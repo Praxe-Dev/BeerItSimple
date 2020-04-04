@@ -13,7 +13,8 @@ public class LoginView extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/FXML/login.fxml"));
+        String pathToFXML = "/FXML/login.fxml";
+        Parent root = FXMLLoader.load(getClass().getResource(pathToFXML));
 
         stage.setTitle("BeerItSimple - Login");
         stage.setScene(new Scene(root));

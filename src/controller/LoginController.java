@@ -26,13 +26,13 @@ public class LoginController implements Initializable  {
     @FXML
     public void openMenu() {
 
-//        System.out.println("test");
+        // Get the login stage to close it.
         Stage loginStage = (Stage) loginContainer.getScene().getWindow();
         loginStage.hide();
 
         Parent root = null;
         try {
-            root = FXMLLoader.load(getClass().getResource("/FXML/menu.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/FXML/templateTest.fxml"));
 
             Stage stage = new Stage();
             stage.setTitle("BeerItSimple - Menu");
