@@ -83,7 +83,7 @@ fabric.properties
 # Sonarlint plugin
 .idea/**/sonarlint/
 
-# SonarQube Plugin
+# SonarQube Plug in
 .idea/**/sonarIssues.xml
 
 # Markdown Navigator plugin
