@@ -9,11 +9,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<SplitPane dividerPositions="0.25585284280936454" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="643.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<SplitPane style="-fx-background-color: black;" fx:controller="controller.templateTestController" dividerPositions="0.25585284280936454" stylesheets="/view/style.css" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-300" minWidth="300" prefHeight="643.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <items>
-      <VBox alignment="CENTER" maxWidth="200.0" minWidth="100.0" prefWidth="125.0" style="-fx-background-color: #2F3033;">
+      <VBox id="mainMenu" fx:id="mainMenu" alignment="CENTER" maxWidth="175.0" minWidth="175.0" prefWidth="175.0">
          <children>
-            <JFXButton buttonType="RAISED" prefHeight="600.0" prefWidth="180.0" style="-fx-background-color: rgba(255,255,255,0.1);" text="Home" textFill="WHITE">
+            <JFXButton onAction="#testBtn" buttonType="RAISED" prefHeight="600.0" prefWidth="180.0" style="-fx-background-color: rgba(255,255,255,0.1);" text="Home" textFill="WHITE">
                <VBox.margin>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </VBox.margin>
@@ -35,14 +35,17 @@
             </JFXButton>
          </children>
       </VBox>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #5c473e;">
+      <VBox fx:id="vTest" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #5c473e;">
          <children>
             <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="74.0" prefWidth="451.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Label" textAlignment="CENTER" textFill="WHITE">
                <VBox.margin>
                   <Insets bottom="40.0" />
                </VBox.margin>
+               <padding>
+                  <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+               </padding>
             </Label>
-            <JFXTreeTableView style="-fx-background-color: rgba(255,255,255,0.3);">
+            <JFXTreeTableView maxHeight="1300.0" prefHeight="1300.0" prefWidth="1032.0" style="-fx-background-color: rgba(255,255,255,0.3);">
                <columns>
                   <TreeTableColumn prefWidth="106.0" text="Column X" />
                   <TreeTableColumn minWidth="0.0" prefWidth="518.0" text="Column X" />
@@ -59,21 +62,33 @@
                      <HBox.margin>
                         <Insets left="60.0" right="60.0" />
                      </HBox.margin>
+                     <padding>
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                     </padding>
                   </JFXButton>
                   <JFXButton prefHeight="75.0" prefWidth="120.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Edit" textFill="WHITE">
                      <HBox.margin>
                         <Insets left="60.0" right="60.0" />
                      </HBox.margin>
+                     <padding>
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                     </padding>
                   </JFXButton>
                   <JFXButton layoutX="10.0" layoutY="10.0" prefHeight="75.0" prefWidth="120.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Details" textFill="WHITE">
                      <HBox.margin>
                         <Insets left="60.0" right="60.0" />
                      </HBox.margin>
+                     <padding>
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                     </padding>
                   </JFXButton>
                   <JFXButton layoutX="62.0" layoutY="10.0" prefHeight="75.0" prefWidth="120.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Delete" textFill="WHITE">
                      <HBox.margin>
                         <Insets left="60.0" right="60.0" />
                      </HBox.margin>
+                     <padding>
+                        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                     </padding>
                   </JFXButton>
                </children>
                <VBox.margin>
