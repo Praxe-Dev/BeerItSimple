@@ -7,7 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class UserInterface extends Application {
-    private String pathToLogin = "/FXML/login.fxml";
+    private static String pathToLogin = "/FXML/login.fxml";
 
     public static void main(String[] args) {
         launch(args);
