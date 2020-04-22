@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<!--        style="-fx-background-color: #5c473e;"-->
+<VBox stylesheets="/view/style.css" alignment="CENTER" prefHeight="641.0" prefWidth="1072.0"  styleClass="center" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.customersController">
+   <children>
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="74.0" prefWidth="451.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Customers" textAlignment="CENTER" textFill="WHITE">
+         <VBox.margin>
+            <Insets bottom="15.0" top="10.0" />
+         </VBox.margin>
+         <font>
+            <Font size="32.0" />
+         </font>
+      </Label>
+      <TableView fx:id="customersTable" prefHeight="1000.0" prefWidth="1000.0">
+<!--        <columns>-->
+<!--          <TableColumn prefWidth="75.0" text="Number" />-->
+<!--          <TableColumn prefWidth="75.0" text="Full Name" />-->
+<!--            <TableColumn prefWidth="75.0" text="Phone Number" />-->
+<!--            <TableColumn prefWidth="75.0" text="Mail" />-->
+<!--        </columns>-->
+         <VBox.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </VBox.margin>
+      </TableView>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <JFXButton prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="New" textFill="WHITE">
+               <HBox.margin>
+                  <Insets left="60.0" right="60.0" />
+               </HBox.margin>
+               <padding>
+                  <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
+               </padding>
+            </JFXButton>
+            <JFXButton prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Edit" textFill="WHITE">
+               <HBox.margin>
+                  <Insets left="60.0" right="60.0" />
+               </HBox.margin>
+               <padding>
+                  <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
+               </padding>
+            </JFXButton>
+            <JFXButton layoutX="10.0" layoutY="10.0" prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Details" textFill="WHITE">
+               <HBox.margin>
+                  <Insets left="60.0" right="60.0" />
+               </HBox.margin>
+               <padding>
+                  <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
+               </padding>
+            </JFXButton>
+            <JFXButton layoutX="62.0" layoutY="10.0" prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Delete" textFill="WHITE">
+               <HBox.margin>
+                  <Insets left="60.0" right="60.0" />
+               </HBox.margin>
+               <padding>
+                  <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
+               </padding>
+            </JFXButton>
+         </children>
+         <VBox.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+</VBox>
