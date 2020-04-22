@@ -27,7 +27,7 @@
             <Font size="38.0" />
          </font>
       </Label>
-      <JFXTextField focusColor="WHITE" labelFloat="true" maxWidth="300.0" promptText="Matricule" style="-fx-background-color: rgba(255,255,255,0.3);">
+      <JFXTextField fx:id="employeeMatricule" focusColor="WHITE" labelFloat="true" maxWidth="300.0" promptText="Matricule" style="-fx-background-color: rgba(255,255,255,0.3);">
          <VBox.margin>
             <Insets bottom="10.0" left="20.0" right="20.0" top="40.0" />
          </VBox.margin>
@@ -35,7 +35,7 @@
             <Font size="18.0" />
          </font>
       </JFXTextField>
-      <JFXPasswordField focusColor="WHITE" labelFloat="true" maxWidth="300.0" promptText="Password" style="-fx-background-color: rgba(255,255,255,0.3);">
+      <JFXPasswordField fx:id="employeePassword" focusColor="WHITE" labelFloat="true" maxWidth="300.0" promptText="Password" style="-fx-background-color: rgba(255,255,255,0.3);">
          <font>
             <Font size="18.0" />
          </font>

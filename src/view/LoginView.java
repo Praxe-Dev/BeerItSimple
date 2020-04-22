@@ -17,6 +17,8 @@ public class LoginView extends Application {
         Parent root = FXMLLoader.load(getClass().getResource(pathToFXML));
 
         stage.setTitle("BeerItSimple - Login");
+        stage.setMinHeight(300.0);
+        stage.setWidth(300.0);
         stage.setScene(new Scene(root));
         stage.show();
     }
