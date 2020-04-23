@@ -94,3 +94,6 @@ fabric.properties
 
 # Ignore la dataConnection
 src/dataAccess/DBConnection.java
+.idea/
+
+BeerItSimple.iml
