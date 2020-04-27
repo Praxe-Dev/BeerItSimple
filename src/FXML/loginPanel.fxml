@@ -10,7 +10,7 @@
 
 <VBox alignment="CENTER"
       id="loginContainer"
-      fx:controller="controller.LoginController"
+      fx:controller="view.LoginView"
       fx:id="loginContainer"
       stylesheets="/view/style.css"
       maxHeight="-Infinity"
@@ -21,6 +21,7 @@
       prefWidth="600.0"
       xmlns="http://javafx.com/javafx/11.0.1"
       xmlns:fx="http://javafx.com/fxml/1">
+<!--   controller.LoginController-->
    <children>
       <Label fx:id="labelTest" prefHeight="55.0" prefWidth="157.0" text="Welcome" textFill="WHITE">
          <font>
@@ -43,7 +44,7 @@
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </VBox.margin>
       </JFXPasswordField>
-      <JFXButton prefHeight="73.0" prefWidth="169.0" onAction="#openMenu" text="Sign in" textFill="WHITE" id="signinButton" fx:id="signinButton">
+      <JFXButton prefHeight="73.0" prefWidth="169.0" text="Sign in" textFill="WHITE" id="signinButton" fx:id="signinButton">
          <VBox.margin>
             <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
          </VBox.margin>
