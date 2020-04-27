@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<VBox styleClass="center" stylesheets="/view/style.css" alignment="CENTER" prefHeight="641.0" prefWidth="1072.0"  xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox styleClass="center" stylesheets="/view/style.css" alignment="CENTER" prefHeight="641.0" prefWidth="1072.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
 <!--   alignment="CENTER" prefHeight="641.0" prefWidth="1072.0" style="-fx-background-color: #5c473e;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"-->
    <children>
       <Label text="Beer It Simple !" textFill="WHITE">
