@@ -91,9 +91,6 @@ fabric.properties
 .idea/**/markdown-navigator/
 
 # End of https://www.gitignore.io/api/intellij
+.idea/compiler.xml
 
-# Ignore la dataConnection
-src/dataAccess/DBConnection.java
-.idea/
-
-BeerItSimple.iml
+.idea/encodings.xml
