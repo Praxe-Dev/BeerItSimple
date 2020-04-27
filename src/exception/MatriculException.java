@@ -1,6 +1,6 @@
 package exception;
 
-import view.popUp;
+import view.PopUp;
 
 public class MatriculException extends Throwable {
     private static final String typeError = "Input Error";
@@ -10,6 +10,6 @@ public class MatriculException extends Throwable {
     }
 
     public void showMessage() {
-        popUp.showError(typeError, message);
+        PopUp.showError(typeError, message);
     }
 }

@@ -15,6 +15,10 @@ public class CustomerController {
         this.customerBusiness = new CustomerBusiness();
     }
 
+    /**
+     * Ask the business package to get allCustomer from DB
+     * @return an array of CustomerViewTable that contains the right format to be displayed
+     */
     public ObservableList<CustomerTableView> getAllCustomers() {
         ArrayList<Customer> customersList = customerBusiness.getAllCustomers();
         ObservableList<CustomerTableView> allCustomers = FXCollections.observableArrayList();

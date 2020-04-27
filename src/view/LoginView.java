@@ -31,12 +31,7 @@ public class LoginView extends View {
     public void init() {
         signinButton.setOnAction(e -> {
             // TODO: Tenter de se connecter
-            try {
-                openSession(e);
-            } catch (Exception exception) {
-//                System.out.println(exception.getMessage());
-                exception.printStackTrace();
-            }
+            openSession(e);
         });
 
         employeeController = new EmployeeController();

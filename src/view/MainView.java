@@ -20,7 +20,6 @@ public class MainView extends View{
     @FXML
     JFXButton searchBtn;
 
-
     // Path to FXML file to display on center
     private static final String pathToHomePanel = "/FXML/homePanel.fxml";
     private static final String pathToCustomersPanel = "/FXML/customersPanel.fxml";

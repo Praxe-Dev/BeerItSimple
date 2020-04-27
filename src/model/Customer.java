@@ -7,7 +7,6 @@ public class Customer extends Entity {
     public Customer(Integer id, String mail, String contactName, String phoneNumber, Integer houseNumber, String street, String fax, String bankAccountNumber, String VATNumber, String cityLabel, Integer cityZipCode, Integer rankId) {
         super(id, mail, contactName, phoneNumber, houseNumber, street, fax, bankAccountNumber, VATNumber, cityLabel, cityZipCode);
         setRankId(rankId);
-//        setDate(date);
     }
 
     public Customer(Integer id, String contactName, String phoneNumber, Integer houseNumber, String street, String bankAccountNumber, String cityLabel, Integer cityZipCode, Integer rankId) {
@@ -22,8 +21,6 @@ public class Customer extends Entity {
     public void setDate(String date) {
         this.date = date;
     }
-
-
 
     @Override
     public String toString() {

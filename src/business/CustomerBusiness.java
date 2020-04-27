@@ -1,15 +1,20 @@
 package business;
 
 import dataAccess.CustomerDBAccess;
+import dataAccess.CustomerDataAccess;
 import model.Customer;
 
 import java.util.ArrayList;
 
 public class CustomerBusiness {
-    private CustomerDBAccess dao;
+    private CustomerDataAccess dao;
 
     public CustomerBusiness() {
-        this.dao = new CustomerDBAccess();
+        setDao(new CustomerDBAccess());
+    }
+
+    public void setDao(CustomerDataAccess dao) {
+        this.dao = dao;
     }
 
     public ArrayList<Customer> getAllCustomers() {

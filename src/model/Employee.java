@@ -1,7 +1,5 @@
 package model;
 
-import javax.swing.*;
-
 public class Employee {
     private Integer id;
     private Integer roleId;
