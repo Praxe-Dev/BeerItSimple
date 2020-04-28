@@ -33,7 +33,7 @@
 <!--      </TableView>-->
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <JFXButton prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="New" textFill="WHITE">
+            <JFXButton fx:id="newCustomer" prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="New" textFill="WHITE">
                <HBox.margin>
                   <Insets left="60.0" right="60.0" />
                </HBox.margin>

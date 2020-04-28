@@ -1,16 +1,21 @@
 package view;
 
+import com.jfoenix.controls.JFXButton;
 import controller.CustomerController;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import model.CustomerTableView;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -20,6 +25,8 @@ public class CustomersView extends VBox implements Initializable {
     private VBox vbox;
     @FXML
     private Label label;
+    @FXML
+    private JFXButton newCustomer;
 
     /**
      * Variable d'instance
@@ -32,6 +39,15 @@ public class CustomersView extends VBox implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        newCustomer.setOnAction(e -> {
+            System.out.print("Try Open create customer");
+            Window login = new Window("FXML/customer/create.fxml", "Create Customer");
+            login.load();
+            login.resizable(false);
+            login.undecorated();
+            login.show();
+        });
 
         TableView<CustomerTableView> customersTable = new TableView<>();
 
