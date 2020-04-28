@@ -1,6 +1,7 @@
 package dataAccess;
 
 import model.Customer;
+import model.Rank;
 
 import java.util.ArrayList;
 

@@ -9,11 +9,12 @@ public class Entity {
     private String street;
     private String fax;
     private String bankAccountNumber;
+    private String businessNumber;
     private String VATNumber;
     private String cityLabel;
     private Integer cityZipCode;
-
-    public Entity(Integer id, String mail, String contactName, String phoneNumber, Integer houseNumber, String street, String fax, String bankAccountNumber, String VATNumber, String cityLabel, Integer cityZipCode) {
+    //TODO: Verifier la presence de tous les constructeurs possibles
+    public Entity(Integer id, String mail, String contactName, String phoneNumber, Integer houseNumber, String street, String fax, String bankAccountNumber, String businessNumber, String VATNumber, String cityLabel, Integer cityZipCode) {
         this.id = id;
         this.mail = mail;
         this.contactName = contactName;
@@ -22,9 +23,54 @@ public class Entity {
         this.street = street;
         this.fax = fax;
         this.bankAccountNumber = bankAccountNumber;
+        this.businessNumber = businessNumber;
         this.VATNumber = VATNumber;
         this.cityLabel = cityLabel;
         this.cityZipCode = cityZipCode;
+    }
+
+    public Entity(Integer id, String mail, String contactName, String phoneNumber, Integer houseNumber, String street, String fax, String cityLabel, Integer cityZipCode) {
+        this(id, mail, contactName, phoneNumber, houseNumber, street, fax, null, null, null, cityLabel, cityZipCode);
+    }
+
+    public Entity(String mail, String contactName, String phoneNumber, Integer houseNumber, String street, String fax, String cityLabel, Integer cityZipCode) {
+        this(null, mail, contactName, phoneNumber, houseNumber, street, fax, null, null, null, cityLabel, cityZipCode);
+    }
+
+    public Entity(Integer id, String contactName, String phoneNumber, Integer houseNumber, String street, String cityLabel, Integer cityZipCode){
+        this(id, null, contactName, phoneNumber, houseNumber, street, null, null, null, null, cityLabel, cityZipCode);
+    }
+
+    public Entity(String contactName, String phoneNumber, Integer houseNumber, String street, String cityLabel, Integer cityZipCode){
+        this(null, null, contactName, phoneNumber, houseNumber, street, null, null, null, null, cityLabel, cityZipCode);
+    }
+
+    public Entity(String contactName, String phoneNumber, Integer houseNumber, String street, String fax, String cityLabel, Integer cityZipCode){
+        this(null, null, contactName, phoneNumber, houseNumber, street, fax, null, null, null, cityLabel, cityZipCode);
+    }
+
+    public Entity(String contactName, String phoneNumber, Integer houseNumber, String street, String businessNumber, String VATNumber, String cityLabel, Integer cityZipCode){
+        this(null, null, contactName, phoneNumber, houseNumber, street, null, null, businessNumber, VATNumber, cityLabel, cityZipCode);
+    }
+
+    public Entity(String mail, String contactName, String phoneNumber, Integer houseNumber, String street, String businessNumber, String VATNumber, String cityLabel, Integer cityZipCode){
+        this(null, mail, contactName, phoneNumber, houseNumber, street, null, null, businessNumber, VATNumber, cityLabel, cityZipCode);
+    }
+
+    public Entity(String mail, String contactName, String phoneNumber, Integer houseNumber, String street, String fax, String businessNumber, String VATNumber, String cityLabel, Integer cityZipCode){
+        this(null, mail, contactName, phoneNumber, houseNumber, street, fax, null, businessNumber, VATNumber, cityLabel, cityZipCode);
+    }
+
+    public Entity(String contactName, String phoneNumber, Integer houseNumber, String street, String bankAccountNumber, String businessNumber, String VATNumber, String cityLabel, Integer cityZipCode){
+        this(null, null, contactName, phoneNumber, houseNumber, street, null, bankAccountNumber, businessNumber, VATNumber, cityLabel, cityZipCode);
+    }
+
+    public String getBusinessNumber() {
+        return businessNumber;
+    }
+
+    public void setBusinessNumber(String businessNumber) {
+        this.businessNumber = businessNumber;
     }
 
     public Integer getId() {

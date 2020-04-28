@@ -25,7 +25,7 @@ public class CustomerController {
         CustomerTableView customerView;
 
         for (Customer customer : customersList) {
-            customerView = new CustomerTableView(customer.getId(), customer.getContactName(), customer.getPhoneNumber(), customer.getMail());
+            customerView = new CustomerTableView(customer.getEntity().getId(), customer.getEntity().getContactName(), customer.getEntity().getPhoneNumber(), customer.getEntity().getMail());
             allCustomers.add(customerView);
         }
 
