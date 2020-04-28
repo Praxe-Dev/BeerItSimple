@@ -5,6 +5,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
@@ -49,6 +50,14 @@ public class Window extends Parent {
 //    public Parent getParent() {
 //        return this.parent;
 //    }
+
+    public void resizable(Boolean isResizable){
+        stage.setResizable(isResizable);
+    }
+
+    public void undecorated(){
+        stage.initStyle(StageStyle.UNDECORATED);
+    }
 
     public void close() {
         stage.close();
