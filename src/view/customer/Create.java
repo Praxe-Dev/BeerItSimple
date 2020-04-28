@@ -1,31 +1,53 @@
 package view.customer;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
+import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.NumberValidator;
+import com.jfoenix.validation.RequiredFieldValidator;
 import controller.CustomerController;
+import controller.RankController;
+import exception.CustomerException;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import model.Customer;
+import model.CustomerTableView;
+import model.Entity;
+import model.Rank;
 import view.View;
+
+import javax.xml.validation.Validator;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Create extends View {
     private CustomerController customerController;
+    private RankController rankController;
     private Boolean entrepriseFormShowed = true;
     private double x = 0, y = 0;
+    private Pane loadedPane = null;
 
+    @FXML
+    private ToggleGroup customerType;
     @FXML
     private JFXRadioButton entrepriseButton;
     @FXML
     private JFXRadioButton particularButton;
+    @FXML
+    private JFXComboBox rankComboBox;
     @FXML
     private JFXButton addButton;
     @FXML
@@ -35,9 +57,16 @@ public class Create extends View {
     @FXML
     private AnchorPane formPane;
 
+    public Create(){ this.rankController = new RankController(); }
+
     @Override
     public void init() {
         addFormPane("entreprise"); //Entreprise form on load
+
+        //ArrayList<String> rankList = rankController.getAllRanks();
+        ObservableList obList = rankController.getAllRanks();
+        rankComboBox.getItems().addAll(obList);
+        rankComboBox.getSelectionModel().select(0);
 
         cancelButton.setOnAction(e -> {
             closeWindow(e);
@@ -47,6 +76,7 @@ public class Create extends View {
             createCustomer(e);
         });
 
+        entrepriseButton.setUserData("entreprise");
         entrepriseButton.selectedProperty().addListener(new InvalidationListener() {
             public void invalidated(Observable ov) {
                 if (entrepriseButton.isSelected()) {
@@ -62,6 +92,7 @@ public class Create extends View {
             }
         });
 
+        particularButton.setUserData("particular");
         particularButton.selectedProperty().addListener(new InvalidationListener() {
             public void invalidated(Observable ov) {
                 if (particularButton.isSelected()) {
@@ -83,29 +114,74 @@ public class Create extends View {
     private void addFormPane(String type){
         if(type != null) {
             try {
-                Pane newLoadedPane = null;
                 if(type.equals("entreprise")){
-                    newLoadedPane = FXMLLoader.load(getClass().getResource("/FXML/customer/forms/entreprise.fxml"));
+                    loadedPane = FXMLLoader.load(getClass().getResource("/FXML/customer/forms/entreprise.fxml"));
                 } else if(type.equals("particular")){
-                    newLoadedPane = FXMLLoader.load(getClass().getResource("/FXML/customer/forms/particular.fxml"));
+                    loadedPane = FXMLLoader.load(getClass().getResource("/FXML/customer/forms/particular.fxml"));
+
                 }
                 formPane.getChildren().clear();
-                formPane.getChildren().add(newLoadedPane);
+                formPane.getChildren().add(loadedPane);
             } catch (IOException e) {
                 System.out.print(e.getMessage());
             }
         }
     }
 
-    private void createCustomer(ActionEvent e){
-        System.out.print("Creation");
-        /*
-        try{
+    private void createCustomer(ActionEvent e) {
+        //Req field
+        RequiredFieldValidator reqField = new RequiredFieldValidator();
+        reqField.setMessage("Required field");
+
+        //Number field
+        NumberValidator numbValid = new NumberValidator();
+        numbValid.setMessage("Only number allowed");
+
+        JFXTextField contactName = getContactName();
+        contactName.getValidators().add(reqField);
+        contactName.validate();
+
+        JFXTextField houseNumber = getHouseNumber();
+        houseNumber.getValidators().add(reqField);
+        houseNumber.validate();
+        houseNumber.getValidators().add(numbValid);
+        houseNumber.validate();
+
+
+
+        String clientType = customerType.getSelectedToggle().getUserData().toString();
+        //try{
+            if(clientType.equals("entreprise")) {
+                System.out.println("ENTREPRISE CONTACT NAME = " + ((JFXTextField) loadedPane.lookup("#contactName")).getText());
+
+            } else if(clientType.equals("particular")){
+                System.out.println("PARTICULAR CONTACT NAME = " + ((JFXTextField) loadedPane.lookup("#contactName")).getText());
+
+            }
             //Try Create
-        } catch(CustomerException exception){
+            //(Integer id, String mail, String contactName, String phoneNumber, Integer houseNumber, String street, String fax, String bankAccountNumber, String VATNumber, String cityLabel, Integer cityZipCode, Integer rankId
+            //Customer customer = new Customer(13, );
+
+        /*} catch(CustomerException exception){
             exception.showMessage();
+        }*/
+
+    }
+
+    //TODO: Deplacer les champs communs dans le fxml create
+
+    public JFXTextField getContactName(){
+        JFXTextField contactName = ((JFXTextField) loadedPane.lookup("#contactName"));
+        if(contactName.getText().isBlank()){
+            //edit
+            return contactName;
+        } else {
+            return contactName;
         }
-         */
+    }
+
+    public JFXTextField getHouseNumber(){
+        return ((JFXTextField) loadedPane.lookup("#houseNumber"));
     }
 
     private void closeWindow(ActionEvent e){

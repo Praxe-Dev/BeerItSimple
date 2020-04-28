@@ -4,9 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import view.View;
 
-import javax.swing.*;
-
-public class Entreprise extends View {
+public class Particular extends View {
 
     @FXML
     private Pane mainPane;

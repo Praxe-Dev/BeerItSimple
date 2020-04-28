@@ -1,10 +1,9 @@
 package dataAccess;
 
 import model.Customer;
+import model.Entity;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class CustomerDBAccess implements CustomerDataAccess{
@@ -25,36 +24,37 @@ public class CustomerDBAccess implements CustomerDataAccess{
 
             customerList = new ArrayList<>();
             Customer test;
+            Entity entity;
             String mail;
             String fax;
-            String businessNumber;
             String VATNumber;
 
             while(data.next()) {
-                test = new Customer(data.getInt("id"),
+                entity = new Entity(
+                        data.getInt("id"),
                         data.getString("contactName"),
                         data.getString("phoneNumber"),
                         data.getInt("houseNumber"),
                         data.getString("street"),
-                        data.getString("businessNumber"),
                         data.getString("CityLabel"),
-                        data.getInt("CityZipCode"),
-                        2
+                        data.getInt("CityZipCode")
                 );
+
+                test = new Customer(entity);
 
                 mail = data.getString("mail");
                 if (!data.wasNull()) {
-                    test.setMail(mail);
+                    test.getEntity().setMail(mail);
                 }
 
                 fax = data.getString("fax");
                 if (!data.wasNull()) {
-                    test.setFax(fax);
+                    test.getEntity().setFax(fax);
                 }
 
                 VATNumber = data.getString("VATNumber");
                 if (!data.wasNull()) {
-                    test.setVATNumber(VATNumber);
+                    test.getEntity().setVATNumber(VATNumber);
                 }
 
                 customerList.add(test);
@@ -66,5 +66,20 @@ public class CustomerDBAccess implements CustomerDataAccess{
         }
 
         return null;
+    }
+
+    public int create(Customer c) throws SQLException {
+        int status = 0;
+        try {
+            String sql = "INSERT INTO customer(EntityId,RankId,subscriptionDate) values(?,?,?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, c.getEntity().getId());
+            preparedStatement.setInt(2, c.getRank().getId());
+            preparedStatement.setDate(3, Date.valueOf(java.time.LocalDate.now()));
+            status = preparedStatement.executeUpdate();
+        } catch(Exception ex){
+            ex.printStackTrace();
+        }
+        return status;
     }
 }
