@@ -17,6 +17,10 @@ public abstract class View extends Node {
 
     public abstract Pane getRoot();
 
+    public void closeWindow() {
+        this.window.close();
+    }
+
     public void switchWindow(Window newWindow) {
         this.window.close();
         newWindow.load();

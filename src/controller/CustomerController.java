@@ -31,4 +31,7 @@ public class CustomerController {
 
         return allCustomers;
     }
+
+    public void newCustomer() {
+    }
 }

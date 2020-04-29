@@ -59,7 +59,7 @@ public class MainView extends View{
      */
     public void setCenter(String pathToFxml) {
 
-        Parent center = new CustomersView();
+        Parent center;
 
         try {
             center = FXMLLoader.load(getClass().getResource(pathToFxml));
