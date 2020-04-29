@@ -42,10 +42,10 @@ public class CustomersView extends VBox implements Initializable {
 
         newCustomer.setOnAction(e -> {
             System.out.print("Try Open create customer");
-            Window login = new Window("FXML/customer/create.fxml", "Create Customer");
+            Window login = new Window("FXML/newCustomerPanel.fxml", "New Customer");
             login.load();
             login.resizable(false);
-            login.undecorated();
+//            login.undecorated();
             login.show();
         });
 
