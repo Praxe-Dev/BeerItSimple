@@ -51,28 +51,28 @@ public class CustomersView extends VBox implements Initializable {
 
         TableView<CustomerTableView> customersTable = new TableView<>();
 
-        ObservableList<CustomerTableView> allCustomer = customersController.getAllCustomers();
+//        ObservableList<CustomerTableView> allCustomer = customersController.getAllCustomers();
+//
+//        TableColumn<CustomerTableView, Integer> idColumn = new TableColumn<CustomerTableView, Integer>("Id #");
+//        idColumn.prefWidthProperty().bind(customersTable.widthProperty().multiply(0.1));
+//        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+//
+//        TableColumn<CustomerTableView, String> contactNameColumn = new TableColumn<CustomerTableView, String>("Contact Name");
+//        contactNameColumn.prefWidthProperty().bind(customersTable.widthProperty().multiply(0.3));
+//        contactNameColumn.setCellValueFactory(new PropertyValueFactory<>("contactName"));
+//
+//        TableColumn<CustomerTableView, String> phoneNumberColumn = new TableColumn<CustomerTableView, String>("Phone Number");
+//        phoneNumberColumn.prefWidthProperty().bind(customersTable.widthProperty().multiply(0.3));
+//        phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+//
+//        TableColumn<CustomerTableView, String> mailColumn = new TableColumn<CustomerTableView, String>("Mail");
+//        mailColumn.prefWidthProperty().bind(customersTable.widthProperty().multiply(0.3));
+//        mailColumn.setCellValueFactory(new PropertyValueFactory<>("mail"));
+//
+//        customersTable.setItems(customersController.getAllCustomers());
+//        customersTable.getColumns().addAll(idColumn, contactNameColumn, phoneNumberColumn, mailColumn);
 
-        TableColumn<CustomerTableView, Integer> idColumn = new TableColumn<CustomerTableView, Integer>("Id #");
-        idColumn.prefWidthProperty().bind(customersTable.widthProperty().multiply(0.1));
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-
-        TableColumn<CustomerTableView, String> contactNameColumn = new TableColumn<CustomerTableView, String>("Contact Name");
-        contactNameColumn.prefWidthProperty().bind(customersTable.widthProperty().multiply(0.3));
-        contactNameColumn.setCellValueFactory(new PropertyValueFactory<>("contactName"));
-
-        TableColumn<CustomerTableView, String> phoneNumberColumn = new TableColumn<CustomerTableView, String>("Phone Number");
-        phoneNumberColumn.prefWidthProperty().bind(customersTable.widthProperty().multiply(0.3));
-        phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
-
-        TableColumn<CustomerTableView, String> mailColumn = new TableColumn<CustomerTableView, String>("Mail");
-        mailColumn.prefWidthProperty().bind(customersTable.widthProperty().multiply(0.3));
-        mailColumn.setCellValueFactory(new PropertyValueFactory<>("mail"));
-
-        customersTable.setItems(customersController.getAllCustomers());
-        customersTable.getColumns().addAll(idColumn, contactNameColumn, phoneNumberColumn, mailColumn);
-
-        int labelIndex = vbox.getChildren().indexOf(label);
-        vbox.getChildren().add(labelIndex + 1,customersTable);
+//        int labelIndex = vbox.getChildren().indexOf(label);
+//        vbox.getChildren().add(labelIndex + 1,customersTable);
     }
 }

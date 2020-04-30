@@ -1,11 +1,13 @@
 package model;
 
+import java.util.GregorianCalendar;
+
 public class CustomerTableFormat {
     private Integer id;
     private String contactName;
     private String phoneNumber;
-    private Integer houseNumber;
-    private String street;
+    private String address;
+    private GregorianCalendar subscriptionDate;
     private String bankAccountNumber;
     private String businessNumber;
     private String VATNumber;
@@ -18,8 +20,7 @@ public class CustomerTableFormat {
         this.id = customer.getEntity().getId();
         this.contactName = customer.getEntity().getContactName();
         this.phoneNumber = customer.getEntity().getPhoneNumber();
-        this.houseNumber = customer.getEntity().getHouseNumber();
-        this.street = customer.getEntity().getStreet();
+        this.address = customer.getEntity().getStreet() + ", " + customer.getEntity().getHouseNumber();
         this.bankAccountNumber = customer.getEntity().getBankAccountNumber();
         this.businessNumber = customer.getEntity().getBusinessNumber();
         this.VATNumber = customer.getEntity().getVATNumber();
@@ -27,6 +28,14 @@ public class CustomerTableFormat {
         this.zipCode = customer.getEntity().getCity().getZipCode();
         this.rankLabel = customer.getRank().getLabel();
         this.creditLimit = customer.getRank().getCreditLimit();
+    }
+
+    public GregorianCalendar getsubscriptionDate() {
+        return subscriptionDate;
+    }
+
+    public void setsubscriptionDate(GregorianCalendar subscriptionDate) {
+        this.subscriptionDate = subscriptionDate;
     }
 
     public Integer getId() {
@@ -41,12 +50,12 @@ public class CustomerTableFormat {
         return phoneNumber;
     }
 
-    public Integer getHouseNumber() {
-        return houseNumber;
+    public String getAddress() {
+        return address;
     }
 
-    public String getStreet() {
-        return street;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getBankAccountNumber() {
