@@ -25,10 +25,6 @@ public class Rank {
 
     @Override
     public String toString() {
-        return "Rank{" +
-                "id=" + id +
-                ", label='" + label + '\'' +
-                ", creditLimit=" + creditLimit +
-                '}';
+        return label + " (" + creditLimit + "€)";
     }
 }

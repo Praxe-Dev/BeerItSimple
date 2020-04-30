@@ -29,6 +29,11 @@
     -fx-background-color: #0b2e6b;
 }
 
+.champ-invalide {
+    -fx-background-color: rgba(255,0,0,0.3);
+    -fx-text-fill: red;
+}
+
 /*TABLE CSS*/
 
 .table-view .table-row-cell {

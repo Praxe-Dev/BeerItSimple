@@ -23,7 +23,7 @@ public class CustomerBusiness {
         return dao.getAllCustomers();
     }
 
-    public int create(Customer customer) throws SQLException {
+    public boolean create(Customer customer) throws SQLException {
         return dao.create(customer);
     }
 }
