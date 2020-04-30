@@ -1,11 +1,13 @@
 package controller;
 
 import business.CustomerBusiness;
+import exception.CustomerException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Customer;
 import model.CustomerTableView;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class CustomerController {
@@ -25,10 +27,14 @@ public class CustomerController {
         CustomerTableView customerView;
 
         for (Customer customer : customersList) {
-            customerView = new CustomerTableView(customer.getId(), customer.getContactName(), customer.getPhoneNumber(), customer.getMail());
+            customerView = new CustomerTableView(customer.getEntity().getId(), customer.getEntity().getContactName(), customer.getEntity().getPhoneNumber(), customer.getEntity().getMail());
             allCustomers.add(customerView);
         }
 
         return allCustomers;
+    }
+
+    public boolean create(Customer customer) throws SQLException {
+        return customerBusiness.create(customer);
     }
 }

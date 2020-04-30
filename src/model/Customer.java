@@ -1,32 +1,61 @@
 package model;
 
-public class Customer extends Entity {
-    private Integer rankId;
+public class Customer {
+    private Rank rank;
+    private Entity entity;
     private String date;
 
-    public Customer(Integer id, String mail, String contactName, String phoneNumber, Integer houseNumber, String street, String fax, String bankAccountNumber, String VATNumber, String cityLabel, Integer cityZipCode, Integer rankId) {
-        super(id, mail, contactName, phoneNumber, houseNumber, street, fax, bankAccountNumber, VATNumber, cityLabel, cityZipCode);
-        setRankId(rankId);
+    public Customer(Entity entity, Rank rank, String date) {
+        setEntity(entity);
+        setRank(rank);
+        setDate(date);
     }
 
-    public Customer(Integer id, String contactName, String phoneNumber, Integer houseNumber, String street, String bankAccountNumber, String cityLabel, Integer cityZipCode, Integer rankId) {
-        super(id, null, contactName, phoneNumber, houseNumber, street, null, bankAccountNumber, null, cityLabel, cityZipCode);
-        setRankId(rankId);
+    public Customer(Entity entity, Rank rank){
+        this(entity, rank, null);
     }
 
-    public void setRankId(Integer rankId) {
-        this.rankId = rankId;
+    public Customer(Entity entity, String date){
+        this(entity, null, date);
+    }
+
+    public Customer(Entity entity){
+        this(entity, null, null);
+    }
+
+    public void setEntity(Entity entity) {
+        this.entity = entity;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setRank(Rank rank) {
+        this.rank = rank;
+    }
+
+    public Rank getRank() {
+        return this.rank;
+    }
+
+    public void setRankId(Rank rank) {
+        this.rank = rank;
     }
 
     public void setDate(String date) {
         this.date = date;
     }
 
+    public Entity getEntity(){
+        return this.entity;
+    }
+
     @Override
     public String toString() {
         return "Customer{" +
-                "rankId=" + rankId +
-                ", date='" + date + '\'' +
+                "rank =" + getRank() +
+                ", date ='" + date + '\'' +
                 '}';
     }
 }

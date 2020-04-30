@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import com.jfoenix.controls.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <!--        style="-fx-background-color: #5c473e;"-->
-<VBox fx:id="vbox" stylesheets="/view/style.css" alignment="CENTER" prefHeight="641.0" prefWidth="1072.0"  styleClass="center" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.CustomersView">
+
+<VBox fx:id="vbox" alignment="CENTER" prefHeight="641.0" prefWidth="1072.0" styleClass="center" stylesheets="/view/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.CustomersView">
    <children>
       <Label fx:id="label" alignment="CENTER" contentDisplay="CENTER" prefHeight="74.0" prefWidth="451.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Customers" textAlignment="CENTER" textFill="WHITE">
          <VBox.margin>
@@ -20,50 +19,70 @@
             <Font size="32.0" />
          </font>
       </Label>
-<!--      <TableView fx:id="customersTable" prefHeight="1000.0" prefWidth="1000.0">-->
-<!--        <columns>-->
-<!--          <TableColumn prefWidth="75.0" text="id #" />-->
-<!--          <TableColumn prefWidth="75.0" text="Full Name" />-->
-<!--            <TableColumn prefWidth="75.0" text="Phone Number" />-->
-<!--            <TableColumn prefWidth="75.0" text="Mail" />-->
-<!--        </columns>-->
-<!--         <VBox.margin>-->
-<!--            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />-->
-<!--         </VBox.margin>-->
-<!--      </TableView>-->
+      <TableView fx:id="customersTable" prefHeight="1000.0" prefWidth="1000.0">
+        <columns>
+            <TableColumn fx:id="customerId" prefWidth="75.0" text="Id #" />
+            <TableColumn fx:id="contactName" prefWidth="75.0" text="Name" />
+            <TableColumn fx:id="phoneNumber"  prefWidth="75.0" text="Phone Number" />
+            <TableColumn fx:id="address"  prefWidth="75.0" text="Address" />
+            <TableColumn fx:id="subscriptionDate" prefWidth="75.0" text="Subsciption date" />
+            <TableColumn fx:id="bankAccountNumber" prefWidth="75.0" text="Bank account" />
+            <TableColumn fx:id="businessNumber" prefWidth="75.0" text="Business number" />
+            <TableColumn fx:id="VATNumber" prefWidth="75.0" text="VATNumber" />
+            <TableColumn fx:id="cityLabel" prefWidth="75.0" text="City" />
+            <TableColumn fx:id="zipCode" prefWidth="75.0" text="ZipCode" />
+            <TableColumn fx:id="rankLabel" prefWidth="75.0" text="Rank" />
+            <TableColumn fx:id="creditLimit" prefWidth="75.0" text="Credit limit" />
+        </columns>
+         <VBox.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </VBox.margin>
+      </TableView>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <JFXButton prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="New" textFill="WHITE">
+            <JFXButton fx:id="newCustomer" contentDisplay="TOP" prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="New" textFill="WHITE">
                <HBox.margin>
                   <Insets left="60.0" right="60.0" />
                </HBox.margin>
                <padding>
                   <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
                </padding>
+               <graphic>
+                  <FontAwesomeIcon fill="WHITE" glyphName="USER_PLUS" size="3em" strokeType="OUTSIDE" strokeWidth="0.0" />
+               </graphic>
             </JFXButton>
-            <JFXButton prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Edit" textFill="WHITE">
+            <JFXButton contentDisplay="TOP" prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Edit" textFill="WHITE">
                <HBox.margin>
                   <Insets left="60.0" right="60.0" />
                </HBox.margin>
                <padding>
                   <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
                </padding>
+               <graphic>
+                  <FontAwesomeIcon fill="WHITE" glyphName="PENCIL_SQUARE" size="3em" strokeType="OUTSIDE" strokeWidth="0.0" />
+               </graphic>
             </JFXButton>
-            <JFXButton layoutX="10.0" layoutY="10.0" prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Details" textFill="WHITE">
+            <JFXButton contentDisplay="TOP" layoutX="10.0" layoutY="10.0" prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Details" textFill="WHITE">
                <HBox.margin>
                   <Insets left="60.0" right="60.0" />
                </HBox.margin>
                <padding>
                   <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
                </padding>
+               <graphic>
+                  <FontAwesomeIcon fill="WHITE" glyphName="LIST" size="3em" strokeType="OUTSIDE" strokeWidth="0.0" />
+               </graphic>
             </JFXButton>
-            <JFXButton layoutX="62.0" layoutY="10.0" prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Delete" textFill="WHITE">
+            <JFXButton contentDisplay="TOP" layoutX="62.0" layoutY="10.0" prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Delete" textFill="WHITE">
                <HBox.margin>
                   <Insets left="60.0" right="60.0" />
                </HBox.margin>
                <padding>
                   <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
                </padding>
+               <graphic>
+                  <FontAwesomeIcon fill="WHITE" glyphName="USER_TIMES" size="3em" strokeType="OUTSIDE" strokeWidth="0.0" />
+               </graphic>
             </JFXButton>
          </children>
          <VBox.margin>

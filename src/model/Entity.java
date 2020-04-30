@@ -1,5 +1,7 @@
 package model;
 
+import javax.xml.validation.Validator;
+
 public class Entity {
     private Integer id;
     private String mail;
@@ -9,11 +11,13 @@ public class Entity {
     private String street;
     private String fax;
     private String bankAccountNumber;
+    private String businessNumber;
     private String VATNumber;
-    private String cityLabel;
-    private Integer cityZipCode;
-
-    public Entity(Integer id, String mail, String contactName, String phoneNumber, Integer houseNumber, String street, String fax, String bankAccountNumber, String VATNumber, String cityLabel, Integer cityZipCode) {
+    //private String cityLabel;
+    //private Integer cityZipCode;
+    private City city;
+    //TODO: Verifier la presence de tous les constructeurs possibles
+    public Entity(Integer id, String mail, String contactName, String phoneNumber, Integer houseNumber, String street, String fax, String bankAccountNumber, String businessNumber, String VATNumber,City city) {
         this.id = id;
         this.mail = mail;
         this.contactName = contactName;
@@ -22,9 +26,62 @@ public class Entity {
         this.street = street;
         this.fax = fax;
         this.bankAccountNumber = bankAccountNumber;
+        this.businessNumber = businessNumber;
         this.VATNumber = VATNumber;
-        this.cityLabel = cityLabel;
-        this.cityZipCode = cityZipCode;
+        //this.cityLabel = cityLabel;
+        //this.cityZipCode = cityZipCode;
+        this.city = city;
+    }
+
+    public Entity(Integer id, String mail, String contactName, String phoneNumber, Integer houseNumber, String street, String fax, City city) {
+        this(id, mail, contactName, phoneNumber, houseNumber, street, fax, null, null, null, city);
+    }
+
+    public Entity(String mail, String contactName, String phoneNumber, Integer houseNumber, String street, String fax, City city) {
+        this(null, mail, contactName, phoneNumber, houseNumber, street, fax, null, null, null, city);
+    }
+
+    public Entity(Integer id, String contactName, String phoneNumber, Integer houseNumber, String street, City city){
+        this(id, null, contactName, phoneNumber, houseNumber, street, null, null, null, null, city);
+    }
+
+    public Entity(String contactName, String phoneNumber, Integer houseNumber, String street, City city){
+        this(null, null, contactName, phoneNumber, houseNumber, street, null, null, null, null, city);
+    }
+
+    public Entity(String contactName, String phoneNumber, Integer houseNumber, String street, String fax, City city){
+        this(null, null, contactName, phoneNumber, houseNumber, street, fax, null, null, null, city);
+    }
+
+    public Entity(String contactName, String phoneNumber, Integer houseNumber, String street, String businessNumber, String VATNumber,City city){
+        this(null, null, contactName, phoneNumber, houseNumber, street, null, null, businessNumber, VATNumber, city);
+    }
+
+    public Entity(String mail, String contactName, String phoneNumber, Integer houseNumber, String street, String businessNumber, String VATNumber, City city){
+        this(null, mail, contactName, phoneNumber, houseNumber, street, null, null, businessNumber, VATNumber, city);
+    }
+
+    public Entity(String mail, String contactName, String phoneNumber, Integer houseNumber, String street, String fax, String businessNumber, String VATNumber, City city){
+        this(null, mail, contactName, phoneNumber, houseNumber, street, fax, null, businessNumber, VATNumber, city);
+    }
+
+    public Entity(String contactName, String phoneNumber, Integer houseNumber, String street, String bankAccountNumber, String businessNumber, String VATNumber, City city){
+        this(null, null, contactName, phoneNumber, houseNumber, street, null, bankAccountNumber, businessNumber, VATNumber, city);
+    }
+
+    public Entity(){
+        this(null, null, null, null, null, null, null, null, null, null, null);
+    }
+
+    public String getBusinessNumber() {
+        return businessNumber;
+    }
+
+    public void setBusinessNumber(String businessNumber) {
+        if(businessNumber != null) {
+            String businessNumberRegex = "^(\\d{4})\\.(\\d{3})\\.(\\d{3})$";
+            if (businessNumber.matches(businessNumberRegex)) this.businessNumber = businessNumber;
+        }
     }
 
     public Integer getId() {
@@ -40,7 +97,10 @@ public class Entity {
     }
 
     public void setMail(String mail) {
-        this.mail = mail;
+        if(mail != null) {
+            String mailRegex = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+            if (mail.matches(mailRegex)) this.mail = mail;
+        }
     }
 
     public String getContactName() {
@@ -56,7 +116,10 @@ public class Entity {
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        if(phoneNumber != null) {
+            String phoneNumberRegex = "^(\\d{4})\\/(\\d{2})\\.(\\d{2})\\.(\\d{2})$";
+            if (phoneNumber.matches(phoneNumberRegex)) this.phoneNumber = phoneNumber;
+        }
     }
 
     public Integer getHouseNumber() {
@@ -80,7 +143,10 @@ public class Entity {
     }
 
     public void setFax(String fax) {
-        this.fax = fax;
+        if(fax != null) {
+            String faxRegex = "^(\\d{3})\\/(\\d{2})\\.(\\d{2})\\.(\\d{2})$";
+            if (fax.matches(faxRegex)) this.fax = fax;
+        }
     }
 
     public String getBankAccountNumber() {
@@ -88,7 +154,10 @@ public class Entity {
     }
 
     public void setBankAccountNumber(String bankAccountNumber) {
-        this.bankAccountNumber = bankAccountNumber;
+        if(bankAccountNumber != null) {
+            String bankAccountRegex = "^([A-Z]{2})(\\d{14})$";
+            if (bankAccountNumber.matches(bankAccountRegex)) this.bankAccountNumber = bankAccountNumber;
+        }
     }
 
     public String getVATNumber() {
@@ -96,23 +165,17 @@ public class Entity {
     }
 
     public void setVATNumber(String VATNumber) {
-        this.VATNumber = VATNumber;
+        if(VATNumber != null) {
+            this.VATNumber = "BE" + VATNumber;
+        }
     }
 
-    public String getCityLabel() {
-        return cityLabel;
+    public City getCity() {
+        return city;
     }
 
-    public void setCityLabel(String cityLabel) {
-        this.cityLabel = cityLabel;
-    }
-
-    public Integer getCityZipCode() {
-        return cityZipCode;
-    }
-
-    public void setCityZipCode(Integer cityZipCode) {
-        this.cityZipCode = cityZipCode;
+    public void setCity(City city) {
+        this.city = city;
     }
 
     @Override
@@ -127,8 +190,8 @@ public class Entity {
                 ", fax='" + fax + '\'' +
                 ", bankAccountNumber='" + bankAccountNumber + '\'' +
                 ", VATNumber='" + VATNumber + '\'' +
-                ", cityLabel='" + cityLabel + '\'' +
-                ", cityZipCode=" + cityZipCode +
+                ", cityLabel='" + getCity().getLabel() + '\'' +
+                ", cityZipCode=" + getCity().getZipCode() +
                 '}';
     }
 }
