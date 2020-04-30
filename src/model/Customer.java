@@ -54,8 +54,8 @@ public class Customer {
     @Override
     public String toString() {
         return "Customer{" +
-                "rankId=" + getRank() +
-                ", date='" + date + '\'' +
+                "rank =" + getRank() +
+                ", date ='" + date + '\'' +
                 '}';
     }
 }

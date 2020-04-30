@@ -63,9 +63,9 @@ public class Create extends View {
     public void init() {
         addFormPane("entreprise"); //Entreprise form on load
 
-        //ArrayList<String> rankList = rankController.getAllRanks();
-        ObservableList obList = rankController.getAllRanks();
-        rankComboBox.getItems().addAll(obList);
+        ArrayList<Rank> rankList = rankController.getAllRanks();
+        //ObservableList obList = rankController.getAllRanks();
+        //rankComboBox.getItems().addAll(obList);
         rankComboBox.getSelectionModel().select(0);
 
         cancelButton.setOnAction(e -> {

@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Rank;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class RankController {
@@ -12,9 +13,10 @@ public class RankController {
 
     public RankController(){ this.rankBusiness = new RankBusiness(); }
 
-    public ObservableList getAllRanks(){
-        ArrayList<String> rankList = rankBusiness.getAllRanks();
-        return FXCollections.observableList(rankList);
+    public ArrayList<Rank> getAllRanks(){
+        return rankBusiness.getAllRanks();
+        //return FXCollections.observableList(rankList);
+
     }
 
 }

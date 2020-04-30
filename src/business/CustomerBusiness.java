@@ -2,8 +2,10 @@ package business;
 
 import dataAccess.CustomerDBAccess;
 import dataAccess.CustomerDataAccess;
+import exception.CustomerException;
 import model.Customer;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class CustomerBusiness {
@@ -19,5 +21,9 @@ public class CustomerBusiness {
 
     public ArrayList<Customer> getAllCustomers() {
         return dao.getAllCustomers();
+    }
+
+    public int create(Customer customer) throws SQLException {
+        return dao.create(customer);
     }
 }

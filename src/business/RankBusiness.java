@@ -16,12 +16,7 @@ public class RankBusiness {
         this.dao = dao;
     }
 
-    public ArrayList<String> getAllRanks() {
-        ArrayList<String> arrayListTransformed = new ArrayList<>();
-        for (Rank rank: dao.getAllRanks()) {
-            arrayListTransformed.add("(" + rank.getId() + ") " + rank.getLabel() + " (" + rank.getCreditLimit() + "€)");
-        }
-        
-        return arrayListTransformed;
+    public ArrayList<Rank> getAllRanks() {
+        return dao.getAllRanks();
     }
 }
