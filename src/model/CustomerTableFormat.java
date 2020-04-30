@@ -1,13 +1,12 @@
 package model;
 
-import java.util.GregorianCalendar;
 
 public class CustomerTableFormat {
     private Integer id;
     private String contactName;
     private String phoneNumber;
     private String address;
-    private GregorianCalendar subscriptionDate;
+    private String subscriptionDate = "test";
     private String bankAccountNumber;
     private String businessNumber;
     private String VATNumber;
@@ -21,6 +20,11 @@ public class CustomerTableFormat {
         this.contactName = customer.getEntity().getContactName();
         this.phoneNumber = customer.getEntity().getPhoneNumber();
         this.address = customer.getEntity().getStreet() + ", " + customer.getEntity().getHouseNumber();
+//        String dateFormat = new SimpleDateFormat("dd-MM-yyyy").format(customer.getDate());
+//        System.out.println("Format de date : " + dateFormat);
+//        this.subscriptionDate = new SimpleDateFormat("dd-MM-yyyy").format(customer.getDate());
+//        setSubscriptionDate();
+//        this.subscriptionDate = "24/14/20132";
         this.bankAccountNumber = customer.getEntity().getBankAccountNumber();
         this.businessNumber = customer.getEntity().getBusinessNumber();
         this.VATNumber = customer.getEntity().getVATNumber();
@@ -30,13 +34,22 @@ public class CustomerTableFormat {
         this.creditLimit = customer.getRank().getCreditLimit();
     }
 
-    public GregorianCalendar getsubscriptionDate() {
+    private void setSubscriptionDate() {
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.ENGLISH);
+        this.subscriptionDate = "test";
+    }
+
+    private String getSubscriptionDate() {
         return subscriptionDate;
     }
 
-    public void setsubscriptionDate(GregorianCalendar subscriptionDate) {
-        this.subscriptionDate = subscriptionDate;
-    }
+//    public GregorianCalendar getsubscriptionDate() {
+//        return subscriptionDate;
+//    }
+//
+//    public void setsubscriptionDate(GregorianCalendar subscriptionDate) {
+//        this.subscriptionDate = subscriptionDate;
+//    }
 
     public Integer getId() {
         return id;

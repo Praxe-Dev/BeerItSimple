@@ -2,21 +2,18 @@ package view;
 
 import com.jfoenix.controls.JFXButton;
 import controller.CustomerController;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import model.CustomerTableView;
+import model.Customer;
+import model.CustomerTableFormat;
 
-import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
 
 public class CustomersView extends VBox implements Initializable {
@@ -27,6 +24,32 @@ public class CustomersView extends VBox implements Initializable {
     private Label label;
     @FXML
     private JFXButton newCustomer;
+    @FXML
+    private TableView<CustomerTableFormat> customersTable;
+    @FXML
+    private TableColumn<CustomerTableFormat, Integer> customerId;
+    @FXML
+    private TableColumn<CustomerTableFormat, String> contactName;
+    @FXML
+    private TableColumn<CustomerTableFormat, String> phoneNumber;
+    @FXML
+    private TableColumn<CustomerTableFormat, String> address;
+    @FXML
+    private TableColumn<CustomerTableFormat, String> subscriptionDate;
+    @FXML
+    private TableColumn<CustomerTableFormat, String> bankAccountNumber;
+    @FXML
+    private TableColumn<CustomerTableFormat, String> businessNumber;
+    @FXML
+    private TableColumn<CustomerTableFormat, String> VATNumber;
+    @FXML
+    private TableColumn<CustomerTableFormat, String> cityLabel;
+    @FXML
+    private TableColumn<CustomerTableFormat, Integer> zipCode;
+    @FXML
+    private TableColumn<CustomerTableFormat, String> rankLabel;
+    @FXML
+    private TableColumn<CustomerTableFormat, Integer> creditLimit;
 
     /**
      * Variable d'instance
@@ -49,30 +72,36 @@ public class CustomersView extends VBox implements Initializable {
             login.show();
         });
 
-        TableView<CustomerTableView> customersTable = new TableView<>();
+        initTableCustomer();
 
-//        ObservableList<CustomerTableView> allCustomer = customersController.getAllCustomers();
-//
-//        TableColumn<CustomerTableView, Integer> idColumn = new TableColumn<CustomerTableView, Integer>("Id #");
-//        idColumn.prefWidthProperty().bind(customersTable.widthProperty().multiply(0.1));
-//        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-//
-//        TableColumn<CustomerTableView, String> contactNameColumn = new TableColumn<CustomerTableView, String>("Contact Name");
-//        contactNameColumn.prefWidthProperty().bind(customersTable.widthProperty().multiply(0.3));
-//        contactNameColumn.setCellValueFactory(new PropertyValueFactory<>("contactName"));
-//
-//        TableColumn<CustomerTableView, String> phoneNumberColumn = new TableColumn<CustomerTableView, String>("Phone Number");
-//        phoneNumberColumn.prefWidthProperty().bind(customersTable.widthProperty().multiply(0.3));
-//        phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
-//
-//        TableColumn<CustomerTableView, String> mailColumn = new TableColumn<CustomerTableView, String>("Mail");
-//        mailColumn.prefWidthProperty().bind(customersTable.widthProperty().multiply(0.3));
-//        mailColumn.setCellValueFactory(new PropertyValueFactory<>("mail"));
-//
-//        customersTable.setItems(customersController.getAllCustomers());
-//        customersTable.getColumns().addAll(idColumn, contactNameColumn, phoneNumberColumn, mailColumn);
+    }
 
-//        int labelIndex = vbox.getChildren().indexOf(label);
-//        vbox.getChildren().add(labelIndex + 1,customersTable);
+    public void initTableCustomer() {
+        customerId.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, Integer>("id"));
+        contactName.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("contactName"));
+        phoneNumber.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("phoneNumber"));
+        address.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("address"));
+//        subscriptionDate.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("subscriptionDate"));
+        bankAccountNumber.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("bankAccountNumber"));
+        businessNumber.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("businessNumber"));
+        VATNumber.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("VATNumber"));
+        cityLabel.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("cityLabel"));
+        zipCode.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, Integer>("zipCode"));
+        rankLabel.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("rankLabel"));
+        creditLimit.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, Integer>("creditLimit"));
+
+        ArrayList<Customer> customersList = customersController.getAllCustomers();
+        ArrayList<CustomerTableFormat> customersRow = new ArrayList<>();
+        for (Customer customer : customersList) {
+            customersRow.add(new CustomerTableFormat(customer));
+        }
+
+        customersTable.getItems().setAll(customersRow);
+
+        customersTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+//        System.out.println("Multiple : " + (double) 1 /customersTable.getColumns().size());
+        for (int i = 0; i < customersTable.getColumns().size(); i++) {
+            customersTable.getColumns().get(i).prefWidthProperty().bind(customersTable.widthProperty().multiply((double) 1 / customersTable.getColumns().size()));
+        }
     }
 }

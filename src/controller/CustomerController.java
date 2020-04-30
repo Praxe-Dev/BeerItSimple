@@ -1,11 +1,10 @@
 package controller;
 
 import business.CustomerBusiness;
-import exception.CustomerException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Customer;
-import model.CustomerTableView;
+import model.CustomerTableFormat;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -21,17 +20,8 @@ public class CustomerController {
      * Ask the business package to get allCustomer from DB
      * @return an array of CustomerViewTable that contains the right format to be displayed
      */
-    public ObservableList<CustomerTableView> getAllCustomers() {
-        ArrayList<Customer> customersList = customerBusiness.getAllCustomers();
-        ObservableList<CustomerTableView> allCustomers = FXCollections.observableArrayList();
-        CustomerTableView customerView;
-
-        for (Customer customer : customersList) {
-            customerView = new CustomerTableView(customer.getEntity().getId(), customer.getEntity().getContactName(), customer.getEntity().getPhoneNumber(), customer.getEntity().getMail());
-            allCustomers.add(customerView);
-        }
-
-        return allCustomers;
+    public ArrayList<Customer> getAllCustomers() {
+        return customerBusiness.getAllCustomers();
     }
 
     public boolean create(Customer customer) throws SQLException {

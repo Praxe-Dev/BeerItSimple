@@ -1,11 +1,13 @@
 package model;
 
+import java.util.GregorianCalendar;
+
 public class Customer {
     private Rank rank;
     private Entity entity;
-    private String date;
+    private GregorianCalendar date;
 
-    public Customer(Entity entity, Rank rank, String date) {
+    public Customer(Entity entity, Rank rank, GregorianCalendar date) {
         setEntity(entity);
         setRank(rank);
         setDate(date);
@@ -15,7 +17,7 @@ public class Customer {
         this(entity, rank, null);
     }
 
-    public Customer(Entity entity, String date){
+    public Customer(Entity entity, GregorianCalendar date){
         this(entity, null, date);
     }
 
@@ -27,7 +29,7 @@ public class Customer {
         this.entity = entity;
     }
 
-    public String getDate() {
+    public GregorianCalendar getDate() {
         return date;
     }
 
@@ -43,7 +45,7 @@ public class Customer {
         this.rank = rank;
     }
 
-    public void setDate(String date) {
+    public void setDate(GregorianCalendar date) {
         this.date = date;
     }
 
