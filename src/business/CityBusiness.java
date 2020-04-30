@@ -14,6 +14,7 @@ public class CityBusiness {
         this.dao = new CityDBAccess();
     }
 
+    /*
     public ArrayList<String> getAllCities() {
         ArrayList<String> cityList = new ArrayList<>();
 
@@ -22,5 +23,10 @@ public class CityBusiness {
         }
 
         return cityList;
+    }
+    */
+
+    public ArrayList<City> getAllCities() {
+        return dao.getAllCities();
     }
 }

@@ -13,6 +13,14 @@ public class City {
         this.label = label;
     }
 
+    public String getLabel() {
+        return label;
+    }
+
+    public Integer getZipCode() {
+        return zipCode;
+    }
+
     public void setZipCode(int zipCode) {
         if (zipCode < 1000 || zipCode > 9999) {
             // TODO: throw error ZipCode

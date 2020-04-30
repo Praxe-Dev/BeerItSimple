@@ -1,11 +1,13 @@
 package controller;
 
 import business.CustomerBusiness;
+import exception.CustomerException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Customer;
 import model.CustomerTableView;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class CustomerController {
@@ -32,6 +34,7 @@ public class CustomerController {
         return allCustomers;
     }
 
-    public void newCustomer() {
+    public int create(Customer customer) throws SQLException {
+        return customerBusiness.create(customer);
     }
 }

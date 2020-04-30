@@ -1,6 +1,5 @@
 package dataAccess;
 
-import com.sun.webkit.graphics.WCPathIterator;
 import model.City;
 
 import java.sql.Connection;
@@ -28,8 +27,8 @@ public class CityDBAccess implements CityDataAccess {
             City city;
 
             while (data.next()) {
-                System.out.println("Label : " + data.getString("Label"));
-                System.out.println("zipCode : " + data.getInt("zipCode"));
+                //System.out.println("Label : " + data.getString("Label"));
+                //System.out.println("zipCode : " + data.getInt("zipCode"));
 
                 city = new City(data.getString("Label"), data.getInt("zipCode"));
                 cityList.add(city);

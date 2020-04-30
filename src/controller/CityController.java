@@ -13,7 +13,14 @@ public class CityController {
 
     public CityController(){ this.cityBusiness = new CityBusiness(); }
 
+    //Changement comme indiqué lors de la réunion Teams
+    /*
     public ObservableList<String> getAllCities() {
         return FXCollections.observableList(cityBusiness.getAllCities());
+    }
+     */
+
+    public ArrayList<City> getAllCities() {
+        return cityBusiness.getAllCities();
     }
 }
