@@ -34,7 +34,7 @@ public class CustomerController {
         return allCustomers;
     }
 
-    public int create(Customer customer) throws SQLException {
+    public boolean create(Customer customer) throws SQLException {
         return customerBusiness.create(customer);
     }
 }

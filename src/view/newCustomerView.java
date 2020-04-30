@@ -4,21 +4,17 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.validation.IntegerValidator;
+import com.jfoenix.validation.RegexValidator;
 import com.jfoenix.validation.RequiredFieldValidator;
 import controller.CityController;
 import controller.CustomerController;
 import controller.RankController;
-import exception.CustomerException;
-import exception.SQLManageException;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.util.StringConverter;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import model.City;
 import model.Customer;
@@ -27,7 +23,6 @@ import model.Rank;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 
 public class newCustomerView extends View {
 
@@ -79,54 +74,112 @@ public class newCustomerView extends View {
         cityController = new CityController();
         customerController = new CustomerController();
 
-        // affiche pour un client particulier
+        // affiche de base pour un client particulier
         businessView.setVisible(false);
 
         // Initialise l'objet reqField qui, ajouter aux textField, permet de vérifier que ceux ci sont initaliser
         RequiredFieldValidator reqField = new RequiredFieldValidator();
         reqField.setMessage("Required field");
+        RegexValidator mailValidator = new RegexValidator();
+        mailValidator.setRegexPattern("^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
+        mailValidator.setMessage("The mail format is not valid");
 
-        // Ajoute les champs requis
+        mail.getValidators().add(mailValidator);
+        mail.focusedProperty().addListener((o, oldVal, newVal) -> {
+            if (!newVal && !newVal.equals("")) {
+                mail.validate();
+            }
+        });
+
         contactName.getValidators().add(reqField);
-        phoneNumber.getValidators().add(reqField);
+        contactName.focusedProperty().addListener((o, oldVal, newVal) -> {
+            if (!newVal) {
+                contactName.validate();
+            }
+        });
+
+        RegexValidator phoneNumberValidator = new RegexValidator();
+        phoneNumberValidator.setRegexPattern("^(\\d{4})\\/(\\d{2})\\.(\\d{2})\\.(\\d{2})$");
+        phoneNumberValidator.setMessage("Phone number format : xxxx/xx.xx.xx");
+        phoneNumber.getValidators().addAll(reqField, phoneNumberValidator);
+        phoneNumber.focusedProperty().addListener((o, oldVal, newVal) -> {
+            if (!newVal) {
+                phoneNumber.validate();
+            }
+        });
+
         address.getValidators().add(reqField);
+        address.focusedProperty().addListener((o, oldVal, newVal) -> {
+            if (!newVal) {
+                address.validate();
+            }
+        });
+
+        IntegerValidator houseNumberValidatore = new IntegerValidator();
+        houseNumberValidatore.setMessage("Should be a number");
         houseNumber.getValidators().add(reqField);
-        accountNumber.getValidators().add(reqField);
-        businessNumber.getValidators().add(reqField);
+        houseNumber.focusedProperty().addListener((o, oldVal, newVal) -> {
+            if (!newVal) {
+                houseNumber.validate();
+            }
+        });
+
+        RegexValidator accountNumberValidator = new RegexValidator();
+        accountNumberValidator.setRegexPattern("^([A-Z]{2})(\\d{14})$");
+        accountNumberValidator.setMessage("Format : BEXXXXXXXXXXXXXX");
+        accountNumber.getValidators().addAll(reqField, accountNumberValidator);
+        accountNumber.focusedProperty().addListener((o, oldVal, newVal) -> {
+            if (!newVal) {
+                accountNumber.validate();
+            }
+        });
+
+        RegexValidator businessNumberValidator = new RegexValidator();
+        businessNumberValidator.setRegexPattern("^(\\d{4})\\.(\\d{3})\\.(\\d{3})$");
+        businessNumberValidator.setMessage("Format : XXXX.XXX.XXX");
+        businessNumber.getValidators().addAll(businessNumberValidator);
+        businessNumber.focusedProperty().addListener((o, oldVal, newVal) -> {
+            if (!newVal) {
+                businessNumber.validate();
+            }
+        });
+
         VATNumber.getValidators().add(reqField);
+        VATNumber.focusedProperty().addListener((o, oldVal, newVal) -> {
+            if (!newVal) {
+                VATNumber.validate();
+            }
+        });
+
+//        submitBtn.disableProperty().bind((
+//                contactName.textProperty().isNotEmpty()).not());
 
         // permet lors du clic des radio buttons de changer la vue
         privateCustomer.setUserData("private");
         privateCustomer.setOnAction(e -> {
             businessView.setVisible(false);
-            //Le clear n'est pas nécessaire car on passe dans le validator uniquement si la bonne case est cochée. Champs remplis ou non.
-            //accountNumber.clear();
-            //businessNumber.clear();
-            //VATNumber.clear();
-            panel.setPrefHeight(Region.USE_COMPUTED_SIZE);
         });
 
         businessCustomer.setUserData("business");
         businessCustomer.setOnAction(e -> {
             businessView.setVisible(true);
-            panel.setPrefHeight(Region.USE_COMPUTED_SIZE);
         });
 
         //Remplis la combobox Rank
         ArrayList<Rank> rankList = rankController.getAllRanks();
         customerRank.setItems(FXCollections.observableArrayList(rankList));
         customerRank.getSelectionModel().selectFirst();
-        customerRank.setConverter(new StringConverter<Rank>() {
-            @Override
-            public String toString(Rank object) {
-                return object.getLabel() + " (" + object.getCreditLimit() + "€)";
-            }
-
-            @Override
-            public Rank fromString(String string) {
-                return null;
-            }
-        });
+//        customerRank.setConverter(new StringConverter<Rank>() {
+//            @Override
+//            public String toString(Rank object) {
+//                return object.getLabel() + " (" + object.getCreditLimit() + "€)";
+//            }
+//
+//            @Override
+//            public Rank fromString(String string) {
+//                return null;
+//            }
+//        });
 
         /*ObservableList<String> cityList = cityController.getAllCities();
         regionBox.getItems().addAll(cityList);
@@ -134,17 +187,18 @@ public class newCustomerView extends View {
         ArrayList<City> cityList = cityController.getAllCities();
         regionBox.setItems(FXCollections.observableArrayList(cityList));
         regionBox.getSelectionModel().selectFirst();
-        regionBox.setConverter(new StringConverter<City>() {
-            @Override
-            public String toString(City object) {
-                return object.getZipCode() + " " + object.getLabel();
-            }
+//        regionBox.setConverter(new StringConverter<City>() {
+//            @Override
+//            public String toString(City object) {
+//                return object.getZipCode() + " " + object.getLabel();
+//            }
+//
+//            @Override
+//            public City fromString(String string) {
+//                return null;
+//            }
+//        });
 
-            @Override
-            public City fromString(String string) {
-                return null;
-            }
-        });
 
         // Associe l'action aux buttons
         cancelBtn.setOnAction(e -> {
@@ -152,80 +206,58 @@ public class newCustomerView extends View {
         });
 
         submitBtn.setOnAction(e -> {
-            try {
-                int status = 0;
-                status = validateData();
-                //System.out.println(status);
-                if(status != 0){
-                    closeWindow();
-                    new CustomerException("Client créé avec succès !", "Success").showMessage();
+//            try {
+//                int status = 0;
+                if(validateData()) {
+                    System.out.println("INSERTION");
+                    try {
+                        if (insertCustomer())
+                            PopUp.showSuccess("Client créé avec succès !", "Success");
+
+                    } catch (SQLException exception) {
+                        PopUp.showError(exception.getMessage(), "Error");
+                    }
                 }
-            } catch (CustomerException err){
-                err.showMessage();
-            } catch(SQLException ex){
-                new SQLManageException(ex).showMessage();
-            }
         });
 
     }
 
-    private int validateData() throws CustomerException, SQLException {
-        String custType = customerType.getSelectedToggle().getUserData().toString();
-        if(!contactName.validate() || !phoneNumber.validate() || !houseNumber.validate() || !address.validate()){
-            throw new CustomerException("Please complete all fields");
-        } else {
-            //Tout est rempli, on vérifie les types de données entrés
-            System.out.println(mail.getText());
-            if(mail.getText() != null){
-                String regex = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
-                if(!mail.getText().matches(regex)) throw new CustomerException("Please verify email format");
-            }
+    private boolean validateData() {
+        return contactName.validate() && phoneNumber.validate() && address.validate() && houseNumber.validate() && checkBusinessCustomer();
+    }
 
-            String phoneRegex = "^(\\d{4})\\/(\\d{2})\\.(\\d{2})\\.(\\d{2})$";
-            if(!phoneNumber.getText().matches(phoneRegex)) throw new CustomerException("Please verify phone number format. Required format: 0123/45.67.89");
+    /**
+     * @return True if particular cause you don't need those informations for a particular customer
+     */
+    private boolean checkBusinessCustomer() {
+        if (businessCustomer.isSelected()) {
+//            if (accountNumber.validate() && businessNumber.validate() && VATNumber.validate()) {
+//                System.out.println("Retourne vrais !");
+//            } else {
+//                System.out.println("Retourne faux !");
+//            }
+            return accountNumber.validate() && businessNumber.validate() && VATNumber.validate();
         }
-
-        if(custType.equals("business")) {
-            //Business validation
-            if(!VATNumber.validate() || !businessNumber.validate() || !accountNumber.validate()){
-                throw new CustomerException("Please complete all fields");
-            } else {
-                //Tout est rempli, on vérifie les types de données entrés
-                String accountRegex = "^([A-Z]{2})(\\d{14})$";
-                if(!accountNumber.getText().matches(accountRegex)) throw new CustomerException("Please verify account number format. Required format: IBAN");
-
-                String businessNumberRegex = "^(\\d{4})\\.(\\d{3})\\.(\\d{3})$";
-                if(!businessNumber.getText().matches(businessNumberRegex)) throw new CustomerException("Please verify business number format. Required format: 0123.456.789");
-
-                if(fax.getText() != null){
-                    String faxRegex = "^(\\d{3})\\/(\\d{2})\\.(\\d{2})\\.(\\d{2})$";
-                    if(!fax.getText().matches(faxRegex)) throw new CustomerException("Please verify fax format. Required format: 012/22.22.22");
-                }
-            }
-        }
-        return insertCustomer();
+            return true;
     }
 
     /**
      * Supprimer le champ VAT car juste le business number avec BE devant donc calculable ?
-     * Passer le type de houseNumber à varchar/string au lieu de int ? Quelle règle regex ?
      *
      */
 
-    private int insertCustomer() throws SQLException{
-        System.out.println("Insert customer");
-        int status = 0;
+    private boolean insertCustomer() throws SQLException{
         try {
             Customer newCustomer;
-            String custType = customerType.getSelectedToggle().getUserData().toString();
             Entity newEntity = new Entity();
+
             newEntity.setContactName(contactName.getText());
             newEntity.setPhoneNumber(phoneNumber.getText());
             newEntity.setMail(mail.getText());
             newEntity.setStreet(address.getText());
             newEntity.setHouseNumber(Integer.parseInt(houseNumber.getText()));
 
-            if(custType.equals("business")) {
+            if(businessCustomer.isSelected()) {
                 newEntity.setBankAccountNumber(accountNumber.getText());
                 newEntity.setVATNumber("BE" + businessNumber.getText());
                 newEntity.setFax(fax.getText());
@@ -235,11 +267,10 @@ public class newCustomerView extends View {
             City city = regionBox.getSelectionModel().getSelectedItem();
             newEntity.setCity(city);
             newCustomer = new Customer(newEntity, selectedRank);
-            status = customerController.create(newCustomer);
+            return customerController.create(newCustomer);
         } catch (SQLException err) {
             throw err;
         }
-        return status;
     }
 
     @Override

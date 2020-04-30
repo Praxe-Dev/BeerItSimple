@@ -10,5 +10,5 @@ import java.util.ArrayList;
 public interface CustomerDataAccess {
     public ArrayList<Customer> getAllCustomers();
 
-    public int create(Customer customer) throws SQLException;
+    public boolean create(Customer customer) throws SQLException;
 }

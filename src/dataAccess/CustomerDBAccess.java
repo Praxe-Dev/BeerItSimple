@@ -75,7 +75,7 @@ public class CustomerDBAccess implements CustomerDataAccess{
         return null;
     }
 
-    public int create(Customer c) throws SQLException {
+    public boolean create(Customer c) throws SQLException {
         int affectedRowsEntity = 0;
         int affectedRowsCustomer = 0;
         int entityID = 0;
@@ -113,15 +113,8 @@ public class CustomerDBAccess implements CustomerDataAccess{
                     preparedStatementCustomer.setInt(2, c.getRank().getId());
                     preparedStatementCustomer.setDate(3, Date.valueOf(java.time.LocalDate.now()));
                     affectedRowsCustomer = preparedStatementCustomer.executeUpdate();
-                    /*
-                    if(affectedRowsCustomer == 0){
-                        String sqlEntityDel = "DELETE FROM entity WHERE id = ?";
-                        PreparedStatement preparedStatementEntityDel = connection.prepareStatement(sqlEntityDel);
-                        preparedStatementEntityDel.setInt(1, entityID);
-                        preparedStatementEntityDel.executeUpdate();
-                        throw new SQLException("Creating Customer failed. Entity delete");
-                    }
-                     */
+
+
                 } else {
                     throw new SQLException("No ID obtained from entity.");
                 }
@@ -134,6 +127,6 @@ public class CustomerDBAccess implements CustomerDataAccess{
         } else {
             throw new SQLException("Creating Entity failed.");
         }
-        return affectedRowsCustomer;
+        return affectedRowsCustomer != 0;
     }
 }
