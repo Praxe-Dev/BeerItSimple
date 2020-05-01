@@ -207,7 +207,7 @@ public class create extends View {
                     try {
                         if (insertCustomer())
                             PopUp.showSuccess("Client créé avec succès !", "Success");
-
+                            closeWindow();
                     } catch (SQLException exception) {
                         PopUp.showError(exception.getMessage(), "Error");
                     }

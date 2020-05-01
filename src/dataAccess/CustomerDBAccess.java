@@ -90,7 +90,7 @@ public class CustomerDBAccess implements CustomerDataAccess{
 
         //Entity
         try {
-            String sqlEntity = "INSERT INTO entity(mail,contactName, phoneNumber, houseNumber, street, bankAccountNumber, businessNumber, VATNumber, Citylabel, CityZipCode) values(?,?,?,?,?,?,?,?,?,?,?)";
+            String sqlEntity = "INSERT INTO entity(mail,contactName, phoneNumber, houseNumber, street, bankAccountNumber, businessNumber, Citylabel, CityZipCode) values(?,?,?,?,?,?,?,?,?)";
             Entity entity = c.getEntity();
             City city = c.getEntity().getCity();
             preparedStatementEntity = connection.prepareStatement(sqlEntity, Statement.RETURN_GENERATED_KEYS);
@@ -101,9 +101,8 @@ public class CustomerDBAccess implements CustomerDataAccess{
             preparedStatementEntity.setString(5, entity.getStreet());
             preparedStatementEntity.setString(6, entity.getBankAccountNumber());
             preparedStatementEntity.setString(7, entity.getBusinessNumber());
-            preparedStatementEntity.setString(8, entity.getVATNumber());
-            preparedStatementEntity.setString(9, city.getLabel());
-            preparedStatementEntity.setInt(10, city.getZipCode());
+            preparedStatementEntity.setString(8, city.getLabel());
+            preparedStatementEntity.setInt(9, city.getZipCode());
             affectedRowsEntity = preparedStatementEntity.executeUpdate();
         }catch(SQLException ex) {
                 throw ex;
