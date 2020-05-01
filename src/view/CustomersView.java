@@ -11,9 +11,7 @@ import model.Customer;
 import model.CustomerTableFormat;
 
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
 
 public class CustomersView extends VBox implements Initializable {
@@ -51,9 +49,6 @@ public class CustomersView extends VBox implements Initializable {
     @FXML
     private TableColumn<CustomerTableFormat, Integer> creditLimit;
 
-    /**
-     * Variable d'instance
-     */
     private CustomerController customersController;
 
     public CustomersView() {
@@ -64,24 +59,23 @@ public class CustomersView extends VBox implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         newCustomer.setOnAction(e -> {
-            System.out.print("Try Open create customer");
             Window login = new Window("FXML/newCustomerPanel.fxml", "New Customer");
             login.load();
             login.resizable(false);
-//            login.undecorated();
             login.show();
         });
 
         initTableCustomer();
-
     }
 
     public void initTableCustomer() {
+        // Add the factory to the cell
+        // That allow the cell to retrieve its data and display it
         customerId.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, Integer>("id"));
         contactName.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("contactName"));
         phoneNumber.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("phoneNumber"));
         address.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("address"));
-//        subscriptionDate.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("subscriptionDate"));
+        subscriptionDate.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("subscriptionDate"));
         bankAccountNumber.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("bankAccountNumber"));
         businessNumber.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("businessNumber"));
         VATNumber.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("VATNumber"));
@@ -90,6 +84,7 @@ public class CustomersView extends VBox implements Initializable {
         rankLabel.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("rankLabel"));
         creditLimit.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, Integer>("creditLimit"));
 
+        // Transforme les customers en CustomerTableFormat pour l'affichage
         ArrayList<Customer> customersList = customersController.getAllCustomers();
         ArrayList<CustomerTableFormat> customersRow = new ArrayList<>();
         for (Customer customer : customersList) {
@@ -98,8 +93,8 @@ public class CustomersView extends VBox implements Initializable {
 
         customersTable.getItems().setAll(customersRow);
 
+        // Permet de redimensionner les colonnes lorsque la taille de la fenêtre change
         customersTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-//        System.out.println("Multiple : " + (double) 1 /customersTable.getColumns().size());
         for (int i = 0; i < customersTable.getColumns().size(); i++) {
             customersTable.getColumns().get(i).prefWidthProperty().bind(customersTable.widthProperty().multiply((double) 1 / customersTable.getColumns().size()));
         }
