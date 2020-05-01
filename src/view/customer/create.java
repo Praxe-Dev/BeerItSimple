@@ -1,4 +1,4 @@
-package view;
+package view.customer;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -20,11 +20,13 @@ import model.City;
 import model.Customer;
 import model.Entity;
 import model.Rank;
+import view.PopUp;
+import view.View;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class newCustomerView extends View {
+public class create extends View {
 
     @FXML
     VBox panel;
@@ -41,8 +43,6 @@ public class newCustomerView extends View {
     @FXML
     JFXTextField phoneNumber;
     @FXML
-    JFXTextField fax;
-    @FXML
     JFXTextField mail;
     @FXML
     JFXTextField houseNumber;
@@ -54,8 +54,6 @@ public class newCustomerView extends View {
     JFXTextField accountNumber;
     @FXML
     JFXTextField businessNumber;
-    @FXML
-    JFXTextField VATNumber;
     @FXML
     Group businessView;
     @FXML
@@ -77,7 +75,7 @@ public class newCustomerView extends View {
         // affiche de base pour un client particulier
         businessView.setVisible(false);
 
-        // Initialise l'objet reqField qui, ajouter aux textField, permet de vérifier que ceux ci sont initaliser
+        // Initialise l'objet reqField qui, ajouté aux textField, permet de vérifier que ceux ci sont initalisés
         RequiredFieldValidator reqField = new RequiredFieldValidator();
         reqField.setMessage("Required field");
         RegexValidator mailValidator = new RegexValidator();
@@ -86,7 +84,10 @@ public class newCustomerView extends View {
 
         mail.getValidators().add(mailValidator);
         mail.focusedProperty().addListener((o, oldVal, newVal) -> {
-            if (!newVal && !newVal.equals("")) {
+            if (!mail.getText().equals("")) {
+                System.out.println(newVal);
+                System.out.println(oldVal);
+                System.out.println(mail.getText());
                 mail.validate();
             }
         });
@@ -115,8 +116,8 @@ public class newCustomerView extends View {
             }
         });
 
-        IntegerValidator houseNumberValidatore = new IntegerValidator();
-        houseNumberValidatore.setMessage("Should be a number");
+        IntegerValidator houseNumberValidator = new IntegerValidator();
+        houseNumberValidator.setMessage("Should be a number");
         houseNumber.getValidators().add(reqField);
         houseNumber.focusedProperty().addListener((o, oldVal, newVal) -> {
             if (!newVal) {
@@ -144,13 +145,6 @@ public class newCustomerView extends View {
             }
         });
 
-        VATNumber.getValidators().add(reqField);
-        VATNumber.focusedProperty().addListener((o, oldVal, newVal) -> {
-            if (!newVal) {
-                VATNumber.validate();
-            }
-        });
-
 //        submitBtn.disableProperty().bind((
 //                contactName.textProperty().isNotEmpty()).not());
 
@@ -165,7 +159,7 @@ public class newCustomerView extends View {
             businessView.setVisible(true);
         });
 
-        //Remplis la combobox Rank
+        //Rempli la combobox Rank
         ArrayList<Rank> rankList = rankController.getAllRanks();
         customerRank.setItems(FXCollections.observableArrayList(rankList));
         customerRank.getSelectionModel().selectFirst();
@@ -231,18 +225,13 @@ public class newCustomerView extends View {
      */
     private boolean checkBusinessCustomer() {
         if (businessCustomer.isSelected()) {
-//            if (accountNumber.validate() && businessNumber.validate() && VATNumber.validate()) {
-//                System.out.println("Retourne vrais !");
-//            } else {
-//                System.out.println("Retourne faux !");
-//            }
-            return accountNumber.validate() && businessNumber.validate() && VATNumber.validate();
+            return accountNumber.validate() && businessNumber.validate();
         }
-            return true;
+        return true;
     }
 
     /**
-     * Supprimer le champ VAT car juste le business number avec BE devant donc calculable ?
+     * VATNumber supprimé car calculable. "BE" + BusinessNumber
      *
      */
 
@@ -259,8 +248,7 @@ public class newCustomerView extends View {
 
             if(businessCustomer.isSelected()) {
                 newEntity.setBankAccountNumber(accountNumber.getText());
-                newEntity.setVATNumber("BE" + businessNumber.getText());
-                newEntity.setFax(fax.getText());
+                newEntity.setVATNumber(businessNumber.getText());
                 newEntity.setBusinessNumber(businessNumber.getText());
             }
             Rank selectedRank = customerRank.getSelectionModel().getSelectedItem();
