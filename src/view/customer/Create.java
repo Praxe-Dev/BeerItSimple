@@ -8,12 +8,9 @@ import com.jfoenix.validation.NumberValidator;
 import com.jfoenix.validation.RequiredFieldValidator;
 import controller.CustomerController;
 import controller.RankController;
-import exception.CustomerException;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,13 +20,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import model.Customer;
-import model.CustomerTableView;
-import model.Entity;
 import model.Rank;
 import view.View;
 
-import javax.xml.validation.Validator;
 import java.io.IOException;
 import java.util.ArrayList;
 
