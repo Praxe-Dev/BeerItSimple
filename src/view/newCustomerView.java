@@ -144,13 +144,6 @@ public class newCustomerView extends View {
             }
         });
 
-        VATNumber.getValidators().add(reqField);
-        VATNumber.focusedProperty().addListener((o, oldVal, newVal) -> {
-            if (!newVal) {
-                VATNumber.validate();
-            }
-        });
-
 //        submitBtn.disableProperty().bind((
 //                contactName.textProperty().isNotEmpty()).not());
 
@@ -231,20 +224,10 @@ public class newCustomerView extends View {
      */
     private boolean checkBusinessCustomer() {
         if (businessCustomer.isSelected()) {
-//            if (accountNumber.validate() && businessNumber.validate() && VATNumber.validate()) {
-//                System.out.println("Retourne vrais !");
-//            } else {
-//                System.out.println("Retourne faux !");
-//            }
             return accountNumber.validate() && businessNumber.validate() && VATNumber.validate();
         }
             return true;
     }
-
-    /**
-     * Supprimer le champ VAT car juste le business number avec BE devant donc calculable ?
-     *
-     */
 
     private boolean insertCustomer() throws SQLException{
         try {
