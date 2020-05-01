@@ -64,16 +64,6 @@ public class CustomerDBAccess implements CustomerDataAccess{
                     entity.setMail(mail);
                 }
 
-                fax = data.getString("fax");
-                if (!data.wasNull()) {
-                    entity.setFax(fax);
-                }
-
-                VATNumber = data.getString("VATNumber");
-                if (!data.wasNull()) {
-                    entity.setVATNumber(VATNumber);
-                }
-
                 java.sql.Date subscriptionDate = data.getDate("subscribtionDate");
                 if (!data.wasNull()) {
                     calendar = new GregorianCalendar();
