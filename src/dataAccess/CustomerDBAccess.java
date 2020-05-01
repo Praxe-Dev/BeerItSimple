@@ -34,7 +34,6 @@ public class CustomerDBAccess implements CustomerDataAccess{
             Rank rank;
 
             String mail;
-            String fax;
             String VATNumber;
             GregorianCalendar calendar = null;
 
@@ -64,16 +63,6 @@ public class CustomerDBAccess implements CustomerDataAccess{
                     entity.setMail(mail);
                 }
 
-                fax = data.getString("fax");
-                if (!data.wasNull()) {
-                    entity.setFax(fax);
-                }
-
-                VATNumber = data.getString("VATNumber");
-                if (!data.wasNull()) {
-                    entity.setVATNumber(VATNumber);
-                }
-
                 java.sql.Date subscriptionDate = data.getDate("subscribtionDate");
                 if (!data.wasNull()) {
                     calendar = new GregorianCalendar();
@@ -101,7 +90,7 @@ public class CustomerDBAccess implements CustomerDataAccess{
 
         //Entity
         try {
-            String sqlEntity = "INSERT INTO entity(mail,contactName, phoneNumber, houseNumber, street, fax, bankAccountNumber, businessNumber, VATNumber, Citylabel, CityZipCode) values(?,?,?,?,?,?,?,?,?,?,?)";
+            String sqlEntity = "INSERT INTO entity(mail,contactName, phoneNumber, houseNumber, street, bankAccountNumber, businessNumber, VATNumber, Citylabel, CityZipCode) values(?,?,?,?,?,?,?,?,?,?,?)";
             Entity entity = c.getEntity();
             City city = c.getEntity().getCity();
             preparedStatementEntity = connection.prepareStatement(sqlEntity, Statement.RETURN_GENERATED_KEYS);
@@ -110,12 +99,11 @@ public class CustomerDBAccess implements CustomerDataAccess{
             preparedStatementEntity.setString(3, entity.getPhoneNumber());
             preparedStatementEntity.setInt(4, entity.getHouseNumber());
             preparedStatementEntity.setString(5, entity.getStreet());
-            preparedStatementEntity.setString(6, entity.getFax());
-            preparedStatementEntity.setString(7, entity.getBankAccountNumber());
-            preparedStatementEntity.setString(8, entity.getBusinessNumber());
-            preparedStatementEntity.setString(9, entity.getVATNumber());
-            preparedStatementEntity.setString(10, city.getLabel());
-            preparedStatementEntity.setInt(11, city.getZipCode());
+            preparedStatementEntity.setString(6, entity.getBankAccountNumber());
+            preparedStatementEntity.setString(7, entity.getBusinessNumber());
+            preparedStatementEntity.setString(8, entity.getVATNumber());
+            preparedStatementEntity.setString(9, city.getLabel());
+            preparedStatementEntity.setInt(10, city.getZipCode());
             affectedRowsEntity = preparedStatementEntity.executeUpdate();
         }catch(SQLException ex) {
                 throw ex;
