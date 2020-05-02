@@ -37,6 +37,9 @@ public class CustomerDBAccess implements CustomerDataAccess{
             String mail;
             String VATNumber;
             GregorianCalendar calendar = null;
+            String accountNumber;
+            String businessNumber;
+
 
             while(data.next()) {
                 city = new City(
@@ -52,6 +55,15 @@ public class CustomerDBAccess implements CustomerDataAccess{
                         data.getString("street"),
                         city
                 );
+
+                accountNumber = data.getString("bankAccountNumber");
+                if (accountNumber != null)
+                    entity.setBankAccountNumber(accountNumber);
+
+                businessNumber = data.getString("businessNumber");
+                if (businessNumber != null)
+                    entity.setBusinessNumber(businessNumber);
+
 
                 rank = new Rank(
                         data.getInt("r.id"),
@@ -111,6 +123,16 @@ public class CustomerDBAccess implements CustomerDataAccess{
                         data.getString("street"),
                         city
                 );
+
+                String bankAccount = data.getString("bankAccountNumber");
+                if (bankAccount != null) {
+                    entity.setBankAccountNumber(bankAccount);
+                }
+
+                String businessNumber = data.getString("businessNumber");
+                if (businessNumber != null) {
+                    entity.setBusinessNumber(businessNumber);
+                }
 
                 Rank rank = new Rank(
                         data.getInt("r.id"),
