@@ -6,6 +6,7 @@ import controller.CityController;
 import controller.CustomerController;
 import controller.RankController;
 import exception.CustomerException;
+import exception.DuplicataException;
 import exception.NoCustomerFoundException;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
@@ -19,10 +20,14 @@ import model.Entity;
 import model.Rank;
 import utils.Validators;
 import view.CustomersView;
+import view.PopUp;
 import view.View;
 
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Update extends View {
 
@@ -81,13 +86,15 @@ public class Update extends View {
         address.setText(selectedCustomer.getEntity().getStreet());
         houseNumber.setText(selectedCustomer.getEntity().getHouseNumber().toString());
         phoneNumber.setText(selectedCustomer.getEntity().getPhoneNumber());
+
+//        mail.setText(selectedCustomer.getEntity().getMail());
         // Avoid null pointer for the validator
         if (selectedCustomer.getEntity().getMail() == null) {
             mail.setText("");
         } else {
             mail.setText(selectedCustomer.getEntity().getMail());
         }
-        
+
         if (selectedCustomer.getEntity().getBankAccountNumber() == null) {
             accountNumber.setText("");
         } else {
@@ -141,8 +148,9 @@ public class Update extends View {
                         }
 
 
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
+
+                    } catch (DuplicataException exception) {
+                        exception.showError();
                     }
                 }
         });
@@ -186,16 +194,34 @@ public class Update extends View {
         return true;
     }
 
-    public boolean updateCostumer() throws SQLException {
+    public boolean updateCostumer() throws DuplicataException {
         selectedCustomer.setRank(customerRank.getSelectionModel().getSelectedItem());
         selectedCustomer.getEntity().setContactName(contactName.getText());
         selectedCustomer.getEntity().setStreet(address.getText());
         selectedCustomer.getEntity().setHouseNumber(Integer.parseInt(houseNumber.getText()));
-        selectedCustomer.getEntity().setMail(mail.getText());
+
+        if (mail.getText().equals("")) {
+            selectedCustomer.getEntity().setMail(null);
+        } else {
+            selectedCustomer.getEntity().setMail(mail.getText());
+        }
+
         selectedCustomer.getEntity().setPhoneNumber(phoneNumber.getText());
         selectedCustomer.getEntity().setCity(region.getValue());
-        selectedCustomer.getEntity().setBankAccountNumber(accountNumber.getText());
-        selectedCustomer.getEntity().setBusinessNumber(businessNumber.getText());
+
+        if (accountNumber.getText().equals("")) {
+            selectedCustomer.getEntity().setBankAccountNumber(null);
+        } else {
+            selectedCustomer.getEntity().setBankAccountNumber(accountNumber.getText());
+        }
+//        selectedCustomer.getEntity().setBankAccountNumber(accountNumber.getText());
+
+        if (businessNumber.getText().equals("")) {
+            selectedCustomer.getEntity().setBusinessNumber(null);
+        } else {
+            selectedCustomer.getEntity().setBusinessNumber(businessNumber.getText());
+        }
+//        selectedCustomer.getEntity().setBusinessNumber(businessNumber.getText());
 
         return customerController.update(selectedCustomer);
     }

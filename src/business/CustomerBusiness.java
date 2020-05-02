@@ -3,10 +3,12 @@ package business;
 import dataAccess.CustomerDBAccess;
 import dataAccess.CustomerDataAccess;
 import exception.CustomerException;
+import exception.DuplicataException;
 import exception.NoCustomerFoundException;
 import model.Customer;
 
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
 public class CustomerBusiness {
@@ -32,7 +34,7 @@ public class CustomerBusiness {
         return dao.getCustomer(id);
     }
 
-    public boolean update(Customer customer) {
+    public boolean update(Customer customer) throws DuplicataException {
         return dao.update(customer);
     }
 }
