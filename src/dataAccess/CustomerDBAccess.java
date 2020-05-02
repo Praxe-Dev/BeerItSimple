@@ -1,6 +1,7 @@
 package dataAccess;
 
 import exception.CustomerException;
+import exception.NoCustomerFoundException;
 import model.City;
 import model.Customer;
 import model.Entity;
@@ -84,7 +85,7 @@ public class CustomerDBAccess implements CustomerDataAccess{
     }
 
     @Override
-    public Customer getCustomer(Integer id) {
+    public Customer getCustomer(Integer id) throws CustomerException, NoCustomerFoundException {
         String sqlInstruction = "SELECT customer.*, entity.*, r.*, city.* FROM customer\n" +
                                 "JOIN entity ON customer.EntityId = entity.id\n" +
                                 "JOIN `rank` r ON r.id = customer.RankId\n" +
@@ -132,17 +133,12 @@ public class CustomerDBAccess implements CustomerDataAccess{
 
                 return new Customer(entity, rank, calendar);
 
-            } else {
-                throw new CustomerException();
-            }
-
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            } else {{
+                throw new NoCustomerFoundException();
+            }}
+        } catch (SQLException e) {
+            throw new CustomerException();
         }
-
-        return null;
     }
 
     public boolean create(Customer c) throws SQLException {
@@ -153,7 +149,7 @@ public class CustomerDBAccess implements CustomerDataAccess{
 
         //Entity
         try {
-            String sqlEntity = "INSERT INTO entity(mail,contactName, phoneNumber, houseNumber, street, fax, bankAccountNumber, businessNumber, VATNumber, Citylabel, CityZipCode) values(?,?,?,?,?,?,?,?,?,?,?)";
+            String sqlEntity = "INSERT INTO entity(mail,contactName, phoneNumber, houseNumber, street, bankAccountNumber, businessNumber, VATNumber, Citylabel, CityZipCode) values(?,?,?,?,?,?,?,?,?,?)";
             Entity entity = c.getEntity();
             City city = c.getEntity().getCity();
             preparedStatementEntity = connection.prepareStatement(sqlEntity, Statement.RETURN_GENERATED_KEYS);
@@ -162,12 +158,11 @@ public class CustomerDBAccess implements CustomerDataAccess{
             preparedStatementEntity.setString(3, entity.getPhoneNumber());
             preparedStatementEntity.setInt(4, entity.getHouseNumber());
             preparedStatementEntity.setString(5, entity.getStreet());
-            preparedStatementEntity.setString(6, entity.getFax());
-            preparedStatementEntity.setString(7, entity.getBankAccountNumber());
-            preparedStatementEntity.setString(8, entity.getBusinessNumber());
-            preparedStatementEntity.setString(9, entity.getVATNumber());
-            preparedStatementEntity.setString(10, city.getLabel());
-            preparedStatementEntity.setInt(11, city.getZipCode());
+            preparedStatementEntity.setString(6, entity.getBankAccountNumber());
+            preparedStatementEntity.setString(7, entity.getBusinessNumber());
+            preparedStatementEntity.setString(8, entity.getVATNumber());
+            preparedStatementEntity.setString(9, city.getLabel());
+            preparedStatementEntity.setInt(10, city.getZipCode());
             affectedRowsEntity = preparedStatementEntity.executeUpdate();
         }catch(SQLException ex) {
                 throw ex;
@@ -198,5 +193,46 @@ public class CustomerDBAccess implements CustomerDataAccess{
             throw new SQLException("Creating Entity failed.");
         }
         return affectedRowsCustomer != 0;
+    }
+
+    public boolean update(Customer customer) {
+        int affectedRow = 0;
+
+        String sqlInstruction = "UPDATE customer\n" +
+                                "JOIN entity ON customer.EntityId = entity.id\n" +
+                                "SET\n" +
+                                " customer.RankId = ?,\n" +
+                                " entity.mail = ?,\n" +
+                                " entity.contactName = ?,\n" +
+                                "entity.phoneNumber = ?,\n" +
+                                "entity.houseNumber = ?,\n" +
+                                "entity.street = ?,\n" +
+                                "entity.bankAccountNumber = ?,\n" +
+                                "entity.businessNumber = ?,\n" +
+                                "entity.CityLabel = ?,\n" +
+                                "entity.CityZipCode = ?\n" +
+                                "WHERE customer.EntityId = ?";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setInt(1, customer.getRank().getId());
+            preparedStatement.setString(2, customer.getEntity().getMail());
+            preparedStatement.setString(3, customer.getEntity().getContactName());
+            preparedStatement.setString(4, customer.getEntity().getPhoneNumber());
+            preparedStatement.setInt(5, customer.getEntity().getHouseNumber());
+            preparedStatement.setString(6, customer.getEntity().getStreet());
+            preparedStatement.setString(7, customer.getEntity().getBankAccountNumber());
+            preparedStatement.setString(8, customer.getEntity().getBusinessNumber());
+            preparedStatement.setString(9, customer.getEntity().getCity().getLabel());
+            preparedStatement.setInt(10, customer.getEntity().getCity().getZipCode());
+            preparedStatement.setInt(11, customer.getEntity().getId());
+
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 }

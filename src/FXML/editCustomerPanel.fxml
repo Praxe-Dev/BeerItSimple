@@ -2,16 +2,19 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="panel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="734.0" prefWidth="1053.0" stylesheets="/view/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.editCustomerView">
+<VBox fx:id="panel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="734.0" prefWidth="1053.0" stylesheets="/view/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.customer.Update">
    <children>
       <AnchorPane prefHeight="98.0" prefWidth="600.0">
          <children>
@@ -23,6 +26,37 @@
             <Line endX="1031.5" endY="78.0" startX="30.292892456054688" startY="78.0" />
          </children>
       </AnchorPane>
+      <HBox alignment="CENTER">
+         <children>
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="38.0" prefWidth="175.0" text="Customer type :">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="30.0" right="30.0" />
+               </HBox.margin>
+            </Label>
+            <JFXRadioButton fx:id="privateCustomer" selected="true" text="Private">
+               <toggleGroup>
+                  <ToggleGroup fx:id="customerType" />
+               </toggleGroup>
+               <HBox.margin>
+                  <Insets left="30.0" right="30.0" />
+               </HBox.margin>
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </JFXRadioButton>
+            <JFXRadioButton fx:id="businessCustomer" text="Business" toggleGroup="$customerType">
+               <HBox.margin>
+                  <Insets left="30.0" right="30.0" />
+               </HBox.margin>
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </JFXRadioButton>
+         </children>
+      </HBox>
       <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="210.0" prefHeight="100.0" prefWidth="357.0">
          <children>
             <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="38.0" prefWidth="175.0" text="Rang Client :">
@@ -130,46 +164,40 @@
             </JFXComboBox>
          </children>
       </HBox>
-      <HBox alignment="CENTER_LEFT" prefHeight="87.0" prefWidth="1053.0">
-         <children>
-            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="38.0" prefWidth="175.0" text="Bank account :">
-               <HBox.margin>
-                  <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
-               </HBox.margin>
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <JFXTextField fx:id="accountNumber" labelFloat="true" prefWidth="245.0" promptText="BEXXXXXXXXXXXXXX (facultatif)">
-               <HBox.margin>
-                  <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
-               </HBox.margin>
-            </JFXTextField>
-            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="38.0" prefWidth="175.0" text="Business number:">
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <HBox.margin>
-                  <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
-               </HBox.margin>
-            </Label>
-            <JFXTextField fx:id="businessNumber" prefWidth="245.0">
-               <HBox.margin>
-                  <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
-               </HBox.margin>
-            </JFXTextField>
-         </children>
-      </HBox>
+      <Group fx:id="businessView">
+         <HBox alignment="CENTER_LEFT" prefHeight="87.0" prefWidth="1053.0">
+            <children>
+               <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="38.0" prefWidth="175.0" text="Bank account :">
+                  <HBox.margin>
+                     <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
+                  </HBox.margin>
+                  <font>
+                     <Font size="18.0" />
+                  </font>
+               </Label>
+               <JFXTextField fx:id="accountNumber" prefWidth="245.0">
+                  <HBox.margin>
+                     <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
+                  </HBox.margin>
+               </JFXTextField>
+               <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="38.0" prefWidth="175.0" text="Business number:">
+                  <font>
+                     <Font size="18.0" />
+                  </font>
+                  <HBox.margin>
+                     <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
+                  </HBox.margin>
+               </Label>
+               <JFXTextField fx:id="businessNumber" prefWidth="245.0">
+                  <HBox.margin>
+                     <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
+                  </HBox.margin>
+               </JFXTextField>
+            </children>
+         </HBox>
+      </Group>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="600.0">
          <children>
-            <JFXButton fx:id="ordersBtn" buttonType="RAISED" layoutX="312.0" layoutY="23.0" prefHeight="75.0" prefWidth="175.0" ripplerFill="WHITE" style="-fx-background-color: #1f6ddb;" text="Orders" textFill="WHITE">
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <HBox.margin>
-                  <Insets left="50.0" right="50.0" />
-               </HBox.margin>
-            </JFXButton>
             <JFXButton fx:id="cancelBtn" buttonType="RAISED" prefHeight="75.0" prefWidth="175.0" ripplerFill="WHITE" style="-fx-background-color: red;" text="Cancel" textFill="WHITE">
                <HBox.margin>
                   <Insets left="50.0" right="50.0" />

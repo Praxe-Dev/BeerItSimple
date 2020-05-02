@@ -1,6 +1,7 @@
 package dataAccess;
 
 import exception.CustomerException;
+import exception.NoCustomerFoundException;
 import model.Customer;
 import model.Rank;
 
@@ -12,5 +13,7 @@ public interface CustomerDataAccess {
 
     public boolean create(Customer customer) throws SQLException;
 
-    public Customer getCustomer(Integer id);
+    public Customer getCustomer(Integer id) throws CustomerException, NoCustomerFoundException;
+
+    boolean update(Customer customer);
 }

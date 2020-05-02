@@ -1,6 +1,8 @@
 package controller;
 
 import business.CustomerBusiness;
+import exception.CustomerException;
+import exception.NoCustomerFoundException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Customer;
@@ -28,7 +30,11 @@ public class CustomerController {
         return customerBusiness.create(customer);
     }
 
-    public Customer getCustomer(Integer id) {
+    public Customer getCustomer(Integer id) throws CustomerException, NoCustomerFoundException {
         return customerBusiness.getCustomer(id);
+    }
+
+    public boolean update(Customer customer) {
+        return customerBusiness.update(customer);
     }
 }

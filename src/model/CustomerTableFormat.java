@@ -13,7 +13,6 @@ public class CustomerTableFormat {
     private String subscriptionDate;
     private String bankAccountNumber;
     private String businessNumber;
-    private String VATNumber;
     private String cityLabel;
     private Integer zipCode;
     private String rankLabel;
@@ -28,7 +27,6 @@ public class CustomerTableFormat {
         setSubscriptionDate(customer.getDate());
         this.bankAccountNumber = customer.getEntity().getBankAccountNumber();
         this.businessNumber = customer.getEntity().getBusinessNumber();
-        this.VATNumber = customer.getEntity().getVATNumber();
         this.cityLabel = customer.getEntity().getCity().getLabel();
         this.zipCode = customer.getEntity().getCity().getZipCode();
         this.rankLabel = customer.getRank().getLabel();
@@ -71,10 +69,6 @@ public class CustomerTableFormat {
 
     public String getBusinessNumber() {
         return businessNumber;
-    }
-
-    public String getVATNumber() {
-        return VATNumber;
     }
 
     public String getCityLabel() {

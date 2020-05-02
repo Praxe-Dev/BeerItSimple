@@ -88,7 +88,7 @@
                               <Insets left="40.0" right="20.0" />
                            </HBox.margin>
                         </JFXTextField>
-                        <JFXButton fx:id="addArticleBtn" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: rgba(0,255,0,0.7); -fx-background-radius: 50%;" text=" " textAlignment="CENTER" textFill="WHITE">
+                        <JFXButton fx:id="addArticleBtn" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" prefHeight="39.0" prefWidth="39.0" style="-fx-background-color: rgba(0,255,0,0.7); -fx-background-radius: 50%;" text=" " textAlignment="CENTER" textFill="WHITE">
                            <HBox.margin>
                               <Insets left="40.0" right="20.0" />
                            </HBox.margin>
@@ -96,7 +96,7 @@
                               <Font size="15.0" />
                            </font>
                            <graphic>
-                              <FontAwesomeIcon fill="WHITE" glyphName="PLUS" size="3em" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" />
+                              <FontAwesomeIcon fill="WHITE" glyphName="PLUS" size="1.5em" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" />
                            </graphic>
                         </JFXButton>
                      </children>

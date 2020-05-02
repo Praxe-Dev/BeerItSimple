@@ -94,7 +94,7 @@ INSERT INTO Entity (mail, contactName, phoneNumber, houseNumber, street, bankAcc
 VALUES ('etuXXXXX@henallux.be', 'John Doe', '0470/21.01.02', 30, 'Rue de Bruxelles', 'BE00111122223333', 'Namur', 5000);
 
 INSERT INTO Entity (mail, contactName, phoneNumber, houseNumber, street, bankAccountNumber, CityLabel, CityZipCode)
-VALUES ('peter@gmail.be', 'Peter Mark', '047/16.65.64', 30, 'Rue de Bruxelles', 'BE02111122223333', 'Namur', 5000);
+VALUES ('peter@gmail.be', 'Peter Mark', '0475/16.65.64', 30, 'Rue de Bruxelles', 'BE02111122223333', 'Namur', 5000);
 
 INSERT INTO Entity (mail, contactName, phoneNumber, houseNumber, street, bankAccountNumber, CityLabel, CityZipCode)
 VALUES ('venom@gmail.be', 'Peter Dinklage', '0473/12.31.12', 30, 'Rue de Bruxelles', 'BE07111122223333', 'Namur', 5000);

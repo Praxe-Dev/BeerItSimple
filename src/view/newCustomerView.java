@@ -20,6 +20,7 @@ import model.City;
 import model.Customer;
 import model.Entity;
 import model.Rank;
+import utils.Validators;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -55,8 +56,6 @@ public class newCustomerView extends View {
     @FXML
     JFXTextField businessNumber;
     @FXML
-    JFXTextField VATNumber;
-    @FXML
     Group businessView;
     @FXML
     JFXButton cancelBtn;
@@ -78,82 +77,24 @@ public class newCustomerView extends View {
         businessView.setVisible(false);
 
         // Initialise l'objet reqField qui, ajouter aux textField, permet de vérifier que ceux ci sont initaliser
-        RequiredFieldValidator reqField = new RequiredFieldValidator();
-        reqField.setMessage("Required field");
-        RegexValidator mailValidator = new RegexValidator();
-        mailValidator.setRegexPattern("^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
-        mailValidator.setMessage("The mail format is not valid");
+//        RequiredFieldValidator reqField = new RequiredFieldValidator();
+//        reqField.setMessage("Required field");
 
-        mail.getValidators().add(mailValidator);
-        mail.focusedProperty().addListener((o, oldVal, newVal) -> {
-            if (!newVal && !newVal.equals("")) {
-                mail.validate();
-            }
-        });
-
-        contactName.getValidators().add(reqField);
-        contactName.focusedProperty().addListener((o, oldVal, newVal) -> {
-            if (!newVal) {
-                contactName.validate();
-            }
-        });
-
-        RegexValidator phoneNumberValidator = new RegexValidator();
-        phoneNumberValidator.setRegexPattern("^(\\d{4})\\/(\\d{2})\\.(\\d{2})\\.(\\d{2})$");
-        phoneNumberValidator.setMessage("Phone number format : xxxx/xx.xx.xx");
-        phoneNumber.getValidators().addAll(reqField, phoneNumberValidator);
-        phoneNumber.focusedProperty().addListener((o, oldVal, newVal) -> {
-            if (!newVal) {
-                phoneNumber.validate();
-            }
-        });
-
-        address.getValidators().add(reqField);
-        address.focusedProperty().addListener((o, oldVal, newVal) -> {
-            if (!newVal) {
-                address.validate();
-            }
-        });
-
-        IntegerValidator houseNumberValidatore = new IntegerValidator();
-        houseNumberValidatore.setMessage("Should be a number");
-        houseNumber.getValidators().add(reqField);
-        houseNumber.focusedProperty().addListener((o, oldVal, newVal) -> {
-            if (!newVal) {
-                houseNumber.validate();
-            }
-        });
-
-        RegexValidator accountNumberValidator = new RegexValidator();
-        accountNumberValidator.setRegexPattern("^([A-Z]{2})(\\d{14})$");
-        accountNumberValidator.setMessage("Format : BEXXXXXXXXXXXXXX");
-        accountNumber.getValidators().addAll(reqField, accountNumberValidator);
-        accountNumber.focusedProperty().addListener((o, oldVal, newVal) -> {
-            if (!newVal) {
-                accountNumber.validate();
-            }
-        });
-
-        RegexValidator businessNumberValidator = new RegexValidator();
-        businessNumberValidator.setRegexPattern("^(\\d{4})\\.(\\d{3})\\.(\\d{3})$");
-        businessNumberValidator.setMessage("Format : XXXX.XXX.XXX");
-        businessNumber.getValidators().addAll(businessNumberValidator);
-        businessNumber.focusedProperty().addListener((o, oldVal, newVal) -> {
-            if (!newVal) {
-                businessNumber.validate();
-            }
-        });
-
-//        submitBtn.disableProperty().bind((
-//                contactName.textProperty().isNotEmpty()).not());
+        Validators.setMailValidators(mail);
+        Validators.setReqField(contactName);
+        Validators.setPhoneNumberValidator(phoneNumber);
+        Validators.setAddressValidator(address);
+        Validators.setHouseNumberValidator(houseNumber);
+        Validators.setAccountNumberValidator(accountNumber);
+        Validators.setBusinessNumberValidator(businessNumber);
 
         // permet lors du clic des radio buttons de changer la vue
-        privateCustomer.setUserData("private");
+//        privateCustomer.setUserData("private");
         privateCustomer.setOnAction(e -> {
             businessView.setVisible(false);
         });
 
-        businessCustomer.setUserData("business");
+//        businessCustomer.setUserData("business");
         businessCustomer.setOnAction(e -> {
             businessView.setVisible(true);
         });
@@ -201,12 +142,14 @@ public class newCustomerView extends View {
         submitBtn.setOnAction(e -> {
 //            try {
 //                int status = 0;
-                if(validateData()) {
+                if(Validators.validate(contactName, phoneNumber, address, houseNumber) && checkBusinessCustomer()) {
                     System.out.println("INSERTION");
                     try {
-                        if (insertCustomer())
-                            PopUp.showSuccess("Client créé avec succès !", "Success");
-
+                        insertCustomer();
+                        PopUp.showSuccess("Client créé avec succès !", "Success");
+                        CustomersView customersView = (CustomersView) getParentView();
+                        customersView.updateTable();
+                        closeWindow();
                     } catch (SQLException exception) {
                         PopUp.showError(exception.getMessage(), "Error");
                     }
@@ -215,16 +158,13 @@ public class newCustomerView extends View {
 
     }
 
-    private boolean validateData() {
-        return contactName.validate() && phoneNumber.validate() && address.validate() && houseNumber.validate() && checkBusinessCustomer();
-    }
 
     /**
      * @return True if particular cause you don't need those informations for a particular customer
      */
     private boolean checkBusinessCustomer() {
         if (businessCustomer.isSelected()) {
-            return accountNumber.validate() && businessNumber.validate() && VATNumber.validate();
+            return Validators.validate(businessNumber, accountNumber);
         }
             return true;
     }
@@ -242,12 +182,10 @@ public class newCustomerView extends View {
 
             if(businessCustomer.isSelected()) {
                 newEntity.setBankAccountNumber(accountNumber.getText());
-                newEntity.setVATNumber("BE" + businessNumber.getText());
-                newEntity.setFax(fax.getText());
                 newEntity.setBusinessNumber(businessNumber.getText());
             }
-            Rank selectedRank = customerRank.getSelectionModel().getSelectedItem();
-            City city = regionBox.getSelectionModel().getSelectedItem();
+            Rank selectedRank = customerRank.getValue();
+            City city = regionBox.getValue();
             newEntity.setCity(city);
             newCustomer = new Customer(newEntity, selectedRank);
             return customerController.create(newCustomer);
@@ -255,9 +193,4 @@ public class newCustomerView extends View {
             throw err;
         }
     }
-
-//    @Override
-//    public Pane getRoot() {
-//        return panel;
-//    }
 }

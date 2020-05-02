@@ -30,4 +30,8 @@ public abstract class View extends Node {
     public void setParentView(View view) {
         this.parentView = view;
     }
+
+    public View getParentView() {
+        return this.parentView;
+    }
 }
