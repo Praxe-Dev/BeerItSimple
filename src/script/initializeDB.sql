@@ -26,7 +26,7 @@ CREATE TABLE VATCode (
 
 CREATE TABLE `Rank` (
 	id int PRIMARY KEY AUTO_INCREMENT, 
-	label varchar(60) NOT NULL, 
+	label varchar(60) UNIQUE NOT NULL,
 	creditLimit int CHECK (creditLimit > 0));
 
 CREATE TABLE Status (
@@ -47,11 +47,9 @@ CREATE TABLE Entity (
 	contactName varchar(255) NOT NULL, 
 	phoneNumber varchar(50) NOT NULL UNIQUE, 
 	houseNumber int NOT NULL CHECK (houseNumber > 0), /* mettre en varchar ? 17A ? */ 
-	street varchar(255) NOT NULL, 
-	fax varchar(30) UNIQUE, 
-	bankAccountNumber varchar(50) UNIQUE, 
-    businessNumber varchar(50) UNIQUE, 
-	VATNumber varchar(50) UNIQUE, 
+	street varchar(255) NOT NULL,
+	bankAccountNumber varchar(50) UNIQUE,
+    businessNumber varchar(50) UNIQUE,
 	Citylabel varchar(255) NOT NULL, 
 	CityZipCode int NOT NULL, /* Pas besoin de check car sera toujours sélectionner par ComboBox */
 	CONSTRAINT city_fk FOREIGN KEY (CityLabel, CityZipCode) REFERENCES city (label, zipCode));

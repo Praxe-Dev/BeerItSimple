@@ -91,28 +91,28 @@ VALUES ('Manager');
 /* Filling Entity table */
 
 INSERT INTO Entity (mail, contactName, phoneNumber, houseNumber, street, bankAccountNumber, CityLabel, CityZipCode)
-VALUES ('etuXXXXX@henallux.be', 'John Doe', '0470/21.01.02', 30, 'Rue de Bruxelles', 'BE00 1111 2222 3333 4444', 'Namur', 5000);
+VALUES ('etuXXXXX@henallux.be', 'John Doe', '0470/21.01.02', 30, 'Rue de Bruxelles', 'BE00111122223333', 'Namur', 5000);
 
 INSERT INTO Entity (mail, contactName, phoneNumber, houseNumber, street, bankAccountNumber, CityLabel, CityZipCode)
-VALUES ('peter@gmail.be', 'Peter Mark', '047/16.65.64', 30, 'Rue de Bruxelles', 'BE02 1111 2222 3333 4444', 'Namur', 5000);
+VALUES ('peter@gmail.be', 'Peter Mark', '047/16.65.64', 30, 'Rue de Bruxelles', 'BE02111122223333', 'Namur', 5000);
 
 INSERT INTO Entity (mail, contactName, phoneNumber, houseNumber, street, bankAccountNumber, CityLabel, CityZipCode)
-VALUES ('venom@gmail.be', 'Peter Dinklage', '0473/12.31.12', 30, 'Rue de Bruxelles', 'BE07 1111 2222 3333 4444', 'Namur', 5000);
+VALUES ('venom@gmail.be', 'Peter Dinklage', '0473/12.31.12', 30, 'Rue de Bruxelles', 'BE07111122223333', 'Namur', 5000);
 
 INSERT INTO Entity (mail, contactName, phoneNumber, houseNumber, street, bankAccountNumber, CityLabel, CityZipCode)
-VALUES ('daenerys@gmail.be', 'Daenerys Targa', '0870/65.73.22', 30, 'Rue de Bruxelles', 'BE03 1111 2222 3333 4444', 'Namur', 5000);
+VALUES ('daenerys@gmail.be', 'Daenerys Targa', '0870/65.73.22', 30, 'Rue de Bruxelles', 'BE03111122223333', 'Namur', 5000);
 
 INSERT INTO Entity (mail, contactName, phoneNumber, houseNumber, street, bankAccountNumber, CityLabel, CityZipCode)
-VALUES ('ragnarloth@gmail.be', 'Ragnar Lothbrok', '0650/21.03.02', 30, 'Rue de Bruxelles', 'BE04 1111 2222 3333 4444', 'Namur', 5000);
+VALUES ('ragnarloth@gmail.be', 'Ragnar Lothbrok', '0650/21.03.02', 30, 'Rue de Bruxelles', 'BE04111122223333', 'Namur', 5000);
 
 INSERT INTO Entity (mail, contactName, phoneNumber, houseNumber, street, bankAccountNumber, CityLabel, CityZipCode)
-VALUES ('lagertha@gmail.be', 'Lagertha Ingstad', '0470/21.17.02', 30, 'Rue de Bruxelles', 'BE05 1111 2222 3333 4444', 'Namur', 5000);
+VALUES ('lagertha@gmail.be', 'Lagertha Ingstad', '0470/21.17.02', 30, 'Rue de Bruxelles', 'BE05111122223333', 'Namur', 5000);
 
 INSERT INTO Entity (mail, contactName, phoneNumber, houseNumber, street, bankAccountNumber, CityLabel, CityZipCode)
-VALUES ('tony@stark.be', 'Tony Stark', '0484/61.16.82', 30, 'Rue de Bruxelles', 'BE06 1111 2222 3333 4444', 'Namur', 5000);
+VALUES ('tony@stark.be', 'Tony Stark', '0484/61.16.82', 30, 'Rue de Bruxelles', 'BE06111122223333', 'Namur', 5000);
 
 INSERT INTO Entity (mail, contactName, phoneNumber, houseNumber, street, bankAccountNumber, CityLabel, CityZipCode)
-VALUES ('bill@microsoft.com', 'Bill Gates', '0484/65.16.82', 30, 'Rue de Bruxelles', 'BE08 1111 2222 3333 4444', 'Namur', 5000);
+VALUES ('bill@microsoft.com', 'Bill Gates', '0484/65.16.82', 30, 'Rue de Bruxelles', 'BE08111122223333', 'Namur', 5000);
 
 /* Filling Customer table */
 
