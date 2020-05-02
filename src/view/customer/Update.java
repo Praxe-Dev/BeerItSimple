@@ -80,14 +80,30 @@ public class Update extends View {
         contactName.setText(selectedCustomer.getEntity().getContactName());
         address.setText(selectedCustomer.getEntity().getStreet());
         houseNumber.setText(selectedCustomer.getEntity().getHouseNumber().toString());
-        mail.setText(selectedCustomer.getEntity().getMail());
         phoneNumber.setText(selectedCustomer.getEntity().getPhoneNumber());
-        accountNumber.setText(selectedCustomer.getEntity().getBankAccountNumber());
-        businessNumber.setText(selectedCustomer.getEntity().getBusinessNumber());
+        // Avoid null pointer for the validator
+        if (selectedCustomer.getEntity().getMail() == null) {
+            mail.setText("");
+        } else {
+            mail.setText(selectedCustomer.getEntity().getMail());
+        }
+        
+        if (selectedCustomer.getEntity().getBankAccountNumber() == null) {
+            accountNumber.setText("");
+        } else {
+            accountNumber.setText(selectedCustomer.getEntity().getBankAccountNumber());
+        }
 
-        if (selectedCustomer.getEntity().getBusinessNumber() != null && selectedCustomer.getEntity().getBankAccountNumber() != null) {
+        if (selectedCustomer.getEntity().getBusinessNumber() == null) {
+            businessNumber.setText("");
+        } else {
+            businessNumber.setText(selectedCustomer.getEntity().getBusinessNumber());
+        }
+
+        if (selectedCustomer.getEntity().getBusinessNumber() != null || selectedCustomer.getEntity().getBankAccountNumber() != null) {
             businessView.setVisible(true);
             businessCustomer.setSelected(true);
+
         } else {
             businessView.setVisible(false);
             privateCustomer.setSelected(true);
