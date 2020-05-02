@@ -95,7 +95,7 @@ public class CustomersView extends View implements Initializable {
     @Override
     public void init() {
         newCustomer.setOnAction(e -> {
-            Window login = new Window("FXML/newCustomerPanel.fxml", "New Customer");
+            Window login = new Window("FXML/customer/create.fxml", "New Customer");
             login.load();
             login.getView().setParentView(this);
             login.resizable(false);
@@ -103,7 +103,7 @@ public class CustomersView extends View implements Initializable {
         });
 
         editCustomer.setOnAction(e -> {
-            Window editCustomer = new Window("FXML/editCustomerPanel.fxml", "BeerItSimple - Edit customer");
+            Window editCustomer = new Window("FXML/customer/update.fxml", "BeerItSimple - Edit customer");
 
             editCustomer.load();
             editCustomer.resizable(false);
