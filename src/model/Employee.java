@@ -25,6 +25,14 @@ public class Employee {
         return this.id;
     }
 
+    public Entity getEntity() {
+        return entity;
+    }
+
+    public void setEntity(Entity entity) {
+        this.entity = entity;
+    }
+
     public String getPassword() {
         return this.password;
     }
