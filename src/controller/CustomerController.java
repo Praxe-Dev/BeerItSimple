@@ -2,6 +2,7 @@ package controller;
 
 import business.CustomerBusiness;
 import exception.CustomerException;
+import exception.DuplicataException;
 import exception.NoCustomerFoundException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,6 +10,7 @@ import model.Customer;
 import model.CustomerTableFormat;
 
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
 public class CustomerController {
@@ -34,7 +36,7 @@ public class CustomerController {
         return customerBusiness.getCustomer(id);
     }
 
-    public boolean update(Customer customer) {
+    public boolean update(Customer customer) throws DuplicataException {
         return customerBusiness.update(customer);
     }
 }

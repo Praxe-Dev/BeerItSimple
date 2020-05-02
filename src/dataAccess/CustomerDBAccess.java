@@ -1,6 +1,7 @@
 package dataAccess;
 
 import exception.CustomerException;
+import exception.DuplicataException;
 import exception.NoCustomerFoundException;
 import model.City;
 import model.Customer;
@@ -215,7 +216,7 @@ public class CustomerDBAccess implements CustomerDataAccess{
         return affectedRowsCustomer != 0;
     }
 
-    public boolean update(Customer customer) {
+    public boolean update(Customer customer) throws DuplicataException {
         int affectedRow = 0;
 
         String sqlInstruction = "UPDATE customer\n" +
@@ -248,9 +249,10 @@ public class CustomerDBAccess implements CustomerDataAccess{
             preparedStatement.setInt(11, customer.getEntity().getId());
 
             preparedStatement.executeUpdate();
-        } catch (Exception e) {
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new DuplicataException(e.getMessage());
+        } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
 
         return true;
