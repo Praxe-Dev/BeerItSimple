@@ -27,4 +27,8 @@ public class CustomerController {
     public boolean create(Customer customer) throws SQLException {
         return customerBusiness.create(customer);
     }
+
+    public Customer getCustomer(Integer id) {
+        return customerBusiness.getCustomer(id);
+    }
 }

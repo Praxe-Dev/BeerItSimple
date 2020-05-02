@@ -23,13 +23,17 @@ public class CustomersView extends VBox implements Initializable {
     @FXML
     private JFXButton newCustomer;
     @FXML
-    private TableView<CustomerTableFormat> customersTable;
+    private JFXButton editCustomer;
+    @FXML
+    TableView<CustomerTableFormat> customersTable;
     @FXML
     private TableColumn<CustomerTableFormat, Integer> customerId;
     @FXML
     private TableColumn<CustomerTableFormat, String> contactName;
     @FXML
     private TableColumn<CustomerTableFormat, String> phoneNumber;
+    @FXML
+    private TableColumn<CustomerTableFormat, String> mail;
     @FXML
     private TableColumn<CustomerTableFormat, String> address;
     @FXML
@@ -38,8 +42,6 @@ public class CustomersView extends VBox implements Initializable {
     private TableColumn<CustomerTableFormat, String> bankAccountNumber;
     @FXML
     private TableColumn<CustomerTableFormat, String> businessNumber;
-    @FXML
-    private TableColumn<CustomerTableFormat, String> VATNumber;
     @FXML
     private TableColumn<CustomerTableFormat, String> cityLabel;
     @FXML
@@ -65,6 +67,13 @@ public class CustomersView extends VBox implements Initializable {
             login.show();
         });
 
+        editCustomer.setOnAction(e -> {
+            Window editCustomer = new Window("FXML/editCustomerPanel.fxml", "BeerItSimple - Edit customer");
+            editCustomer.load();
+            editCustomer.resizable(false);
+//            editCustomer.getView().setParentView(this);
+        });
+
         initTableCustomer();
     }
 
@@ -74,11 +83,11 @@ public class CustomersView extends VBox implements Initializable {
         customerId.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, Integer>("id"));
         contactName.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("contactName"));
         phoneNumber.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("phoneNumber"));
+        mail.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("mail"));
         address.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("address"));
         subscriptionDate.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("subscriptionDate"));
         bankAccountNumber.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("bankAccountNumber"));
         businessNumber.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("businessNumber"));
-        VATNumber.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("VATNumber"));
         cityLabel.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("cityLabel"));
         zipCode.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, Integer>("zipCode"));
         rankLabel.setCellValueFactory(new PropertyValueFactory<CustomerTableFormat, String>("rankLabel"));
@@ -99,4 +108,11 @@ public class CustomersView extends VBox implements Initializable {
             customersTable.getColumns().get(i).prefWidthProperty().bind(customersTable.widthProperty().multiply((double) 1 / customersTable.getColumns().size()));
         }
     }
+
+//    protected Customer getSelectedCustomer() {
+//        CustomerTableFormat customerTableFormat = customersTable.getSelectionModel().getSelectedItem();
+//        Customer customer = customersController.getCustomer(customerTableFormat.getId());
+//
+//        return customer;
+//    }
 }

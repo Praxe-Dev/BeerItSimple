@@ -83,6 +83,68 @@ public class CustomerDBAccess implements CustomerDataAccess{
         return null;
     }
 
+    @Override
+    public Customer getCustomer(Integer id) {
+        String sqlInstruction = "SELECT customer.*, entity.*, r.*, city.* FROM customer\n" +
+                                "JOIN entity ON customer.EntityId = entity.id\n" +
+                                "JOIN `rank` r ON r.id = customer.RankId\n" +
+                                "JOIN city ON entity.cityLabel = city.label AND entity.CityZipCode = city.zipCode\n" +
+                                "WHERE customer.EntityId = ?";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setInt(1, id);
+
+            ResultSet data = preparedStatement.executeQuery();
+
+            if (data.next()) {
+                City city = new City(
+                        data.getString("CityLabel"),
+                        data.getInt("CityZipCode")
+                );
+
+                Entity entity = new Entity(
+                        data.getInt("id"),
+                        data.getString("contactName"),
+                        data.getString("phoneNumber"),
+                        data.getInt("houseNumber"),
+                        data.getString("street"),
+                        city
+                );
+
+                Rank rank = new Rank(
+                        data.getInt("r.id"),
+                        data.getString("r.label"),
+                        data.getInt("r.creditLimit")
+                );
+
+                String mail = data.getString("mail");
+                if (!data.wasNull()) {
+                    entity.setMail(mail);
+                }
+
+                GregorianCalendar calendar = null;
+                java.sql.Date subscriptionDate = data.getDate("subscribtionDate");
+                if (!data.wasNull()) {
+                    calendar = new GregorianCalendar();
+                    calendar.setTime(subscriptionDate);
+                }
+
+                return new Customer(entity, rank, calendar);
+
+            } else {
+                throw new CustomerException();
+            }
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public boolean create(Customer c) throws SQLException {
         int affectedRowsEntity = 0;
         int affectedRowsCustomer = 0;

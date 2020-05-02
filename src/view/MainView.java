@@ -48,10 +48,10 @@ public class MainView extends View{
         setCenter(pathToHomePanel);
     }
 
-    @Override
-    public Pane getRoot() {
-        return this.mainPanel;
-    }
+//    @Override
+//    public Pane getRoot() {
+//        return this.mainPanel;
+//    }
 
     /**
      * Get the view and display it on the center Panel

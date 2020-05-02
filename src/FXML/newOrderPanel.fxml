@@ -1,24 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXCheckBox?>
-<?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXDatePicker?>
-<?import com.jfoenix.controls.JFXTextField?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Group?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TreeTableColumn?>
-<?import javafx.scene.control.TreeTableView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import com.jfoenix.controls.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox layoutX="1.0" layoutY="1.0" prefHeight="720.0" prefWidth="1200.0">
          <children>
@@ -97,13 +88,16 @@
                               <Insets left="40.0" right="20.0" />
                            </HBox.margin>
                         </JFXTextField>
-                        <JFXButton fx:id="addArticleBtn" alignment="CENTER" buttonType="RAISED" prefHeight="42.0" prefWidth="106.0" style="-fx-background-color: rgba(0,255,0,0.7);" text="Add" textAlignment="CENTER" textFill="WHITE">
+                        <JFXButton fx:id="addArticleBtn" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: rgba(0,255,0,0.7); -fx-background-radius: 50%;" text=" " textAlignment="CENTER" textFill="WHITE">
                            <HBox.margin>
                               <Insets left="40.0" right="20.0" />
                            </HBox.margin>
                            <font>
                               <Font size="15.0" />
                            </font>
+                           <graphic>
+                              <FontAwesomeIcon fill="WHITE" glyphName="PLUS" size="3em" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" />
+                           </graphic>
                         </JFXButton>
                      </children>
                      <VBox.margin>

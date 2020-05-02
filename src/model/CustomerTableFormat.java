@@ -8,6 +8,7 @@ public class CustomerTableFormat {
     private Integer id;
     private String contactName;
     private String phoneNumber;
+    private String mail;
     private String address;
     private String subscriptionDate;
     private String bankAccountNumber;
@@ -22,6 +23,7 @@ public class CustomerTableFormat {
         this.id = customer.getEntity().getId();
         this.contactName = customer.getEntity().getContactName();
         this.phoneNumber = customer.getEntity().getPhoneNumber();
+        this.mail = customer.getEntity().getMail();
         this.address = customer.getEntity().getStreet() + ", " + customer.getEntity().getHouseNumber();
         setSubscriptionDate(customer.getDate());
         this.bankAccountNumber = customer.getEntity().getBankAccountNumber();
@@ -89,5 +91,9 @@ public class CustomerTableFormat {
 
     public Integer getCreditLimit() {
         return creditLimit;
+    }
+
+    public String getMail() {
+        return this.mail;
     }
 }

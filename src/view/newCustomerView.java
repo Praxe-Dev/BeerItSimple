@@ -256,8 +256,8 @@ public class newCustomerView extends View {
         }
     }
 
-    @Override
-    public Pane getRoot() {
-        return panel;
-    }
+//    @Override
+//    public Pane getRoot() {
+//        return panel;
+//    }
 }

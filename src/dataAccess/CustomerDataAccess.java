@@ -11,4 +11,6 @@ public interface CustomerDataAccess {
     public ArrayList<Customer> getAllCustomers();
 
     public boolean create(Customer customer) throws SQLException;
+
+    public Customer getCustomer(Integer id);
 }

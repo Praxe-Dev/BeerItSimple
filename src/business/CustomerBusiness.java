@@ -26,4 +26,8 @@ public class CustomerBusiness {
     public boolean create(Customer customer) throws SQLException {
         return dao.create(customer);
     }
+
+    public Customer getCustomer(Integer id) {
+        return dao.getCustomer(id);
+    }
 }
