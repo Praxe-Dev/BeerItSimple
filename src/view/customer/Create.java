@@ -186,5 +186,6 @@ public class Create extends View {
         } catch (SQLException err) {
             throw err;
         }
+        return true;
     }
 }
