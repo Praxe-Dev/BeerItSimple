@@ -7,8 +7,6 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<!--        style="-fx-background-color: #5c473e;"-->
-
 <VBox fx:id="vbox" alignment="CENTER" prefHeight="641.0" prefWidth="1072.0" styleClass="center" stylesheets="/view/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.CustomersView">
    <children>
       <Label fx:id="label" alignment="CENTER" contentDisplay="CENTER" prefHeight="74.0" prefWidth="451.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Customers" textAlignment="CENTER" textFill="WHITE">

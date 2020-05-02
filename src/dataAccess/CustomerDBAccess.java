@@ -4,9 +4,11 @@ import exception.CustomerException;
 import model.City;
 import model.Customer;
 import model.Entity;
+import model.Rank;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 public class CustomerDBAccess implements CustomerDataAccess{
     private Connection connection;
@@ -17,20 +19,24 @@ public class CustomerDBAccess implements CustomerDataAccess{
 
     @Override
     public ArrayList<Customer> getAllCustomers() {
-        String sqlInstruction = "SELECT c.*, e.*\n" +
-                                "FROM customer c JOIN entity e\n" +
-                                "ON c.EntityId = e.id";
+        String sqlInstruction = "SELECT customer.*, e.*, r.*, city.*\n" +
+                                "FROM customer JOIN entity e ON customer.EntityId = e.id\n" +
+                                "JOIN `rank` r ON r .id = customer.RankId\n" +
+                                "JOIN city ON e.CityLabel = city.label AND e.CityZipCode = city.zipCode";
         ArrayList<Customer> customerList;
         try {
             ResultSet data = connection.createStatement().executeQuery(sqlInstruction);
 
             customerList = new ArrayList<>();
-            Customer test;
+            Customer customer;
             Entity entity;
             City city;
+            Rank rank;
+
             String mail;
             String fax;
             String VATNumber;
+            GregorianCalendar calendar = null;
 
             while(data.next()) {
                 city = new City(
@@ -47,24 +53,36 @@ public class CustomerDBAccess implements CustomerDataAccess{
                         city
                 );
 
-                test = new Customer(entity);
+                rank = new Rank(
+                        data.getInt("r.id"),
+                        data.getString("r.label"),
+                        data.getInt("r.creditLimit")
+                );
 
                 mail = data.getString("mail");
                 if (!data.wasNull()) {
-                    test.getEntity().setMail(mail);
+                    entity.setMail(mail);
                 }
 
                 fax = data.getString("fax");
                 if (!data.wasNull()) {
-                    test.getEntity().setFax(fax);
+                    entity.setFax(fax);
                 }
 
                 VATNumber = data.getString("VATNumber");
                 if (!data.wasNull()) {
-                    test.getEntity().setVATNumber(VATNumber);
+                    entity.setVATNumber(VATNumber);
                 }
 
-                customerList.add(test);
+                java.sql.Date subscriptionDate = data.getDate("subscribtionDate");
+                if (!data.wasNull()) {
+                    calendar = new GregorianCalendar();
+                    calendar.setTime(subscriptionDate);
+                }
+
+                customer = new Customer(entity, rank, calendar);
+
+                customerList.add(customer);
             }
 
             return customerList;

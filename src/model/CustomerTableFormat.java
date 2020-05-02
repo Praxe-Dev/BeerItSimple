@@ -1,5 +1,7 @@
 package model;
 
+
+import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
 public class CustomerTableFormat {
@@ -7,7 +9,7 @@ public class CustomerTableFormat {
     private String contactName;
     private String phoneNumber;
     private String address;
-    private GregorianCalendar subscriptionDate;
+    private String subscriptionDate;
     private String bankAccountNumber;
     private String businessNumber;
     private String VATNumber;
@@ -21,6 +23,7 @@ public class CustomerTableFormat {
         this.contactName = customer.getEntity().getContactName();
         this.phoneNumber = customer.getEntity().getPhoneNumber();
         this.address = customer.getEntity().getStreet() + ", " + customer.getEntity().getHouseNumber();
+        setSubscriptionDate(customer.getDate());
         this.bankAccountNumber = customer.getEntity().getBankAccountNumber();
         this.businessNumber = customer.getEntity().getBusinessNumber();
         this.VATNumber = customer.getEntity().getVATNumber();
@@ -30,12 +33,14 @@ public class CustomerTableFormat {
         this.creditLimit = customer.getRank().getCreditLimit();
     }
 
-    public GregorianCalendar getsubscriptionDate() {
-        return subscriptionDate;
+
+    public void setSubscriptionDate(GregorianCalendar subscriptionDate) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        this.subscriptionDate = formatter.format(subscriptionDate.getTime());
     }
 
-    public void setsubscriptionDate(GregorianCalendar subscriptionDate) {
-        this.subscriptionDate = subscriptionDate;
+    public String getSubscriptionDate() {
+        return this.subscriptionDate;
     }
 
     public Integer getId() {
