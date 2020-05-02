@@ -59,7 +59,7 @@ public class CustomersView extends VBox implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         newCustomer.setOnAction(e -> {
-            Window login = new Window("FXML/newCustomerPanel.fxml", "New Customer");
+            Window login = new Window("FXML/customer/create.fxml", "New Customer");
             login.load();
             login.resizable(false);
             login.show();
