@@ -1,14 +1,30 @@
 package model;
 
 public class Rank {
-    private int id;
+    private Integer id;
     private String label;
-    private int creditLimit;
+    private Integer creditLimit;
 
-    public Rank(int id, String label, int creditLimit){
+    public Rank(Integer id, String label, Integer creditLimit){
+        setId(id);
+        setLabel(label);
+        setCreditLimit(creditLimit);
+    }
+
+    public void setId(int id) {
         this.id = id;
+    }
+
+    public void setLabel(String label) {
         this.label = label;
-        this.creditLimit = creditLimit;
+    }
+
+    public void setCreditLimit(int creditLimit) {
+        if(creditLimit > 0) {
+            this.creditLimit = creditLimit;
+        } else {
+            this.creditLimit = 0;
+        }
     }
 
     public int getId(){
@@ -25,6 +41,6 @@ public class Rank {
 
     @Override
     public String toString() {
-        return label + " (" + creditLimit + "€)";
+        return getLabel() + " (" + getCreditLimit() + "€)";
     }
 }
