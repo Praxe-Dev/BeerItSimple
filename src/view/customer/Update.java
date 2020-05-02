@@ -88,7 +88,7 @@ public class Update extends View {
         phoneNumber.setText(selectedCustomer.getEntity().getPhoneNumber());
 
 //        mail.setText(selectedCustomer.getEntity().getMail());
-        // Avoid null pointer for the validator
+//        Avoid null pointer for the validator
         if (selectedCustomer.getEntity().getMail() == null) {
             mail.setText("");
         } else {
@@ -107,6 +107,7 @@ public class Update extends View {
             businessNumber.setText(selectedCustomer.getEntity().getBusinessNumber());
         }
 
+        // Display the right format for the customerType
         if (selectedCustomer.getEntity().getBusinessNumber() != null || selectedCustomer.getEntity().getBankAccountNumber() != null) {
             businessView.setVisible(true);
             businessCustomer.setSelected(true);
@@ -139,7 +140,7 @@ public class Update extends View {
         });
 
         submitBtn.setOnAction(e -> {
-                if (Validators.validate(mail, contactName, phoneNumber, address, houseNumber, houseNumber) && checkBusinessCustomer()) {
+                if (Validators.validate(contactName, phoneNumber, address, houseNumber, houseNumber) && checkMail() && checkBusinessCustomer()) {
                     try {
                         if (updateCostumer()) {
                             System.out.println("Done");
@@ -194,6 +195,7 @@ public class Update extends View {
         return true;
     }
 
+    // TODO : Handle deletion of bankAccountNumber and businessNumber
     public boolean updateCostumer() throws DuplicataException {
         selectedCustomer.setRank(customerRank.getSelectionModel().getSelectedItem());
         selectedCustomer.getEntity().setContactName(contactName.getText());
@@ -224,5 +226,14 @@ public class Update extends View {
 //        selectedCustomer.getEntity().setBusinessNumber(businessNumber.getText());
 
         return customerController.update(selectedCustomer);
+    }
+
+    private boolean checkMail() {
+        System.out.println("Mail : " + mail.getText());
+        if (!mail.getText().equals("")) {
+            return mail.validate();
+        } else {
+            return true;
+        }
     }
 }

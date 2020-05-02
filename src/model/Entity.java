@@ -78,6 +78,8 @@ public class Entity {
         if(businessNumber != null) {
             String businessNumberRegex = "^(\\d{4})\\.(\\d{3})\\.(\\d{3})$";
             if (businessNumber.matches(businessNumberRegex)) this.businessNumber = businessNumber;
+        } else {
+            this.businessNumber = null;
         }
     }
 
@@ -97,6 +99,8 @@ public class Entity {
         if(mail != null) {
             String mailRegex = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
             if (mail.matches(mailRegex)) this.mail = mail;
+        } else {
+            this.mail = null;
         }
     }
 
@@ -143,6 +147,8 @@ public class Entity {
         if(bankAccountNumber != null) {
             String bankAccountRegex = "^([A-Z]{2})(\\d{14})$";
             if (bankAccountNumber.matches(bankAccountRegex)) this.bankAccountNumber = bankAccountNumber;
+        } else {
+            this.bankAccountNumber = null;
         }
     }
 

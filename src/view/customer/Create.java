@@ -134,9 +134,8 @@ public class Create extends View {
         });
 
         submitBtn.setOnAction(e -> {
-//            try {
-//                int status = 0;
-            if(Validators.validate(contactName, phoneNumber, address, houseNumber) && checkBusinessCustomer()) {
+//            System.out.println("Check mail :" + checkMail());
+            if(Validators.validate(contactName, phoneNumber, address, houseNumber) && checkMail() && checkBusinessCustomer()) {
                 System.out.println("INSERTION");
                 try {
                     insertCustomer();
@@ -150,6 +149,15 @@ public class Create extends View {
             }
         });
 
+    }
+
+    private boolean checkMail() {
+        System.out.println("Mail : " + mail.getText());
+        if (!mail.getText().equals("")) {
+            return mail.validate();
+        } else {
+            return true;
+        }
     }
 
 
