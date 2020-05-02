@@ -8,9 +8,9 @@ public class DBConnection {
     private static Connection connection = null;
 
     // Modify to suit your config
-    private static String url = "jdbc:mysql://localhost:3306/projet_brasserie";
-    private static String id = "root";
-    private static String password = "didi2000";
+    private static String url = "jdbc:mysql://localhost:3306/library";
+    private static String id = "test";
+    private static String password = "root1";
 
     private DBConnection() {
     }

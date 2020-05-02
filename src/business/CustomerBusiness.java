@@ -3,6 +3,7 @@ package business;
 import dataAccess.CustomerDBAccess;
 import dataAccess.CustomerDataAccess;
 import exception.CustomerException;
+import exception.NoCustomerFoundException;
 import model.Customer;
 
 import java.sql.SQLException;
@@ -25,5 +26,13 @@ public class CustomerBusiness {
 
     public boolean create(Customer customer) throws SQLException {
         return dao.create(customer);
+    }
+
+    public Customer getCustomer(Integer id) throws CustomerException, NoCustomerFoundException {
+        return dao.getCustomer(id);
+    }
+
+    public boolean update(Customer customer) {
+        return dao.update(customer);
     }
 }

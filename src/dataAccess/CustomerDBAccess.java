@@ -1,6 +1,7 @@
 package dataAccess;
 
 import exception.CustomerException;
+import exception.NoCustomerFoundException;
 import model.City;
 import model.Customer;
 import model.Entity;
@@ -36,6 +37,9 @@ public class CustomerDBAccess implements CustomerDataAccess{
             String mail;
             String VATNumber;
             GregorianCalendar calendar = null;
+            String accountNumber;
+            String businessNumber;
+
 
             while(data.next()) {
                 city = new City(
@@ -51,6 +55,15 @@ public class CustomerDBAccess implements CustomerDataAccess{
                         data.getString("street"),
                         city
                 );
+
+                accountNumber = data.getString("bankAccountNumber");
+                if (accountNumber != null)
+                    entity.setBankAccountNumber(accountNumber);
+
+                businessNumber = data.getString("businessNumber");
+                if (businessNumber != null)
+                    entity.setBusinessNumber(businessNumber);
+
 
                 rank = new Rank(
                         data.getInt("r.id"),
@@ -80,6 +93,73 @@ public class CustomerDBAccess implements CustomerDataAccess{
         }
 
         return null;
+    }
+
+    @Override
+    public Customer getCustomer(Integer id) throws CustomerException, NoCustomerFoundException {
+        String sqlInstruction = "SELECT customer.*, entity.*, r.*, city.* FROM customer\n" +
+                                "JOIN entity ON customer.EntityId = entity.id\n" +
+                                "JOIN `rank` r ON r.id = customer.RankId\n" +
+                                "JOIN city ON entity.cityLabel = city.label AND entity.CityZipCode = city.zipCode\n" +
+                                "WHERE customer.EntityId = ?";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setInt(1, id);
+
+            ResultSet data = preparedStatement.executeQuery();
+
+            if (data.next()) {
+                City city = new City(
+                        data.getString("CityLabel"),
+                        data.getInt("CityZipCode")
+                );
+
+                Entity entity = new Entity(
+                        data.getInt("id"),
+                        data.getString("contactName"),
+                        data.getString("phoneNumber"),
+                        data.getInt("houseNumber"),
+                        data.getString("street"),
+                        city
+                );
+
+                String bankAccount = data.getString("bankAccountNumber");
+                if (bankAccount != null) {
+                    entity.setBankAccountNumber(bankAccount);
+                }
+
+                String businessNumber = data.getString("businessNumber");
+                if (businessNumber != null) {
+                    entity.setBusinessNumber(businessNumber);
+                }
+
+                Rank rank = new Rank(
+                        data.getInt("r.id"),
+                        data.getString("r.label"),
+                        data.getInt("r.creditLimit")
+                );
+
+                String mail = data.getString("mail");
+                if (!data.wasNull()) {
+                    entity.setMail(mail);
+                }
+
+                GregorianCalendar calendar = null;
+                java.sql.Date subscriptionDate = data.getDate("subscribtionDate");
+                if (!data.wasNull()) {
+                    calendar = new GregorianCalendar();
+                    calendar.setTime(subscriptionDate);
+                }
+
+                return new Customer(entity, rank, calendar);
+
+            } else {{
+                throw new NoCustomerFoundException();
+            }}
+        } catch (SQLException e) {
+            throw new CustomerException();
+        }
     }
 
     public boolean create(Customer c) throws SQLException {
@@ -133,5 +213,46 @@ public class CustomerDBAccess implements CustomerDataAccess{
             throw new SQLException("Creating Entity failed.");
         }
         return affectedRowsCustomer != 0;
+    }
+
+    public boolean update(Customer customer) {
+        int affectedRow = 0;
+
+        String sqlInstruction = "UPDATE customer\n" +
+                                "JOIN entity ON customer.EntityId = entity.id\n" +
+                                "SET\n" +
+                                " customer.RankId = ?,\n" +
+                                " entity.mail = ?,\n" +
+                                " entity.contactName = ?,\n" +
+                                "entity.phoneNumber = ?,\n" +
+                                "entity.houseNumber = ?,\n" +
+                                "entity.street = ?,\n" +
+                                "entity.bankAccountNumber = ?,\n" +
+                                "entity.businessNumber = ?,\n" +
+                                "entity.CityLabel = ?,\n" +
+                                "entity.CityZipCode = ?\n" +
+                                "WHERE customer.EntityId = ?";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setInt(1, customer.getRank().getId());
+            preparedStatement.setString(2, customer.getEntity().getMail());
+            preparedStatement.setString(3, customer.getEntity().getContactName());
+            preparedStatement.setString(4, customer.getEntity().getPhoneNumber());
+            preparedStatement.setInt(5, customer.getEntity().getHouseNumber());
+            preparedStatement.setString(6, customer.getEntity().getStreet());
+            preparedStatement.setString(7, customer.getEntity().getBankAccountNumber());
+            preparedStatement.setString(8, customer.getEntity().getBusinessNumber());
+            preparedStatement.setString(9, customer.getEntity().getCity().getLabel());
+            preparedStatement.setInt(10, customer.getEntity().getCity().getZipCode());
+            preparedStatement.setInt(11, customer.getEntity().getId());
+
+            preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 }

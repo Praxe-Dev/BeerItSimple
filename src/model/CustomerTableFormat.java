@@ -8,11 +8,11 @@ public class CustomerTableFormat {
     private Integer id;
     private String contactName;
     private String phoneNumber;
+    private String mail;
     private String address;
     private String subscriptionDate;
     private String bankAccountNumber;
     private String businessNumber;
-    private String VATNumber;
     private String cityLabel;
     private Integer zipCode;
     private String rankLabel;
@@ -22,11 +22,11 @@ public class CustomerTableFormat {
         this.id = customer.getEntity().getId();
         this.contactName = customer.getEntity().getContactName();
         this.phoneNumber = customer.getEntity().getPhoneNumber();
+        this.mail = customer.getEntity().getMail();
         this.address = customer.getEntity().getStreet() + ", " + customer.getEntity().getHouseNumber();
         setSubscriptionDate(customer.getDate());
         this.bankAccountNumber = customer.getEntity().getBankAccountNumber();
         this.businessNumber = customer.getEntity().getBusinessNumber();
-        this.VATNumber = customer.getEntity().getVATNumber();
         this.cityLabel = customer.getEntity().getCity().getLabel();
         this.zipCode = customer.getEntity().getCity().getZipCode();
         this.rankLabel = customer.getRank().getLabel();
@@ -71,10 +71,6 @@ public class CustomerTableFormat {
         return businessNumber;
     }
 
-    public String getVATNumber() {
-        return VATNumber;
-    }
-
     public String getCityLabel() {
         return cityLabel;
     }
@@ -89,5 +85,9 @@ public class CustomerTableFormat {
 
     public Integer getCreditLimit() {
         return creditLimit;
+    }
+
+    public String getMail() {
+        return this.mail;
     }
 }

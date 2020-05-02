@@ -1,24 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXRadioButton?>
-<?import com.jfoenix.controls.JFXTextField?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Group?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.text.Font?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-<VBox fx:id="panel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="731.0" prefWidth="1053.0" stylesheets="/view/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.customer.Create">
+<VBox fx:id="panel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="734.0" prefWidth="1053.0" stylesheets="/view/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.customer.Update">
    <children>
       <AnchorPane prefHeight="98.0" prefWidth="600.0">
          <children>
-            <Label layoutX="35.0" layoutY="18.0" prefHeight="54.0" prefWidth="214.0" text="New customer">
+            <Label layoutX="35.0" layoutY="18.0" prefHeight="54.0" prefWidth="214.0" text="Edit customer">
                <font>
                   <Font size="29.0" />
                </font>
@@ -26,22 +20,22 @@
             <Line endX="1031.5" endY="78.0" startX="30.292892456054688" startY="78.0" />
          </children>
       </AnchorPane>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="357.0">
+      <HBox alignment="CENTER">
          <children>
             <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="38.0" prefWidth="175.0" text="Customer type :">
-               <HBox.margin>
-                  <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
-               </HBox.margin>
                <font>
                   <Font size="18.0" />
                </font>
+               <HBox.margin>
+                  <Insets left="30.0" right="30.0" />
+               </HBox.margin>
             </Label>
             <JFXRadioButton fx:id="privateCustomer" selected="true" text="Private">
                <toggleGroup>
                   <ToggleGroup fx:id="customerType" />
                </toggleGroup>
                <HBox.margin>
-                  <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
+                  <Insets left="30.0" right="30.0" />
                </HBox.margin>
                <font>
                   <Font size="14.0" />
@@ -49,7 +43,7 @@
             </JFXRadioButton>
             <JFXRadioButton fx:id="businessCustomer" text="Business" toggleGroup="$customerType">
                <HBox.margin>
-                  <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
+                  <Insets left="30.0" right="30.0" />
                </HBox.margin>
                <font>
                   <Font size="14.0" />
@@ -157,7 +151,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <JFXComboBox fx:id="regionBox" prefHeight="25.0" prefWidth="245.0">
+            <JFXComboBox fx:id="region" prefHeight="25.0" prefWidth="245.0">
                <HBox.margin>
                   <Insets bottom="15.0" left="20.0" right="30.0" top="15.0" />
                </HBox.margin>
