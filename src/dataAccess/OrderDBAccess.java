@@ -38,9 +38,6 @@ public class OrderDBAccess implements OrderDataAccess {
             Status status;
             PaymentMethod paymentMethod;
 
-            String mail;
-            String fax;
-            String VATNumber;
             GregorianCalendar calendar = null;
             GregorianCalendar subscribtionDateGregorian = null;
 
@@ -52,10 +49,13 @@ public class OrderDBAccess implements OrderDataAccess {
 
                 entity = new Entity(
                         data.getInt("e.id"),
+                        data.getString("e.mail"),
                         data.getString("e.contactName"),
                         data.getString("e.phoneNumber"),
                         data.getInt("e.houseNumber"),
                         data.getString("e.street"),
+                        data.getString("e.bankAccountNumber"),
+                        data.getString("e.businessNumber"),
                         city
                 );
 
@@ -134,10 +134,13 @@ public class OrderDBAccess implements OrderDataAccess {
 
                     Entity entityDeliveryMan = new Entity(
                             data.getInt("e.id"),
+                            data.getString("e.mail"),
                             data.getString("e.contactName"),
                             data.getString("e.phoneNumber"),
                             data.getInt("e.houseNumber"),
                             data.getString("e.street"),
+                            data.getString("e.bankAccountNumber"),
+                            data.getString("e.businessNumber"),
                             cityD
                     );
 
@@ -176,18 +179,15 @@ public class OrderDBAccess implements OrderDataAccess {
                             data.getInt("e.CityZipCode")
                         );
 
-                        /**
-                         * TODO: Retirer les commentaires ci-dessosu une fois que le merge de la classe entity aura été fait.
-                         */
                         Entity providerEntity = new Entity(
                             dataOrderLine.getInt("e.id"),
-                            //data.getString("e.mail"),
+                            data.getString("e.mail"),
                             data.getString("e.contactName"),
                             data.getString("e.phoneNumber"),
                             data.getInt("e.houseNumber"),
                             data.getString("e.street"),
-                            //data.getString("e.bankAccountNumber"),
-                            //data.getString("e.businessNumber"),
+                            data.getString("e.bankAccountNumber"),
+                            data.getString("e.businessNumber"),
                             providerCity
                         );
 
