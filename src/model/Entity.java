@@ -9,7 +9,6 @@ public class Entity {
     private String phoneNumber;
     private Integer houseNumber;
     private String street;
-    private String fax;
     private String bankAccountNumber;
     private String businessNumber;
     private String VATNumber;
@@ -181,7 +180,6 @@ public class Entity {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", houseNumber=" + houseNumber +
                 ", street='" + street + '\'' +
-                ", fax='" + fax + '\'' +
                 ", bankAccountNumber='" + bankAccountNumber + '\'' +
                 ", VATNumber='" + VATNumber + '\'' +
                 ", cityLabel='" + getCity().getLabel() + '\'' +

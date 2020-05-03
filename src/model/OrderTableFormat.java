@@ -21,7 +21,12 @@ public class OrderTableFormat {
     public OrderTableFormat(Order order){
         setReference(order.getReference());
         setStartingDate(order.getStartingDate());
-        setCustomerName(order.getCustomer().getEntity().getContactName());
+        if (order.getCustomer() != null) {
+            setCustomerName(order.getCustomer().getEntity().getContactName());
+        } else {
+            setCustomerName("N/A");
+        }
+//        setCustomerName(order.getCustomer().getEntity().getContactName());
         setPaid(order.getPaid());
         setPaymentMethod(order.getPaymentMethod().getLabel());
         setStatus(order.getStatus().getLabel());

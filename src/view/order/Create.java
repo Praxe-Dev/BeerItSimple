@@ -23,6 +23,7 @@ import view.CustomersView;
 import view.PopUp;
 import view.View;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
@@ -148,11 +149,16 @@ public class Create extends View {
 
        submitBtn.setOnAction(e -> {
            if (!tableArticle.getItems().isEmpty()) {
-               if (newOrderInsert()) {
-                   PopUp.showSuccess("New order added !", "The new order has been added successfully.");
-                   Index index = (Index) getParentView();
-                   index.updateTable();
-                   closeWindow();
+
+               try {
+                   if (newOrderInsert()) {
+                       PopUp.showSuccess("New order added !", "The new order has been added successfully.");
+                       Index index = (Index) getParentView();
+                       index.updateTable();
+                       closeWindow();
+                   }
+               } catch (SQLException ex) {
+                   ex.printStackTrace();
                }
            }
        });
@@ -169,7 +175,7 @@ public class Create extends View {
         return true;
     }
 
-    private boolean newOrderInsert() {
+    private boolean newOrderInsert() throws SQLException {
         ArrayList<OrderLine> orderLines = new ArrayList<>();
         Product product;
         Delivery delivery = null;

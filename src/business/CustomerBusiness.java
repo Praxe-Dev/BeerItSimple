@@ -37,4 +37,8 @@ public class CustomerBusiness {
     public boolean update(Customer customer) throws DuplicataException {
         return dao.update(customer);
     }
+
+    public boolean delete(Customer customer) {
+        return dao.delete(customer);
+    }
 }

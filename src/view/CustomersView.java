@@ -53,6 +53,8 @@ public class CustomersView extends View implements Initializable {
     private TableColumn<CustomerTableFormat, String> rankLabel;
     @FXML
     private TableColumn<CustomerTableFormat, Integer> creditLimit;
+    @FXML
+    private JFXButton deleteBtn;
 
     private CustomerController customersController;
 
@@ -122,6 +124,25 @@ public class CustomersView extends View implements Initializable {
                 editCustomer.show();
             } else {
                 editCustomer.close();
+            }
+        });
+
+        deleteBtn.setOnAction(e -> {
+            Customer customer = null;
+            try {
+                customer = getSelectedCustomer();
+            } catch (CustomerException ex) {
+                ex.showMessage();
+            } catch (NoCustomerFoundException ex) {
+                ex.showMessage();
+            } catch (NullPointerException ex) {
+                PopUp.showError("No customer selected", "To delete a customer you must select one.");
+            }
+
+            if(PopUp.showConfirm("Confirm delete", "Are you sur you want to delete " + customer.getEntity().getContactName() + " ?")) {
+                if (customersController.delete(customer)) {
+                    updateTable();
+                }
             }
         });
     }

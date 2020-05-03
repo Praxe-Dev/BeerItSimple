@@ -18,4 +18,6 @@ public interface CustomerDataAccess {
     public Customer getCustomer(Integer id) throws CustomerException, NoCustomerFoundException;
 
     boolean update(Customer customer) throws DuplicataException;
+
+    boolean delete(Customer customer);
 }
