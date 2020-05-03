@@ -24,6 +24,7 @@ import view.PopUp;
 import view.View;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
@@ -149,19 +150,29 @@ public class Create extends View {
 
        submitBtn.setOnAction(e -> {
            if (!tableArticle.getItems().isEmpty()) {
+                if (deliveryDateCheck()) {
 
-               try {
-                   if (newOrderInsert()) {
-                       PopUp.showSuccess("New order added !", "The new order has been added successfully.");
-                       Index index = (Index) getParentView();
-                       index.updateTable();
-                       closeWindow();
-                   }
-               } catch (SQLException ex) {
-                   ex.printStackTrace();
-               }
+                    try {
+                        if (newOrderInsert()) {
+                            PopUp.showSuccess("New order added !", "The new order has been added successfully.");
+                            Index index = (Index) getParentView();
+                            index.updateTable();
+                            closeWindow();
+                        }
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                }
            }
        });
+    }
+
+    private boolean deliveryDateCheck() {
+        if (deliveryCheck.isSelected() && LocalDate.now().isAfter(deliveryDate.getValue())) {
+            PopUp.showError("Date error", "The delivery date can't be earlier than the current date.");
+            return false;
+        }
+        return true;
     }
 
     public boolean checkPresentProduct(Product newProduct) {
