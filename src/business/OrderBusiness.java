@@ -2,6 +2,7 @@ package business;
 
 import dataAccess.OrderDBAccess;
 import dataAccess.OrderDataAccess;
+import exception.DeletionExceiption;
 import exception.NoRowSelected;
 import model.Customer;
 import model.Order;
@@ -32,5 +33,9 @@ public class OrderBusiness {
 
     public Order getOrder(int reference) throws NoRowSelected {
         return dao.getOrder(reference);
+    }
+
+    public boolean deleteOrder(Order order) throws DeletionExceiption {
+        return dao.deleteOrder(order);
     }
 }
