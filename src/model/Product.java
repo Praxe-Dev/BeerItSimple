@@ -8,9 +8,9 @@ public class Product {
     private Integer currentStock;
     private Integer maxStock;
     private Integer minStock;
-    private Double VATRate;
+    private Integer VATRate;
 
-    public Product(Provider provider, Integer code, String label, Double unitPrice, Integer currentStock, Integer maxStock, Integer minStock, Double VATRate) {
+    public Product(Provider provider, Integer code, String label, Double unitPrice, Integer currentStock, Integer maxStock, Integer minStock, Integer VATRate) {
         setProvider(provider);
         setCode(code);
         setLabel(label);
@@ -77,11 +77,11 @@ public class Product {
         this.minStock = minStock;
     }
 
-    public Double getVATRate() {
+    public Integer getVATRate() {
         return VATRate;
     }
 
-    public void setVATRate(Double VATRate) {
+    public void setVATRate(Integer VATRate) {
         this.VATRate = VATRate;
     }
 }
