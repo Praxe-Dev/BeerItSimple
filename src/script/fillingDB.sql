@@ -137,6 +137,17 @@ VALUES (7, 1, '2020-03-06');
 INSERT INTO Customer (EntityId, RankId, subscribtionDate)
 VALUES (3, 1, '2020-03-07');
 
+/* Filling Employee table */
+
+INSERT INTO Employee (EntityId, RoleId,password)
+VALUES (1, 1, 'JeSuisUnPoisson');
+
+INSERT INTO Employee (EntityId, RoleId,password)
+VALUES (2, 1, 'admin');
+
+INSERT INTO Employee (EntityId, RoleId,password)
+VALUES (8, 1, 'test');
+
 /* Filling Provider table */
 
 INSERT INTO Provider (entityId, providerType)
@@ -161,16 +172,3 @@ VALUES ('2020-06-21', 1, 1);
 
 INSERT INTO OrderLine (Productcode, Orderreference, quantity, salesUnitPrice)
 VALUES (1,1,32,2.70);
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,33 +1,22 @@
 package view.customer;
 
 import com.jfoenix.controls.*;
-import com.sun.source.doctree.ValueTree;
 import controller.CityController;
 import controller.CustomerController;
 import controller.RankController;
-import exception.CustomerException;
 import exception.DuplicataException;
-import exception.NoCustomerFoundException;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
-import javafx.scene.control.ToggleGroup;
 import model.City;
 import model.Customer;
-import model.Entity;
 import model.Rank;
 import utils.Validators;
 import view.CustomersView;
-import view.PopUp;
 import view.View;
 
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Update extends View {
 
@@ -87,7 +76,6 @@ public class Update extends View {
         houseNumber.setText(selectedCustomer.getEntity().getHouseNumber().toString());
         phoneNumber.setText(selectedCustomer.getEntity().getPhoneNumber());
 
-//        mail.setText(selectedCustomer.getEntity().getMail());
 //        Avoid null pointer for the validator
         if (selectedCustomer.getEntity().getMail() == null) {
             mail.setText("");
@@ -140,16 +128,13 @@ public class Update extends View {
         });
 
         submitBtn.setOnAction(e -> {
-                if (Validators.validate(contactName, phoneNumber, address, houseNumber, houseNumber) && checkMail() && checkBusinessCustomer()) {
+                if (Validators.validate(contactName, phoneNumber, address, houseNumber, houseNumber) && Validators.validateNullableValue(mail, businessNumber, accountNumber)) {
                     try {
                         if (updateCostumer()) {
                             System.out.println("Done");
                             customersView.updateTable();
                             closeWindow();
                         }
-
-
-
                     } catch (DuplicataException exception) {
                         exception.showError();
                     }
@@ -195,7 +180,6 @@ public class Update extends View {
         return true;
     }
 
-    // TODO : Handle deletion of bankAccountNumber and businessNumber
     public boolean updateCostumer() throws DuplicataException {
         selectedCustomer.setRank(customerRank.getSelectionModel().getSelectedItem());
         selectedCustomer.getEntity().setContactName(contactName.getText());
@@ -216,24 +200,13 @@ public class Update extends View {
         } else {
             selectedCustomer.getEntity().setBankAccountNumber(accountNumber.getText());
         }
-//        selectedCustomer.getEntity().setBankAccountNumber(accountNumber.getText());
 
         if (businessNumber.getText().equals("")) {
             selectedCustomer.getEntity().setBusinessNumber(null);
         } else {
             selectedCustomer.getEntity().setBusinessNumber(businessNumber.getText());
         }
-//        selectedCustomer.getEntity().setBusinessNumber(businessNumber.getText());
 
         return customerController.update(selectedCustomer);
-    }
-
-    private boolean checkMail() {
-        System.out.println("Mail : " + mail.getText());
-        if (!mail.getText().equals("")) {
-            return mail.validate();
-        } else {
-            return true;
-        }
     }
 }
