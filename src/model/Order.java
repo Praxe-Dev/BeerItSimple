@@ -29,6 +29,10 @@ public class Order {
         this(customer, reference, isPaid, startingDate, status, paymentMethod, null);
     }
 
+    public Order(Customer customer,GregorianCalendar startingDate, PaymentMethod paymentMethod) {
+        this(customer, null,false, startingDate, new Status(1), paymentMethod, null);
+    }
+
     public void setOrderLineList(ArrayList<OrderLine> orderLineList) {
         this.orderLineList = orderLineList;
     }
@@ -43,6 +47,10 @@ public class Order {
 
     public void addOrderLine(OrderLine orderLine){
         orderLineList.add(orderLine);
+    }
+
+    public void setOrderLine(ArrayList<OrderLine> orderLines) {
+        orderLineList = orderLines;
     }
 
     public ArrayList<OrderLine> getOrderLineList(){

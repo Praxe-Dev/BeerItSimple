@@ -4,6 +4,7 @@ import dataAccess.OrderDBAccess;
 import dataAccess.OrderDataAccess;
 import model.Customer;
 import model.Order;
+import model.OrderLineTableFormat;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -21,5 +22,9 @@ public class OrderBusiness {
 
     public ArrayList<Order> getAllOrders() throws SQLException {
         return dao.getAllOrders();
+    }
+
+    public boolean create(Order orderLineTableFormats) {
+        return dao.create(orderLineTableFormats);
     }
 }

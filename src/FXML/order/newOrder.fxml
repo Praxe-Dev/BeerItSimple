@@ -9,7 +9,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane stylesheets="/view/style.css" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.order.Create">
    <children>
       <HBox layoutX="1.0" layoutY="1.0" prefHeight="720.0" prefWidth="1200.0">
          <children>
@@ -28,7 +28,7 @@
                         <Insets top="75.0" />
                      </VBox.margin>
                   </JFXComboBox>
-                  <JFXComboBox fx:id="paymentMethode" labelFloat="true" prefHeight="25.0" prefWidth="250.0" promptText="Payment method">
+                  <JFXComboBox fx:id="paymentMethod" labelFloat="true" prefHeight="25.0" prefWidth="250.0" promptText="Payment method">
                      <VBox.margin>
                         <Insets top="75.0" />
                      </VBox.margin>
@@ -41,12 +41,12 @@
                         <Font size="18.0" />
                      </font>
                   </JFXCheckBox>
-                  <Group>
+                  <Group fx:id="deliveryDisplay">
                      <VBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
                      </VBox.margin>
                      <children>
-                        <JFXDatePicker fx:id="date" defaultColor="BLACK" prefHeight="28.0" prefWidth="250.0" />
+                        <DatePicker fx:id="deliveryDate" prefHeight="25.0" prefWidth="250.0" />
                      </children>
                   </Group>
                   <HBox alignment="CENTER">
@@ -69,7 +69,7 @@
                         </JFXButton>
                      </children>
                      <VBox.margin>
-                        <Insets top="100.0" />
+                        <Insets top="75.0" />
                      </VBox.margin>
                   </HBox>
                </children>
@@ -78,17 +78,17 @@
                <children>
                   <HBox alignment="CENTER_LEFT">
                      <children>
-                        <JFXComboBox fx:id="articleList" labelFloat="true" prefHeight="60.0" prefWidth="250.0" promptText="Article">
+                        <JFXComboBox fx:id="productList" labelFloat="true" prefHeight="60.0" prefWidth="250.0" promptText="Article">
                            <HBox.margin>
                               <Insets right="20.0" />
                            </HBox.margin>
                         </JFXComboBox>
-                        <JFXTextField fx:id="articleQuantity" labelFloat="true" maxWidth="250.0" minWidth="65.0" prefHeight="48.0" prefWidth="65.0" promptText="Quantity">
+                        <JFXTextField fx:id="productQuantity" labelFloat="true" maxWidth="250.0" minWidth="65.0" prefHeight="48.0" prefWidth="65.0" promptText="Quantity">
                            <HBox.margin>
                               <Insets left="40.0" right="20.0" />
                            </HBox.margin>
                         </JFXTextField>
-                        <JFXButton fx:id="addArticleBtn" alignment="CENTER" buttonType="RAISED" contentDisplay="CENTER" prefHeight="39.0" prefWidth="39.0" style="-fx-background-color: rgba(0,255,0,0.7); -fx-background-radius: 50%;" text=" " textAlignment="CENTER" textFill="WHITE">
+                        <JFXButton fx:id="addArticleBtn" alignment="CENTER" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: rgba(0,255,0,0.7); -fx-background-radius: 50%;" text=" " textAlignment="CENTER" textFill="WHITE">
                            <HBox.margin>
                               <Insets left="40.0" right="20.0" />
                            </HBox.margin>
@@ -104,30 +104,38 @@
                         <Insets left="20.0" top="40.0" />
                      </VBox.margin>
                   </HBox>
-                  <TreeTableView fx:id="tableArticle" prefHeight="421.0" prefWidth="743.0">
+                  <TableView fx:id="tableArticle" prefHeight="421.0" prefWidth="743.0">
                     <columns>
-                      <TreeTableColumn fx:id="article" prefWidth="302.0" text="Article" />
-                      <TreeTableColumn fx:id="price" minWidth="0.0" prefWidth="111.0" text="Price" />
-                        <TreeTableColumn fx:id="quantity" minWidth="0.0" prefWidth="162.0" text="Quantity" />
-                        <TreeTableColumn fx:id="total" minWidth="0.0" prefWidth="167.0" text="Total" />
+                      <TableColumn fx:id="article" prefWidth="302.0" text="Article" />
+                      <TableColumn fx:id="price" minWidth="0.0" prefWidth="111.0" text="price" />
+                        <TableColumn fx:id="quantity" minWidth="0.0" prefWidth="162.0" text="Quantity" />
+                        <TableColumn fx:id="total" minWidth="0.0" prefWidth="167.0" text="Total" />
                     </columns>
                      <VBox.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                      </VBox.margin>
-                  </TreeTableView>
+                  </TableView>
                   <HBox alignment="CENTER_LEFT" prefHeight="54.0" prefWidth="783.0">
                      <children>
-                        <JFXButton fx:id="removeArticleBtn" alignment="CENTER" buttonType="RAISED" prefHeight="51.0" prefWidth="100.0" style="-fx-background-color: rgba(255,0,0,0.8);" text="Remove Article" textAlignment="CENTER" textFill="WHITE">
+                        <JFXButton fx:id="removeArticleBtn" alignment="CENTER" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: rgba(255,0,0,0.8); -fx-background-radius: 50%; -fx-border-radius: 50%;" text=" " textAlignment="CENTER" textFill="WHITE">
                            <HBox.margin>
                               <Insets left="20.0" />
                            </HBox.margin>
+                           <graphic>
+                              <FontAwesomeIcon fill="WHITE" glyphName="MINUS" size="1.5em" strokeType="OUTSIDE" strokeWidth="0.0" />
+                           </graphic>
                         </JFXButton>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total :" textAlignment="RIGHT" wrappingWidth="447.13671875">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total :" textAlignment="RIGHT" wrappingWidth="284.13671875">
                            <font>
                               <Font size="24.0" />
                            </font>
                         </Text>
-                        <Text fx:id="totalAmount" layoutX="10.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0.00€" textAlignment="CENTER" wrappingWidth="216.13671875">
+                        <Text fx:id="totalAmount" layoutX="10.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0,00" textAlignment="RIGHT" wrappingWidth="216.13671875">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="totalAmount1" layoutX="518.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" €" wrappingWidth="216.13671875">
                            <font>
                               <Font size="24.0" />
                            </font>

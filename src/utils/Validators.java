@@ -83,6 +83,17 @@ public class Validators {
         addListener(field);
     }
 
+    public static void setNumberValidator(JFXTextField field) {
+        String regexPattern = "^[\\d]{0,3}";
+        String message = "Should only contains number";
+        RegexValidator fieldValidator = new RegexValidator();
+        fieldValidator.setRegexPattern(regexPattern);
+        fieldValidator.setMessage(message);
+
+        field.getValidators().add(fieldValidator);
+        addListener(field);
+    }
+
     private static void addListener(JFXTextField field) {
         field.focusedProperty().addListener((o, oldVal, newVal) -> {
             if (!newVal && !newVal.equals("")) {

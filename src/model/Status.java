@@ -9,6 +9,10 @@ public class Status {
         setLabel(label);
     }
 
+    public Status(Integer id) {
+        this(id, null);
+    }
+
     public Integer getId(){
         return this.id;
     }

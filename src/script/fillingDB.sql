@@ -161,7 +161,25 @@ VALUES ('2019-06-14', false, 1, 2, 1);
 /* Filling Product table */
 
 INSERT INTO Product (label, unitPrice, currentStock, minStock, VATCodeRate)
-VALUES ('Jupiler 21cl', 2.50, 156, 30, 21);
+VALUES ('Jupiler 25cl', 2.50, 156, 30, 21);
+
+INSERT INTO Product (label, unitPrice, currentStock, minStock, VATCodeRate)
+VALUES ('Vodka 75cl', 12.50, 156, 30, 21);
+
+INSERT INTO Product (label, unitPrice, currentStock, minStock, VATCodeRate)
+VALUES ('Amaretto 1l', 13.99, 156, 30, 21);
+
+INSERT INTO Product (label, unitPrice, currentStock, minStock, VATCodeRate)
+VALUES ('Caiser Jupiler 24 x 25cl', 13.65, 156, 30, 21);
+
+INSERT INTO Product (label, unitPrice, currentStock, minStock, VATCodeRate)
+VALUES ('Maes 25cl', 2.50, 156, 30, 21);
+
+INSERT INTO Product (label, unitPrice, currentStock, minStock, VATCodeRate)
+VALUES ('Mojito canette 25cl', 2.50, 156, 30, 21);
+
+INSERT INTO Product (label, unitPrice, currentStock, minStock, VATCodeRate)
+VALUES ('Carapils 25cl', 0.99, 156, 30, 21);
 
 /* Filling Delivery table */
 

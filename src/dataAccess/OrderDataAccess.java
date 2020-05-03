@@ -7,4 +7,6 @@ import java.util.ArrayList;
 
 public interface OrderDataAccess {
     public ArrayList<Order> getAllOrders() throws SQLException;
+
+    boolean create(Order orderLineTableFormats);
 }
