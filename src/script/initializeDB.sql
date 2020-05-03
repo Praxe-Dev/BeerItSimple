@@ -87,7 +87,7 @@ CREATE TABLE `Order` (
 	isPaid bit NOT NULL, 
 	StatusNumber int NOT NULL, 
 	paymentMethodId int NOT NULL, 
-	CustomerEntityId int NOT NULL,
+	CustomerEntityId int,
 	CONSTRAINT status_fk FOREIGN KEY (StatusNumber) REFERENCES `Status` (id),
 	CONSTRAINT PaymentMethod_fk FOREIGN KEY (paymentMethodId) REFERENCES PaymentMethod (id),
 	CONSTRAINT OrderCustomerEntity_fk FOREIGN KEY (CustomerEntityId) REFERENCES Customer (EntityId));

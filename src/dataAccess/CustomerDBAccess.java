@@ -257,4 +257,36 @@ public class CustomerDBAccess implements CustomerDataAccess{
 
         return true;
     }
+
+    public boolean delete(Customer customer) {
+
+        String sqlUpdateOrder = "UPDATE `order` SET CustomerEntityid = null\n" +
+                                "WHERE CustomerEntityid = ?";
+
+        try {
+            PreparedStatement preparedStatementOrder = connection.prepareStatement(sqlUpdateOrder);
+            preparedStatementOrder.setInt(1, customer.getEntity().getId());
+
+            preparedStatementOrder.executeUpdate();
+
+            String sqlDeleteCustomer = "DELETE FROM customer\n" +
+                                    "WHERE EntityId = ?";
+
+            PreparedStatement preparedStatementDeleteCustomer = connection.prepareStatement(sqlDeleteCustomer);
+            preparedStatementDeleteCustomer.setInt(1, customer.getEntity().getId());
+            preparedStatementDeleteCustomer.executeUpdate();
+
+            String sqlDeleteEntity = "DELETE FROM entity\n" +
+                                    "WHERE id = ? AND ? NOT IN (SELECT EntityId FROM employee)";
+
+            PreparedStatement preparedStatementDeleteEntity = connection.prepareStatement(sqlDeleteEntity);
+            preparedStatementDeleteEntity.setInt(1, customer.getEntity().getId());
+            preparedStatementDeleteEntity.setInt(2, customer.getEntity().getId());
+            preparedStatementDeleteEntity.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 }

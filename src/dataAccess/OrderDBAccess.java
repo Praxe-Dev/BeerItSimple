@@ -16,64 +16,26 @@ public class OrderDBAccess implements OrderDataAccess {
 
     @Override
     public ArrayList<Order> getAllOrders() throws SQLException {
-        String sqlInstruction = "SELECT o.*, s.*, p.*, c.*, r.*, e.*, city.* FROM `order` o\n"+
+        String sqlInstruction = "SELECT o.*, s.*, p.* FROM `order` o\n"+
                 "JOIN status s ON s.id = o.StatusNumber\n" +
-                "JOIN paymentmethod p ON p.id = o.paymentMethodId\n" +
-                "JOIN customer c ON c.EntityId = o.CustomerEntityId\n" +
-                "JOIN `rank` r ON r.id = c.RankId\n" +
-                "JOIN entity e ON e.id = o.CustomerEntityId\n" +
-                "JOIN city ON e.CityLabel = city.label AND e.CityZipCode = city.zipCode";
-        ArrayList<Order> orderList;
+                "JOIN paymentmethod p ON p.id = o.paymentMethodId\n";
+
+        ArrayList<Order> orderList = new ArrayList<>();
         try {
             ResultSet data = connection.createStatement().executeQuery(sqlInstruction);
 
             orderList = new ArrayList<>();
             Order order;
-            Customer customer;
-            Entity entity;
-            City city;
-            Rank rank;
             Status status;
+            Integer customerId;
             PaymentMethod paymentMethod;
 
             GregorianCalendar calendar = null;
-            GregorianCalendar subscribtionDateGregorian = null;
+
 
             while(data.next()) {
-                city = new City(
-                        data.getString("e.CityLabel"),
-                        data.getInt("e.CityZipCode")
-                );
 
-                entity = new Entity(
-                        data.getInt("e.id"),
-                        data.getString("e.mail"),
-                        data.getString("e.contactName"),
-                        data.getString("e.phoneNumber"),
-                        data.getInt("e.houseNumber"),
-                        data.getString("e.street"),
-                        data.getString("e.bankAccountNumber"),
-                        data.getString("e.businessNumber"),
-                        city
-                );
-
-                java.sql.Date subscribtionDate = data.getDate("c.subscribtionDate");
-                if (!data.wasNull()) {
-                    subscribtionDateGregorian = new GregorianCalendar();
-                    subscribtionDateGregorian.setTime(subscribtionDate);
-                }
-
-                rank = new Rank(
-                        data.getInt("r.id"),
-                        data.getString("r.label"),
-                        data.getInt("r.creditLimit")
-                );
-
-                customer = new Customer(
-                        entity,
-                        rank,
-                        subscribtionDateGregorian
-                );
+                customerId = data.getInt("o.CustomerEntityId");
 
                 status = new Status(
                         data.getInt("s.id"),
@@ -92,7 +54,7 @@ public class OrderDBAccess implements OrderDataAccess {
                 }
 
                 order = new Order(
-                        customer,
+                        null,
                         data.getInt("o.reference"),
                         data.getBoolean("o.isPaid"),
                         calendar,
@@ -100,12 +62,83 @@ public class OrderDBAccess implements OrderDataAccess {
                         paymentMethod
                 );
 
+                /*************************************************************************************************************************************************************/
+                System.out.println("Customer id : " + customerId);
+                if (customerId != 0) {
+                    Customer customer;
+                    Entity entity;
+                    City city;
+                    Rank rank;
+                    GregorianCalendar subscribtionDateGregorian = null;
+
+                    String sqlCustomerInstruction = "SELECT c.*, e.*, r.*, city.*\n" +
+                            "FROM customer c JOIN entity e ON e.id = c.Entityid\n" +
+                            "JOIN `rank` r ON r.id = c.RankId\n" +
+                            "JOIN city ON e.CityLabel = city.label AND e.CityZipCode = city.zipCode\n" +
+                            "WHERE c.EntityId = ?";
+
+                    PreparedStatement preparedStatementCustomer = connection.prepareStatement(sqlCustomerInstruction);
+                    preparedStatementCustomer.setInt(1, customerId);
+
+                    ResultSet dataCustomer = preparedStatementCustomer.executeQuery();
+                    dataCustomer.next();
+
+//                "JOIN customer c ON c.EntityId = o.CustomerEntityId\n" +
+//                "JOIN `rank` r ON r.id = c.RankId\n" +
+//                "JOIN entity e ON e.id = o.CustomerEntityId\n" +
+//                "JOIN city ON e.CityLabel = city.label AND e.CityZipCode = city.zipCode";
+
+
+                    city = new City(
+                            dataCustomer.getString("city.label"),
+                            dataCustomer.getInt("city.zipCode")
+                    );
+
+//                if (data.getInt("o.CustomerEntityId") != null) {
+//
+//                }
+
+                    entity = new Entity(
+                            dataCustomer.getInt("e.id"),
+                            dataCustomer.getString("e.mail"),
+                            dataCustomer.getString("e.contactName"),
+                            dataCustomer.getString("e.phoneNumber"),
+                            dataCustomer.getInt("e.houseNumber"),
+                            dataCustomer.getString("e.street"),
+                            dataCustomer.getString("e.bankAccountNumber"),
+                            dataCustomer.getString("e.businessNumber"),
+                            city
+                    );
+
+                    java.sql.Date subscribtionDate = dataCustomer.getDate("c.subscribtionDate");
+                    if (!dataCustomer.wasNull()) {
+                        subscribtionDateGregorian = new GregorianCalendar();
+                        subscribtionDateGregorian.setTime(subscribtionDate);
+                    }
+
+                    rank = new Rank(
+                            dataCustomer.getInt("r.id"),
+                            dataCustomer.getString("r.label"),
+                            dataCustomer.getInt("r.creditLimit")
+                    );
+
+                    customer = new Customer(
+                            entity,
+                            rank,
+                            subscribtionDateGregorian
+                    );
+                    order.setCustomer(customer);
+                }
+
+                /*************************************************************************************************************************************************************/
+
                 String sqlDelivery = "SELECT d.*, emp.*, e.*, c.* FROM delivery d\n" +
                         "JOIN employee emp ON emp.EntityId = d.EmployeeEntityId\n" +
                         "JOIN entity e ON e.id = d.EmployeeEntityId\n" +
                         "JOIN city c ON e.CityLabel = c.label AND e.CityZipCode = c.zipCode\n" +
                         "WHERE d.OrderReference = ?";
                 PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDelivery);
+
                 preparedStatementDelivery.setInt(1, order.getReference());
                 ResultSet dataDelivery = preparedStatementDelivery.executeQuery();
 //                dataDelivery.next();
@@ -131,14 +164,14 @@ public class OrderDBAccess implements OrderDataAccess {
                     );
 
                     Entity entityDeliveryMan = new Entity(
-                            data.getInt("e.id"),
-                            data.getString("e.mail"),
-                            data.getString("e.contactName"),
-                            data.getString("e.phoneNumber"),
-                            data.getInt("e.houseNumber"),
-                            data.getString("e.street"),
-                            data.getString("e.bankAccountNumber"),
-                            data.getString("e.businessNumber"),
+                            dataDelivery.getInt("e.id"),
+                            dataDelivery.getString("e.mail"),
+                            dataDelivery.getString("e.contactName"),
+                            dataDelivery.getString("e.phoneNumber"),
+                            dataDelivery.getInt("e.houseNumber"),
+                            dataDelivery.getString("e.street"),
+                            dataDelivery.getString("e.bankAccountNumber"),
+                            dataDelivery.getString("e.businessNumber"),
                             cityD
                     );
 
@@ -219,7 +252,7 @@ public class OrderDBAccess implements OrderDataAccess {
                 orderList.add(order);
             }
         } catch (SQLException e) {
-            throw e;
+            e.printStackTrace();
         }
 
         return orderList;

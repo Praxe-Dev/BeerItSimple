@@ -39,4 +39,8 @@ public class CustomerController {
     public boolean update(Customer customer) throws DuplicataException {
         return customerBusiness.update(customer);
     }
+
+    public boolean delete(Customer customer) {
+        return customerBusiness.delete(customer);
+    }
 }
