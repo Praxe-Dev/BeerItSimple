@@ -62,8 +62,6 @@ public class OrderDBAccess implements OrderDataAccess {
                         paymentMethod
                 );
 
-                /*************************************************************************************************************************************************************/
-                System.out.println("Customer id : " + customerId);
                 if (customerId != 0) {
                     Customer customer;
                     Entity entity;
@@ -83,20 +81,10 @@ public class OrderDBAccess implements OrderDataAccess {
                     ResultSet dataCustomer = preparedStatementCustomer.executeQuery();
                     dataCustomer.next();
 
-//                "JOIN customer c ON c.EntityId = o.CustomerEntityId\n" +
-//                "JOIN `rank` r ON r.id = c.RankId\n" +
-//                "JOIN entity e ON e.id = o.CustomerEntityId\n" +
-//                "JOIN city ON e.CityLabel = city.label AND e.CityZipCode = city.zipCode";
-
-
                     city = new City(
                             dataCustomer.getString("city.label"),
                             dataCustomer.getInt("city.zipCode")
                     );
-
-//                if (data.getInt("o.CustomerEntityId") != null) {
-//
-//                }
 
                     entity = new Entity(
                             dataCustomer.getInt("e.id"),
@@ -129,8 +117,6 @@ public class OrderDBAccess implements OrderDataAccess {
                     );
                     order.setCustomer(customer);
                 }
-
-                /*************************************************************************************************************************************************************/
 
                 String sqlDelivery = "SELECT d.*, emp.*, e.*, c.* FROM delivery d\n" +
                         "JOIN employee emp ON emp.EntityId = d.EmployeeEntityId\n" +

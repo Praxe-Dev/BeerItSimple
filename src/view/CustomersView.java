@@ -140,7 +140,9 @@ public class CustomersView extends View implements Initializable {
             }
 
             if(PopUp.showConfirm("Confirm delete", "Are you sur you want to delete " + customer.getEntity().getContactName() + " ?")) {
-                customersController.delete(customer);
+                if (customersController.delete(customer)) {
+                    updateTable();
+                }
             }
         });
     }
