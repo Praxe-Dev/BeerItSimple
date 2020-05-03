@@ -1,8 +1,10 @@
 package controller;
 
 import business.OrderBusiness;
+import exception.NoRowSelected;
 import model.Order;
 import model.OrderLineTableFormat;
+import model.OrderTableFormat;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,7 +20,11 @@ public class OrderController {
         return orderBusiness.getAllOrders();
     }
 
-    public boolean create(Order orderLineTableFormats) {
+    public boolean create(Order orderLineTableFormats) throws SQLException {
         return orderBusiness.create(orderLineTableFormats);
+    }
+
+    public Order getOrder(int reference) throws NoRowSelected {
+        return orderBusiness.getOrder(reference);
     }
 }

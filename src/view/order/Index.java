@@ -2,10 +2,11 @@ package view.order;
 
 import com.jfoenix.controls.JFXButton;
 import controller.OrderController;
+import exception.CustomerException;
+import exception.NoCustomerFoundException;
+import exception.NoRowSelected;
 import exception.SQLManageException;
-import model.Customer;
-import model.CustomerTableFormat;
-import model.OrderTableFormat;
+import model.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -14,7 +15,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
-import model.Order;
 import view.View;
 import view.Window;
 
@@ -36,7 +36,7 @@ public class Index extends View implements Initializable {
     @FXML
     private JFXButton viewOrder;
     @FXML
-    private JFXButton delOrder;
+    private JFXButton deleteBtn;
     @FXML
     private TableView<OrderTableFormat> orderTable;
     @FXML
@@ -72,14 +72,29 @@ public class Index extends View implements Initializable {
 
     @Override
     public void init() {
-
-
         newOrderBtn.setOnAction(e -> {
             Window newOrder = new Window("FXML/order/newOrder.fxml", "BeerItSimple - New order");
             newOrder.load();
             newOrder.getView().setParentView(this);
             newOrder.show();
         });
+
+        deleteBtn.setOnAction(e -> {
+            try {
+                getSelectedOrder();
+            } catch (NoRowSelected ex) {
+                ex.showError();
+            } catch (NullPointerException ex) {
+                new NoRowSelected();
+            }
+        });
+    }
+
+    private Order getSelectedOrder() throws NoRowSelected {
+        OrderTableFormat orderTableFormat = orderTable.getSelectionModel().getSelectedItem();
+        Order order = orderController.getOrder(orderTableFormat.getReference());
+
+        return order;
     }
 
     public void initTableOrder() {
