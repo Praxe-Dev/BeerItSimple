@@ -61,15 +61,6 @@ CREATE TABLE Employee (
 	CONSTRAINT EmployeeEntity_fk FOREIGN KEY (EntityId) REFERENCES Entity (id),
 	CONSTRAINT role_fk FOREIGN KEY (RoleId) REFERENCES Role (id));
 
-INSERT INTO Employee (EntityId, RoleId,password)
-VALUES (1, 1, 'JeSuisUnPoisson');
-
-INSERT INTO Employee (EntityId, RoleId,password)
-VALUES (2, 1, 'admin');
-
-INSERT INTO Employee (EntityId, RoleId,password)
-VALUES (8, 1, 'test');
-
 /*CREATE TABLE Customer (
 	EntityId int PRIMARY KEY, 
 	RankId int NOT NULL, 

@@ -66,4 +66,6 @@ public class Window extends Parent {
     public Stage getStage() {
         return this.stage;
     }
+
+    public View getView() { return this.view; }
 }

@@ -12,18 +12,18 @@ public class PopUp {
         error.showAndWait();
     }
 
-    public static void showInfo(String errorType, String message) {
+    public static void showInfo(String type, String message) {
         Alert error = new Alert(Alert.AlertType.INFORMATION);
         error.setTitle("Information");
-        error.setHeaderText(errorType);
+        error.setHeaderText(type);
         error.setContentText(message);
         error.showAndWait();
     }
 
-    public static void showSuccess(String errorType, String message) {
+    public static void showSuccess(String type, String message) {
         Alert error = new Alert(Alert.AlertType.INFORMATION);
-        error.setTitle("Succès");
-        error.setHeaderText(errorType);
+        error.setTitle("Success");
+        error.setHeaderText(type);
         error.setContentText(message);
         error.showAndWait();
     }

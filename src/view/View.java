@@ -15,7 +15,7 @@ public abstract class View extends Node {
 
     public abstract void init();
 
-    public abstract Pane getRoot();
+//    public abstract Pane getRoot();
 
     public void closeWindow() {
         this.window.close();
@@ -25,5 +25,13 @@ public abstract class View extends Node {
         this.window.close();
         newWindow.load();
         newWindow.show();
+    }
+
+    public void setParentView(View view) {
+        this.parentView = view;
+    }
+
+    public View getParentView() {
+        return this.parentView;
     }
 }

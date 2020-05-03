@@ -94,7 +94,7 @@ INSERT INTO Entity (mail, contactName, phoneNumber, houseNumber, street, bankAcc
 VALUES ('etuXXXXX@henallux.be', 'John Doe', '0470/21.01.02', 30, 'Rue de Bruxelles', 'BE00111122223333', 'Namur', 5000);
 
 INSERT INTO Entity (mail, contactName, phoneNumber, houseNumber, street, bankAccountNumber, CityLabel, CityZipCode)
-VALUES ('peter@gmail.be', 'Peter Mark', '047/16.65.64', 30, 'Rue de Bruxelles', 'BE02111122223333', 'Namur', 5000);
+VALUES ('peter@gmail.be', 'Peter Mark', '0475/16.65.64', 30, 'Rue de Bruxelles', 'BE02111122223333', 'Namur', 5000);
 
 INSERT INTO Entity (mail, contactName, phoneNumber, houseNumber, street, bankAccountNumber, CityLabel, CityZipCode)
 VALUES ('venom@gmail.be', 'Peter Dinklage', '0473/12.31.12', 30, 'Rue de Bruxelles', 'BE07111122223333', 'Namur', 5000);
@@ -137,6 +137,17 @@ VALUES (7, 1, '2020-03-06');
 INSERT INTO Customer (EntityId, RankId, subscribtionDate)
 VALUES (3, 1, '2020-03-07');
 
+/* Filling Employee table */
+
+INSERT INTO Employee (EntityId, RoleId,password)
+VALUES (1, 1, 'JeSuisUnPoisson');
+
+INSERT INTO Employee (EntityId, RoleId,password)
+VALUES (2, 1, 'admin');
+
+INSERT INTO Employee (EntityId, RoleId,password)
+VALUES (8, 1, 'test');
+
 /* Filling Provider table */
 
 INSERT INTO Provider (entityId, providerType)
@@ -150,7 +161,25 @@ VALUES ('2019-06-14', false, 1, 2, 1);
 /* Filling Product table */
 
 INSERT INTO Product (label, unitPrice, currentStock, minStock, VATCodeRate)
-VALUES ('Jupiler 21cl', 2.50, 156, 30, 21);
+VALUES ('Jupiler 25cl', 2.50, 156, 30, 21);
+
+INSERT INTO Product (label, unitPrice, currentStock, minStock, VATCodeRate)
+VALUES ('Vodka 75cl', 12.50, 156, 30, 21);
+
+INSERT INTO Product (label, unitPrice, currentStock, minStock, VATCodeRate)
+VALUES ('Amaretto 1l', 13.99, 156, 30, 21);
+
+INSERT INTO Product (label, unitPrice, currentStock, minStock, VATCodeRate)
+VALUES ('Caiser Jupiler 24 x 25cl', 13.65, 156, 30, 21);
+
+INSERT INTO Product (label, unitPrice, currentStock, minStock, VATCodeRate)
+VALUES ('Maes 25cl', 2.50, 156, 30, 21);
+
+INSERT INTO Product (label, unitPrice, currentStock, minStock, VATCodeRate)
+VALUES ('Mojito canette 25cl', 2.50, 156, 30, 21);
+
+INSERT INTO Product (label, unitPrice, currentStock, minStock, VATCodeRate)
+VALUES ('Carapils 25cl', 0.99, 156, 30, 21);
 
 /* Filling Delivery table */
 
@@ -161,16 +190,3 @@ VALUES ('2020-06-21', 1, 1);
 
 INSERT INTO OrderLine (Productcode, Orderreference, quantity, salesUnitPrice)
 VALUES (1,1,32,2.70);
-
-
-
-
-
-
-
-
-
-
-
-
-

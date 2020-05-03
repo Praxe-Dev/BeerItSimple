@@ -1,6 +1,8 @@
 package dataAccess;
 
 import exception.CustomerException;
+import exception.DuplicataException;
+import exception.NoCustomerFoundException;
 import model.City;
 import model.Customer;
 import model.Entity;
@@ -34,9 +36,11 @@ public class CustomerDBAccess implements CustomerDataAccess{
             Rank rank;
 
             String mail;
-            String fax;
             String VATNumber;
             GregorianCalendar calendar = null;
+            String accountNumber;
+            String businessNumber;
+
 
             while(data.next()) {
                 city = new City(
@@ -53,6 +57,15 @@ public class CustomerDBAccess implements CustomerDataAccess{
                         city
                 );
 
+                accountNumber = data.getString("bankAccountNumber");
+                if (accountNumber != null)
+                    entity.setBankAccountNumber(accountNumber);
+
+                businessNumber = data.getString("businessNumber");
+                if (businessNumber != null)
+                    entity.setBusinessNumber(businessNumber);
+
+
                 rank = new Rank(
                         data.getInt("r.id"),
                         data.getString("r.label"),
@@ -62,16 +75,6 @@ public class CustomerDBAccess implements CustomerDataAccess{
                 mail = data.getString("mail");
                 if (!data.wasNull()) {
                     entity.setMail(mail);
-                }
-
-                fax = data.getString("fax");
-                if (!data.wasNull()) {
-                    entity.setFax(fax);
-                }
-
-                VATNumber = data.getString("VATNumber");
-                if (!data.wasNull()) {
-                    entity.setVATNumber(VATNumber);
                 }
 
                 java.sql.Date subscriptionDate = data.getDate("subscribtionDate");
@@ -93,6 +96,73 @@ public class CustomerDBAccess implements CustomerDataAccess{
         return null;
     }
 
+    @Override
+    public Customer getCustomer(Integer id) throws CustomerException, NoCustomerFoundException {
+        String sqlInstruction = "SELECT customer.*, entity.*, r.*, city.* FROM customer\n" +
+                                "JOIN entity ON customer.EntityId = entity.id\n" +
+                                "JOIN `rank` r ON r.id = customer.RankId\n" +
+                                "JOIN city ON entity.cityLabel = city.label AND entity.CityZipCode = city.zipCode\n" +
+                                "WHERE customer.EntityId = ?";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setInt(1, id);
+
+            ResultSet data = preparedStatement.executeQuery();
+
+            if (data.next()) {
+                City city = new City(
+                        data.getString("CityLabel"),
+                        data.getInt("CityZipCode")
+                );
+
+                Entity entity = new Entity(
+                        data.getInt("id"),
+                        data.getString("contactName"),
+                        data.getString("phoneNumber"),
+                        data.getInt("houseNumber"),
+                        data.getString("street"),
+                        city
+                );
+
+                String bankAccount = data.getString("bankAccountNumber");
+                if (bankAccount != null) {
+                    entity.setBankAccountNumber(bankAccount);
+                }
+
+                String businessNumber = data.getString("businessNumber");
+                if (businessNumber != null) {
+                    entity.setBusinessNumber(businessNumber);
+                }
+
+                Rank rank = new Rank(
+                        data.getInt("r.id"),
+                        data.getString("r.label"),
+                        data.getInt("r.creditLimit")
+                );
+
+                String mail = data.getString("mail");
+                if (!data.wasNull()) {
+                    entity.setMail(mail);
+                }
+
+                GregorianCalendar calendar = null;
+                java.sql.Date subscriptionDate = data.getDate("subscribtionDate");
+                if (!data.wasNull()) {
+                    calendar = new GregorianCalendar();
+                    calendar.setTime(subscriptionDate);
+                }
+
+                return new Customer(entity, rank, calendar);
+
+            } else {{
+                throw new NoCustomerFoundException();
+            }}
+        } catch (SQLException e) {
+            throw new CustomerException();
+        }
+    }
+
     public boolean create(Customer c) throws SQLException {
         int affectedRowsEntity = 0;
         int affectedRowsCustomer = 0;
@@ -101,7 +171,7 @@ public class CustomerDBAccess implements CustomerDataAccess{
 
         //Entity
         try {
-            String sqlEntity = "INSERT INTO entity(mail,contactName, phoneNumber, houseNumber, street, fax, bankAccountNumber, businessNumber, VATNumber, Citylabel, CityZipCode) values(?,?,?,?,?,?,?,?,?,?,?)";
+            String sqlEntity = "INSERT INTO entity(mail,contactName, phoneNumber, houseNumber, street, bankAccountNumber, businessNumber, Citylabel, CityZipCode) values(?,?,?,?,?,?,?,?,?)";
             Entity entity = c.getEntity();
             City city = c.getEntity().getCity();
             preparedStatementEntity = connection.prepareStatement(sqlEntity, Statement.RETURN_GENERATED_KEYS);
@@ -110,12 +180,10 @@ public class CustomerDBAccess implements CustomerDataAccess{
             preparedStatementEntity.setString(3, entity.getPhoneNumber());
             preparedStatementEntity.setInt(4, entity.getHouseNumber());
             preparedStatementEntity.setString(5, entity.getStreet());
-            preparedStatementEntity.setString(6, entity.getFax());
-            preparedStatementEntity.setString(7, entity.getBankAccountNumber());
-            preparedStatementEntity.setString(8, entity.getBusinessNumber());
-            preparedStatementEntity.setString(9, entity.getVATNumber());
-            preparedStatementEntity.setString(10, city.getLabel());
-            preparedStatementEntity.setInt(11, city.getZipCode());
+            preparedStatementEntity.setString(6, entity.getBankAccountNumber());
+            preparedStatementEntity.setString(7, entity.getBusinessNumber());
+            preparedStatementEntity.setString(8, city.getLabel());
+            preparedStatementEntity.setInt(9, city.getZipCode());
             affectedRowsEntity = preparedStatementEntity.executeUpdate();
         }catch(SQLException ex) {
                 throw ex;
@@ -146,5 +214,47 @@ public class CustomerDBAccess implements CustomerDataAccess{
             throw new SQLException("Creating Entity failed.");
         }
         return affectedRowsCustomer != 0;
+    }
+
+    public boolean update(Customer customer) throws DuplicataException {
+        int affectedRow = 0;
+
+        String sqlInstruction = "UPDATE customer\n" +
+                                "JOIN entity ON customer.EntityId = entity.id\n" +
+                                "SET\n" +
+                                " customer.RankId = ?,\n" +
+                                " entity.mail = ?,\n" +
+                                " entity.contactName = ?,\n" +
+                                "entity.phoneNumber = ?,\n" +
+                                "entity.houseNumber = ?,\n" +
+                                "entity.street = ?,\n" +
+                                "entity.bankAccountNumber = ?,\n" +
+                                "entity.businessNumber = ?,\n" +
+                                "entity.CityLabel = ?,\n" +
+                                "entity.CityZipCode = ?\n" +
+                                "WHERE customer.EntityId = ?";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setInt(1, customer.getRank().getId());
+            preparedStatement.setString(2, customer.getEntity().getMail());
+            preparedStatement.setString(3, customer.getEntity().getContactName());
+            preparedStatement.setString(4, customer.getEntity().getPhoneNumber());
+            preparedStatement.setInt(5, customer.getEntity().getHouseNumber());
+            preparedStatement.setString(6, customer.getEntity().getStreet());
+            preparedStatement.setString(7, customer.getEntity().getBankAccountNumber());
+            preparedStatement.setString(8, customer.getEntity().getBusinessNumber());
+            preparedStatement.setString(9, customer.getEntity().getCity().getLabel());
+            preparedStatement.setInt(10, customer.getEntity().getCity().getZipCode());
+            preparedStatement.setInt(11, customer.getEntity().getId());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new DuplicataException(e.getMessage());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return true;
     }
 }

@@ -21,12 +21,12 @@
         <columns>
             <TableColumn fx:id="customerId" prefWidth="75.0" text="Id #" />
             <TableColumn fx:id="contactName" prefWidth="75.0" text="Name" />
-            <TableColumn fx:id="phoneNumber"  prefWidth="75.0" text="Phone Number" />
-            <TableColumn fx:id="address"  prefWidth="75.0" text="Address" />
+            <TableColumn fx:id="phoneNumber" prefWidth="75.0" text="Phone Number" />
+            <TableColumn fx:id="mail" prefWidth="75.0" text="Mail" />
+            <TableColumn fx:id="address" prefWidth="75.0" text="Address" />
             <TableColumn fx:id="subscriptionDate" prefWidth="75.0" text="Subsciption date" />
             <TableColumn fx:id="bankAccountNumber" prefWidth="75.0" text="Bank account" />
             <TableColumn fx:id="businessNumber" prefWidth="75.0" text="Business number" />
-            <TableColumn fx:id="VATNumber" prefWidth="75.0" text="VATNumber" />
             <TableColumn fx:id="cityLabel" prefWidth="75.0" text="City" />
             <TableColumn fx:id="zipCode" prefWidth="75.0" text="ZipCode" />
             <TableColumn fx:id="rankLabel" prefWidth="75.0" text="Rank" />
@@ -49,7 +49,7 @@
                   <FontAwesomeIcon fill="WHITE" glyphName="USER_PLUS" size="3em" strokeType="OUTSIDE" strokeWidth="0.0" />
                </graphic>
             </JFXButton>
-            <JFXButton contentDisplay="TOP" prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Edit" textFill="WHITE">
+            <JFXButton fx:id="editCustomer" contentDisplay="TOP" prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Edit" textFill="WHITE">
                <HBox.margin>
                   <Insets left="60.0" right="60.0" />
                </HBox.margin>
@@ -60,7 +60,7 @@
                   <FontAwesomeIcon fill="WHITE" glyphName="PENCIL_SQUARE" size="3em" strokeType="OUTSIDE" strokeWidth="0.0" />
                </graphic>
             </JFXButton>
-            <JFXButton contentDisplay="TOP" layoutX="10.0" layoutY="10.0" prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Details" textFill="WHITE">
+            <JFXButton fx:id="detailBtn" contentDisplay="TOP" layoutX="10.0" layoutY="10.0" prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Details" textFill="WHITE">
                <HBox.margin>
                   <Insets left="60.0" right="60.0" />
                </HBox.margin>

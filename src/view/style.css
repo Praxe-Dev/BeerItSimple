@@ -34,8 +34,12 @@
     -fx-text-fill: red;
 }
 
+#error {
+    -fx-background-color: rgba(255,0,0,0.5);
+}
+
 /*TABLE CSS*/
 
-.table-view .table-row-cell {
-    -fx-control-inner-background: rgba(0,0,0,0.3);
-}
+/*.table-view .table-row-cell {*/
+/*    -fx-control-inner-background: rgba(0,0,0,0.3);*/
+/*}*/
