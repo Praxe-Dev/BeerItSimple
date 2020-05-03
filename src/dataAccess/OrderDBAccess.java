@@ -2,10 +2,8 @@ package dataAccess;
 
 import model.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.swing.*;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
@@ -225,5 +223,73 @@ public class OrderDBAccess implements OrderDataAccess {
         }
 
         return orderList;
+    }
+
+    public boolean create(Order order) {
+        int affectedRow = 0;
+        String sqlInstructionOrder = "INSERT INTO `order` (startingDate, isPaid, StatusNumber, paymentMethodId, CustomerEntityId)\n" +
+                                     "VALUES (?,?,?,?,?)";
+
+        PreparedStatement preparedStatement = null;
+
+        try {
+            preparedStatement = connection.prepareStatement(sqlInstructionOrder, Statement.RETURN_GENERATED_KEYS);
+//            preparedStatement.setDate(1, Date.valueOf(java.time.LocalDate.now()));
+            preparedStatement.setDate(1, new java.sql.Date(order.getStartingDate().getTimeInMillis()));
+            preparedStatement.setBoolean(2, order.getPaid());
+            preparedStatement.setInt(3, order.getStatus().getId());
+            preparedStatement.setInt(4, order.getPaymentMethod().getId());
+            preparedStatement.setInt(5, order.getCustomer().getEntity().getId());
+
+            affectedRow = preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (affectedRow != 0) {
+            try {
+                ResultSet genretadKeys = preparedStatement.getGeneratedKeys();
+                if (genretadKeys.next()) {
+                    if (order.getDelivery() != null) {
+                        String sqlDelivery = "INSERT INTO delivery (plannedDate, OrderReference, EmployeeEntityId)\n" +
+                                             "VALUES (?,?,?)";
+
+                        PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDelivery);
+                        preparedStatementDelivery.setDate(1, new java.sql.Date(order.getDelivery().getPlannedDate().getTimeInMillis()));
+                        preparedStatementDelivery.setInt(2, genretadKeys.getInt(1));
+                        preparedStatementDelivery.setInt(3, order.getDelivery().getEmployee().getId());
+
+                        preparedStatementDelivery.executeUpdate();
+                    }
+
+                    String sqlOrderLine = "INSERT INTO orderline (productCode, Orderreference, quantity, salesUnitPrice)\n" +
+                                          "VALUES(?,?,?,?)";
+                    PreparedStatement preparedStatementOrderLine = connection.prepareStatement(sqlOrderLine);
+
+                    for (OrderLine line : order.getOrderLineList()) {
+                        preparedStatementOrderLine.setInt(1, line.getProduct().getCode());
+                        preparedStatementOrderLine.setInt(2, genretadKeys.getInt(1));
+                        preparedStatementOrderLine.setInt(3, line.getQuantity());
+                        preparedStatementOrderLine.setDouble(4, line.getSalesUnitPrice());
+
+                        preparedStatementOrderLine.executeUpdate();
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+
+                String protection = "rollback to security1";
+                PreparedStatement preparedStatement1 = null;
+                connection.prepareStatement(protection).executeUpdate();
+                return false;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return true;
     }
 }

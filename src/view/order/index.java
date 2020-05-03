@@ -13,6 +13,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import model.Order;
+import view.Window;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -26,7 +27,7 @@ public class index implements Initializable {
     @FXML
     private Label label;
     @FXML
-    private JFXButton newOrder;
+    private JFXButton newOrderBtn;
     @FXML
     private JFXButton editOrder;
     @FXML
@@ -63,6 +64,12 @@ public class index implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initTableOrder();
+
+        newOrderBtn.setOnAction(e -> {
+            Window newOrder = new Window("FXML/order/newOrder.fxml", "BeerItSimple - New order");
+            newOrder.load();
+            newOrder.show();
+        });
     }
 
     public void initTableOrder() {

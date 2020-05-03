@@ -18,6 +18,10 @@ public class Delivery {
         setOrder(order);
     }
 
+    public Delivery(Employee employee, GregorianCalendar plannedDate, Order order) {
+        this(employee, null, plannedDate, null, order);
+    }
+
     public Employee getEmployee() {
         return employee;
     }

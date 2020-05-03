@@ -5,7 +5,7 @@ import view.PopUp;
 import java.awt.*;
 import java.sql.SQLException;
 
-public class SQLManageException {
+public class SQLManageException extends Exception {
     private static SQLException exception;
 
     public SQLManageException(SQLException exception){

@@ -35,7 +35,7 @@
         </TableView>
         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
             <children>
-                <JFXButton fx:id="newOrder" contentDisplay="TOP" prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="New" textFill="WHITE">
+                <JFXButton fx:id="newOrderBtn" contentDisplay="TOP" prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="New" textFill="WHITE">
                     <HBox.margin>
                         <Insets left="60.0" right="60.0" />
                     </HBox.margin>
@@ -43,7 +43,7 @@
                         <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
                     </padding>
                     <graphic>
-                        <FontAwesomeIcon fill="WHITE" glyphName="USER_PLUS" size="3em" strokeType="OUTSIDE" strokeWidth="0.0" />
+                        <FontAwesomeIcon fill="WHITE" glyphName="CART_PLUS" size="3em" strokeType="OUTSIDE" strokeWidth="0.0" />
                     </graphic>
                 </JFXButton>
                 <JFXButton fx:id="editOrder" contentDisplay="TOP" prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Edit" textFill="WHITE">

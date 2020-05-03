@@ -84,4 +84,9 @@ public class Product {
     public void setVATRate(Integer VATRate) {
         this.VATRate = VATRate;
     }
+
+    @Override
+    public String toString() {
+        return "[" + code + "] " + label + " (" + unitPrice + " €)" ;
+    }
 }
