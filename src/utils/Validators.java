@@ -103,4 +103,17 @@ public class Validators {
 
         return check;
     }
+
+    public static boolean validateNullableValue(JFXTextField... elements) {
+//        boolean check = true;
+        for (JFXTextField element : elements) {
+            if (!element.getText().equals("")) {
+                if (!element.validate()) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
 }

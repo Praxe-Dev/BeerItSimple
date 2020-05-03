@@ -70,10 +70,6 @@ public class Create extends View {
         // affiche de base pour un client particulier
         businessView.setVisible(false);
 
-        // Initialise l'objet reqField qui, ajouter aux textField, permet de vérifier que ceux ci sont initaliser
-//        RequiredFieldValidator reqField = new RequiredFieldValidator();
-//        reqField.setMessage("Required field");
-
         Validators.setMailValidators(mail);
         Validators.setReqField(contactName);
         Validators.setPhoneNumberValidator(phoneNumber);
@@ -135,7 +131,7 @@ public class Create extends View {
 
         submitBtn.setOnAction(e -> {
 //            System.out.println("Check mail :" + checkMail());
-            if(Validators.validate(contactName, phoneNumber, address, houseNumber) && checkMail() && checkBusinessCustomer()) {
+            if(Validators.validate(contactName, phoneNumber, address, houseNumber)  && Validators.validateNullableValue(mail, businessNumber, accountNumber)) {
                 System.out.println("INSERTION");
                 try {
                     insertCustomer();
@@ -160,39 +156,32 @@ public class Create extends View {
         }
     }
 
-
-    /**
-     * @return True if particular cause you don't need those informations for a particular customer
-     */
-    private boolean checkBusinessCustomer() {
-        if (businessCustomer.isSelected()) {
-            return Validators.validate(businessNumber, accountNumber);
-        }
-        return true;
-    }
-
     private boolean insertCustomer() throws SQLException{
-        try {
-            Customer newCustomer;
-            Entity newEntity = new Entity();
 
-            newEntity.setContactName(contactName.getText());
-            newEntity.setPhoneNumber(phoneNumber.getText());
-            newEntity.setMail(mail.getText());
-            newEntity.setStreet(address.getText());
-            newEntity.setHouseNumber(Integer.parseInt(houseNumber.getText()));
+        Customer newCustomer;
+        Entity newEntity = new Entity();
 
-            if(businessCustomer.isSelected()) {
+        newEntity.setContactName(contactName.getText());
+        newEntity.setPhoneNumber(phoneNumber.getText());
+        newEntity.setMail(mail.getText());
+        newEntity.setStreet(address.getText());
+        newEntity.setHouseNumber(Integer.parseInt(houseNumber.getText()));
+
+        if(businessCustomer.isSelected()) {
+            if (accountNumber.validate())
                 newEntity.setBankAccountNumber(accountNumber.getText());
+
+            if (businessNumber.validate())
                 newEntity.setBusinessNumber(businessNumber.getText());
-            }
-            Rank selectedRank = customerRank.getValue();
-            City city = regionBox.getValue();
-            newEntity.setCity(city);
-            newCustomer = new Customer(newEntity, selectedRank);
-            return customerController.create(newCustomer);
-        } catch (SQLException err) {
-            throw err;
         }
+
+        System.out.println("Business Number : " + newEntity.getBusinessNumber());
+        System.out.println("Account number : " + newEntity.getBankAccountNumber());
+
+        Rank selectedRank = customerRank.getValue();
+        City city = regionBox.getValue();
+        newEntity.setCity(city);
+        newCustomer = new Customer(newEntity, selectedRank);
+        return customerController.create(newCustomer);
     }
 }
