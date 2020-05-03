@@ -3,6 +3,8 @@ package view.order;
 import com.jfoenix.controls.JFXButton;
 import controller.OrderController;
 import exception.SQLManageException;
+import model.Customer;
+import model.CustomerTableFormat;
 import model.OrderTableFormat;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -13,6 +15,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import model.Order;
+import view.View;
 import view.Window;
 
 import java.net.URL;
@@ -20,7 +23,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class index implements Initializable {
+public class Index extends View implements Initializable {
 
     @FXML
     private VBox vbox;
@@ -57,17 +60,24 @@ public class index implements Initializable {
 
     private OrderController orderController;
 
-    public index() {
+    public Index() {
         this.orderController = new OrderController();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initTableOrder();
+        init();
+    }
+
+    @Override
+    public void init() {
+
 
         newOrderBtn.setOnAction(e -> {
             Window newOrder = new Window("FXML/order/newOrder.fxml", "BeerItSimple - New order");
             newOrder.load();
+            newOrder.getView().setParentView(this);
             newOrder.show();
         });
     }
@@ -103,6 +113,21 @@ public class index implements Initializable {
         orderTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         for (int i = 0; i < orderTable.getColumns().size(); i++) {
             orderTable.getColumns().get(i).prefWidthProperty().bind(orderTable.widthProperty().multiply((double) 1 / orderTable.getColumns().size()));
+        }
+    }
+
+    public void updateTable() {
+
+        ArrayList<OrderTableFormat> ordersList = new ArrayList<>();
+        try {
+
+            for (Order order : orderController.getAllOrders()) {
+                ordersList.add(new OrderTableFormat(order));
+            }
+
+            orderTable.getItems().setAll(ordersList);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

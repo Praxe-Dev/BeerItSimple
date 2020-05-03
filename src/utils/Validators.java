@@ -84,7 +84,7 @@ public class Validators {
     }
 
     public static void setNumberValidator(JFXTextField field) {
-        String regexPattern = "^[\\d]{0,3}";
+        String regexPattern = "(^[1-9])[0-9]{0,3}";
         String message = "Should only contains number";
         RegexValidator fieldValidator = new RegexValidator();
         fieldValidator.setRegexPattern(regexPattern);

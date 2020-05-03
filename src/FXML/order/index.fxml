@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox fx:id="vbox" alignment="CENTER" prefHeight="641.0" prefWidth="1072.0" styleClass="center" stylesheets="/view/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.order.index">
+<VBox fx:id="vbox" alignment="CENTER" prefHeight="641.0" prefWidth="1072.0" styleClass="center" stylesheets="/view/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.order.Index">
     <children>
         <Label fx:id="label" alignment="CENTER" contentDisplay="CENTER" prefHeight="74.0" prefWidth="451.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Orders" textAlignment="CENTER" textFill="WHITE">
             <VBox.margin>

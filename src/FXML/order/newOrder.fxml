@@ -9,7 +9,7 @@
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane stylesheets="/view/style.css" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.order.Create">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1200.0" stylesheets="/view/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.order.Create">
    <children>
       <HBox layoutX="1.0" layoutY="1.0" prefHeight="720.0" prefWidth="1200.0">
          <children>
@@ -78,12 +78,12 @@
                <children>
                   <HBox alignment="CENTER_LEFT">
                      <children>
-                        <JFXComboBox fx:id="productList" labelFloat="true" prefHeight="60.0" prefWidth="250.0" promptText="Article">
+                        <JFXComboBox fx:id="productList" labelFloat="true" prefHeight="25.0" prefWidth="250.0" promptText="Article">
                            <HBox.margin>
                               <Insets right="20.0" />
                            </HBox.margin>
                         </JFXComboBox>
-                        <JFXTextField fx:id="productQuantity" labelFloat="true" maxWidth="250.0" minWidth="65.0" prefHeight="48.0" prefWidth="65.0" promptText="Quantity">
+                        <JFXTextField fx:id="productQuantity" labelFloat="true" maxWidth="250.0" minWidth="65.0" prefHeight="25.0" prefWidth="65.0" promptText="Quantity" text="1">
                            <HBox.margin>
                               <Insets left="40.0" right="20.0" />
                            </HBox.margin>
