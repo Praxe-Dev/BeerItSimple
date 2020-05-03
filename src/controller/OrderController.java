@@ -1,6 +1,7 @@
 package controller;
 
 import business.OrderBusiness;
+import exception.DeletionExceiption;
 import exception.NoRowSelected;
 import model.Order;
 import model.OrderLineTableFormat;
@@ -26,5 +27,9 @@ public class OrderController {
 
     public Order getOrder(int reference) throws NoRowSelected {
         return orderBusiness.getOrder(reference);
+    }
+
+    public boolean deleteOrder(Order order) throws DeletionExceiption {
+        return orderBusiness.deleteOrder(order);
     }
 }

@@ -1,5 +1,6 @@
 package dataAccess;
 
+import exception.DeletionExceiption;
 import exception.NoRowSelected;
 import model.*;
 
@@ -205,6 +206,48 @@ public class OrderDBAccess implements OrderDataAccess {
         return true;
     }
 
+    public boolean deleteOrder(Order order) throws DeletionExceiption {
+        try {
+
+            String sqlInstruction = "SET SQL_SAFE_UPDATES = 0";
+            connection.prepareStatement(sqlInstruction).execute();
+
+
+            String sqlOrderline = "DELETE FROM orderline\n" +
+                                "WHERE Orderreference = ?;\n";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlOrderline);
+            preparedStatement.setInt(1, order.getReference());
+            preparedStatement.executeUpdate();
+
+            if (order.getDelivery() != null) {
+                String sqlDelivery = /*"SET SQL_SAFE_UPDATES = 0;\n" +*/
+                                 "DELETE FROM delivery\n" +
+                                 "WHERE OrderReference = ?;\n";
+
+                PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDelivery);
+                preparedStatementDelivery.setInt(1, order.getReference());
+                preparedStatementDelivery.executeUpdate();
+            }
+
+            sqlInstruction = "SET SQL_SAFE_UPDATES = 1";
+            connection.prepareStatement(sqlInstruction).execute();
+
+            String sqlOrder = "DELETE FROM `order`\n" +
+                              "WHERE `reference` = ?";
+            PreparedStatement preparedStatementOrder = connection.prepareStatement(sqlOrder);
+            preparedStatementOrder.setInt(1, order.getReference());
+            preparedStatementOrder.executeUpdate();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DeletionExceiption();
+        }
+
+        return true;
+    }
+
     public Order getOrder(int reference) throws NoRowSelected {
         Order order = null;
         Status status = null;
@@ -392,7 +435,6 @@ public class OrderDBAccess implements OrderDataAccess {
         preparedStatement.setInt(1, order.getReference());
 
             ResultSet dataOrderLine = preparedStatement.executeQuery();
-            System.out.println(dataOrderLine);
             while(dataOrderLine.next()){
                 Product product = new Product(
                         null,

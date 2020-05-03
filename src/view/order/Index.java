@@ -2,10 +2,7 @@ package view.order;
 
 import com.jfoenix.controls.JFXButton;
 import controller.OrderController;
-import exception.CustomerException;
-import exception.NoCustomerFoundException;
-import exception.NoRowSelected;
-import exception.SQLManageException;
+import exception.*;
 import model.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -81,12 +78,17 @@ public class Index extends View implements Initializable {
 
         deleteBtn.setOnAction(e -> {
             try {
-                getSelectedOrder();
+                Order order = getSelectedOrder();
+                orderController.deleteOrder(order);
             } catch (NoRowSelected ex) {
+                ex.showError();
+            } catch (DeletionExceiption ex) {
                 ex.showError();
             } catch (NullPointerException ex) {
                 new NoRowSelected();
             }
+
+            updateTable();
         });
     }
 
