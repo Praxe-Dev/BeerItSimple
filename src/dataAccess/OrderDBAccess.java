@@ -204,7 +204,7 @@ public class OrderDBAccess implements OrderDataAccess {
                                 dataOrderLine.getInt("p.currentStock"),
                                 dataOrderLine.getInt("p.maxStock"),
                                 dataOrderLine.getInt("p.minStock"),
-                                dataOrderLine.getDouble("v.rate")
+                                dataOrderLine.getInt("v.rate")
                         );
                         OrderLine orderLine = new OrderLine(
                                 product,
