@@ -25,9 +25,11 @@ public class OrderTableFormat {
         setPaid(order.getPaid());
         setPaymentMethod(order.getPaymentMethod().getLabel());
         setStatus(order.getStatus().getLabel());
-        setPlannedDate(order.getDelivery().getPlannedDate());
-        setDeliveredDate(order.getDelivery().getDeliveredDate());
-        setDeliveryMan(order.getDelivery().getEmployee().getEntity().getContactName());
+        if (order.getDelivery() != null) {
+            setPlannedDate(order.getDelivery().getPlannedDate());
+            setDeliveredDate(order.getDelivery().getDeliveredDate());
+            setDeliveryMan(order.getDelivery().getEmployee().getEntity().getContactName());
+        }
     }
 
     public Integer getReference() {
@@ -91,7 +93,15 @@ public class OrderTableFormat {
     }
 
     public String getDeliveredDate() {
-        return (deliveredDate == null) ? ((plannedDate == null) ? "N/A" : "Not delivered yet") : dateFormat(deliveredDate);
+//        return (deliveredDate == null) ? ((plannedDate == null) ? "N/A" : "Not delivered yet") : dateFormat(deliveredDate);
+        String deliveryDate = "N/A";
+            if (deliveredDate == null) {
+                deliveryDate = "Not delivered yet";
+            } else {
+                deliveryDate = dateFormat(deliveredDate);
+            }
+
+            return deliveryDate;
     }
 
     public void setDeliveredDate(GregorianCalendar deliveredDate) {

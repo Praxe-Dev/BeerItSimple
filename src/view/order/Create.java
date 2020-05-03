@@ -10,7 +10,6 @@ import controller.PaymentMethodController;
 import controller.ProductController;
 import exception.NoRowSelected;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.DatePicker;
@@ -20,10 +19,10 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import model.*;
 import utils.Validators;
+import view.CustomersView;
+import view.PopUp;
 import view.View;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
@@ -109,14 +108,19 @@ public class Create extends View {
 //               productQuantity.getStyleClass().remove("error");
                productQuantity.setStyle("");
                Product newProduct = productList.getValue();
-               int productQty = Integer.parseInt(productQuantity.getText());
+               if (!checkPresentProduct(newProduct)) {
+                    PopUp.showError("Duplicate error", "You try to add a product already present in the command !");
+               } else {
 
-               OrderLineTableFormat orderLineTableFormat = new OrderLineTableFormat(newProduct, productQty);
-               tableArticle.getItems().add(orderLineTableFormat);
-               double amount = Double.parseDouble(totalAmount.getText().replace(',', '.'));
+                   int productQty = Integer.parseInt(productQuantity.getText());
 
-               String newTotal = String.format("%.2f", amount + orderLineTableFormat.getTotal());
-               totalAmount.setText(newTotal);
+                   OrderLineTableFormat orderLineTableFormat = new OrderLineTableFormat(newProduct, productQty);
+                   tableArticle.getItems().add(orderLineTableFormat);
+                   double amount = Double.parseDouble(totalAmount.getText().replace(',', '.'));
+
+                   String newTotal = String.format("%.2f", amount + orderLineTableFormat.getTotal());
+                   totalAmount.setText(newTotal);
+               }
            } else {
                productQuantity.setStyle("-fx-background-color: rgba(255,0,0,0.5)");
 //               productQuantity.getStyleClass().add("error");
@@ -143,13 +147,29 @@ public class Create extends View {
        });
 
        submitBtn.setOnAction(e -> {
-           newOrderInsert();
+           if (!tableArticle.getItems().isEmpty()) {
+               if (newOrderInsert()) {
+                   PopUp.showSuccess("New order added !", "The new order has been added successfully.");
+                   Index index = (Index) getParentView();
+                   index.updateTable();
+                   closeWindow();
+               }
+           }
        });
     }
 
-    private void newOrderInsert() {
-//        LocalDate deliveryDateValue = deliveryDate.getValue();
-//        java.sql.Date date = Date.valueOf(deliveryDateValue);
+    public boolean checkPresentProduct(Product newProduct) {
+        ArrayList<OrderLineTableFormat> products = new ArrayList<>(tableArticle.getItems());
+
+        for (OrderLineTableFormat product : products) {
+            if (product.getProductCode() == newProduct.getCode())
+                return false;
+        }
+
+        return true;
+    }
+
+    private boolean newOrderInsert() {
         ArrayList<OrderLine> orderLines = new ArrayList<>();
         Product product;
         Delivery delivery = null;
@@ -172,13 +192,12 @@ public class Create extends View {
             newOrder.setDelivery(delivery);
         }
 
-
         for (OrderLineTableFormat line : tableArticle.getItems()) {
             product = productList.getItems().get(line.getProductCode() - 1);
             newOrder.addOrderLine(new OrderLine(product, newOrder, line.getQuantity(), line.getUnitPrice()));
         }
 
-        orderController.create(newOrder);
+        return orderController.create(newOrder);
     }
 
     private void initTable() {

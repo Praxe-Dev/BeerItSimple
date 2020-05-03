@@ -17,12 +17,12 @@ public class OrderDBAccess implements OrderDataAccess {
     @Override
     public ArrayList<Order> getAllOrders() throws SQLException {
         String sqlInstruction = "SELECT o.*, s.*, p.*, c.*, r.*, e.*, city.* FROM `order` o\n"+
-                            "JOIN status s ON s.id = o.StatusNumber\n" +
-                            "JOIN paymentmethod p ON p.id = o.paymentMethodId\n" +
-                            "JOIN customer c ON c.EntityId = o.CustomerEntityId\n" +
-                            "JOIN `rank` r ON r.id = c.RankId\n" +
-                            "JOIN entity e ON e.id = o.CustomerEntityId\n" +
-                            "JOIN city ON e.CityLabel = city.label AND e.CityZipCode = city.zipCode";
+                "JOIN status s ON s.id = o.StatusNumber\n" +
+                "JOIN paymentmethod p ON p.id = o.paymentMethodId\n" +
+                "JOIN customer c ON c.EntityId = o.CustomerEntityId\n" +
+                "JOIN `rank` r ON r.id = c.RankId\n" +
+                "JOIN entity e ON e.id = o.CustomerEntityId\n" +
+                "JOIN city ON e.CityLabel = city.label AND e.CityZipCode = city.zipCode";
         ArrayList<Order> orderList;
         try {
             ResultSet data = connection.createStatement().executeQuery(sqlInstruction);
@@ -36,9 +36,6 @@ public class OrderDBAccess implements OrderDataAccess {
             Status status;
             PaymentMethod paymentMethod;
 
-            String mail;
-            String fax;
-            String VATNumber;
             GregorianCalendar calendar = null;
             GregorianCalendar subscribtionDateGregorian = null;
 
@@ -50,10 +47,13 @@ public class OrderDBAccess implements OrderDataAccess {
 
                 entity = new Entity(
                         data.getInt("e.id"),
+                        data.getString("e.mail"),
                         data.getString("e.contactName"),
                         data.getString("e.phoneNumber"),
                         data.getInt("e.houseNumber"),
                         data.getString("e.street"),
+                        data.getString("e.bankAccountNumber"),
+                        data.getString("e.businessNumber"),
                         city
                 );
 
@@ -101,15 +101,15 @@ public class OrderDBAccess implements OrderDataAccess {
                 );
 
                 String sqlDelivery = "SELECT d.*, emp.*, e.*, c.* FROM delivery d\n" +
-                                "JOIN employee emp ON emp.EntityId = d.EmployeeEntityId\n" +
-                                "JOIN entity e ON e.id = d.EmployeeEntityId\n" +
-                                "JOIN city c ON e.CityLabel = c.label AND e.CityZipCode = c.zipCode\n" +
-                                "WHERE d.OrderReference = ?";
+                        "JOIN employee emp ON emp.EntityId = d.EmployeeEntityId\n" +
+                        "JOIN entity e ON e.id = d.EmployeeEntityId\n" +
+                        "JOIN city c ON e.CityLabel = c.label AND e.CityZipCode = c.zipCode\n" +
+                        "WHERE d.OrderReference = ?";
                 PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDelivery);
                 preparedStatementDelivery.setInt(1, order.getReference());
                 ResultSet dataDelivery = preparedStatementDelivery.executeQuery();
-                dataDelivery.next();
-                if(!dataDelivery.wasNull()){
+//                dataDelivery.next();
+                if(dataDelivery.next()){
                     GregorianCalendar plannedDateG = null;
                     GregorianCalendar deliveredDateG = null;
 
@@ -126,16 +126,19 @@ public class OrderDBAccess implements OrderDataAccess {
                     }
 
                     City cityD = new City(
-                        dataDelivery.getString("c.label"),
-                        dataDelivery.getInt("c.zipCode")
+                            dataDelivery.getString("c.label"),
+                            dataDelivery.getInt("c.zipCode")
                     );
 
                     Entity entityDeliveryMan = new Entity(
                             data.getInt("e.id"),
+                            data.getString("e.mail"),
                             data.getString("e.contactName"),
                             data.getString("e.phoneNumber"),
                             data.getInt("e.houseNumber"),
                             data.getString("e.street"),
+                            data.getString("e.bankAccountNumber"),
+                            data.getString("e.businessNumber"),
                             cityD
                     );
 
@@ -146,23 +149,23 @@ public class OrderDBAccess implements OrderDataAccess {
                             entityDeliveryMan);
 
                     Delivery delivery = new Delivery(
-                        deliveryMan,
-                        dataDelivery.getInt("d.id"),
-                        plannedDateG,
-                        deliveredDateG,
-                        order
+                            deliveryMan,
+                            dataDelivery.getInt("d.id"),
+                            plannedDateG,
+                            deliveredDateG,
+                            order
                     );
                     order.setDelivery(delivery);
                 }
 
                 String sqlOrderLine = "SELECT o.*, p.*, v.*, provider.*, e.*, city.* FROM OrderLine o\n"+
-                                "JOIN product p ON p.code = o.Productcode\n" +
-                                "JOIN vatcode v ON v.rate = p.VATCodeRate\n" +
-                                "JOIN provider ON provider.entityId = p.ProviderEntityId\n" +
-                                "JOIN entity e ON e.id = provider.entityId\n" +
-                                "JOIN city c ON c.label = provider.entityId\n" +
-                                "JOIN city ON e.CityLabel = city.label AND e.CityZipCode = city.zipCode\n" +
-                                "WHERE Orderreference = ?";
+                        "JOIN product p ON p.code = o.Productcode\n" +
+                        "JOIN vatcode v ON v.rate = p.VATCodeRate\n" +
+                        "JOIN provider ON provider.entityId = p.ProviderEntityId\n" +
+                        "JOIN entity e ON e.id = provider.entityId\n" +
+                        "JOIN city c ON c.label = provider.entityId\n" +
+                        "JOIN city ON e.CityLabel = city.label AND e.CityZipCode = city.zipCode\n" +
+                        "WHERE Orderreference = ?";
                 PreparedStatement preparedStatement = connection.prepareStatement(sqlOrderLine);
                 preparedStatement.setInt(1, order.getReference());
                 try {
@@ -170,23 +173,20 @@ public class OrderDBAccess implements OrderDataAccess {
                     while(dataOrderLine.next()){
                         //Add all orderline to already created order object.
                         City providerCity = new City(
-                            data.getString("e.CityLabel"),
-                            data.getInt("e.CityZipCode")
+                                data.getString("e.CityLabel"),
+                                data.getInt("e.CityZipCode")
                         );
 
-                        /**
-                         * TODO: Retirer les commentaires ci-dessosu une fois que le merge de la classe entity aura été fait.
-                         */
                         Entity providerEntity = new Entity(
-                            dataOrderLine.getInt("e.id"),
-                            //data.getString("e.mail"),
-                            data.getString("e.contactName"),
-                            data.getString("e.phoneNumber"),
-                            data.getInt("e.houseNumber"),
-                            data.getString("e.street"),
-                            //data.getString("e.bankAccountNumber"),
-                            //data.getString("e.businessNumber"),
-                            providerCity
+                                dataOrderLine.getInt("e.id"),
+                                data.getString("e.mail"),
+                                data.getString("e.contactName"),
+                                data.getString("e.phoneNumber"),
+                                data.getInt("e.houseNumber"),
+                                data.getString("e.street"),
+                                data.getString("e.bankAccountNumber"),
+                                data.getString("e.businessNumber"),
+                                providerCity
                         );
 
                         Provider provider = new Provider(
@@ -225,6 +225,7 @@ public class OrderDBAccess implements OrderDataAccess {
         return orderList;
     }
 
+
     public boolean create(Order order) {
         int affectedRow = 0;
         String sqlInstructionOrder = "INSERT INTO `order` (startingDate, isPaid, StatusNumber, paymentMethodId, CustomerEntityId)\n" +
@@ -250,13 +251,15 @@ public class OrderDBAccess implements OrderDataAccess {
             try {
                 ResultSet genretadKeys = preparedStatement.getGeneratedKeys();
                 if (genretadKeys.next()) {
+                    int orderId = genretadKeys.getInt(1);
+
                     if (order.getDelivery() != null) {
                         String sqlDelivery = "INSERT INTO delivery (plannedDate, OrderReference, EmployeeEntityId)\n" +
                                              "VALUES (?,?,?)";
 
                         PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDelivery);
                         preparedStatementDelivery.setDate(1, new java.sql.Date(order.getDelivery().getPlannedDate().getTimeInMillis()));
-                        preparedStatementDelivery.setInt(2, genretadKeys.getInt(1));
+                        preparedStatementDelivery.setInt(2, orderId);
                         preparedStatementDelivery.setInt(3, order.getDelivery().getEmployee().getId());
 
                         preparedStatementDelivery.executeUpdate();
@@ -268,7 +271,7 @@ public class OrderDBAccess implements OrderDataAccess {
 
                     for (OrderLine line : order.getOrderLineList()) {
                         preparedStatementOrderLine.setInt(1, line.getProduct().getCode());
-                        preparedStatementOrderLine.setInt(2, genretadKeys.getInt(1));
+                        preparedStatementOrderLine.setInt(2, orderId);
                         preparedStatementOrderLine.setInt(3, line.getQuantity());
                         preparedStatementOrderLine.setDouble(4, line.getSalesUnitPrice());
 
