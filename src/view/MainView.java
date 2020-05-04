@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 
 public class MainView extends View{
 
@@ -22,7 +21,7 @@ public class MainView extends View{
 
     // Path to FXML file to display on center
     private static final String pathToHomePanel = "/FXML/homePanel.fxml";
-    private static final String pathToCustomersPanel = "/FXML/customersPanel.fxml";
+    private static final String pathToCustomersPanel = "/FXML/customer/index.fxml";
     private static final String pathToOrdersPanel = "/FXML/order/index.fxml";
     private static final String pathToSearchPanel = "/FXML/searchPanel.fxml";
 

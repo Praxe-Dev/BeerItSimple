@@ -13,7 +13,6 @@ import model.City;
 import model.Customer;
 import model.Rank;
 import utils.Validators;
-import view.CustomersView;
 import view.View;
 
 import java.util.ArrayList;
@@ -54,14 +53,14 @@ public class Update extends View {
     CityController cityController;
     RankController rankController;
     CustomerController customerController;
-    CustomersView customersView;
+    Index customersView;
 
     @Override
     public void init() {
         cityController = new CityController();
         rankController = new RankController();
         customerController = new CustomerController();
-        customersView = (CustomersView) this.getParentView();
+        customersView = (Index) this.getParentView();
 
         Validators.setMailValidators(mail);
         Validators.setReqField(contactName);
