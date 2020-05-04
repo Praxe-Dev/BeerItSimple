@@ -16,7 +16,7 @@ public class Validators {
         mailValidator.setMessage(message);
 
         mail.getValidators().add(mailValidator);
-        addListener(mail);
+        addListenerOptional(mail);
     }
 
     public static void setPhoneNumberValidator(JFXTextField phoneNumber) {
@@ -60,7 +60,7 @@ public class Validators {
         accountNumberValidator.setMessage(message);
 
         accountNumber.getValidators().add(accountNumberValidator);
-        addListener(accountNumber);
+        addListenerOptional(accountNumber);
     }
 
     public static void setBusinessNumberValidator(JFXTextField businessNumber) {
@@ -97,6 +97,14 @@ public class Validators {
     private static void addListener(JFXTextField field) {
         field.focusedProperty().addListener((o, oldVal, newVal) -> {
             if (!newVal && !newVal.equals("")) {
+                field.validate();
+            }
+        });
+    }
+
+    private static void addListenerOptional(JFXTextField field) {
+        field.focusedProperty().addListener((o, oldVal, newVal) -> {
+            if (!field.getText().equals("")) {
                 field.validate();
             }
         });

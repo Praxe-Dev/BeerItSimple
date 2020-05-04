@@ -374,7 +374,7 @@ public class OrderDBAccess implements OrderDataAccess {
             Entity customerEntity;
             City city;
             Rank rank;
-            GregorianCalendar subscribtionDateGregorian = null;
+            GregorianCalendar subscriptionDateGregorian = null;
 
             String sqlCustomerInstruction = "SELECT c.*, e.*, r.*, city.*\n" +
                     "FROM customer c JOIN entity e ON e.id = c.Entityid\n" +
@@ -405,10 +405,10 @@ public class OrderDBAccess implements OrderDataAccess {
                     city
             );
 
-            Date subscribtionDate = dataCustomer.getDate("c.subscribtionDate");
+            Date subscriptionDate = dataCustomer.getDate("c.subscriptionDate");
             if (!dataCustomer.wasNull()) {
-                subscribtionDateGregorian = new GregorianCalendar();
-                subscribtionDateGregorian.setTime(subscribtionDate);
+                subscriptionDateGregorian = new GregorianCalendar();
+                subscriptionDateGregorian.setTime(subscriptionDate);
             }
 
             rank = new Rank(
@@ -420,7 +420,7 @@ public class OrderDBAccess implements OrderDataAccess {
             customer = new Customer(
                     entity,
                     rank,
-                    subscribtionDateGregorian
+                    subscriptionDateGregorian
             );
             order.setCustomer(customer);
         }

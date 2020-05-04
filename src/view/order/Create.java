@@ -19,7 +19,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import model.*;
 import utils.Validators;
-import view.CustomersView;
 import view.PopUp;
 import view.View;
 

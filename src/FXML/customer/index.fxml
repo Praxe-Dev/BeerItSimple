@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox fx:id="vbox" alignment="CENTER" prefHeight="641.0" prefWidth="1072.0" styleClass="center" stylesheets="/view/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.CustomersView">
+<VBox fx:id="vbox" alignment="CENTER" prefHeight="641.0" prefWidth="1072.0" styleClass="center" stylesheets="/view/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.customer.Index">
    <children>
       <Label fx:id="label" alignment="CENTER" contentDisplay="CENTER" prefHeight="74.0" prefWidth="451.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Customers" textAlignment="CENTER" textFill="WHITE">
          <VBox.margin>
@@ -24,7 +24,7 @@
             <TableColumn fx:id="phoneNumber" prefWidth="75.0" text="Phone Number" />
             <TableColumn fx:id="mail" prefWidth="75.0" text="Mail" />
             <TableColumn fx:id="address" prefWidth="75.0" text="Address" />
-            <TableColumn fx:id="subscriptionDate" prefWidth="75.0" text="Subsciption date" />
+            <TableColumn fx:id="subscriptionDate" prefWidth="75.0" text="Subscription date" />
             <TableColumn fx:id="bankAccountNumber" prefWidth="75.0" text="Bank account" />
             <TableColumn fx:id="businessNumber" prefWidth="75.0" text="Business number" />
             <TableColumn fx:id="cityLabel" prefWidth="75.0" text="City" />

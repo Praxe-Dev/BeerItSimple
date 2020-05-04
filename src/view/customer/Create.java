@@ -16,7 +16,6 @@ import model.Customer;
 import model.Entity;
 import model.Rank;
 import utils.Validators;
-import view.CustomersView;
 import view.PopUp;
 import view.View;
 
@@ -136,7 +135,7 @@ public class Create extends View {
                 try {
                     insertCustomer();
                     PopUp.showSuccess("Client créé avec succès !", "Success");
-                    CustomersView customersView = (CustomersView) getParentView();
+                    Index customersView = (Index) getParentView();
                     customersView.updateTable();
                     closeWindow();
                 } catch (SQLException exception) {
@@ -145,15 +144,6 @@ public class Create extends View {
             }
         });
 
-    }
-
-    private boolean checkMail() {
-        System.out.println("Mail : " + mail.getText());
-        if (!mail.getText().equals("")) {
-            return mail.validate();
-        } else {
-            return true;
-        }
     }
 
     private boolean insertCustomer() throws SQLException{
