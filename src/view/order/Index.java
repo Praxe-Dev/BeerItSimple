@@ -12,6 +12,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
+import view.PopUp;
 import view.View;
 import view.Window;
 
@@ -79,7 +80,11 @@ public class Index extends View implements Initializable {
         deleteBtn.setOnAction(e -> {
             try {
                 Order order = getSelectedOrder();
-                orderController.deleteOrder(order);
+                if(PopUp.showConfirm("Confirm delete", "Are you sur you want to delete the order [" + order.getReference() + "] ?")) {
+                    if (orderController.deleteOrder(order)) {
+                        updateTable();
+                    }
+                }
             } catch (NoRowSelected ex) {
                 ex.showError();
             } catch (DeletionExceiption ex) {
