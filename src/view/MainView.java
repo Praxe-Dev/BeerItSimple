@@ -28,7 +28,6 @@ public class MainView extends View{
 
     @Override
     public void init() {
-
         homeBtn.setOnAction(e -> {
             setCenter(pathToHomePanel);
         });

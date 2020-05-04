@@ -1,26 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXPasswordField?>
-<?import com.jfoenix.controls.JFXTextField?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox alignment="CENTER"
-      id="loginContainer"
-      fx:controller="view.LoginView"
-      fx:id="loginContainer"
-      stylesheets="/view/style.css"
-      maxHeight="-Infinity"
-      maxWidth="-Infinity"
-      minHeight="-Infinity"
-      minWidth="-Infinity"
-      prefHeight="400.0"
-      prefWidth="600.0"
-      xmlns="http://javafx.com/javafx/11.0.1"
-      xmlns:fx="http://javafx.com/fxml/1">
+<VBox id="loginContainer" fx:id="loginContainer" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="454.0" prefWidth="651.0" stylesheets="/view/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.LoginView">
 <!--   controller.LoginController-->
    <children>
       <Label fx:id="labelTest" prefHeight="55.0" prefWidth="157.0" text="Welcome" textFill="WHITE">
@@ -44,7 +30,7 @@
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </VBox.margin>
       </JFXPasswordField>
-      <JFXButton prefHeight="73.0" prefWidth="169.0" text="Sign in" textFill="WHITE" id="signinButton" fx:id="signinButton">
+      <JFXButton id="signinButton" fx:id="signinButton" prefHeight="73.0" prefWidth="169.0" text="Sign in" textFill="WHITE">
          <VBox.margin>
             <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
          </VBox.margin>

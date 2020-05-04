@@ -9,7 +9,7 @@
 
 <BorderPane fx:id="mainPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="400.0" minWidth="600.0" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MainView">
    <left>
-      <VBox alignment="CENTER" prefHeight="720.0" prefWidth="150.0" style="-fx-background-color: #2F3033;" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="720.0" prefWidth="150.0" style="-fx-background-color: #2c5364;" BorderPane.alignment="CENTER">
          <children>
             <JFXButton fx:id="homeBtn" buttonType="RAISED" contentDisplay="TOP" prefHeight="700.0" prefWidth="200.0" style="-fx-background-color: rgba(255,255,255,0.1);" text="Home" textFill="WHITE">
                <VBox.margin>
@@ -50,13 +50,6 @@
          </children>
       </VBox>
    </left>
-   <bottom>
-      <AnchorPane prefHeight="60.0" prefWidth="1280.0" style="-fx-background-color: black;" BorderPane.alignment="CENTER">
-         <children>
-            <Label alignment="CENTER" layoutY="-1.0" prefHeight="62.0" prefWidth="1280.0" text="Citation Citation Citation Citation Citation Citation Citation Citation Citation " textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-         </children>
-      </AnchorPane>
-   </bottom>
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -78,4 +71,14 @@
         </menus>
       </MenuBar>
    </top>
+   <bottom>
+      <AnchorPane prefHeight="60.0" prefWidth="1280.0" style="-fx-background-color: linear-gradient(to left, #0f2027, #203a43, #2c5364);" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" layoutY="-1.0" prefHeight="62.0" prefWidth="1280.0" text="Citation Citation Citation Citation Citation Citation Citation Citation Citation " textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </AnchorPane>
+   </bottom>
 </BorderPane>
