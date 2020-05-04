@@ -1,4 +1,4 @@
-package view;
+package view.customer;
 
 import com.jfoenix.controls.JFXButton;
 import controller.CustomerController;
@@ -11,13 +11,16 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import model.Customer;
 import model.CustomerTableFormat;
+import view.PopUp;
+import view.View;
+import view.Window;
 import view.customer.Update;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class CustomersView extends View implements Initializable {
+public class Index extends View implements Initializable {
 
     @FXML
     private VBox vbox;
@@ -58,7 +61,7 @@ public class CustomersView extends View implements Initializable {
 
     private CustomerController customersController;
 
-    public CustomersView() {
+    public Index() {
         this.customersController = new CustomerController();
     }
 

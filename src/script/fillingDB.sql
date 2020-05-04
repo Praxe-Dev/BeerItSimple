@@ -116,25 +116,25 @@ VALUES ('bill@microsoft.com', 'Bill Gates', '0484/65.16.82', 30, 'Rue de Bruxell
 
 /* Filling Customer table */
 
-INSERT INTO Customer (EntityId, RankId, subscribtionDate)
+INSERT INTO Customer (EntityId, RankId, subscriptionDate)
 VALUES (1, 3, '2020-03-01');
 
-INSERT INTO Customer (EntityId, RankId, subscribtionDate)
+INSERT INTO Customer (EntityId, RankId, subscriptionDate)
 VALUES (2, 2, '2020-03-03');
 
-INSERT INTO Customer (EntityId, RankId, subscribtionDate)
+INSERT INTO Customer (EntityId, RankId, subscriptionDate)
 VALUES (4, 1, '2020-03-02');
 
-INSERT INTO Customer (EntityId, RankId, subscribtionDate)
+INSERT INTO Customer (EntityId, RankId, subscriptionDate)
 VALUES (5, 1, '2020-03-04');
 
-INSERT INTO Customer (EntityId, RankId, subscribtionDate)
+INSERT INTO Customer (EntityId, RankId, subscriptionDate)
 VALUES (6, 1, '2020-03-05');
 
-INSERT INTO Customer (EntityId, RankId, subscribtionDate)
+INSERT INTO Customer (EntityId, RankId, subscriptionDate)
 VALUES (7, 1, '2020-03-06');
 
-INSERT INTO Customer (EntityId, RankId, subscribtionDate)
+INSERT INTO Customer (EntityId, RankId, subscriptionDate)
 VALUES (3, 1, '2020-03-07');
 
 /* Filling Employee table */

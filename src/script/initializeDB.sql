@@ -64,14 +64,14 @@ CREATE TABLE Employee (
 /*CREATE TABLE Customer (
 	EntityId int PRIMARY KEY, 
 	RankId int NOT NULL, 
-	subscibtionDate date NOT NULL CHECK (subscribtionDate <= sysdate()),
+	subsciptionDate date NOT NULL CHECK (subscriptionDate <= sysdate()),
 	CONSTRAINT CustomerEntity_fk FOREIGN KEY (EntityId) references Entity (id),
 	CONSTRAINT rank_fk FOREIGN KEY (RankId) REFERENCES `Rank` (id));*/
     
 CREATE TABLE Customer (
 	EntityId int NOT NULL, 
 	RankId int NOT NULL, 
-	subscribtionDate date NOT NULL, 
+	subscriptionDate date NOT NULL,
 	PRIMARY KEY (EntityId),
 	CONSTRAINT CustomerEntity_fk FOREIGN KEY (EntityId) references Entity (id),
 	CONSTRAINT rank_fk FOREIGN KEY (RankId) REFERENCES `Rank` (id));

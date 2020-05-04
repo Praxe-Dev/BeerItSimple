@@ -77,7 +77,7 @@ public class CustomerDBAccess implements CustomerDataAccess{
                     entity.setMail(mail);
                 }
 
-                java.sql.Date subscriptionDate = data.getDate("subscribtionDate");
+                java.sql.Date subscriptionDate = data.getDate("subscriptionDate");
                 if (!data.wasNull()) {
                     calendar = new GregorianCalendar();
                     calendar.setTime(subscriptionDate);
@@ -147,7 +147,7 @@ public class CustomerDBAccess implements CustomerDataAccess{
                 }
 
                 GregorianCalendar calendar = null;
-                java.sql.Date subscriptionDate = data.getDate("subscribtionDate");
+                java.sql.Date subscriptionDate = data.getDate("subscriptionDate");
                 if (!data.wasNull()) {
                     calendar = new GregorianCalendar();
                     calendar.setTime(subscriptionDate);
@@ -192,7 +192,7 @@ public class CustomerDBAccess implements CustomerDataAccess{
         if(affectedRowsEntity != 0) {
             try (ResultSet generatedKeys = preparedStatementEntity.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    String sqlCustomer = "INSERT INTO customer(`EntityId`,`RankId`,`subscribtionDate`) values(?,?,?)";
+                    String sqlCustomer = "INSERT INTO customer(`EntityId`,`RankId`,`subscriptionDate`) values(?,?,?)";
                     PreparedStatement preparedStatementCustomer = connection.prepareStatement(sqlCustomer);
                     entityID = generatedKeys.getInt(1);
                     preparedStatementCustomer.setInt(1, entityID);

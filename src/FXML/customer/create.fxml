@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXRadioButton?>
-<?import com.jfoenix.controls.JFXTextField?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.Group?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.text.Font?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
-<VBox fx:id="panel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="731.0" prefWidth="1053.0" stylesheets="/view/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.customer.Create">
+<VBox fx:id="panel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="731.0" prefWidth="1053.0" stylesheets="/view/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.customer.Create">
    <children>
       <AnchorPane prefHeight="98.0" prefWidth="600.0">
          <children>
@@ -28,7 +22,7 @@
       </AnchorPane>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="357.0">
          <children>
-            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="38.0" prefWidth="175.0" text="Customer type :">
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="38.0" prefWidth="175.0" text="Customer type:">
                <HBox.margin>
                   <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
                </HBox.margin>
@@ -59,7 +53,7 @@
       </HBox>
       <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="210.0" prefHeight="100.0" prefWidth="357.0">
          <children>
-            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="38.0" prefWidth="175.0" text="Rang Client :">
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="38.0" prefWidth="175.0" text="Customer rank:">
                <HBox.margin>
                   <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
                </HBox.margin>
@@ -72,24 +66,7 @@
                   <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
                </HBox.margin>
             </JFXComboBox>
-            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="38.0" prefWidth="175.0" text="Customer name :">
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <HBox.margin>
-                  <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
-               </HBox.margin>
-            </Label>
-            <JFXTextField fx:id="contactName" prefWidth="245.0">
-               <HBox.margin>
-                  <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
-               </HBox.margin>
-            </JFXTextField>
-         </children>
-      </HBox>
-      <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="233.0" prefHeight="100.0" prefWidth="357.0">
-         <children>
-            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="38.0" prefWidth="175.0" text="Address :">
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="38.0" prefWidth="175.0" text="Address:">
                <HBox.margin>
                   <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
                </HBox.margin>
@@ -102,7 +79,24 @@
                   <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
                </HBox.margin>
             </JFXTextField>
-            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="38.0" prefWidth="175.0" text="House number :">
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="233.0" prefHeight="100.0" prefWidth="357.0">
+         <children>
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="38.0" prefWidth="175.0" text="Customer name:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <HBox.margin>
+                  <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
+               </HBox.margin>
+            </Label>
+            <JFXTextField fx:id="contactName" prefWidth="245.0">
+               <HBox.margin>
+                  <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
+               </HBox.margin>
+            </JFXTextField>
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="38.0" prefWidth="175.0" text="House number:">
                <font>
                   <Font size="18.0" />
                </font>
@@ -119,7 +113,7 @@
       </HBox>
       <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="308.0" prefHeight="100.0" prefWidth="357.0">
          <children>
-            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="38.0" prefWidth="175.0" text="Email :">
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="38.0" prefWidth="175.0" text="Mail:">
                <HBox.margin>
                   <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
                </HBox.margin>
@@ -132,24 +126,7 @@
                   <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
                </HBox.margin>
             </JFXTextField>
-            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="38.0" prefWidth="175.0" text="Phone number :">
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <HBox.margin>
-                  <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
-               </HBox.margin>
-            </Label>
-            <JFXTextField fx:id="phoneNumber" prefWidth="245.0">
-               <HBox.margin>
-                  <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
-               </HBox.margin>
-            </JFXTextField>
-         </children>
-      </HBox>
-      <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="508.0" prefHeight="100.0" prefWidth="357.0">
-         <children>
-            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="38.0" prefWidth="175.0" text="Region :">
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="38.0" prefWidth="175.0" text="Region:">
                <HBox.margin>
                   <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
                </HBox.margin>
@@ -164,10 +141,27 @@
             </JFXComboBox>
          </children>
       </HBox>
+      <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="508.0" prefHeight="100.0" prefWidth="357.0">
+         <children>
+            <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="38.0" prefWidth="171.0" text="Phone number:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <HBox.margin>
+                  <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
+               </HBox.margin>
+            </Label>
+            <JFXTextField fx:id="phoneNumber" prefHeight="25.0" prefWidth="240.0">
+               <HBox.margin>
+                  <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
+               </HBox.margin>
+            </JFXTextField>
+         </children>
+      </HBox>
       <Group fx:id="businessView">
          <HBox alignment="CENTER_LEFT" prefHeight="87.0" prefWidth="1053.0">
             <children>
-               <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="38.0" prefWidth="175.0" text="Bank account :">
+               <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="38.0" prefWidth="175.0" text="Bank account:">
                   <HBox.margin>
                      <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
                   </HBox.margin>
@@ -175,7 +169,7 @@
                      <Font size="18.0" />
                   </font>
                </Label>
-               <JFXTextField fx:id="accountNumber" prefWidth="245.0">
+               <JFXTextField fx:id="accountNumber" prefWidth="245.0" promptText="(facultatif)">
                   <HBox.margin>
                      <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
                   </HBox.margin>
