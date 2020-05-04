@@ -55,9 +55,7 @@ public class Window extends Parent {
         stage.setResizable(isResizable);
     }
 
-    public void undecorated(){
-        stage.initStyle(StageStyle.UNDECORATED);
-    }
+    public void undecorated(){ stage.initStyle(StageStyle.UNDECORATED); }
 
     public void close() {
         stage.close();
