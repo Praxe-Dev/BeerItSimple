@@ -9,7 +9,7 @@
 }
 
 #loginContainer {
-    -fx-background-color: teal;
+    -fx-background-color: linear-gradient(to left, #0f2027, #203a43, #2c5364);
 }
 
 .split-pane:vertical > .split-pane-divider {
@@ -17,16 +17,16 @@
 }
 
 .split-pane:horizontal > .split-pane-divider {
-    -fx-background-color: #2F3033;
+    -fx-background-color: #0f2027;
     /*-fx-padding: 0;*/
 }
 
 #mainMenu {
-    -fx-background-color: #2F3033;
+    -fx-background-color: #0f2027;
 }
 
 .center {
-    -fx-background-color: #0b2e6b;
+    -fx-background-color: linear-gradient(to left, #0f2027, #203a43, #2c5364);
 }
 
 .champ-invalide {
