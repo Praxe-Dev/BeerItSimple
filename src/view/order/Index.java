@@ -30,6 +30,8 @@ public class Index extends View implements Initializable {
     @FXML
     private JFXButton searchBtn;
     @FXML
+    private JFXButton refreshBtn;
+    @FXML
     private JFXButton newOrderBtn;
     @FXML
     private JFXButton editOrder;
@@ -72,13 +74,16 @@ public class Index extends View implements Initializable {
 
     @Override
     public void init() {
-
         searchBtn.setOnAction(e -> {
             Window search = new Window("FXML/order/search.fxml", "BeerItSimple - Search in order");
             search.load();
             search.getView().setParentView(this);
             search.resizable(false);
             search.show();
+        });
+
+        refreshBtn.setOnAction(e -> {
+            updateTable();
         });
 
         newOrderBtn.setOnAction(e -> {
@@ -179,31 +184,15 @@ public class Index extends View implements Initializable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-//        ArrayList<OrderTableFormat> ordersList = new ArrayList<>();
-//        try {
-//
-//            for (Order order : orderController.getAllOrders()) {
-//                ordersList.add(new OrderTableFormat(order));
-//            }
-//
-//            orderTable.getItems().setAll(ordersList);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
     }
 
     public boolean updateTable(ArrayList<Order> orderList) {
         ArrayList<OrderTableFormat> ordersList = new ArrayList<>();
-//        try {
 
         for (Order order : orderList) {
             ordersList.add(new OrderTableFormat(order));
         }
 
          return orderTable.getItems().setAll(ordersList);
-
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
     }
 }
