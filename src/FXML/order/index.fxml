@@ -46,7 +46,7 @@
                         <FontAwesomeIcon fill="WHITE" glyphName="CART_PLUS" size="3em" strokeType="OUTSIDE" strokeWidth="0.0" />
                     </graphic>
                 </JFXButton>
-                <JFXButton fx:id="editOrder" contentDisplay="TOP" prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Edit" textFill="WHITE">
+                <JFXButton fx:id="editOrderBtn" contentDisplay="TOP" prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Edit" textFill="WHITE">
                     <HBox.margin>
                         <Insets left="60.0" right="60.0" />
                     </HBox.margin>

@@ -4,6 +4,7 @@ import dataAccess.OrderDBAccess;
 import dataAccess.OrderDataAccess;
 import exception.DeletionExceiption;
 import exception.NoRowSelected;
+import exception.SQLManageException;
 import model.Customer;
 import model.Order;
 import model.OrderLineTableFormat;
@@ -37,5 +38,9 @@ public class OrderBusiness {
 
     public boolean deleteOrder(Order order) throws DeletionExceiption {
         return dao.deleteOrder(order);
+    }
+
+    public boolean updateOrder(Order order) throws SQLManageException {
+        return dao.updateOrder(order);
     }
 }

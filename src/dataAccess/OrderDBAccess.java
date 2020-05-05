@@ -1,7 +1,9 @@
 package dataAccess;
 
 import exception.DeletionExceiption;
+import exception.DuplicataException;
 import exception.NoRowSelected;
+import exception.SQLManageException;
 import model.*;
 
 import javax.swing.*;
@@ -514,6 +516,182 @@ public class OrderDBAccess implements OrderDataAccess {
                     order
             );
             order.setDelivery(delivery);
+        }
+    }
+
+    public boolean updateOrder(Order order) throws SQLManageException {
+        int affectedRow = 0;
+
+        String sqlInstruction = "UPDATE `order` SET `isPaid` = ?, `statusNumber` = ?, `paymentMethodId` = ? WHERE `reference` = ?";
+
+        try {
+            //Order update
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setBoolean(1, order.getPaid());
+            preparedStatement.setInt(2, order.getStatus().getId());
+            preparedStatement.setInt(3, order.getPaymentMethod().getId());
+            preparedStatement.setInt(4, order.getReference());
+            preparedStatement.executeUpdate();
+
+            //Delivery update
+            if(order.getDelivery() != null) {
+                updateDelivery(order);
+            } else {
+                deleteDelivery(order);
+            }
+
+            //Orderlines update
+            updateOrderLines(order);
+
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new SQLManageException(e);
+        } catch (SQLException e) {
+            throw new SQLManageException(e);
+        }
+
+        return true;
+    }
+
+    private void deleteDelivery(Order order) throws SQLManageException {
+        String sqlDeleteDelivery = "DELETE FROM delivery WHERE OrderReference = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlDeleteDelivery);
+            preparedStatement.setInt(1, order.getReference());
+            preparedStatement.executeUpdate();
+        } catch(SQLException e){
+            throw new SQLManageException(e);
+        }
+    }
+
+    private void updateDelivery(Order order) throws SQLManageException {
+        //Delivery select
+        String sqlDeliveryInstruction = "SELECT * FROM delivery WHERE OrderReference = ?";
+        try {
+            PreparedStatement preparedStatement2 = connection.prepareStatement(sqlDeliveryInstruction);
+            preparedStatement2.setInt(1, order.getReference());
+            ResultSet dataDelivery = preparedStatement2.executeQuery();
+            if(dataDelivery.next()) {
+                //Delivery update
+                Date deliveredDate = null;
+                if(order.getDelivery().getDeliveredDate() != null){
+                    deliveredDate = new Date(order.getDelivery().getDeliveredDate().getTimeInMillis());
+                }
+                String updateDelivery = "UPDATE `delivery`\n" +
+                        "SET\n" +
+                        " `plannedDate` = ?,\n" +
+                        " `deliveredDate` = ?\n" +
+                        "WHERE `id` = ?";
+                PreparedStatement preparedStatementDelivery = connection.prepareStatement(updateDelivery);
+                preparedStatementDelivery.setDate(1, new java.sql.Date(order.getDelivery().getPlannedDate().getTimeInMillis()));
+                preparedStatementDelivery.setDate(2, deliveredDate);
+                preparedStatementDelivery.setInt(3, dataDelivery.getInt("id"));
+                preparedStatementDelivery.executeUpdate();
+            } else {
+                //Create delivery
+                String sqlDelivery = "INSERT INTO delivery (plannedDate, OrderReference, EmployeeEntityId)\n" +
+                        "VALUES (?,?,?)";
+
+                PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDelivery);
+                preparedStatementDelivery.setDate(1, new java.sql.Date(order.getDelivery().getPlannedDate().getTimeInMillis()));
+                preparedStatementDelivery.setInt(2, order.getReference());
+                preparedStatementDelivery.setInt(3, order.getDelivery().getEmployee().getId());
+
+                preparedStatementDelivery.executeUpdate();
+            }
+        } catch(SQLException e){
+            throw new SQLManageException(e);
+        }
+    }
+
+    private void updateOrderLines(Order order) throws SQLManageException {
+        //Check if update necessary for all orderLine
+        for(OrderLine orderLine : order.getOrderLineList()){
+            //Chercher si une ligne existe pour ce produit. Si oui, update la quantité. Si non, l'ajouter.
+            String selectOrderLine = "SELECT * FROM orderline WHERE Orderreference = ? AND Productcode = ?";
+            try {
+                PreparedStatement preparedStatement = connection.prepareStatement(selectOrderLine);
+                preparedStatement.setInt(1, order.getReference());
+                preparedStatement.setInt(2, orderLine.getProduct().getCode());
+
+                ResultSet data = preparedStatement.executeQuery();
+                if(data.next()){
+                    //Update quantity if necessary
+                    Integer currentQuantity = data.getInt("quantity");
+                    if(currentQuantity != orderLine.getQuantity()){
+                        String updateOrderLine = "UPDATE orderLine SET quantity = ? WHERE Orderreference = ? AND Productcode = ?";
+                        PreparedStatement preparedStatementUpdate = connection.prepareStatement(updateOrderLine);
+                        preparedStatementUpdate.setInt(1, orderLine.getQuantity());
+                        preparedStatementUpdate.setInt(2, order.getReference());
+                        preparedStatementUpdate.setInt(3, orderLine.getProduct().getCode());
+                        preparedStatementUpdate.executeUpdate();
+                    }
+                } else {
+                    //Add new line to this order
+                    String sqlOrderLine = "INSERT INTO orderline (Productcode, Orderreference, quantity, salesUnitPrice)\n" +
+                                        "VALUES(?,?,?,?)";
+                    try {
+                        PreparedStatement preparedStatementOrderLine = connection.prepareStatement(sqlOrderLine);
+                        preparedStatementOrderLine.setInt(1, orderLine.getProduct().getCode());
+                        preparedStatementOrderLine.setInt(2, order.getReference());
+                        preparedStatementOrderLine.setInt(3, orderLine.getQuantity());
+                        preparedStatementOrderLine.setDouble(4, orderLine.getSalesUnitPrice());
+
+                        preparedStatementOrderLine.executeUpdate();
+                    }catch(SQLException e){
+                        throw new SQLManageException(e);
+                    }
+                }
+            } catch(SQLException e){
+                throw new SQLManageException(e);
+            }
+        }
+        checkOrderLinesToDelete(order);
+    }
+
+    private void checkOrderLinesToDelete(Order order) throws SQLManageException{
+        //Loop on all order line of mentionned order if exist in order.getOrderLineList. If not, need to delete !
+        String selectOrderLine = "SELECT * FROM orderline WHERE Orderreference = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(selectOrderLine);
+            preparedStatement.setInt(1, order.getReference());
+
+            ResultSet data = preparedStatement.executeQuery();
+            ArrayList<OrderLine> orderLinesExists = new ArrayList<>();
+            while(data.next()){
+                //Select product from this orderline to create OrderLine object
+                String selectProduct = "SELECT * FROM product WHERE code = ?";
+                PreparedStatement preparedStatementProduct = connection.prepareStatement(selectProduct);
+                preparedStatementProduct.setInt(1, data.getInt("Productcode"));
+
+                ResultSet dataProduct = preparedStatementProduct.executeQuery();
+                if(dataProduct.next()){
+                    Product product = new Product(dataProduct.getInt("code"));
+                    OrderLine orderLine = new OrderLine(product, order, data.getInt("quantity"), data.getDouble("salesUnitPrice"));
+                    orderLinesExists.add(orderLine);
+                }
+            }
+
+            ArrayList<OrderLine> orderLinesFromUpdate = order.getOrderLineList();
+            for(OrderLine orderLineExist : orderLinesExists){
+                //Check if this code product and reference order exist in order.getOrderLineList. If not, delete from database.
+                for(int i = 0; i < orderLinesFromUpdate.size(); i++){
+                    if(orderLinesFromUpdate.get(i).getProduct().getCode() == orderLineExist.getProduct().getCode()){
+                        break;
+                    }
+
+                    if (i == orderLinesFromUpdate.size()) {
+                        //Delete orderLineExist from db
+                        String deleteOrderLine = "DELETE FROM orderline WHERE Productcode = ? AND Orderreference = ?";
+                        PreparedStatement preparedDeleteOrderLine = connection.prepareStatement(deleteOrderLine);
+                        preparedDeleteOrderLine.setInt(1, orderLineExist.getProduct().getCode());
+                        preparedDeleteOrderLine.setInt(2, order.getReference());
+
+                        preparedDeleteOrderLine.executeUpdate();
+                    }
+                }
+            }
+        } catch(SQLException e){
+            throw new SQLManageException(e);
         }
     }
 }

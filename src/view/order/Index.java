@@ -15,6 +15,7 @@ import javafx.scene.layout.VBox;
 import view.PopUp;
 import view.View;
 import view.Window;
+import view.order.Update;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -30,7 +31,7 @@ public class Index extends View implements Initializable {
     @FXML
     private JFXButton newOrderBtn;
     @FXML
-    private JFXButton editOrder;
+    private JFXButton editOrderBtn;
     @FXML
     private JFXButton viewOrder;
     @FXML
@@ -75,6 +76,28 @@ public class Index extends View implements Initializable {
             newOrder.load();
             newOrder.getView().setParentView(this);
             newOrder.show();
+        });
+
+        editOrderBtn.setOnAction(e -> {
+            Window editOrder = new Window("FXML/order/update.fxml", "BeerItSimple - Edit order");
+            editOrder.load();
+            editOrder.resizable(false);
+            editOrder.getView().setParentView(this);
+
+            Update Update = (Update) editOrder.getView();
+            Order order = null;
+            try {
+                order = getSelectedOrder();
+            } catch (Exception exception) {
+                PopUp.showError("Order not found", "You may be didn't selected an order in the table.");
+            }
+
+            if (order != null) {
+                Update.setOrder(order);
+                editOrder.show();
+            } else {
+                editOrder.close();
+            }
         });
 
         deleteBtn.setOnAction(e -> {

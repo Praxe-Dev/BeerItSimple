@@ -101,7 +101,8 @@ public class OrderTableFormat {
 //        return (deliveredDate == null) ? ((plannedDate == null) ? "N/A" : "Not delivered yet") : dateFormat(deliveredDate);
         String deliveryDate = "N/A";
             if (deliveredDate == null) {
-                deliveryDate = "Not delivered yet";
+                if(plannedDate != null)
+                    deliveryDate = "Not delivered yet";
             } else {
                 deliveryDate = dateFormat(deliveredDate);
             }

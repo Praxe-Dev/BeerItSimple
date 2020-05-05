@@ -2,6 +2,7 @@ package dataAccess;
 
 import exception.DeletionExceiption;
 import exception.NoRowSelected;
+import exception.SQLManageException;
 import model.Order;
 import model.OrderTableFormat;
 
@@ -16,4 +17,6 @@ public interface OrderDataAccess {
     Order getOrder(int reference) throws NoRowSelected;
 
     boolean deleteOrder(Order order) throws DeletionExceiption;
+
+    boolean updateOrder(Order order) throws SQLManageException;
 }
