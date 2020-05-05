@@ -277,13 +277,17 @@ public class CustomerDBAccess implements CustomerDataAccess{
             preparedStatementDeleteCustomer.executeUpdate();
 
             String sqlDeleteEntity = "DELETE FROM entity\n" +
-                                    "WHERE id = ? AND ? NOT IN (SELECT EntityId FROM employee)";
+                                    "WHERE id = ? AND id NOT IN (SELECT EntityId FROM employee)";
 
             PreparedStatement preparedStatementDeleteEntity = connection.prepareStatement(sqlDeleteEntity);
             preparedStatementDeleteEntity.setInt(1, customer.getEntity().getId());
-            preparedStatementDeleteEntity.setInt(2, customer.getEntity().getId());
             preparedStatementDeleteEntity.executeUpdate();
         } catch (SQLException e) {
+//            try {
+//            connection.prepareStatement("rollback ;").executeUpdate();
+//            } catch (SQLException ex) {
+//                ex.printStackTrace();
+//            }
             e.printStackTrace();
             return false;
         }

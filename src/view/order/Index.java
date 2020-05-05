@@ -74,6 +74,7 @@ public class Index extends View implements Initializable {
             Window newOrder = new Window("FXML/order/newOrder.fxml", "BeerItSimple - New order");
             newOrder.load();
             newOrder.getView().setParentView(this);
+            newOrder.resizable(false);
             newOrder.show();
         });
 
