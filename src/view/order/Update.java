@@ -65,11 +65,17 @@ public class Update extends View {
     @FXML
     TableColumn<OrderLineTableFormat, Integer> quantity;
     @FXML
-    TableColumn<OrderLineTableFormat, Double> total;
+    TableColumn<OrderLineTableFormat, Double> totalExclVat;
+    @FXML
+    TableColumn<OrderLineTableFormat, Double> totalInclVat;
     @FXML
     JFXButton removeArticleBtn;
     @FXML
-    Text totalAmount;
+    Text totalAmountExclVat;
+    @FXML
+    Text totalAmountVatOnly;
+    @FXML
+    Text totalAmountVatInc;
     @FXML
     Group deliveryDisplay;
 
@@ -110,14 +116,15 @@ public class Update extends View {
                     PopUp.showError("Duplicate error", "You try to add a product already present in the command !");
                 } else {
 
-                    int productQty = Integer.parseInt(productQuantity.getText());
-
-                    OrderLineTableFormat orderLineTableFormat = new OrderLineTableFormat(newProduct, productQty);
-                    tableArticle.getItems().add(orderLineTableFormat);
-                    double amount = Double.parseDouble(totalAmount.getText().replace(',', '.'));
-
-                    String newTotal = String.format("%.2f", amount + orderLineTableFormat.getTotal());
-                    totalAmount.setText(newTotal);
+//                    int productQty = Integer.parseInt(productQuantity.getText());
+//
+//                    OrderLineTableFormat orderLineTableFormat = new OrderLineTableFormat(newProduct, productQty);
+//                    tableArticle.getItems().add(orderLineTableFormat);
+//                    double amount = Double.parseDouble(totalAmount.getText().replace(',', '.'));
+//
+//                    String newTotal = String.format("%.2f", amount + orderLineTableFormat.getTotal());
+//                    totalAmount.setText(newTotal);
+                    addProduct(newProduct);
                 }
             } else {
                 productQuantity.setStyle("-fx-background-color: rgba(255,0,0,0.5)");
@@ -129,12 +136,13 @@ public class Update extends View {
         removeArticleBtn.setOnAction(e -> {
             try {
 
-                OrderLineTableFormat orderLineTableFormat = tableArticle.getSelectionModel().getSelectedItem();
-                tableArticle.getItems().remove(orderLineTableFormat);
-                double amount = Double.parseDouble(totalAmount.getText().replace(',', '.'));
+//                OrderLineTableFormat orderLineTableFormat = tableArticle.getSelectionModel().getSelectedItem();
+//                tableArticle.getItems().remove(orderLineTableFormat);
+//                double amount = Double.parseDouble(totalAmount.getText().replace(',', '.'));
+//
+//                String newTotal = String.format("%.2f", amount - orderLineTableFormat.getTotal());
+//                totalAmount.setText(newTotal);
 
-                String newTotal = String.format("%.2f", amount - orderLineTableFormat.getTotal());
-                totalAmount.setText(newTotal);
             } catch (NullPointerException exception) {
                 new NoRowSelected();
             }
@@ -193,6 +201,27 @@ public class Update extends View {
             }
         }
         return true;
+    }
+
+    private void addProduct(Product product) {
+        int productQty = Integer.parseInt(productQuantity.getText());
+
+        OrderLineTableFormat orderLineTableFormat = new OrderLineTableFormat(product, productQty);
+        tableArticle.getItems().add(orderLineTableFormat);
+        double currentAmountExlVat = Double.parseDouble(totalAmountExclVat.getText().replace(',', '.'));
+
+        double newAmountExclVat = currentAmountExlVat + orderLineTableFormat.getExclVat();
+        String newTotalExclVat = String.format("%.2f", newAmountExclVat);
+        totalAmountExclVat.setText(newTotalExclVat);
+
+        double currentVatTotal = Double.parseDouble(totalAmountVatOnly.getText().replace(',', '.'));
+        double newVatTotal = currentVatTotal + (orderLineTableFormat.getExclVat() * ((double) orderLineTableFormat.getVatCodeRate() / 100.0));
+        String totalVat = String.format("%.2f", newVatTotal);
+        totalAmountVatOnly.setText(totalVat);
+
+        double newTotalVatIncl = newVatTotal + newAmountExclVat;
+        String totalVatIncl = String.format("%.2f", newTotalVatIncl);
+        totalAmountVatInc.setText(totalVatIncl);
     }
 
     private boolean updateOrder() throws SQLManageException, PaymentMethodException, StatusException {
@@ -334,20 +363,31 @@ public class Update extends View {
     }
 
     private void initTable() {
-        article.setCellValueFactory(new PropertyValueFactory<OrderLineTableFormat, String>("product"));
-        price.setCellValueFactory(new PropertyValueFactory<OrderLineTableFormat, Double>("unitPrice"));
-        quantity.setCellValueFactory(new PropertyValueFactory<OrderLineTableFormat, Integer>("quantity"));
-        total.setCellValueFactory(new PropertyValueFactory<OrderLineTableFormat, Double>("total"));
+        article.setCellValueFactory(new PropertyValueFactory<>("product"));
+        price.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        totalExclVat.setCellValueFactory(new PropertyValueFactory<>("exclVat"));
+        totalInclVat.setCellValueFactory(new PropertyValueFactory<>("inclVat"));
     }
 
     private void fillProductTable(){
+        double amountExclVat = 0;
+        double amountInclVat = 0;
         for(OrderLine orderLine : order.getOrderLineList()){
             OrderLineTableFormat orderLineTableFormat = new OrderLineTableFormat(orderLine.getProduct(), orderLine.getQuantity());
             tableArticle.getItems().add(orderLineTableFormat);
-            double amount = Double.parseDouble(totalAmount.getText().replace(',', '.'));
-
-            String newTotal = String.format("%.2f", amount + orderLineTableFormat.getTotal());
-            totalAmount.setText(newTotal);
+//            double amount = Double.parseDouble(total.getText().replace(',', '.'));
+            amountExclVat += orderLineTableFormat.getExclVat();
+            amountInclVat += orderLineTableFormat.getInclVat();
         }
+
+        double amountVatOnly = amountInclVat - amountExclVat;
+        String newAmountExclVat = String.format("%.2f", amountExclVat);
+        totalAmountExclVat.setText(newAmountExclVat);
+        String newAmountVatOnly = String.format("%.2f", amountVatOnly);
+        totalAmountVatOnly.setText(newAmountVatOnly);
+        String newAmountInclVat = String.format("%.2f", amountInclVat);
+        totalAmountVatInc.setText(newAmountInclVat);
+
     }
 }
