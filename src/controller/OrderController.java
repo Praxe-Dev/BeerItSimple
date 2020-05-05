@@ -3,6 +3,7 @@ package controller;
 import business.OrderBusiness;
 import exception.DeletionExceiption;
 import exception.NoRowSelected;
+import exception.SQLManageException;
 import model.Order;
 import model.OrderLineTableFormat;
 import model.OrderTableFormat;
@@ -32,6 +33,10 @@ public class OrderController {
 
     public boolean deleteOrder(Order order) throws DeletionExceiption {
         return orderBusiness.deleteOrder(order);
+    }
+
+    public boolean updateOrder(Order order) throws SQLManageException {
+        return orderBusiness.updateOrder(order);
     }
 
     public ArrayList<Order> getAllOrdersBetweenDates(LocalDate startingDate, LocalDate endDate) {
