@@ -35,7 +35,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <JFXRadioButton fx:id="privateCustomer" selected="true" text="Private">
+            <JFXRadioButton fx:id="privateCustomer" disable="true" selected="true" text="Private">
                <toggleGroup>
                   <ToggleGroup fx:id="customerType" />
                </toggleGroup>
@@ -46,7 +46,7 @@
                   <Font size="14.0" />
                </font>
             </JFXRadioButton>
-            <JFXRadioButton fx:id="businessCustomer" text="Business" toggleGroup="$customerType">
+            <JFXRadioButton fx:id="businessCustomer" disable="true" text="Business" toggleGroup="$customerType">
                <HBox.margin>
                   <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
                </HBox.margin>
@@ -156,7 +156,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <JFXTextField fx:id="region" prefWidth="245.0">
+            <JFXTextField fx:id="region" editable="false" prefWidth="245.0">
                <HBox.margin>
                   <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
                </HBox.margin>
@@ -197,7 +197,7 @@
       </Group>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="600.0">
          <children>
-            <JFXButton fx:id="cancelBtn" buttonType="RAISED" prefHeight="75.0" prefWidth="175.0" ripplerFill="WHITE" style="-fx-background-color: red;" text="Cancel" textFill="WHITE">
+            <JFXButton fx:id="closeBtn" buttonType="RAISED" prefHeight="75.0" prefWidth="175.0" ripplerFill="WHITE" style="-fx-background-color: red;" text="Close" textFill="WHITE">
                <HBox.margin>
                   <Insets left="50.0" right="50.0" />
                </HBox.margin>
