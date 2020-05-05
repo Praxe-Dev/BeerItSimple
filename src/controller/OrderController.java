@@ -8,6 +8,7 @@ import model.OrderLineTableFormat;
 import model.OrderTableFormat;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class OrderController {
@@ -31,5 +32,9 @@ public class OrderController {
 
     public boolean deleteOrder(Order order) throws DeletionExceiption {
         return orderBusiness.deleteOrder(order);
+    }
+
+    public ArrayList<Order> getAllOrdersBetweenDates(LocalDate startingDate, LocalDate endDate) {
+        return orderBusiness.getAllOrdersBetweenDates(startingDate, endDate);
     }
 }

@@ -49,7 +49,7 @@ public class Order {
         orderLineList.add(orderLine);
     }
 
-    public void setOrderLine(ArrayList<OrderLine> orderLines) {
+    public void setAllOrderLine(ArrayList<OrderLine> orderLines) {
         orderLineList = orderLines;
     }
 

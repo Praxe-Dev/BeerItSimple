@@ -1,7 +1,6 @@
 package view.order;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXCheckBox;
 import controller.OrderController;
 import exception.*;
 import model.*;
@@ -16,7 +15,6 @@ import javafx.scene.layout.VBox;
 import view.PopUp;
 import view.View;
 import view.Window;
-import view.customer.Update;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -29,6 +27,8 @@ public class Index extends View implements Initializable {
     private VBox vbox;
     @FXML
     private Label label;
+    @FXML
+    private JFXButton searchBtn;
     @FXML
     private JFXButton newOrderBtn;
     @FXML
@@ -72,6 +72,15 @@ public class Index extends View implements Initializable {
 
     @Override
     public void init() {
+
+        searchBtn.setOnAction(e -> {
+            Window search = new Window("FXML/order/search.fxml", "BeerItSimple - Search in order");
+            search.load();
+            search.getView().setParentView(this);
+            search.resizable(false);
+            search.show();
+        });
+
         newOrderBtn.setOnAction(e -> {
             Window newOrder = new Window("FXML/order/newOrder.fxml", "BeerItSimple - New order");
             newOrder.load();
@@ -165,17 +174,36 @@ public class Index extends View implements Initializable {
     }
 
     public void updateTable() {
-
-        ArrayList<OrderTableFormat> ordersList = new ArrayList<>();
         try {
-
-            for (Order order : orderController.getAllOrders()) {
-                ordersList.add(new OrderTableFormat(order));
-            }
-
-            orderTable.getItems().setAll(ordersList);
+            updateTable(orderController.getAllOrders());
         } catch (SQLException e) {
             e.printStackTrace();
         }
+//        ArrayList<OrderTableFormat> ordersList = new ArrayList<>();
+//        try {
+//
+//            for (Order order : orderController.getAllOrders()) {
+//                ordersList.add(new OrderTableFormat(order));
+//            }
+//
+//            orderTable.getItems().setAll(ordersList);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+    }
+
+    public boolean updateTable(ArrayList<Order> orderList) {
+        ArrayList<OrderTableFormat> ordersList = new ArrayList<>();
+//        try {
+
+        for (Order order : orderList) {
+            ordersList.add(new OrderTableFormat(order));
+        }
+
+         return orderTable.getItems().setAll(ordersList);
+
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
     }
 }

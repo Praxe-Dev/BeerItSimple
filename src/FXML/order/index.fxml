@@ -9,7 +9,7 @@
 
 <VBox fx:id="vbox" alignment="CENTER" prefHeight="641.0" prefWidth="1072.0" styleClass="center" stylesheets="/view/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.order.Index">
     <children>
-        <Label fx:id="label" alignment="CENTER" contentDisplay="CENTER" prefHeight="74.0" prefWidth="451.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Orders" textAlignment="CENTER" textFill="WHITE">
+        <Label fx:id="label" alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="451.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Orders" textAlignment="CENTER" textFill="WHITE">
             <VBox.margin>
                 <Insets bottom="15.0" top="10.0" />
             </VBox.margin>
@@ -17,7 +17,25 @@
                 <Font size="32.0" />
             </font>
         </Label>
-        <TableView fx:id="orderTable" prefHeight="1000.0" prefWidth="1000.0">
+      <HBox>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <children>
+            <JFXButton fx:id="searchBtn" mnemonicParsing="false" prefHeight="58.0" prefWidth="123.0" text="Search" textFill="WHITE">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+               <graphic>
+                  <FontAwesomeIcon fill="WHITE" glyphName="SEARCH" size="2em" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="33.42856979370117" />
+               </graphic>
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </JFXButton>
+         </children>
+      </HBox>
+        <TableView fx:id="orderTable" prefHeight="1000.0" prefWidth="1052.0">
             <columns>
                 <TableColumn fx:id="reference" prefWidth="75.0" text="Reference" />
                 <TableColumn fx:id="startingDate" prefWidth="75.0" text="Date" />

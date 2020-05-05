@@ -17,6 +17,24 @@
             <Font size="32.0" />
          </font>
       </Label>
+       <HBox>
+           <VBox.margin>
+               <Insets />
+           </VBox.margin>
+           <children>
+               <JFXButton mnemonicParsing="false" prefHeight="58.0" prefWidth="123.0" text="Search" textFill="WHITE">
+                   <HBox.margin>
+                       <Insets left="10.0" />
+                   </HBox.margin>
+                   <graphic>
+                       <FontAwesomeIcon fill="WHITE" glyphName="SEARCH" size="2em" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="33.42856979370117" />
+                   </graphic>
+                   <font>
+                       <Font size="18.0" />
+                   </font>
+               </JFXButton>
+           </children>
+       </HBox>
       <TableView fx:id="customersTable" prefHeight="1000.0" prefWidth="1000.0">
         <columns>
             <TableColumn fx:id="customerId" prefWidth="75.0" text="Id #" />

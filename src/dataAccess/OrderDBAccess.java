@@ -6,8 +6,10 @@ import model.*;
 
 import javax.swing.*;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.sql.Date;
 
 public class OrderDBAccess implements OrderDataAccess {
     private Connection connection;
@@ -135,6 +137,191 @@ public class OrderDBAccess implements OrderDataAccess {
         return orderList;
     }
 
+    public Order getOrder(int reference) throws NoRowSelected {
+        Order order = null;
+        Status status = null;
+        PaymentMethod paymentMethod = null;
+
+        String sqlInstruction = "SELECT o.*, p.*, s.*\n" +
+                "FROM `order` o JOIN paymentmethod p ON o.paymentMethodId = p.id\n" +
+                "JOIN `status` s ON o.statusNumber = s.id\n" +
+                "WHERE o.`reference` = ?";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setInt(1, reference);
+
+            ResultSet data = preparedStatement.executeQuery();
+
+            if (data.next()) {
+
+                int customerId = data.getInt("o.CustomerEntityId");
+
+                status = new Status(
+                        data.getInt("s.id"),
+                        data.getString("s.label")
+                );
+
+                paymentMethod = new PaymentMethod(
+                        data.getInt("p.id"),
+                        data.getString("p.label")
+                );
+
+                GregorianCalendar startingDate = new GregorianCalendar();
+                startingDate.setTime(data.getDate("o.startingDate"));
+                order = new Order(
+                        null,
+                        data.getInt("o.reference"),
+                        data.getBoolean("o.isPaid"),
+                        startingDate,
+                        status,
+                        paymentMethod,
+                        null
+                );
+
+//                String sqlDeliveryInstruction = "SELECT d.*, emp.*, e.*, c.* FROM delivery d\n" +
+//                                                "JOIN employee emp ON emp.EntityId = d.EmployeeEntityId\n" +
+//                                                "JOIN entity e ON e.id = d.EmployeeEntityId\n" +
+//                                                "JOIN city c ON e.CityLabel = c.label AND e.CityZipCode = c.zipCode\n" +
+//                                                "WHERE d.OrderReference = ?";
+//
+//                // get delivery and all informations
+//                Delivery delivery = null;
+//                Employee employee = null;
+//                Entity entity = null;
+//
+//                PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDeliveryInstruction);
+//                preparedStatementDelivery.setInt(1, order.getReference());
+//                ResultSet dataDelivery = preparedStatementDelivery.executeQuery();
+//
+//                if (dataDelivery.next()) {
+//                    GregorianCalendar plannedDateG = null;
+//                    GregorianCalendar deliveredDateG = null;
+//
+//                    java.sql.Date plannedDate = dataDelivery.getDate("d.plannedDate");
+//                    if (plannedDate != null) {
+//                        plannedDateG = new GregorianCalendar();
+//                        plannedDateG.setTime(plannedDate);
+//                    }
+//
+//                    java.sql.Date deliveredDate = dataDelivery.getDate("d.deliveredDate");
+//                    if (deliveredDate != null) {
+//                        deliveredDateG = new GregorianCalendar();
+//                        deliveredDateG.setTime(deliveredDate);
+//                    }
+//
+//                    City cityD = new City(
+//                            dataDelivery.getString("c.label"),
+//                            dataDelivery.getInt("c.zipCode")
+//                    );
+//
+//                    Entity entityDeliveryMan = new Entity(
+//                            dataDelivery.getInt("e.id"),
+//                            dataDelivery.getString("e.mail"),
+//                            dataDelivery.getString("e.contactName"),
+//                            dataDelivery.getString("e.phoneNumber"),
+//                            dataDelivery.getInt("e.houseNumber"),
+//                            dataDelivery.getString("e.street"),
+//                            dataDelivery.getString("e.bankAccountNumber"),
+//                            dataDelivery.getString("e.businessNumber"),
+//                            cityD
+//                    );
+//
+//                    Employee deliveryMan = new Employee(
+//                            dataDelivery.getInt("emp.EntityId"),
+//                            dataDelivery.getInt("emp.RoleId"),
+//                            dataDelivery.getString("emp.password"),
+//                            entityDeliveryMan);
+//
+//                    delivery = new Delivery(
+//                            deliveryMan,
+//                            dataDelivery.getInt("d.id"),
+//                            plannedDateG,
+//                            deliveredDateG,
+//                            order
+//                    );
+//
+//                    order.setDelivery(delivery);
+//                }
+                setDeliveryFromOrder(order);
+                setCustomerFromId(order, customerId);
+                setOrderLineFromOrder(order);
+
+            }
+        } catch (SQLException e) {
+            throw new NoRowSelected();
+        }
+
+        return order;
+    }
+
+    @Override
+    public ArrayList<Order> getAllOrdersBetweenDates(LocalDate startingDate, LocalDate endDate) {
+        String sqlInstruction = "SELECT o.*, s.*, p.* FROM `order` o\n"+
+                                "JOIN status s ON s.id = o.StatusNumber\n" +
+                                "JOIN paymentmethod p ON p.id = o.paymentMethodId\n" +
+                                "WHERE ? <= o.startingDate AND o.startingDate <= ?";
+
+        ArrayList<Order> orderList = new ArrayList<>();
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+//            java.sql.Date start = new Date(0);
+            Date start = Date.valueOf(startingDate);
+            Date end = Date.valueOf(endDate);
+
+            preparedStatement.setDate(1, start);
+            preparedStatement.setDate(2, end);
+
+            ResultSet data = preparedStatement.executeQuery();
+
+            Order order;
+            Status status;
+            Integer customerId;
+            PaymentMethod paymentMethod;
+            GregorianCalendar calendar = null;
+
+            while (data.next()) {
+                customerId = data.getInt("o.CustomerEntityId");
+
+                status = new Status(
+                        data.getInt("s.id"),
+                        data.getString("s.label")
+                );
+
+                paymentMethod = new PaymentMethod(
+                        data.getInt("p.id"),
+                        data.getString("p.label")
+                );
+
+                java.sql.Date startDate = data.getDate("startingDate");
+                if (startDate != null) {
+                    calendar = new GregorianCalendar();
+                    calendar.setTime(startDate);
+                }
+
+                order = new Order(
+                        null,
+                        data.getInt("o.reference"),
+                        data.getBoolean("o.isPaid"),
+                        calendar,
+                        status,
+                        paymentMethod
+                );
+
+                setCustomerFromId(order, customerId);
+                setDeliveryFromOrder(order);
+                setOrderLineFromOrder(order);
+
+                orderList.add(order);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return orderList;
+    }
 
     public boolean create(Order order) throws SQLException {
         int affectedRow = 0;
@@ -248,124 +435,6 @@ public class OrderDBAccess implements OrderDataAccess {
         return true;
     }
 
-    public Order getOrder(int reference) throws NoRowSelected {
-        Order order = null;
-        Status status = null;
-        PaymentMethod paymentMethod = null;
-
-        String sqlInstruction = "SELECT o.*, p.*, s.*\n" +
-                                "FROM `order` o JOIN paymentmethod p ON o.paymentMethodId = p.id\n" +
-                                "JOIN `status` s ON o.statusNumber = s.id\n" +
-                                "WHERE o.`reference` = ?";
-
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
-            preparedStatement.setInt(1, reference);
-
-            ResultSet data = preparedStatement.executeQuery();
-
-            if (data.next()) {
-
-                int customerId = data.getInt("o.CustomerEntityId");
-
-                status = new Status(
-                        data.getInt("s.id"),
-                        data.getString("s.label")
-                );
-
-                paymentMethod = new PaymentMethod(
-                    data.getInt("p.id"),
-                    data.getString("p.label")
-                );
-
-                GregorianCalendar startingDate = new GregorianCalendar();
-                startingDate.setTime(data.getDate("o.startingDate"));
-                order = new Order(
-                        null,
-                        data.getInt("o.reference"),
-                        data.getBoolean("o.isPaid"),
-                        startingDate,
-                        status,
-                        paymentMethod,
-                        null
-                        );
-
-//                String sqlDeliveryInstruction = "SELECT d.*, emp.*, e.*, c.* FROM delivery d\n" +
-//                                                "JOIN employee emp ON emp.EntityId = d.EmployeeEntityId\n" +
-//                                                "JOIN entity e ON e.id = d.EmployeeEntityId\n" +
-//                                                "JOIN city c ON e.CityLabel = c.label AND e.CityZipCode = c.zipCode\n" +
-//                                                "WHERE d.OrderReference = ?";
-//
-//                // get delivery and all informations
-//                Delivery delivery = null;
-//                Employee employee = null;
-//                Entity entity = null;
-//
-//                PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDeliveryInstruction);
-//                preparedStatementDelivery.setInt(1, order.getReference());
-//                ResultSet dataDelivery = preparedStatementDelivery.executeQuery();
-//
-//                if (dataDelivery.next()) {
-//                    GregorianCalendar plannedDateG = null;
-//                    GregorianCalendar deliveredDateG = null;
-//
-//                    java.sql.Date plannedDate = dataDelivery.getDate("d.plannedDate");
-//                    if (plannedDate != null) {
-//                        plannedDateG = new GregorianCalendar();
-//                        plannedDateG.setTime(plannedDate);
-//                    }
-//
-//                    java.sql.Date deliveredDate = dataDelivery.getDate("d.deliveredDate");
-//                    if (deliveredDate != null) {
-//                        deliveredDateG = new GregorianCalendar();
-//                        deliveredDateG.setTime(deliveredDate);
-//                    }
-//
-//                    City cityD = new City(
-//                            dataDelivery.getString("c.label"),
-//                            dataDelivery.getInt("c.zipCode")
-//                    );
-//
-//                    Entity entityDeliveryMan = new Entity(
-//                            dataDelivery.getInt("e.id"),
-//                            dataDelivery.getString("e.mail"),
-//                            dataDelivery.getString("e.contactName"),
-//                            dataDelivery.getString("e.phoneNumber"),
-//                            dataDelivery.getInt("e.houseNumber"),
-//                            dataDelivery.getString("e.street"),
-//                            dataDelivery.getString("e.bankAccountNumber"),
-//                            dataDelivery.getString("e.businessNumber"),
-//                            cityD
-//                    );
-//
-//                    Employee deliveryMan = new Employee(
-//                            dataDelivery.getInt("emp.EntityId"),
-//                            dataDelivery.getInt("emp.RoleId"),
-//                            dataDelivery.getString("emp.password"),
-//                            entityDeliveryMan);
-//
-//                    delivery = new Delivery(
-//                            deliveryMan,
-//                            dataDelivery.getInt("d.id"),
-//                            plannedDateG,
-//                            deliveredDateG,
-//                            order
-//                    );
-//
-//                    order.setDelivery(delivery);
-//                }
-                setDeliveryFromOrder(order);
-                setCustomerFromId(order, customerId);
-                setOrderLineFromOrder(order);
-
-            }
-        } catch (SQLException e) {
-            throw new NoRowSelected();
-        }
-
-        return order;
-    }
-
     private void setCustomerFromId(Order order, int customerId) throws SQLException {
         Entity entity;
         if (customerId != 0) {
@@ -430,6 +499,7 @@ public class OrderDBAccess implements OrderDataAccess {
         String sqlOrderLine = "SELECT o.*, p.*\n" +
                               "FROM orderline o JOIN product p ON o.Productcode = p.code\n"+
                               "WHERE o.Orderreference = ?;";
+        ArrayList<OrderLine> orderLines = new ArrayList<>();
 
         PreparedStatement preparedStatement = connection.prepareStatement(sqlOrderLine);
         preparedStatement.setInt(1, order.getReference());

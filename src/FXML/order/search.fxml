@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="/view/style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.order.Search">
+   <tabs>
+      <Tab fx:id="dateSearchPane" text="Between date search">
+         <content>
+            <VBox prefHeight="200.0" prefWidth="600.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="141.0" prefWidth="600.0" text="Search all order between below dates" textFill="WHITE">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <HBox alignment="CENTER_LEFT" prefHeight="141.0" prefWidth="600.0" spacing="40.0">
+                     <children>
+                        <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="50.0" prefWidth="250.0" text="Starting date :" textAlignment="RIGHT" textFill="WHITE">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <DatePicker fx:id="startingDate" prefHeight="25.0" prefWidth="255.0" promptText="At least one day earlier than current day" />
+                     </children>
+                     <VBox.margin>
+                        <Insets top="40.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" prefHeight="173.0" prefWidth="600.0" spacing="40.0">
+                     <children>
+                        <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="50.0" prefWidth="250.0" text="End date :" textAlignment="RIGHT" textFill="WHITE">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <DatePicker fx:id="endDate" prefHeight="25.0" prefWidth="255.0" promptText="(Optional) Empty = current date" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="194.0" prefWidth="600.0" spacing="100.0">
+                     <children>
+                        <JFXButton fx:id="cancelBtn" prefHeight="55.0" prefWidth="125.0" style="-fx-background-color: red;" text="Cancel" textFill="WHITE">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </JFXButton>
+                        <JFXButton fx:id="searchBtn" layoutX="10.0" layoutY="10.0" prefHeight="55.0" prefWidth="125.0" style="-fx-background-color: rgba(0,255,0,0.8);" text="Search" textFill="WHITE">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </JFXButton>
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+            </VBox>
+         </content>
+      </Tab>
+   </tabs>
+</TabPane>
