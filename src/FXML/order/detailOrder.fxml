@@ -69,10 +69,11 @@
                <children>
                   <TableView fx:id="tableArticle" prefHeight="421.0" prefWidth="743.0">
                     <columns>
-                      <TableColumn fx:id="article" prefWidth="302.0" text="Article" />
-                      <TableColumn fx:id="price" minWidth="0.0" prefWidth="111.0" text="price" />
-                        <TableColumn fx:id="quantity" minWidth="0.0" prefWidth="162.0" text="Quantity" />
-                        <TableColumn fx:id="total" minWidth="0.0" prefWidth="167.0" text="Total" />
+                       <TableColumn fx:id="article" prefWidth="200.0" text="Article" />
+                       <TableColumn fx:id="price" minWidth="0.0" prefWidth="103.0" text="price" />
+                       <TableColumn fx:id="quantity" minWidth="0.0" prefWidth="100.0" text="Quantity" />
+                       <TableColumn fx:id="totalExclVat" minWidth="0.0" prefWidth="157.0" text="Total excl TVA" />
+                       <TableColumn fx:id="totalInclVat" minWidth="0.0" prefWidth="182.0" text="Total incl TVA" />
                     </columns>
                      <VBox.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="60.0" />
@@ -80,31 +81,69 @@
                   </TableView>
                   <HBox alignment="CENTER_RIGHT" prefHeight="54.0" prefWidth="783.0">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total :" textAlignment="RIGHT" wrappingWidth="284.13671875">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total exl. VAT :" textAlignment="RIGHT" wrappingWidth="284.13671875">
                            <font>
                               <Font size="24.0" />
                            </font>
                         </Text>
-                        <Text fx:id="totalAmount" layoutX="10.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0,00" textAlignment="RIGHT" wrappingWidth="216.13671875">
+                        <Text fx:id="totalAmountExclVat" layoutX="10.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0,00" textAlignment="RIGHT" wrappingWidth="216.13671875">
                            <font>
                               <Font size="24.0" />
                            </font>
                         </Text>
-                        <Text layoutX="518.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" €" wrappingWidth="216.13671875">
+                        <Text fx:id="totalAmount1" layoutX="518.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" €" wrappingWidth="216.13671875">
                            <font>
                               <Font size="24.0" />
                            </font>
                         </Text>
                      </children>
                      <VBox.margin>
-                        <Insets bottom="50.0" />
+                        <Insets />
                      </VBox.margin>
                   </HBox>
-                  <HBox alignment="CENTER" layoutX="10.0" layoutY="501.0" prefHeight="32.0" prefWidth="781.0" />
+                  <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="551.0" prefHeight="54.0" prefWidth="783.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total VAT :" textAlignment="RIGHT" wrappingWidth="284.13671875">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="totalAmountVatOnly" layoutX="10.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0,00" textAlignment="RIGHT" wrappingWidth="216.13671875">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="totalAmount11" layoutX="518.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" €" wrappingWidth="216.13671875">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="605.0" prefHeight="54.0" prefWidth="783.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total Inc. VAT :" textAlignment="RIGHT" wrappingWidth="284.13671875">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="totalAmountVatInc" layoutX="10.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0,00" textAlignment="RIGHT" wrappingWidth="216.13671875">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="totalAmount111" layoutX="518.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" €" wrappingWidth="216.13671875">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </HBox>
                </children>
             </VBox>
          </children>
       </HBox>
       <Line endX="403.0" startX="403.0" startY="720.9999389648438" />
+      <Line endX="600.0" endY="600.0" layoutX="10.0" layoutY="10.0" startX="1000.0" startY="600.0" />
    </children>
 </AnchorPane>

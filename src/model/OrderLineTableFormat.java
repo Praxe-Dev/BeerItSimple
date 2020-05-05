@@ -7,14 +7,18 @@ public class OrderLineTableFormat {
     private String product;
     private double unitPrice;
     private int quantity;
-    private double total;
+    private int VATCodeRate;
+    private double exclVat;
+    private double inclVat;
 
     public OrderLineTableFormat(Product p, int quantity) {
         this.productCode = p.getCode();
         this.product = p.toString();
         this.unitPrice = p.getUnitPrice();
         this.quantity = quantity;
-        this.total = unitPrice * (double) quantity;
+        this.VATCodeRate = p.getVATRate();
+        this.exclVat = unitPrice * (double) quantity;
+        this.inclVat = this.exclVat * (((double) VATCodeRate / 100) + 1);
     }
 
     public int getProductCode() {
@@ -33,9 +37,14 @@ public class OrderLineTableFormat {
         return quantity;
     }
 
-    public double getTotal() {
-        return total;
+    public double getInclVat() {
+        // if not casted, not correct (I wanna die)
+        return (double) Math.round(inclVat * 100) / 100;
     }
+    public double getExclVat() {
+        return exclVat;
+    }
+    public double getVatCodeRate() { return VATCodeRate; }
 
     @Override
     public String toString() {
@@ -44,7 +53,9 @@ public class OrderLineTableFormat {
                 ", product='" + product + '\'' +
                 ", unitPrice=" + unitPrice +
                 ", quantity=" + quantity +
-                ", total=" + total +
+                ", VATCodeRate=" + VATCodeRate +
+                ", exclVat=" + exclVat +
+                ", inclVat=" + inclVat +
                 '}';
     }
 }

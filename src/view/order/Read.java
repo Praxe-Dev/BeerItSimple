@@ -6,7 +6,6 @@ import controller.OrderController;
 import exception.NoRowSelected;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -38,9 +37,15 @@ public class Read extends View {
     @FXML
     TableColumn<OrderLineTableFormat, Integer> quantity;
     @FXML
-    TableColumn<OrderLineTableFormat, Double> total;
+    TableColumn<OrderLineTableFormat, Double> totalExclVat;
     @FXML
-    Text totalAmount;
+    TableColumn<OrderLineTableFormat, Double> totalInclVat;
+    @FXML
+    Text totalAmountExclVat;
+    @FXML
+    Text totalAmountVatOnly;
+    @FXML
+    Text totalAmountVatInc;
 
 //    OrderController orderController;
 
@@ -68,11 +73,17 @@ public class Read extends View {
 
         initTable();
 
-        double amount = 0;
+        double amountExclVat = 0;
+        double amountOnlyVat = 0;
         for (OrderLineTableFormat ol : tableArticle.getItems()) {
-            amount += ol.getTotal();
+            amountExclVat += ol.getExclVat();
+            amountOnlyVat += ol.getExclVat() * (ol.getVatCodeRate() / 100.0);
         }
-        totalAmount.setText(String.format("%.2f", amount));
+
+        double totalAmount = amountExclVat + amountOnlyVat;
+        totalAmountExclVat.setText(String.format("%.2f", amountExclVat));
+        totalAmountVatOnly.setText(String.format("%.2f", amountOnlyVat));
+        totalAmountVatInc.setText(String.format("%.2f", totalAmount));
     }
 
     private void initTable() {
@@ -82,7 +93,8 @@ public class Read extends View {
             article.setCellValueFactory(new PropertyValueFactory<>("product"));
             price.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
             quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
-            total.setCellValueFactory(new PropertyValueFactory<>("total"));
+            totalExclVat.setCellValueFactory(new PropertyValueFactory<>("exclVat"));
+            totalInclVat.setCellValueFactory(new PropertyValueFactory<>("inclVat"));
 
             ArrayList<OrderLineTableFormat> orderLines = new ArrayList<>();
 
