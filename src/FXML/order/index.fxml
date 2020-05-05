@@ -57,7 +57,7 @@
                         <FontAwesomeIcon fill="WHITE" glyphName="PENCIL_SQUARE" size="3em" strokeType="OUTSIDE" strokeWidth="0.0" />
                     </graphic>
                 </JFXButton>
-                <JFXButton fx:id="viewOrder" contentDisplay="TOP" layoutX="10.0" layoutY="10.0" prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Details" textFill="WHITE">
+                <JFXButton fx:id="detailBtn" contentDisplay="TOP" layoutX="10.0" layoutY="10.0" prefHeight="75.0" prefWidth="600.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Details" textFill="WHITE">
                     <HBox.margin>
                         <Insets left="60.0" right="60.0" />
                     </HBox.margin>

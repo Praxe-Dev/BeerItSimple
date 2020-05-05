@@ -1,6 +1,7 @@
 package view.order;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import controller.OrderController;
 import exception.*;
 import model.*;
@@ -15,6 +16,7 @@ import javafx.scene.layout.VBox;
 import view.PopUp;
 import view.View;
 import view.Window;
+import view.customer.Update;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -32,7 +34,7 @@ public class Index extends View implements Initializable {
     @FXML
     private JFXButton editOrder;
     @FXML
-    private JFXButton viewOrder;
+    JFXButton detailBtn;
     @FXML
     private JFXButton deleteBtn;
     @FXML
@@ -86,8 +88,6 @@ public class Index extends View implements Initializable {
                         updateTable();
                     }
                 }
-            } catch (NoRowSelected ex) {
-                ex.showError();
             } catch (DeletionExceiption ex) {
                 ex.showError();
             } catch (NullPointerException ex) {
@@ -96,11 +96,36 @@ public class Index extends View implements Initializable {
 
             updateTable();
         });
+
+        detailBtn.setOnAction((e) -> {
+            Order selectedOrder;
+            Window detailOrder;
+//            try {
+            selectedOrder = getSelectedOrder();
+            if (selectedOrder != null) {
+                detailOrder = new Window("FXML/order/detailOrder.fxml", "BeerItSimple - Order : " + selectedOrder.getReference());
+
+
+                detailOrder.load();
+                detailOrder.resizable(false);
+                detailOrder.getView().setParentView(this);
+                // assurément Update car on le crée nous même juste avant
+                Read detail = (Read) detailOrder.getView();
+
+                detail.setOrder(selectedOrder);
+                detailOrder.show();
+            }
+        });
     }
 
-    private Order getSelectedOrder() throws NoRowSelected {
-        OrderTableFormat orderTableFormat = orderTable.getSelectionModel().getSelectedItem();
-        Order order = orderController.getOrder(orderTableFormat.getReference());
+    private Order getSelectedOrder() {
+        Order order = null;
+        try {
+            OrderTableFormat orderTableFormat = orderTable.getSelectionModel().getSelectedItem();
+            order = orderController.getOrder(orderTableFormat.getReference());
+        } catch (Exception e) {
+            new NoRowSelected();
+        }
 
         return order;
     }

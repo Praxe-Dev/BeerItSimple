@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1200.0" stylesheets="/view/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.order.Read">
+   <children>
+      <HBox layoutX="1.0" layoutY="1.0" prefHeight="720.0" prefWidth="1200.0">
+         <children>
+            <VBox alignment="TOP_CENTER" prefHeight="720.0" prefWidth="506.0">
+               <children>
+                  <Label prefHeight="55.0" prefWidth="321.0" text="New order">
+                     <VBox.margin>
+                        <Insets top="30.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <JFXTextField fx:id="customer" editable="false" maxHeight="45.0" maxWidth="250.0" minHeight="45.0" minWidth="250.0" prefHeight="45.0" prefWidth="250.0" promptText="Customer">
+                     <VBox.margin>
+                        <Insets top="75.0" />
+                     </VBox.margin>
+                  </JFXTextField>
+                  <JFXTextField fx:id="paymentMethod" editable="false" layoutX="94.0" layoutY="170.0" maxHeight="25.0" maxWidth="250.0" minHeight="25.0" minWidth="250.0" prefHeight="25.0" prefWidth="250.0" promptText="Payment method">
+                     <VBox.margin>
+                        <Insets top="75.0" />
+                     </VBox.margin>
+                  </JFXTextField>
+                  <JFXCheckBox fx:id="deliveryCheck" checkedColor="#105a9c" contentDisplay="RIGHT" disable="true" prefHeight="48.0" prefWidth="253.0" text="Delivery">
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </JFXCheckBox>
+                  <Group fx:id="deliveryDisplay">
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
+                     </VBox.margin>
+                     <children>
+                        <JFXTextField fx:id="deliveryDate" editable="false" layoutX="-80.0" layoutY="2.0" maxHeight="25.0" maxWidth="250.0" minHeight="25.0" minWidth="250.0" prefHeight="25.0" prefWidth="250.0" promptText="Delivery date" />
+                     </children>
+                  </Group>
+                  <HBox alignment="CENTER">
+                     <children>
+                        <JFXButton fx:id="okBtn" buttonType="RAISED" minHeight="75.0" minWidth="100.0" prefHeight="75.0" prefWidth="150.0" style="-fx-background-color: #2c5364;" text="Ok" textFill="WHITE">
+                           <HBox.margin>
+                              <Insets left="20.0" right="20.0" />
+                           </HBox.margin>
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </JFXButton>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="75.0" />
+                     </VBox.margin>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox alignment="TOP_CENTER" prefHeight="720.0" prefWidth="872.0">
+               <children>
+                  <TableView fx:id="tableArticle" prefHeight="421.0" prefWidth="743.0">
+                    <columns>
+                      <TableColumn fx:id="article" prefWidth="302.0" text="Article" />
+                      <TableColumn fx:id="price" minWidth="0.0" prefWidth="111.0" text="price" />
+                        <TableColumn fx:id="quantity" minWidth="0.0" prefWidth="162.0" text="Quantity" />
+                        <TableColumn fx:id="total" minWidth="0.0" prefWidth="167.0" text="Total" />
+                    </columns>
+                     <VBox.margin>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="60.0" />
+                     </VBox.margin>
+                  </TableView>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="54.0" prefWidth="783.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total :" textAlignment="RIGHT" wrappingWidth="284.13671875">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="totalAmount" layoutX="10.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0,00" textAlignment="RIGHT" wrappingWidth="216.13671875">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="518.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" €" wrappingWidth="216.13671875">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Text>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="50.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="CENTER" layoutX="10.0" layoutY="501.0" prefHeight="32.0" prefWidth="781.0" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <Line endX="403.0" startX="403.0" startY="720.9999389648438" />
+   </children>
+</AnchorPane>
