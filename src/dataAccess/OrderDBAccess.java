@@ -749,7 +749,7 @@ public class OrderDBAccess implements OrderDataAccess {
                         break;
                     }
 
-                    if (i == orderLinesFromUpdate.size()) {
+                    if (i+1 == orderLinesFromUpdate.size()) {
                         //Delete orderLineExist from db
                         String deleteOrderLine = "DELETE FROM orderline WHERE Productcode = ? AND Orderreference = ?";
                         PreparedStatement preparedDeleteOrderLine = connection.prepareStatement(deleteOrderLine);
