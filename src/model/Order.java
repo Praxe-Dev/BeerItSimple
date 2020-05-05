@@ -1,5 +1,6 @@
 package model;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -103,6 +104,10 @@ public class Order {
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
+    }
+
+    public void setAllOrderLines(ArrayList<OrderLine> orderLineList){
+        this.orderLineList = orderLineList;
     }
 
 }

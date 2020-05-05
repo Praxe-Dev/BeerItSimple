@@ -246,10 +246,12 @@ public class Update extends View {
             }
         }
 
+        ArrayList<OrderLine> orderLineArrayList = new ArrayList<>();
         for (OrderLineTableFormat line : tableArticle.getItems()) {
             product = productList.getItems().get(line.getProductCode() - 1);
-            order.addOrderLine(new OrderLine(product, order, line.getQuantity(), line.getUnitPrice()));
+            orderLineArrayList.add(new OrderLine(product, order, line.getQuantity(), line.getUnitPrice()));
         }
+        order.setAllOrderLines(orderLineArrayList);
 
         return orderController.updateOrder(order);
     }
