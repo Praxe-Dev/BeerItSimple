@@ -211,4 +211,8 @@ public class Index extends View implements Initializable {
 
          return orderTable.getItems().setAll(ordersList);
     }
+
+    public void hideRefreshButton(){
+        refreshBtn.setVisible(false);
+    }
 }

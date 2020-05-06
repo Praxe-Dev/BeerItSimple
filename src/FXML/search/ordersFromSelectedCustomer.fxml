@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox fx:id="ordersFromSelectedCustomerPane" prefHeight="200.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.search.ordersFromSelectedCustomer">
+    <children>
+        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="141.0" prefWidth="600.0" text="Retrieve all orders from the selected customer" textFill="WHITE">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Label>
+        <HBox alignment="CENTER_LEFT" prefHeight="141.0" prefWidth="600.0" spacing="40.0">
+            <children>
+                <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="36.0" prefWidth="234.0" text="Customer:" textAlignment="RIGHT" textFill="WHITE">
+                    <font>
+                        <Font size="24.0" />
+                    </font>
+                </Label>
+            <JFXComboBox fx:id="customerBox" prefHeight="25.0" prefWidth="203.0" unFocusColor="WHITE" />
+            </children>
+            <VBox.margin>
+                <Insets top="40.0" />
+            </VBox.margin>
+        </HBox>
+        <HBox alignment="CENTER" prefHeight="194.0" prefWidth="600.0" spacing="100.0">
+            <children>
+                <JFXButton fx:id="cancelBtn" prefHeight="55.0" prefWidth="125.0" style="-fx-background-color: red;" text="Cancel" textFill="WHITE">
+                    <font>
+                        <Font size="24.0" />
+                    </font>
+                </JFXButton>
+                <JFXButton fx:id="searchBtn" layoutX="10.0" layoutY="10.0" prefHeight="55.0" prefWidth="125.0" style="-fx-background-color: rgba(0,255,0,0.8);" text="Search" textFill="WHITE">
+                    <font>
+                        <Font size="24.0" />
+                    </font>
+                </JFXButton>
+            </children>
+            <VBox.margin>
+                <Insets />
+            </VBox.margin>
+        </HBox>
+    </children>
+</VBox>

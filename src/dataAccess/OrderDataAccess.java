@@ -25,5 +25,7 @@ public interface OrderDataAccess {
 
     ArrayList<Order> getAllOrdersBetweenDates(LocalDate startingDate, LocalDate endDate);
 
+    ArrayList<Order> getAllOrdersFromCustomer(Customer customer) throws SQLManageException;
+
     Rank updateCustomerRank(Customer customer) throws SQLManageException;
 }

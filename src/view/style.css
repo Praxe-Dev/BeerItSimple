@@ -55,3 +55,7 @@
     -fx-text-fill: white;
 }
 
+.whiteComboBox .cell {
+    -fx-text-fill: white;
+}
+

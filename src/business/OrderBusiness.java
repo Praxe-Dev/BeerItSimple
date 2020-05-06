@@ -49,4 +49,8 @@ public class OrderBusiness {
     public Rank updateCustomerRank(Customer customer) throws SQLManageException {
         return dao.updateCustomerRank(customer);
     }
+
+    public ArrayList<Order> getAllOrdersFromCustomer(Customer customer) throws SQLManageException {
+        return dao.getAllOrdersFromCustomer(customer);
+    }
 }
