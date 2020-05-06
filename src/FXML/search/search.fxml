@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="/view/style.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.search.Search">
+   <tabs>
+      <Tab fx:id="betweenDateSearch" text="Orders between two dates" />
+      <Tab fx:id="zipCodeSearch" text="Orders by ZipCode" />
+      <Tab fx:id="customerRankSearch" text="Delivery by customer Rank" />
+      <Tab fx:id="orderByCustomerSearch" text="Orders by customer" />
+   </tabs>
+</TabPane>
