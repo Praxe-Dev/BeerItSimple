@@ -44,4 +44,8 @@ public class OrderController {
     public Rank updateCustomerRank(Customer customer) throws SQLManageException {
         return orderBusiness.updateCustomerRank(customer);
     }
+
+    public ArrayList<Order> getAllOrdersFromCustomer(Customer customer) throws SQLManageException{
+        return orderBusiness.getAllOrdersFromCustomer(customer);
+    }
 }

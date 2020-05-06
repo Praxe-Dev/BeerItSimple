@@ -27,17 +27,17 @@ public class Search extends View {
     @FXML
     Tab customerRankSearch;
     @FXML
-    Tab orderByCustomerSearch;
+    Tab ordersFromSelectedCustomer;
 
     private final String pathToBetweenDates = "/FXML/search/ordersBetweenTwoDates.fxml";
     private final String pathToZipCodeSearch = "/FXML/search/zipCodeSearch.fxml";
     private final String pathToCustomerRankSearch = "/FXML/search/customerRankSearch.fxml";
-    private final String pathToorderByCustomerSearch = "/FXML/search/orderByCustomerSearch.fxml";
+    private final String pathToOrdersFromSelectedCustomer = "/FXML/search/ordersFromSelectedCustomer.fxml";
 
     @Override
     public void init() {
         betweenDateSearch.setOnSelectionChanged(e -> {
-            setView(pathToBetweenDates);
+            setView(betweenDateSearch, pathToBetweenDates);
         });
 
         zipCodeSearch.setOnSelectionChanged(e -> {
@@ -50,22 +50,19 @@ public class Search extends View {
 //            setView(pathToCustomerRankSearch);
         });
 
-        orderByCustomerSearch.setOnSelectionChanged(e -> {
-            // TODO
-//            setView(pathToorderByCustomerSearch);
+        ordersFromSelectedCustomer.setOnSelectionChanged(e -> {
+              setView(ordersFromSelectedCustomer, pathToOrdersFromSelectedCustomer);
         });
 
-        setView(pathToBetweenDates);
+        setView(betweenDateSearch, pathToBetweenDates);
 
     }
 
-    private void setView(String pathToFxml) {
+    private void setView(Tab tab, String pathToFxml) {
         Parent view;
-
         try {
             view = FXMLLoader.load(getClass().getResource(pathToFxml));
-
-            betweenDateSearch.setContent(view);
+            tab.setContent(view);
         } catch (Exception e) {
             e.printStackTrace();
         }

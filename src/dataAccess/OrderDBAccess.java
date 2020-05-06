@@ -737,4 +737,123 @@ public class OrderDBAccess implements OrderDataAccess {
             throw new SQLManageException(e);
         }
     }
+
+    public ArrayList<Order> getAllOrdersFromCustomer(Customer customer) throws SQLManageException {
+        ArrayList<Order> orderArrayList = new ArrayList<>();
+        String sqlInstruction = "SELECT o.*, s.*, p.* FROM `order` o\n"+
+                "JOIN status s ON s.id = o.StatusNumber\n" +
+                "JOIN paymentmethod p ON p.id = o.paymentMethodId\n" +
+                "WHERE o.CustomerEntityId = ?";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setInt(1, customer.getEntity().getId());
+            ResultSet data = preparedStatement.executeQuery();
+
+            Order order;
+            Status status;
+            Integer customerId;
+            PaymentMethod paymentMethod;
+
+            GregorianCalendar calendar = null;
+
+
+            while(data.next()) {
+
+                customerId = data.getInt("o.CustomerEntityId");
+
+                status = new Status(
+                        data.getInt("s.id"),
+                        data.getString("s.label")
+                );
+
+                paymentMethod = new PaymentMethod(
+                        data.getInt("p.id"),
+                        data.getString("p.label")
+                );
+
+                java.sql.Date startingDate = data.getDate("startingDate");
+                if (startingDate != null) {
+                    calendar = new GregorianCalendar();
+                    calendar.setTime(startingDate);
+                }
+
+                order = new Order(
+                        null,
+                        data.getInt("o.reference"),
+                        data.getBoolean("o.isPaid"),
+                        calendar,
+                        status,
+                        paymentMethod
+                );
+
+                setCustomerFromId(order, customerId);
+
+                setDeliveryFromOrder(order);
+
+                String sqlOrderLine = "SELECT o.*, p.*, v.*, provider.*, e.*, city.* FROM OrderLine o\n"+
+                        "JOIN product p ON p.code = o.Productcode\n" +
+                        "JOIN vatcode v ON v.rate = p.VATCodeRate\n" +
+                        "JOIN provider ON provider.entityId = p.ProviderEntityId\n" +
+                        "JOIN entity e ON e.id = provider.entityId\n" +
+                        "JOIN city c ON c.label = provider.entityId\n" +
+                        "JOIN city ON e.CityLabel = city.label AND e.CityZipCode = city.zipCode\n" +
+                        "WHERE Orderreference = ?";
+                PreparedStatement preparedStatement2 = connection.prepareStatement(sqlOrderLine);
+                preparedStatement2.setInt(1, order.getReference());
+                try {
+                    ResultSet dataOrderLine = preparedStatement2.executeQuery();
+                    while(dataOrderLine.next()){
+                        //Add all orderline to already created order object.
+                        City providerCity = new City(
+                                data.getString("e.CityLabel"),
+                                data.getInt("e.CityZipCode")
+                        );
+
+                        Entity providerEntity = new Entity(
+                                dataOrderLine.getInt("e.id"),
+                                data.getString("e.mail"),
+                                data.getString("e.contactName"),
+                                data.getString("e.phoneNumber"),
+                                data.getInt("e.houseNumber"),
+                                data.getString("e.street"),
+                                data.getString("e.bankAccountNumber"),
+                                data.getString("e.businessNumber"),
+                                providerCity
+                        );
+
+                        Provider provider = new Provider(
+                                providerEntity,
+                                dataOrderLine.getString("provider.providerType")
+                        );
+
+                        Product product = new Product(
+                                provider,
+                                dataOrderLine.getInt("p.code"),
+                                dataOrderLine.getString("p.label"),
+                                dataOrderLine.getDouble("p.unitPrice"),
+                                dataOrderLine.getInt("p.currentStock"),
+                                dataOrderLine.getInt("p.maxStock"),
+                                dataOrderLine.getInt("p.minStock"),
+                                dataOrderLine.getInt("v.rate")
+                        );
+                        OrderLine orderLine = new OrderLine(
+                                product,
+                                order,
+                                dataOrderLine.getInt("o.quantity"),
+                                dataOrderLine.getDouble("o.salesUnitPrice")
+                        );
+                        order.addOrderLine(orderLine);
+                    }
+                } catch(SQLException ex){
+                    throw ex;
+                }
+
+                orderArrayList.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orderArrayList;
+    }
 }

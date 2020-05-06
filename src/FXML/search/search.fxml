@@ -11,6 +11,6 @@
       <Tab fx:id="betweenDateSearch" text="Orders between two dates" />
       <Tab fx:id="zipCodeSearch" text="Orders by ZipCode" />
       <Tab fx:id="customerRankSearch" text="Delivery by customer Rank" />
-      <Tab fx:id="orderByCustomerSearch" text="Orders by customer" />
+      <Tab fx:id="ordersFromSelectedCustomer" text="Orders by customer" />
    </tabs>
 </TabPane>
