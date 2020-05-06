@@ -325,7 +325,7 @@ public class OrderDBAccess implements OrderDataAccess {
         return orderList;
     }
 
-    public boolean create(Order order) throws SQLException {
+    public boolean create(Order order) throws SQLException, SQLManageException {
         int affectedRow = 0;
         String sqlInstructionOrder = "INSERT INTO `order` (startingDate, isPaid, StatusNumber, paymentMethodId, CustomerEntityId)\n" +
                                      "VALUES (?,?,?,?,?)";
@@ -393,6 +393,43 @@ public class OrderDBAccess implements OrderDataAccess {
         }
 
         return true;
+    }
+
+    public Rank updateCustomerRank(Customer customer) throws SQLManageException {
+        //Get All Orders and orderlines
+        Rank newRank = null;
+        String sqlInstruction = "SELECT sum(ol.salesUnitPrice*ol.quantity) AS ordersSum FROM `order` JOIN `orderline` ol ON ol.Orderreference = order.reference  WHERE order.CustomerEntityId = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setInt(1, customer.getEntity().getId());
+            ResultSet data = preparedStatement.executeQuery();
+            if(data.next()){
+                //Search new rank
+                String sqlSearch = "SELECT * FROM `rank` WHERE minAmountOrder <= ? ORDER BY id DESC LIMIT 1";
+                PreparedStatement preparedRankStatement= connection.prepareStatement(sqlSearch);
+                preparedRankStatement.setDouble(1, data.getDouble("ordersSum"));
+                ResultSet dataRank = preparedRankStatement.executeQuery();
+                if(dataRank.next()){
+                    newRank = new Rank(
+                            dataRank.getInt("id"),
+                            dataRank.getString("label"),
+                            dataRank.getInt("creditLimit"),
+                            dataRank.getInt("minAmountOrder")
+                    );
+                    if(customer.getRank().getId() != newRank.getId()){
+                        //Update rank
+                        String updateRank = "UPDATE customer SET RankId = ? WHERE EntityId = ?";
+                        PreparedStatement preparedUpdateRank= connection.prepareStatement(updateRank);
+                        preparedUpdateRank.setInt(1,newRank.getId());
+                        preparedUpdateRank.setInt(2,customer.getEntity().getId());
+                        preparedUpdateRank.executeUpdate();
+                    }
+                }
+            }
+        } catch(SQLException e){
+            new SQLManageException(e);
+        }
+        return newRank;
     }
 
     public boolean deleteOrder(Order order) throws DeletionExceiption {

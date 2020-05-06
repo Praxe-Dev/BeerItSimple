@@ -4,9 +4,7 @@ import business.OrderBusiness;
 import exception.DeletionExceiption;
 import exception.NoRowSelected;
 import exception.SQLManageException;
-import model.Order;
-import model.OrderLineTableFormat;
-import model.OrderTableFormat;
+import model.*;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -23,7 +21,7 @@ public class OrderController {
         return orderBusiness.getAllOrders();
     }
 
-    public boolean create(Order orderLineTableFormats) throws SQLException {
+    public boolean create(Order orderLineTableFormats) throws SQLException, SQLManageException {
         return orderBusiness.create(orderLineTableFormats);
     }
 
@@ -41,5 +39,9 @@ public class OrderController {
 
     public ArrayList<Order> getAllOrdersBetweenDates(LocalDate startingDate, LocalDate endDate) {
         return orderBusiness.getAllOrdersBetweenDates(startingDate, endDate);
+    }
+
+    public Rank updateCustomerRank(Customer customer) throws SQLManageException {
+        return orderBusiness.updateCustomerRank(customer);
     }
 }

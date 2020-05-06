@@ -9,6 +9,7 @@ import controller.OrderController;
 import controller.PaymentMethodController;
 import controller.ProductController;
 import exception.NoRowSelected;
+import exception.SQLManageException;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -140,6 +141,8 @@ public class Create extends View {
                         }
                     } catch (SQLException ex) {
                         ex.printStackTrace();
+                    } catch (SQLManageException ex) {
+                        ex.showMessage();
                     }
                 }
            }
@@ -232,7 +235,7 @@ public class Create extends View {
         return true;
     }
 
-    private boolean newOrderInsert() throws SQLException {
+    private boolean newOrderInsert() throws SQLException, SQLManageException {
         ArrayList<OrderLine> orderLines = new ArrayList<>();
         Product product;
         Delivery delivery = null;
@@ -260,7 +263,14 @@ public class Create extends View {
             newOrder.addOrderLine(new OrderLine(product, newOrder, line.getQuantity(), line.getUnitPrice()));
         }
 
-        return orderController.create(newOrder);
+        Boolean orderCreated = orderController.create(newOrder);
+        if(orderCreated){
+            Rank updateRank = orderController.updateCustomerRank(newOrder.getCustomer());
+            if(updateRank != null){
+                PopUp.showSuccess("Rank up !", "Thank the client and announce their new rank is: " + updateRank.getLabel() + ".\n His new credit limit is: " + updateRank.getCreditLimit() + "\n");
+            }
+        }
+        return orderCreated;
     }
 
     private void initTable() {
