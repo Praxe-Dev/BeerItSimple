@@ -28,8 +28,8 @@ public class Index extends View implements Initializable {
     private VBox vbox;
     @FXML
     private Label label;
-//    @FXML
-//    private JFXButton searchBtn;
+    @FXML
+    private JFXButton searchBtn;
     @FXML
     private JFXButton refreshBtn;
     @FXML
@@ -75,6 +75,11 @@ public class Index extends View implements Initializable {
 
     @Override
     public void init() {
+
+        refreshBtn.setOnAction(e -> {
+            updateTable();
+        });
+
         newOrderBtn.setOnAction(e -> {
             Window newOrder = new Window("FXML/order/newOrder.fxml", "BeerItSimple - New order");
             newOrder.load();
