@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import view.order.Index;
 
 import java.io.IOException;
 
@@ -34,7 +35,9 @@ public class Window extends Parent {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
             parent = fxmlLoader.load(getClass().getClassLoader().getResource(pathToFxml).openStream());
+
             view = fxmlLoader.getController();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -66,4 +69,7 @@ public class Window extends Parent {
     }
 
     public View getView() { return this.view; }
+
+    public void setController(Index orderIndex) {
+    }
 }

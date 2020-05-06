@@ -1,24 +1,26 @@
-package view.order;
+package view.search;
 
 import com.jfoenix.controls.JFXButton;
 import controller.OrderController;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.Tab;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.BorderPane;
 import model.Order;
 import view.PopUp;
 import view.View;
+import view.Window;
+import view.order.Index;
 
+import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
-public class Search extends View {
 
-    @FXML
-    Tab dateSearchpane;
+public class searchBetweenDates extends View implements Initializable {
     @FXML
     DatePicker startingDate;
     @FXML
@@ -31,9 +33,15 @@ public class Search extends View {
     Index orderIndex;
 
     @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        System.out.println("test");
+        init();
+    }
+
+    @Override
     public void init() {
         // to update the table
-        orderIndex = (Index) getParentView();
+        System.out.println("test");
 
         cancelBtn.setOnAction(e -> {
             closeWindow();
@@ -43,7 +51,8 @@ public class Search extends View {
             executeSearch();
         });
 
-        setShortcut(new KeyCodeCombination(KeyCode.ENTER), () -> executeSearch());
+//        setShortcut(new KeyCodeCombination(KeyCode.ENTER), () -> executeSearch());
+        orderIndex = new Index();
     }
 
     private boolean validateBothDates(LocalDate start, LocalDate end) {
@@ -57,11 +66,19 @@ public class Search extends View {
 
         if (validateBothDates(start, end)) {
             ArrayList<Order> orderBetweenDates = new OrderController().getAllOrdersBetweenDates(start, end.plusDays(1));
-            if (orderIndex.updateTable(orderBetweenDates)) {
-                closeWindow();
-            }
+
+            openNewTabView(orderBetweenDates);
         } else {
             PopUp.showError("Wrong date", "The starting date must be one day earlier than the current date\n (Either the end date won't \"back to the future\")");
         }
+    }
+
+    private void openNewTabView(ArrayList<Order> orderBetweenDates) {
+        Window displayResult = new Window("FXML/order/index.fxml", "BeerItSimple - Search result");
+        displayResult.load();
+        displayResult.getView().setParentView(this);
+        Index index = (Index) displayResult.getView();
+        index.updateTable(orderBetweenDates);
+        displayResult.show();
     }
 }

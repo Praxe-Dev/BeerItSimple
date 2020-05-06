@@ -17,6 +17,8 @@ public class MainView extends View{
     @FXML
     JFXButton ordersBtn;
     @FXML
+    JFXButton productBtn;
+    @FXML
     JFXButton searchBtn;
 
     // Path to FXML file to display on center
@@ -27,7 +29,7 @@ public class MainView extends View{
 
     @Override
     public void init() {
-        homeBtn.setOnAction(e -> {
+                homeBtn.setOnAction(e -> {
             setCenter(pathToHomePanel);
         });
 
@@ -41,6 +43,14 @@ public class MainView extends View{
 
         searchBtn.setOnAction(e -> {
             // TODO: Open new tabPane
+        });
+
+        searchBtn.setOnAction(e -> {
+            Window search = new Window("FXML/search/search.fxml", "BeerItSimple - Search in order");
+            search.load();
+//            search.getView().setParentView(this);
+            search.resizable(false);
+            search.show();
         });
 
         setCenter(pathToHomePanel);

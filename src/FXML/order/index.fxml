@@ -22,17 +22,6 @@
             <Insets />
          </VBox.margin>
          <children>
-            <JFXButton fx:id="searchBtn" minWidth="125.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="123.0" text="Search" textFill="WHITE">
-               <HBox.margin>
-                  <Insets left="10.0" />
-               </HBox.margin>
-               <graphic>
-                  <FontAwesomeIcon fill="WHITE" glyphName="SEARCH" size="2em" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="33.42856979370117" />
-               </graphic>
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </JFXButton>
             <Label prefHeight="48.0" prefWidth="1800.0" />
             <JFXButton fx:id="refreshBtn" contentDisplay="RIGHT" layoutX="20.0" layoutY="10.0" minWidth="142.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="142.0" text="Refresh" textAlignment="RIGHT" textFill="WHITE">
                <graphic>
@@ -106,7 +95,7 @@
                         <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
                     </padding>
                     <graphic>
-                        <FontAwesomeIcon fill="WHITE" glyphName="USER_TIMES" size="3em" strokeType="OUTSIDE" strokeWidth="0.0" />
+                        <FontAwesomeIcon fill="WHITE" glyphName="MINUS_SQUARE" size="3em" strokeType="OUTSIDE" strokeWidth="0.0" />
                     </graphic>
                 </JFXButton>
             </children>
