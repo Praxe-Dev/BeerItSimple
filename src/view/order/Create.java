@@ -16,6 +16,8 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.text.Text;
 import model.*;
 import utils.Validators;
@@ -84,6 +86,9 @@ public class Create extends View {
         productController = new ProductController();
         orderController = new OrderController();
 
+        setShortcut(new KeyCodeCombination(KeyCode.ENTER), () -> addArticle());
+        setShortcut(new KeyCodeCombination(KeyCode.DELETE), () -> removeProduct());
+
         Validators.setNumberValidator(productQuantity);
 
         ArrayList<Customer> allCustomers = customerController.getAllCustomers();
@@ -111,32 +116,11 @@ public class Create extends View {
        initTable();
 
        addArticleBtn.setOnAction(e -> {
-           if (!productQuantity.getText().equals("") && productQuantity.validate()) {
-//               productQuantity.getStyleClass().remove("error");
-               productQuantity.setStyle("");
-               Product newProduct = productList.getValue();
-               if (!checkPresentProduct(newProduct)) {
-                    PopUp.showError("Duplicate error", "You try to add a product already present in the command !");
-               } else {
-
-                   addProduct(newProduct);
-//                   String newVatAmount = String.format("%.2F", (newAmount) )
-               }
-           } else {
-               productQuantity.setStyle("-fx-background-color: rgba(255,0,0,0.5)");
-//               productQuantity.getStyleClass().add("error");
-
-           }
+           addArticle();
        });
 
        removeArticleBtn.setOnAction(e -> {
-           try {
-               OrderLineTableFormat orderLineTableFormat = tableArticle.getSelectionModel().getSelectedItem();
-               tableArticle.getItems().remove(tableArticle.getSelectionModel().getSelectedItem());
-               removeProduct(orderLineTableFormat);
-           } catch (NullPointerException exception) {
-               new NoRowSelected();
-           }
+           removeProduct();
        });
 
        cancelBtn.setOnAction(e -> {
@@ -162,6 +146,25 @@ public class Create extends View {
        });
     }
 
+    public void addArticle() {
+        if (!productQuantity.getText().equals("") && productQuantity.validate()) {
+//               productQuantity.getStyleClass().remove("error");
+            productQuantity.setStyle("");
+            Product newProduct = productList.getValue();
+            if (!checkPresentProduct(newProduct)) {
+                PopUp.showError("Duplicate error", "You try to add a product already present in the command !");
+            } else {
+
+                addProduct(newProduct);
+//                   String newVatAmount = String.format("%.2F", (newAmount) )
+            }
+        } else {
+            productQuantity.setStyle("-fx-background-color: rgba(255,0,0,0.5)");
+//               productQuantity.getStyleClass().add("error");
+
+        }
+    }
+
     private void addProduct(Product product) {
         int productQty = Integer.parseInt(productQuantity.getText());
 
@@ -183,24 +186,31 @@ public class Create extends View {
         totalAmountVatInc.setText(totalVatIncl);
     }
 
-    private void removeProduct(OrderLineTableFormat orderLineTableFormat) {
+    private void removeProduct() {
+        try {
 
-        double currentAmountExlVat = Double.parseDouble(totalAmountExclVat.getText().replace(',', '.'));
-        double newAmountExclVat = currentAmountExlVat - orderLineTableFormat.getExclVat();
-        String newTotalExclVat = String.format("%.2f", newAmountExclVat);
-        totalAmountExclVat.setText(newTotalExclVat);
+            OrderLineTableFormat orderLineTableFormat = tableArticle.getSelectionModel().getSelectedItem();
+            tableArticle.getItems().remove(tableArticle.getSelectionModel().getSelectedItem());
 
-        double currentVatTotal = Double.parseDouble(totalAmountVatOnly.getText().replace(',', '.'));
-        double newVatTotal = 0;
-        if (newAmountExclVat != 0) {
-            newVatTotal = currentVatTotal - (orderLineTableFormat.getExclVat() * ((double) orderLineTableFormat.getVatCodeRate() / 100.0));
+            double currentAmountExlVat = Double.parseDouble(totalAmountExclVat.getText().replace(',', '.'));
+            double newAmountExclVat = currentAmountExlVat - orderLineTableFormat.getExclVat();
+            String newTotalExclVat = String.format("%.2f", newAmountExclVat);
+            totalAmountExclVat.setText(newTotalExclVat);
+
+            double currentVatTotal = Double.parseDouble(totalAmountVatOnly.getText().replace(',', '.'));
+            double newVatTotal = 0;
+            if (newAmountExclVat != 0) {
+                newVatTotal = currentVatTotal - (orderLineTableFormat.getExclVat() * ((double) orderLineTableFormat.getVatCodeRate() / 100.0));
+            }
+            String totalVat = String.format("%.2f", newVatTotal);
+            totalAmountVatOnly.setText(totalVat);
+
+            double newTotalVatIncl = newAmountExclVat + newVatTotal;
+            String totalVatIncl = String.format("%.2f", newTotalVatIncl);
+            totalAmountVatInc.setText(totalVatIncl);
+        } catch (NullPointerException e) {
+            new NoRowSelected();
         }
-        String totalVat = String.format("%.2f", newVatTotal);
-        totalAmountVatOnly.setText(totalVat);
-
-        double newTotalVatIncl = newAmountExclVat + newVatTotal;
-        String totalVatIncl = String.format("%.2f", newTotalVatIncl);
-        totalAmountVatInc.setText(totalVatIncl);
     }
 
     private boolean deliveryDateCheck() {
