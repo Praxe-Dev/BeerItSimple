@@ -4,12 +4,14 @@ import dataAccess.OrderDBAccess;
 import dataAccess.OrderDataAccess;
 import exception.DeletionExceiption;
 import exception.NoRowSelected;
+import exception.SQLManageException;
 import model.Customer;
 import model.Order;
 import model.OrderLineTableFormat;
 import model.OrderTableFormat;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class OrderBusiness {
@@ -37,5 +39,13 @@ public class OrderBusiness {
 
     public boolean deleteOrder(Order order) throws DeletionExceiption {
         return dao.deleteOrder(order);
+    }
+
+    public ArrayList<Order> getAllOrdersBetweenDates(LocalDate startingDate, LocalDate endDate) {
+        return dao.getAllOrdersBetweenDates(startingDate, endDate);
+    }
+
+    public boolean updateOrder(Order order) throws SQLManageException {
+        return dao.updateOrder(order);
     }
 }

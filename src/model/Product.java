@@ -21,6 +21,10 @@ public class Product {
         setVATRate(VATRate);
     }
 
+    public Product(Integer code) {
+        this(null, code, null, null, null, null, null, null);
+    }
+
     public Provider getProvider() {
         return provider;
     }

@@ -15,6 +15,7 @@ import view.PopUp;
 import view.View;
 import view.Window;
 import view.customer.Update;
+import view.customer.Read;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -30,6 +31,8 @@ public class Index extends View implements Initializable {
     private JFXButton newCustomer;
     @FXML
     private JFXButton editCustomer;
+    @FXML
+    private JFXButton detailBtn;
     @FXML
     TableView<CustomerTableFormat> customersTable;
     @FXML
@@ -127,6 +130,29 @@ public class Index extends View implements Initializable {
                 editCustomer.show();
             } else {
                 editCustomer.close();
+            }
+        });
+
+        detailBtn.setOnAction( e -> {
+            Window readCustomer = new Window ("FXML/customer/read.fxml", "BeerItSimple - Details");
+
+            readCustomer.load();
+            readCustomer.resizable(false);
+            readCustomer.getView().setParentView(this);
+
+            Read Read = (Read) readCustomer.getView();
+            Customer customer = null;
+            try {
+                customer = getSelectedCustomer();
+            } catch (Exception exception) {
+                PopUp.showError("Customer not found", "You may be didn't selected a customer in the table.");
+            }
+
+            if (customer != null) {
+                Read.setCustomer(customer);
+                readCustomer.show();
+            } else {
+                readCustomer.close();
             }
         });
 

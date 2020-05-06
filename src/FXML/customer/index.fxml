@@ -17,6 +17,36 @@
             <Font size="32.0" />
          </font>
       </Label>
+       <HBox>
+           <VBox.margin>
+               <Insets />
+           </VBox.margin>
+           <children>
+               <JFXButton fx:id="searchBtn" minWidth="125.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="123.0" text="Search" textFill="WHITE">
+                   <HBox.margin>
+                       <Insets left="10.0" />
+                   </HBox.margin>
+                   <graphic>
+                       <FontAwesomeIcon fill="WHITE" glyphName="SEARCH" size="2em" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="33.42856979370117" />
+                   </graphic>
+                   <font>
+                       <Font size="18.0" />
+                   </font>
+               </JFXButton>
+               <Label prefHeight="48.0" prefWidth="1800.0" />
+               <JFXButton fx:id="refreshBtn" contentDisplay="RIGHT" layoutX="20.0" layoutY="10.0" minWidth="142.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="142.0" text="Refresh" textAlignment="RIGHT" textFill="WHITE">
+                   <graphic>
+                       <FontAwesomeIcon fill="WHITE" glyphName="REFRESH" size="2em" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="38.42856979370117" />
+                   </graphic>
+                   <font>
+                       <Font size="18.0" />
+                   </font>
+                   <HBox.margin>
+                       <Insets right="10.0" />
+                   </HBox.margin>
+               </JFXButton>
+           </children>
+       </HBox>
       <TableView fx:id="customersTable" prefHeight="1000.0" prefWidth="1000.0">
         <columns>
             <TableColumn fx:id="customerId" prefWidth="75.0" text="Id #" />

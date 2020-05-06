@@ -1,6 +1,8 @@
 package view;
 
 import javafx.scene.Node;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
 
 public abstract class View extends Node {
@@ -33,5 +35,9 @@ public abstract class View extends Node {
 
     public View getParentView() {
         return this.parentView;
+    }
+
+    public void setShortcut(KeyCombination keyCode, Runnable runnable) {
+        this.window.getStage().getScene().getAccelerators().put(keyCode, runnable);
     }
 }

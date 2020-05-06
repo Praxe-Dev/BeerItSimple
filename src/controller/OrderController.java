@@ -3,11 +3,13 @@ package controller;
 import business.OrderBusiness;
 import exception.DeletionExceiption;
 import exception.NoRowSelected;
+import exception.SQLManageException;
 import model.Order;
 import model.OrderLineTableFormat;
 import model.OrderTableFormat;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class OrderController {
@@ -31,5 +33,13 @@ public class OrderController {
 
     public boolean deleteOrder(Order order) throws DeletionExceiption {
         return orderBusiness.deleteOrder(order);
+    }
+
+    public boolean updateOrder(Order order) throws SQLManageException {
+        return orderBusiness.updateOrder(order);
+    }
+
+    public ArrayList<Order> getAllOrdersBetweenDates(LocalDate startingDate, LocalDate endDate) {
+        return orderBusiness.getAllOrdersBetweenDates(startingDate, endDate);
     }
 }

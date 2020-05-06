@@ -38,8 +38,20 @@
     -fx-background-color: rgba(255,0,0,0.5);
 }
 
-/*TABLE CSS*/
+.tab-pane, .tab, .tab-header-background {
+    -fx-background-color: linear-gradient(to top, #0f2027, #203a43, #2c5364);
+    -fx-text-fill: white;
+}
 
-/*.table-view .table-row-cell {*/
-/*    -fx-control-inner-background: rgba(0,0,0,0.3);*/
-/*}*/
+.tab {
+    -fx-border-color: #2c5364;
+}
+
+.tab-header {
+    -fx-color-label-visible: white;
+}
+
+.tab-label {
+    -fx-text-fill: white;
+}
+

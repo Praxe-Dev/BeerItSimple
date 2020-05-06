@@ -28,4 +28,8 @@ public class Status {
     public void setLabel(String label){
         this.label = label;
     }
+
+    public String toString(){
+        return getLabel();
+    }
 }

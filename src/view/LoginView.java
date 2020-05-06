@@ -8,6 +8,9 @@ import exception.EmployeeLoginException;
 import exception.MatriculException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import model.Employee;
@@ -31,13 +34,15 @@ public class LoginView extends View {
     public void init() {
         signinButton.setOnAction(e -> {
             // TODO: Tenter de se connecter
-            openSession(e);
+            openSession();
         });
+
+        setShortcut(new KeyCodeCombination(KeyCode.ENTER), () -> openSession());
 
         employeeController = new EmployeeController();
     }
 
-    private void openSession(ActionEvent e) {
+    private void openSession() {
 
         try {
             int matricule = getMatricule();

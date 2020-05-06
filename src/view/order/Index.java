@@ -15,6 +15,7 @@ import javafx.scene.layout.VBox;
 import view.PopUp;
 import view.View;
 import view.Window;
+import view.order.Update;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -28,11 +29,15 @@ public class Index extends View implements Initializable {
     @FXML
     private Label label;
     @FXML
+    private JFXButton searchBtn;
+    @FXML
+    private JFXButton refreshBtn;
+    @FXML
     private JFXButton newOrderBtn;
     @FXML
-    private JFXButton editOrder;
+    private JFXButton editOrderBtn;
     @FXML
-    private JFXButton viewOrder;
+    JFXButton detailBtn;
     @FXML
     private JFXButton deleteBtn;
     @FXML
@@ -70,11 +75,46 @@ public class Index extends View implements Initializable {
 
     @Override
     public void init() {
+        searchBtn.setOnAction(e -> {
+            Window search = new Window("FXML/order/search.fxml", "BeerItSimple - Search in order");
+            search.load();
+            search.getView().setParentView(this);
+            search.resizable(false);
+            search.show();
+        });
+
+        refreshBtn.setOnAction(e -> {
+            updateTable();
+        });
+
         newOrderBtn.setOnAction(e -> {
             Window newOrder = new Window("FXML/order/newOrder.fxml", "BeerItSimple - New order");
             newOrder.load();
             newOrder.getView().setParentView(this);
+            newOrder.resizable(false);
             newOrder.show();
+        });
+
+        editOrderBtn.setOnAction(e -> {
+            Window editOrder = new Window("FXML/order/update.fxml", "BeerItSimple - Edit order");
+            editOrder.load();
+            editOrder.resizable(false);
+            editOrder.getView().setParentView(this);
+
+            Update Update = (Update) editOrder.getView();
+            Order order = null;
+            try {
+                order = getSelectedOrder();
+            } catch (Exception exception) {
+                PopUp.showError("Order not found", "You may be didn't selected an order in the table.");
+            }
+
+            if (order != null) {
+                Update.setOrder(order);
+                editOrder.show();
+            } else {
+                editOrder.close();
+            }
         });
 
         deleteBtn.setOnAction(e -> {
@@ -85,8 +125,6 @@ public class Index extends View implements Initializable {
                         updateTable();
                     }
                 }
-            } catch (NoRowSelected ex) {
-                ex.showError();
             } catch (DeletionExceiption ex) {
                 ex.showError();
             } catch (NullPointerException ex) {
@@ -95,11 +133,36 @@ public class Index extends View implements Initializable {
 
             updateTable();
         });
+
+        detailBtn.setOnAction((e) -> {
+            Order selectedOrder;
+            Window detailOrder;
+//            try {
+            selectedOrder = getSelectedOrder();
+            if (selectedOrder != null) {
+                detailOrder = new Window("FXML/order/detailOrder.fxml", "BeerItSimple - Order : " + selectedOrder.getReference());
+
+
+                detailOrder.load();
+                detailOrder.resizable(false);
+                detailOrder.getView().setParentView(this);
+                // assurément Update car on le crée nous même juste avant
+                Read detail = (Read) detailOrder.getView();
+
+                detail.setOrder(selectedOrder);
+                detailOrder.show();
+            }
+        });
     }
 
-    private Order getSelectedOrder() throws NoRowSelected {
-        OrderTableFormat orderTableFormat = orderTable.getSelectionModel().getSelectedItem();
-        Order order = orderController.getOrder(orderTableFormat.getReference());
+    private Order getSelectedOrder() {
+        Order order = null;
+        try {
+            OrderTableFormat orderTableFormat = orderTable.getSelectionModel().getSelectedItem();
+            order = orderController.getOrder(orderTableFormat.getReference());
+        } catch (Exception e) {
+            new NoRowSelected();
+        }
 
         return order;
     }
@@ -139,17 +202,20 @@ public class Index extends View implements Initializable {
     }
 
     public void updateTable() {
-
-        ArrayList<OrderTableFormat> ordersList = new ArrayList<>();
         try {
-
-            for (Order order : orderController.getAllOrders()) {
-                ordersList.add(new OrderTableFormat(order));
-            }
-
-            orderTable.getItems().setAll(ordersList);
+            updateTable(orderController.getAllOrders());
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean updateTable(ArrayList<Order> orderList) {
+        ArrayList<OrderTableFormat> ordersList = new ArrayList<>();
+
+        for (Order order : orderList) {
+            ordersList.add(new OrderTableFormat(order));
+        }
+
+         return orderTable.getItems().setAll(ordersList);
     }
 }
