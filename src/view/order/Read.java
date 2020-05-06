@@ -6,6 +6,7 @@ import controller.OrderController;
 import exception.NoRowSelected;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -18,6 +19,8 @@ import java.util.ArrayList;
 
 public class Read extends View {
 
+    @FXML
+    Label orderReference;
     @FXML
     JFXTextField customer;
     @FXML
@@ -55,6 +58,8 @@ public class Read extends View {
     public void init() {
 //        orderController = new OrderController();
 //        Order order = orderController.getOrder();
+        orderReference.setText("[" + selectedOrder.getReference() + "]");
+
         if (selectedOrder.getCustomer() != null)
             customer.setText(selectedOrder.getCustomer().getEntity().getContactName());
         else

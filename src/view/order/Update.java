@@ -17,6 +17,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.text.Text;
 import model.*;
 import utils.Date;
@@ -87,13 +89,16 @@ public class Update extends View {
 
     @Override
     public void init(){
+        setShortcut(new KeyCodeCombination(KeyCode.ENTER), () -> addArticle());
+        setShortcut(new KeyCodeCombination(KeyCode.DELETE), () -> removeArticle());
+
         paymentMethodController = new PaymentMethodController();
         orderController = new OrderController();
         productController = new ProductController();
         statusController = new StatusController();
         Index orderView = (Index) getParentView();
 
-        orderReference.setText(order.getReference().toString());
+        orderReference.setText("[" + order.getReference() + "]");
         createdAt.setText("Created at " + Date.format(order.getStartingDate()));
 
         ArrayList<Product> allProducts = productController.getAllProducts();
@@ -108,44 +113,34 @@ public class Update extends View {
         fillProductTable();
 
         addArticleBtn.setOnAction(e -> {
-            if (!productQuantity.getText().equals("") && productQuantity.validate()) {
-//               productQuantity.getStyleClass().remove("error");
-                productQuantity.setStyle("");
-                Product newProduct = productList.getValue();
-                if (!checkPresentProduct(newProduct)) {
-                    PopUp.showError("Duplicate error", "You try to add a product already present in the command !");
-                } else {
-
-//                    int productQty = Integer.parseInt(productQuantity.getText());
+//            if (!productQuantity.getText().equals("") && productQuantity.validate()) {
+////               productQuantity.getStyleClass().remove("error");
+//                productQuantity.setStyle("");
+//                Product newProduct = productList.getValue();
+//                if (!checkPresentProduct(newProduct)) {
+//                    PopUp.showError("Duplicate error", "You try to add a product already present in the command !");
+//                } else {
 //
-//                    OrderLineTableFormat orderLineTableFormat = new OrderLineTableFormat(newProduct, productQty);
-//                    tableArticle.getItems().add(orderLineTableFormat);
-//                    double amount = Double.parseDouble(totalAmount.getText().replace(',', '.'));
+////                    int productQty = Integer.parseInt(productQuantity.getText());
+////
+////                    OrderLineTableFormat orderLineTableFormat = new OrderLineTableFormat(newProduct, productQty);
+////                    tableArticle.getItems().add(orderLineTableFormat);
+////                    double amount = Double.parseDouble(totalAmount.getText().replace(',', '.'));
+////
+////                    String newTotal = String.format("%.2f", amount + orderLineTableFormat.getTotal());
+////                    totalAmount.setText(newTotal);
+//                    addProduct(newProduct);
+//                }
+//            } else {
+//                productQuantity.setStyle("-fx-background-color: rgba(255,0,0,0.5)");
+////               productQuantity.getStyleClass().add("error");
 //
-//                    String newTotal = String.format("%.2f", amount + orderLineTableFormat.getTotal());
-//                    totalAmount.setText(newTotal);
-                    addProduct(newProduct);
-                }
-            } else {
-                productQuantity.setStyle("-fx-background-color: rgba(255,0,0,0.5)");
-//               productQuantity.getStyleClass().add("error");
-
-            }
+//            }
+            addArticle();
         });
 
         removeArticleBtn.setOnAction(e -> {
-            try {
-
-//                OrderLineTableFormat orderLineTableFormat = tableArticle.getSelectionModel().getSelectedItem();
-//                tableArticle.getItems().remove(orderLineTableFormat);
-//                double amount = Double.parseDouble(totalAmount.getText().replace(',', '.'));
-//
-//                String newTotal = String.format("%.2f", amount - orderLineTableFormat.getTotal());
-//                totalAmount.setText(newTotal);
-
-            } catch (NullPointerException exception) {
-                new NoRowSelected();
-            }
+            removeArticle();
         });
 
         deliveryCheck.setOnAction(e -> {
@@ -193,6 +188,39 @@ public class Update extends View {
         });
     }
 
+    public void addArticle () {
+        if (!productQuantity.getText().equals("") && productQuantity.validate()) {
+//               productQuantity.getStyleClass().remove("error");
+            productQuantity.setStyle("");
+            Product newProduct = productList.getValue();
+            if (!checkPresentProduct(newProduct)) {
+                PopUp.showError("Duplicate error", "You try to add a product already present in the command !");
+            } else {
+                addProduct(newProduct);
+            }
+        } else {
+            productQuantity.setStyle("-fx-background-color: rgba(255,0,0,0.5)");
+
+        }
+    }
+
+    public void removeArticle() {
+        try {
+
+            OrderLineTableFormat orderLineTableFormat = tableArticle.getSelectionModel().getSelectedItem();
+            tableArticle.getItems().remove(orderLineTableFormat);
+//                double amount = Double.parseDouble(totalAmount.getText().replace(',', '.'));
+//
+//                String newTotal = String.format("%.2f", amount - orderLineTableFormat.getTotal());
+//                totalAmount.setText(newTotal);
+
+            removeProduct(orderLineTableFormat);
+
+        } catch (NullPointerException exception) {
+            new NoRowSelected();
+        }
+    }
+
     private boolean deliveryDateCheck() {
         if(order.getDelivery() == null || order.getDelivery().getDeliveredDate() == null) {
             if (deliveryCheck.isSelected() && LocalDate.now().isAfter(deliveryDate.getValue())) {
@@ -220,6 +248,26 @@ public class Update extends View {
         totalAmountVatOnly.setText(totalVat);
 
         double newTotalVatIncl = newVatTotal + newAmountExclVat;
+        String totalVatIncl = String.format("%.2f", newTotalVatIncl);
+        totalAmountVatInc.setText(totalVatIncl);
+    }
+
+    private void removeProduct(OrderLineTableFormat orderLineTableFormat) {
+
+        double currentAmountExlVat = Double.parseDouble(totalAmountExclVat.getText().replace(',', '.'));
+        double newAmountExclVat = currentAmountExlVat - orderLineTableFormat.getExclVat();
+        String newTotalExclVat = String.format("%.2f", newAmountExclVat);
+        totalAmountExclVat.setText(newTotalExclVat);
+
+        double currentVatTotal = Double.parseDouble(totalAmountVatOnly.getText().replace(',', '.'));
+        double newVatTotal = 0;
+        if (newAmountExclVat != 0) {
+            newVatTotal = currentVatTotal - (orderLineTableFormat.getExclVat() * ((double) orderLineTableFormat.getVatCodeRate() / 100.0));
+        }
+        String totalVat = String.format("%.2f", newVatTotal);
+        totalAmountVatOnly.setText(totalVat);
+
+        double newTotalVatIncl = newAmountExclVat + newVatTotal;
         String totalVatIncl = String.format("%.2f", newTotalVatIncl);
         totalAmountVatInc.setText(totalVatIncl);
     }

@@ -14,14 +14,23 @@
          <children>
             <VBox alignment="TOP_CENTER" prefHeight="720.0" prefWidth="506.0">
                <children>
-                  <Label prefHeight="55.0" prefWidth="321.0" text="New order">
+                  <HBox prefHeight="54.0" prefWidth="373.0">
+                     <children>
+                        <Label prefHeight="55.0" prefWidth="142.0" text="Edit order n°">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="orderReference" prefHeight="54.0" prefWidth="217.0" text="REF">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                     </children>
                      <VBox.margin>
-                        <Insets top="30.0" />
+                        <Insets left="20.0" right="40.0" top="20.0" />
                      </VBox.margin>
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Label>
+                  </HBox>
                   <JFXTextField fx:id="customer" editable="false" maxHeight="45.0" maxWidth="250.0" minHeight="45.0" minWidth="250.0" prefHeight="45.0" prefWidth="250.0" promptText="Customer">
                      <VBox.margin>
                         <Insets top="75.0" />
