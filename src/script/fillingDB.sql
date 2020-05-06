@@ -43,14 +43,14 @@ VALUES (21);
 
 /* Filling rank table */
 
-INSERT INTO `Rank` (label, creditLimit)
-VALUES ('New', null);
+INSERT INTO `Rank` (label, creditLimit, minAmountOrder)
+VALUES ('New', null, 0);
 
-INSERT INTO `Rank` (label, creditLimit)
-VALUES ('Loyal', 500);
+INSERT INTO `Rank` (label, creditLimit, minAmountOrder)
+VALUES ('Loyal', 500, 250);
 
-INSERT INTO `Rank` (label, creditLimit)
-VALUES ('Prioritised', 1500);
+INSERT INTO `Rank` (label, creditLimit, minAmountOrder)
+VALUES ('Prioritised', 1500, 750);
 
 /* Filling Status table */
 

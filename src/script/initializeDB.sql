@@ -27,7 +27,8 @@ CREATE TABLE VATCode (
 CREATE TABLE `Rank` (
 	id int PRIMARY KEY AUTO_INCREMENT, 
 	label varchar(60) UNIQUE NOT NULL,
-	creditLimit int CHECK (creditLimit > 0));
+	creditLimit int CHECK (creditLimit > 0),
+	minAmountOrder int CHECK (minAmountOrder >= 0));
 
 CREATE TABLE Status (
 	id int PRIMARY KEY AUTO_INCREMENT, 
