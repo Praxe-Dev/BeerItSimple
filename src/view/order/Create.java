@@ -29,7 +29,9 @@ import java.math.BigDecimal;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Create extends View {
@@ -247,11 +249,14 @@ public class Create extends View {
         );
 
         if (deliveryCheck.isSelected()) {
-            GregorianCalendar date = new GregorianCalendar();
-            date.set(deliveryDate.getValue().getYear(), deliveryDate.getValue().getDayOfMonth(), deliveryDate.getValue().getDayOfMonth());
+            LocalDate date = deliveryDate.getValue();
+            // Create the right format for delivery.plannedDate (-1 and +1 to get the right value)
+            GregorianCalendar gc = new GregorianCalendar(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth() + 1);
+
+//            date.set(deliveryDate.getValue().getYear(), deliveryDate.getValue().getMonthValue(), deliveryDate.getValue().getDayOfMonth());
             delivery = new Delivery(
                     new Employee(2, "admin"),
-                    date,
+                    gc,
                     newOrder
             );
 

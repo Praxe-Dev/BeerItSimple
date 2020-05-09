@@ -181,70 +181,6 @@ public class OrderDBAccess implements OrderDataAccess {
                         null
                 );
 
-//                String sqlDeliveryInstruction = "SELECT d.*, emp.*, e.*, c.* FROM delivery d\n" +
-//                                                "JOIN employee emp ON emp.EntityId = d.EmployeeEntityId\n" +
-//                                                "JOIN entity e ON e.id = d.EmployeeEntityId\n" +
-//                                                "JOIN city c ON e.CityLabel = c.label AND e.CityZipCode = c.zipCode\n" +
-//                                                "WHERE d.OrderReference = ?";
-//
-//                // get delivery and all informations
-//                Delivery delivery = null;
-//                Employee employee = null;
-//                Entity entity = null;
-//
-//                PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDeliveryInstruction);
-//                preparedStatementDelivery.setInt(1, order.getReference());
-//                ResultSet dataDelivery = preparedStatementDelivery.executeQuery();
-//
-//                if (dataDelivery.next()) {
-//                    GregorianCalendar plannedDateG = null;
-//                    GregorianCalendar deliveredDateG = null;
-//
-//                    java.sql.Date plannedDate = dataDelivery.getDate("d.plannedDate");
-//                    if (plannedDate != null) {
-//                        plannedDateG = new GregorianCalendar();
-//                        plannedDateG.setTime(plannedDate);
-//                    }
-//
-//                    java.sql.Date deliveredDate = dataDelivery.getDate("d.deliveredDate");
-//                    if (deliveredDate != null) {
-//                        deliveredDateG = new GregorianCalendar();
-//                        deliveredDateG.setTime(deliveredDate);
-//                    }
-//
-//                    City cityD = new City(
-//                            dataDelivery.getString("c.label"),
-//                            dataDelivery.getInt("c.zipCode")
-//                    );
-//
-//                    Entity entityDeliveryMan = new Entity(
-//                            dataDelivery.getInt("e.id"),
-//                            dataDelivery.getString("e.mail"),
-//                            dataDelivery.getString("e.contactName"),
-//                            dataDelivery.getString("e.phoneNumber"),
-//                            dataDelivery.getInt("e.houseNumber"),
-//                            dataDelivery.getString("e.street"),
-//                            dataDelivery.getString("e.bankAccountNumber"),
-//                            dataDelivery.getString("e.businessNumber"),
-//                            cityD
-//                    );
-//
-//                    Employee deliveryMan = new Employee(
-//                            dataDelivery.getInt("emp.EntityId"),
-//                            dataDelivery.getInt("emp.RoleId"),
-//                            dataDelivery.getString("emp.password"),
-//                            entityDeliveryMan);
-//
-//                    delivery = new Delivery(
-//                            deliveryMan,
-//                            dataDelivery.getInt("d.id"),
-//                            plannedDateG,
-//                            deliveredDateG,
-//                            order
-//                    );
-//
-//                    order.setDelivery(delivery);
-//                }
                 setDeliveryFromOrder(order);
                 setCustomerFromId(order, customerId);
                 setOrderLineFromOrder(order);
@@ -262,7 +198,7 @@ public class OrderDBAccess implements OrderDataAccess {
         String sqlInstruction = "SELECT o.*, s.*, p.* FROM `order` o\n"+
                                 "JOIN status s ON s.id = o.StatusNumber\n" +
                                 "JOIN paymentmethod p ON p.id = o.paymentMethodId\n" +
-                                "WHERE ? <= o.startingDate AND o.startingDate <= ?";
+                                "WHERE ? <= o.startingDate AND ? >= o.startingDate";
 
         ArrayList<Order> orderList = new ArrayList<>();
 

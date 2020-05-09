@@ -113,29 +113,6 @@ public class Update extends View {
         fillProductTable();
 
         addArticleBtn.setOnAction(e -> {
-//            if (!productQuantity.getText().equals("") && productQuantity.validate()) {
-////               productQuantity.getStyleClass().remove("error");
-//                productQuantity.setStyle("");
-//                Product newProduct = productList.getValue();
-//                if (!checkPresentProduct(newProduct)) {
-//                    PopUp.showError("Duplicate error", "You try to add a product already present in the command !");
-//                } else {
-//
-////                    int productQty = Integer.parseInt(productQuantity.getText());
-////
-////                    OrderLineTableFormat orderLineTableFormat = new OrderLineTableFormat(newProduct, productQty);
-////                    tableArticle.getItems().add(orderLineTableFormat);
-////                    double amount = Double.parseDouble(totalAmount.getText().replace(',', '.'));
-////
-////                    String newTotal = String.format("%.2f", amount + orderLineTableFormat.getTotal());
-////                    totalAmount.setText(newTotal);
-//                    addProduct(newProduct);
-//                }
-//            } else {
-//                productQuantity.setStyle("-fx-background-color: rgba(255,0,0,0.5)");
-////               productQuantity.getStyleClass().add("error");
-//
-//            }
             addArticle();
         });
 
@@ -277,18 +254,24 @@ public class Update extends View {
 
         if (deliveryCheck.isSelected()) {
             if(deliveryDate != null) {
-                GregorianCalendar date = new GregorianCalendar();
-                date.set(deliveryDate.getValue().getYear(), deliveryDate.getValue().getDayOfMonth(), deliveryDate.getValue().getDayOfMonth());
-                if(order.getDelivery() != null && order.getDelivery().getPlannedDate() != null && order.getDelivery().getPlannedDate() != date){
+//                GregorianCalendar date = new GregorianCalendar();
+//                date.set(deliveryDate.getValue().getYear(), deliveryDate.getValue().getDayOfMonth(), deliveryDate.getValue().getDayOfMonth());
+
+                LocalDate date = deliveryDate.getValue();
+                // Create the right format for delivery.plannedDate (-1 and +1 to get the right value)
+                GregorianCalendar gc = new GregorianCalendar(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth() + 1);
+
+                // TODO: find a functioner to compare both date ( order.getDelivery().getPlannedDate() != gc is always false )
+                if(order.getDelivery() != null && order.getDelivery().getPlannedDate() != null){
                     if(deliveryDateCheck()) {
-                        order.getDelivery().setPlannedDate(date);
+                        order.getDelivery().setPlannedDate(gc);
                     }
                 } else if(order.getDelivery() == null) {
                     if(deliveryDateCheck()) {
                         Delivery delivery = new Delivery(
                                 //TODO: Select d'employé ayant le role livreur
                                 new Employee(2, "admin"),
-                                date,
+                                gc,
                                 order
                         );
                         order.setDelivery(delivery);

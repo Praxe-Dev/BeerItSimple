@@ -208,7 +208,6 @@ public class Index extends View implements Initializable {
         for (Order order : orderList) {
             ordersList.add(new OrderTableFormat(order));
         }
-
-         return orderTable.getItems().setAll(ordersList);
+        return orderTable.getItems().setAll(ordersList);
     }
 }

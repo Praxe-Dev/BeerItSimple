@@ -34,18 +34,16 @@ public class searchBetweenDates extends View implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        System.out.println("test");
         init();
     }
 
     @Override
     public void init() {
         // to update the table
-        System.out.println("test");
-
-        cancelBtn.setOnAction(e -> {
-            closeWindow();
-        });
+//        cancelBtn.setOnAction(e -> {
+//            // TODO: Find how to close the current pane
+//            closeWindow();
+//        });
 
         searchBtn.setOnAction(e -> {
             executeSearch();
@@ -56,7 +54,7 @@ public class searchBetweenDates extends View implements Initializable {
     }
 
     private boolean validateBothDates(LocalDate start, LocalDate end) {
-        return end.isBefore(LocalDate.now().plusDays(1)) && start.isBefore(end) ;
+        return end.isBefore(LocalDate.now().plusDays(1)) && start.isBefore(LocalDate.now().plusDays(1)) ;
     }
 
     public void executeSearch() {
@@ -65,7 +63,7 @@ public class searchBetweenDates extends View implements Initializable {
         LocalDate end = endDate.getValue() == null ? LocalDate.now() : endDate.getValue();
 
         if (validateBothDates(start, end)) {
-            ArrayList<Order> orderBetweenDates = new OrderController().getAllOrdersBetweenDates(start, end.plusDays(1));
+            ArrayList<Order> orderBetweenDates = new OrderController().getAllOrdersBetweenDates(start, end);
 
             openNewTabView(orderBetweenDates);
         } else {
@@ -78,6 +76,7 @@ public class searchBetweenDates extends View implements Initializable {
         displayResult.load();
         displayResult.getView().setParentView(this);
         Index index = (Index) displayResult.getView();
+
         index.updateTable(orderBetweenDates);
         displayResult.show();
     }
