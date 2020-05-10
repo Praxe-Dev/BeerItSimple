@@ -34,13 +34,22 @@ public class ProductBusiness {
 
         ArrayList<ProductIncome> productIncomes = new ArrayList<>();
 
+//        for (Product p : allProducts) {
+//            productIncomes.add(new ProductIncome(p));
+//            int index = productIncomes.size() - 1;
+//
+//            allOrderlines.stream()
+//                    .filter(x -> x.getProduct().getCode().equals(p.getCode()))
+//                    .forEach(x -> productIncomes.get(index).addAmountSold(x));
+//        }
+
         for (Product p : allProducts) {
             productIncomes.add(new ProductIncome(p));
             int index = productIncomes.size() - 1;
 
             allOrderlines.stream()
                     .filter(x -> x.getProduct().getCode().equals(p.getCode()))
-                    .forEach(x -> productIncomes.get(index).addAmountSold(x));
+                    .forEach(productIncomes.get(index)::addAmountSold);
         }
 
         for (ProductIncome p : productIncomes) {
