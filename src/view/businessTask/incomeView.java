@@ -90,9 +90,13 @@ public class incomeView extends View {
     void updateTable(ArrayList<ProductIncome> products) {
         incomeTable.getItems().setAll(products);
 
+//        double total = products.stream()
+//                                    .map(ProductIncome::getIncome)
+//                                    .reduce(0.0, Double::sum);
+
         double total = products.stream()
-                                    .map(ProductIncome::getIncome)
-                                    .reduce(0.0, Double::sum);
+                                .mapToDouble(ProductIncome::getIncome)
+                                .sum();
 
         totalIncome.setText(Double.toString(total));
     }
