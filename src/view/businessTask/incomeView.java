@@ -9,6 +9,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.text.Text;
 import model.OrderTableFormat;
 import model.Product;
 import model.ProductIncome;
@@ -40,6 +41,8 @@ public class incomeView extends View {
     TableColumn<ProductIncome, Double> income;
     @FXML
     TableColumn<ProductIncome, Double> salePercentage;
+    @FXML
+    Text totalIncome;
 
 
     @Override
@@ -86,5 +89,11 @@ public class incomeView extends View {
 
     void updateTable(ArrayList<ProductIncome> products) {
         incomeTable.getItems().setAll(products);
+
+        double total = products.stream()
+                                    .map(ProductIncome::getIncome)
+                                    .reduce(0.0, Double::sum);
+
+        totalIncome.setText(Double.toString(total));
     }
 }

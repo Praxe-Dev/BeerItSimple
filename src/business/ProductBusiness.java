@@ -43,6 +43,7 @@ public class ProductBusiness {
 //                    .forEach(x -> productIncomes.get(index).addAmountSold(x));
 //        }
 
+//        Do the same thing but with Method reference
         for (Product p : allProducts) {
             productIncomes.add(new ProductIncome(p));
             int index = productIncomes.size() - 1;
@@ -52,9 +53,11 @@ public class ProductBusiness {
                     .forEach(productIncomes.get(index)::addAmountSold);
         }
 
-        for (ProductIncome p : productIncomes) {
-            p.calculPercentage();
-        }
+//        for (ProductIncome p : productIncomes) {
+//            p.calculPercentage();
+//        }
+
+        productIncomes.forEach(ProductIncome::calculPercentage);
 
         return productIncomes;
     }
