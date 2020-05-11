@@ -77,6 +77,7 @@ public class ordersFromSelectedCustomer extends View implements Initializable {
         Index index = (Index) displayResult.getView();
         index.updateTable(allOrdersFromCustomer);
         index.hideRefreshButton();
+        index.setCustomer(customer);
         displayResult.show();
     }
 }

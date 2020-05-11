@@ -122,6 +122,7 @@ public class Read extends View {
         view.order.Index index = (Index) displayResult.getView();
         index.updateTable(allOrdersFromCustomer);
         index.hideRefreshButton();
+        index.setCustomer(this.selectedCustomer);
         displayResult.show();
     }
 }

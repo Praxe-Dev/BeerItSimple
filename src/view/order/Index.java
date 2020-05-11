@@ -62,6 +62,7 @@ public class Index extends View implements Initializable {
     private TableColumn<OrderTableFormat, String> deliveryMan;
 
     private OrderController orderController;
+    private Customer customer = null;
 
     public Index() {
         this.orderController = new OrderController();
@@ -85,7 +86,9 @@ public class Index extends View implements Initializable {
             newOrder.load();
             newOrder.getView().setParentView(this);
             newOrder.resizable(false);
+            Create create = (Create) newOrder.getView();
             newOrder.show();
+            if(customer != null) create.selectCustomer(customer);
         });
 
         editOrderBtn.setOnAction(e -> {
@@ -209,6 +212,10 @@ public class Index extends View implements Initializable {
             ordersList.add(new OrderTableFormat(order));
         }
         return orderTable.getItems().setAll(ordersList);
+    }
+
+    public void setCustomer(Customer customer){
+        this.customer = customer;
     }
 
     public void hideRefreshButton(){

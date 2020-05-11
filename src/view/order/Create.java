@@ -285,4 +285,20 @@ public class Create extends View {
         totalExclVat.setCellValueFactory(new PropertyValueFactory<>("exclVat"));
         totalInclVat.setCellValueFactory(new PropertyValueFactory<>("inclVat"));
     }
+
+    public void selectCustomer(Customer customer){
+        int indexCust = getCustomerIndex(customer);
+        if(indexCust != -1) customerList.getSelectionModel().select(indexCust);
+    }
+
+    private int getCustomerIndex(Customer customer){
+        int index = 0;
+        for(Customer cust : customerList.getItems()){
+            if(cust.getEntity().getId() == customer.getEntity().getId()){
+                return index;
+            }
+            index++;
+        }
+        return index;
+    }
 }
