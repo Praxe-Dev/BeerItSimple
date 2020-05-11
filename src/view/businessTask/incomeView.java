@@ -69,7 +69,6 @@ public class incomeView extends View {
             total += p.getSalePercentageNumber();
         }
 
-        System.out.println("Total : " + total);
         initTable();
         updateTable(productIncomes);
     }
