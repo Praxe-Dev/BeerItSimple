@@ -54,6 +54,10 @@ public class OrderBusiness {
         return dao.getAllOrdersFromCustomer(customer);
     }
 
+    public ArrayList<Order> getAllOrdersFromZipCode(City city) throws SQLManageException {
+        return dao.getAllOrdersFromZipCode(city);
+    }
+
     public ArrayList<Order> getOrdersFromRanks(Rank rank, Status status, Boolean isPaid) {
         return dao.getOrdersFromRanks(rank, status, isPaid);
     }

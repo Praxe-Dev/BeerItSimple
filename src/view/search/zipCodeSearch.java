@@ -25,8 +25,6 @@ public class zipCodeSearch extends View implements Initializable {
     @FXML
     JFXComboBox<City> zipCodeBox;
     @FXML
-    JFXButton cancelBtn;
-    @FXML
     JFXButton searchBtn;
 
     CityController cityController;
@@ -40,26 +38,23 @@ public class zipCodeSearch extends View implements Initializable {
 
     @Override
     public void init() {
-        /*cityController = new CityController();
+        cityController = new CityController();
         orderController = new OrderController();
         ArrayList<City> allCities = cityController.getAllCities();
         zipCodeBox.setItems(FXCollections.observableArrayList(allCities));
         zipCodeBox.getSelectionModel().selectFirst();
-        zipCodeBox.getStyleClass().add("whiteComboBox");*/
+        zipCodeBox.getStyleClass().add("blackComboBox");
 
-        cancelBtn.setOnAction(e -> {
-            closeWindow();
-        });
 
-        /*searchBtn.setOnAction(e -> {
+        searchBtn.setOnAction(e -> {
             search();
-        });*/
+        });
     }
 
-    /*private void search(){
+    private void search(){
         try {
             City city = zipCodeBox.getSelectionModel().getSelectedItem();
-            ArrayList<Order> allOrders = orderController.getAllOrdersFromCustomer(city);
+            ArrayList<Order> allOrders = orderController.getAllOrdersFromZipCode(city);
             if(allOrders == null || allOrders.size() == 0){
                 PopUp.showError("No order", "There are no orders delivered for this zipcode");
             } else {
@@ -73,14 +68,14 @@ public class zipCodeSearch extends View implements Initializable {
     }
 
     private void openNewTabView(ArrayList<Order> allOrdersFromZipcode, City city) {
-        Window displayResult = new Window("FXML/order/index.fxml", "BeerItSimple - All orders from selected zipcode : " + city.getZipCode());
+        Window displayResult = new Window("FXML/order/index.fxml", "BeerItSimple - All orders from the selected zipcode : " + city.getZipCode() + " - " + city.getLabel());
         displayResult.load();
         displayResult.getView().setParentView(this);
         Index index = (Index) displayResult.getView();
         index.updateTable(allOrdersFromZipcode);
         index.hideRefreshButton();
-        index.setCustomer(customer);
+        index.setZipCode(city);
         displayResult.show();
-    }*/
+    }
 
 }

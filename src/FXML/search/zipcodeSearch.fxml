@@ -30,11 +30,6 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="194.0" prefWidth="600.0" spacing="100.0">
          <children>
-            <JFXButton fx:id="cancelBtn" prefHeight="55.0" prefWidth="125.0" style="-fx-background-color: red;" text="Cancel" textFill="WHITE">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </JFXButton>
             <JFXButton fx:id="searchBtn" layoutX="10.0" layoutY="10.0" prefHeight="55.0" prefWidth="125.0" style="-fx-background-color: rgba(0,255,0,0.8);" text="Search" textFill="WHITE">
                <font>
                   <Font size="24.0" />

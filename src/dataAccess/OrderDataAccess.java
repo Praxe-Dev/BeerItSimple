@@ -24,6 +24,8 @@ public interface OrderDataAccess {
 
     ArrayList<Order> getAllOrdersFromCustomer(Customer customer) throws SQLManageException;
 
+    ArrayList<Order> getAllOrdersFromZipCode(City city) throws SQLManageException;
+
     Rank updateCustomerRank(Customer customer) throws SQLManageException;
 
     ArrayList<Order> getOrdersFromRanks(Rank rank, Status status, Boolean isPaid);
