@@ -49,6 +49,10 @@ public class OrderController {
         return orderBusiness.getAllOrdersFromCustomer(customer);
     }
 
+    public ArrayList<Order> getAllOrdersFromZipCode(City city) throws SQLManageException{
+        return orderBusiness.getAllOrdersFromZipCode(city);
+    }
+
     public ArrayList<Order> getOrdersFromRanks(Rank rank, Status status, Boolean isPaid) {
         return orderBusiness.getOrdersFromRanks(rank, status, isPaid);
     }

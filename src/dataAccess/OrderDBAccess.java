@@ -820,16 +820,18 @@ public class OrderDBAccess implements OrderDataAccess {
         }
     }
 
-    /*public ArrayList<Order> getAllOrdersFromZipcode(City city) throws SQLManageException {
+    public ArrayList<Order> getAllOrdersFromZipCode(City city) throws SQLManageException {
         ArrayList<Order> orderArrayList = new ArrayList<>();
-        String sqlInstruction = "SELECT o.*, s.*, p.* FROM `order` o\n"+
-                "JOIN status s ON s.id = o.StatusNumber\n" +
-                "JOIN paymentmethod p ON p.id = o.paymentMethodId\n" +
-                "WHERE o.CustomerEntityId = ?";
+        String sqlInstruction = "SELECT o.*, s.*, p.*, e.* FROM `order` o\n" +
+                                    "JOIN `status` s ON s.id = o.StatusNumber\n" +
+                                    "JOIN paymentmethod p ON p.id = o.paymentMethodId\n" +
+                                    "JOIN `entity` e ON e.id = o.CustomerEntityId\n" +
+                                    "WHERE e.CityZipCode = ? AND e.Citylabel = ?";
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
-            preparedStatement.setInt(1, customer.getEntity().getId());
+            preparedStatement.setInt(1, city.getZipCode());
+            preparedStatement.setString(2, city.getLabel());
             ResultSet data = preparedStatement.executeQuery();
 
             Order order;
@@ -937,7 +939,7 @@ public class OrderDBAccess implements OrderDataAccess {
             e.printStackTrace();
         }
         return orderArrayList;
-    } */
+    }
 
     public ArrayList<Order> getAllOrdersFromCustomer(Customer customer) throws SQLManageException {
         ArrayList<Order> orderArrayList = new ArrayList<>();

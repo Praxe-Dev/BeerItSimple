@@ -63,6 +63,7 @@ public class Index extends View implements Initializable {
 
     private OrderController orderController;
     private Customer customer = null;
+    private City city = null;
 
     public Index() {
         this.orderController = new OrderController();
@@ -217,6 +218,8 @@ public class Index extends View implements Initializable {
     public void setCustomer(Customer customer){
         this.customer = customer;
     }
+
+    public void setZipCode(City city) {this.city = city;}
 
     public void hideRefreshButton(){
         refreshBtn.setVisible(false);
