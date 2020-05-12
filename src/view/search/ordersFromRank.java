@@ -50,12 +50,14 @@ public class ordersFromRank extends View implements Initializable {
         rankController = new RankController();
         rankList.getItems().setAll(rankController.getAllRanks());
         rankList.getSelectionModel().selectFirst();
+        rankList.getStyleClass().add("whiteComboBox");
 //        rankList.setTextFill(Color.WHITE);
 
         statusController = new StatusController();
         statusList.getItems().add(new Status(null, "No matter"));
         statusList.getItems().addAll(statusController.getAllStatus());
         statusList.getSelectionModel().selectFirst();
+        statusList.getStyleClass().add("whiteComboBox");
 //        statusList.setFocusColor(Color.WHITE);
 
 
