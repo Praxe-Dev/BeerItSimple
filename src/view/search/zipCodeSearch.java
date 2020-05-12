@@ -20,10 +20,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class zipcodeSearch extends View implements Initializable {
+public class zipCodeSearch extends View implements Initializable {
 
     @FXML
-    JFXComboBox<City> zipcodeBox;
+    JFXComboBox<City> zipCodeBox;
     @FXML
     JFXButton cancelBtn;
     @FXML
@@ -40,25 +40,25 @@ public class zipcodeSearch extends View implements Initializable {
 
     @Override
     public void init() {
-        cityController = new CityController();
+        /*cityController = new CityController();
         orderController = new OrderController();
         ArrayList<City> allCities = cityController.getAllCities();
-        zipcodeBox.setItems(FXCollections.observableArrayList(allCities));
-        zipcodeBox.getSelectionModel().selectFirst();
-        zipcodeBox.getStyleClass().add("whiteComboBox");
+        zipCodeBox.setItems(FXCollections.observableArrayList(allCities));
+        zipCodeBox.getSelectionModel().selectFirst();
+        zipCodeBox.getStyleClass().add("whiteComboBox");*/
 
         cancelBtn.setOnAction(e -> {
             closeWindow();
         });
 
-        searchBtn.setOnAction(e -> {
+        /*searchBtn.setOnAction(e -> {
             search();
-        });
+        });*/
     }
 
-    private void search(){
+    /*private void search(){
         try {
-            City city = zipcodeBox.getSelectionModel().getSelectedItem();
+            City city = zipCodeBox.getSelectionModel().getSelectedItem();
             ArrayList<Order> allOrders = orderController.getAllOrdersFromCustomer(city);
             if(allOrders == null || allOrders.size() == 0){
                 PopUp.showError("No order", "There are no orders delivered for this zipcode");
@@ -81,6 +81,6 @@ public class zipcodeSearch extends View implements Initializable {
         index.hideRefreshButton();
         index.setCustomer(customer);
         displayResult.show();
-    }
+    }*/
 
 }
