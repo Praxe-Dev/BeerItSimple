@@ -3,10 +3,7 @@ package dataAccess;
 import exception.DeletionExceiption;
 import exception.NoRowSelected;
 import exception.SQLManageException;
-import model.Customer;
-import model.Order;
-import model.OrderTableFormat;
-import model.Rank;
+import model.*;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -28,4 +25,6 @@ public interface OrderDataAccess {
     ArrayList<Order> getAllOrdersFromCustomer(Customer customer) throws SQLManageException;
 
     Rank updateCustomerRank(Customer customer) throws SQLManageException;
+
+    ArrayList<Order> getOrdersFromRanks(Rank rank, Status status, Boolean isPaid);
 }

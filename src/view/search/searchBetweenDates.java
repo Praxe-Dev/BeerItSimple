@@ -53,10 +53,6 @@ public class searchBetweenDates extends View implements Initializable {
         orderIndex = new Index();
     }
 
-    private boolean validateBothDates(LocalDate start, LocalDate end) {
-        return end.isBefore(LocalDate.now().plusDays(1)) && start.isBefore(LocalDate.now().plusDays(1)) ;
-    }
-
     public void executeSearch() {
         LocalDate start = startingDate.getValue() == null ? LocalDate.now() : startingDate.getValue();
 //            System.out.println("Start = " + start);
@@ -65,13 +61,13 @@ public class searchBetweenDates extends View implements Initializable {
         if (validateBothDates(start, end)) {
             ArrayList<Order> orderBetweenDates = new OrderController().getAllOrdersBetweenDates(start, end);
 
-            openNewTabView(orderBetweenDates);
+            openNewTableView(orderBetweenDates);
         } else {
             PopUp.showError("Wrong date", "The starting date must be one day earlier than the current date\n (Either the end date won't \"back to the future\")");
         }
     }
 
-    private void openNewTabView(ArrayList<Order> orderBetweenDates) {
+    private void openNewTableView(ArrayList<Order> orderBetweenDates) {
         Window displayResult = new Window("FXML/order/index.fxml", "BeerItSimple - Search result");
         displayResult.load();
         displayResult.getView().setParentView(this);
@@ -79,5 +75,9 @@ public class searchBetweenDates extends View implements Initializable {
 
         index.updateTable(orderBetweenDates);
         displayResult.show();
+    }
+
+    private boolean validateBothDates(LocalDate start, LocalDate end) {
+        return end.isBefore(LocalDate.now().plusDays(1)) && start.isBefore(LocalDate.now().plusDays(1)) ;
     }
 }

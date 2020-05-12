@@ -48,4 +48,8 @@ public class OrderController {
     public ArrayList<Order> getAllOrdersFromCustomer(Customer customer) throws SQLManageException{
         return orderBusiness.getAllOrdersFromCustomer(customer);
     }
+
+    public ArrayList<Order> getOrdersFromRanks(Rank rank, Status status, Boolean isPaid) {
+        return orderBusiness.getOrdersFromRanks(rank, status, isPaid);
+    }
 }

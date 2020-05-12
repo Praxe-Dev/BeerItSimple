@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import com.jfoenix.controls.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox fx:id="vbox" alignment="CENTER" prefHeight="641.0" prefWidth="1072.0" styleClass="center" stylesheets="/view/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.businessTask.incomeView">
+<VBox fx:id="vbox" alignment="CENTER" prefHeight="641.0" prefWidth="1072.0" styleClass="center" stylesheets="/view/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.businessTask.incomeView">
    <children>
       <Label fx:id="label" alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="451.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Income" textAlignment="CENTER" textFill="WHITE">
          <VBox.margin>
@@ -61,9 +56,9 @@
          <columns>
             <TableColumn fx:id="productCode" editable="false" prefWidth="106.0" text="Product code" />
             <TableColumn fx:id="productName" editable="false" prefWidth="130.0" text="Product name" />
-            <TableColumn fx:id="amountSold" editable="false" prefWidth="96.0" text="Amount sold" />
-            <TableColumn fx:id="income" editable="false" minWidth="1.0" prefWidth="99.0" text="Income" />
-            <TableColumn fx:id="salePercentage" editable="false" prefWidth="167.0" text="Sales percentage" />
+            <TableColumn fx:id="amountSold" editable="false" prefWidth="96.0" style="-fx-alignment: CENTER_RIGHT;" text="Amount sold" />
+            <TableColumn fx:id="income" editable="false" minWidth="1.0" prefWidth="99.0" style="-fx-alignment: CENTER_RIGHT;" text="Income" />
+            <TableColumn fx:id="salePercentage" editable="false" prefWidth="167.0" style="-fx-alignment: CENTER_RIGHT;" text="Sales percentage" />
          </columns>
          <VBox.margin>
             <Insets bottom="10.0" left="40.0" right="40.0" top="10.0" />

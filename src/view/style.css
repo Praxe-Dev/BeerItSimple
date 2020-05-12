@@ -59,3 +59,10 @@
     -fx-text-fill: white;
 }
 
+.jfx-combo-box {
+    -fx-background-color: rgba(255,255,255,0.7);
+}
+
+.jfx-combo-box .label {
+    -fx-background-color: white;
+}
