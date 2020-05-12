@@ -47,6 +47,10 @@ public class Update extends View {
     @FXML
     JFXCheckBox deliveryCheck;
     @FXML
+    JFXCheckBox paid;
+    @FXML
+    JFXCheckBox delivered;
+    @FXML
     DatePicker deliveryDate;
     @FXML
     JFXButton cancelBtn;
@@ -112,6 +116,16 @@ public class Update extends View {
         initTable();
         fillProductTable();
 
+        statusList.setOnAction(e -> {
+            if(!statusList.getSelectionModel().getSelectedItem().getLabel().equals("Finished")){
+                if(order.getDelivery() == null){
+                    if(deliveryCheck.isDisable()){
+                        deliveryCheck.setDisable(false);
+                    }
+                }
+            }
+        });
+
         addArticleBtn.setOnAction(e -> {
             addArticle();
         });
@@ -125,8 +139,10 @@ public class Update extends View {
                 if(order.getDelivery().getDeliveredDate() == null) {
                     if (deliveryDisplay.isVisible()) {
                         deliveryDisplay.setVisible(false);
+                        delivered.setVisible(false);
                     } else {
                         deliveryDisplay.setVisible(true);
+                        delivered.setVisible(true);
                     }
                 } else {
                     deliveryCheck.setSelected(true);
@@ -134,8 +150,10 @@ public class Update extends View {
             } else {
                 if (deliveryDisplay.isVisible()) {
                     deliveryDisplay.setVisible(false);
+                    delivered.setVisible(false);
                 } else {
                     deliveryDisplay.setVisible(true);
+                    delivered.setVisible(true);
                 }
             }
         });
@@ -277,9 +295,19 @@ public class Update extends View {
                         order.setDelivery(delivery);
                     }
                 }
+
+                if(delivered.isSelected()){
+                    if(order.getDelivery() != null && order.getDelivery().getDeliveredDate() == null){
+                        order.getDelivery().setDeliveredDate(gc);
+                    }
+                }
             }
         } else {
             order.setDelivery(null);
+        }
+
+        if(paid.isSelected()){
+            order.setPaid(true);
         }
 
         Status selectedStatus = statusList.getSelectionModel().getSelectedItem();
@@ -340,6 +368,12 @@ public class Update extends View {
         } else {
             paymentMethod.getSelectionModel().selectFirst();
         }
+
+        if(order.getPaid()){
+            paymentMethod.setDisable(true);
+            paid.setSelected(true);
+            paid.setDisable(true);
+        }
     }
 
     private void setDelivery(){
@@ -350,17 +384,20 @@ public class Update extends View {
                 Calendar calendar = plannedDate;
                 deliveryDate.setValue(LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.DAY_OF_MONTH)));
                 if (order.getDelivery().getDeliveredDate() != null) {
+                    deliveryCheck.setDisable(true);
                     deliveryDate.setDisable(true);
                 }
             }
             if (order.getDelivery().getDeliveredDate() != null) {
                 deliveredAt.setText("Delivered at " + Date.format(order.getDelivery().getDeliveredDate()));
+                delivered.setVisible(false);
             } else {
                 deliveredAt.setVisible(false);
             }
         } else {
             deliveryDisplay.setVisible(false);
             deliveredAt.setVisible(false);
+            delivered.setVisible(false);
         }
     }
 
@@ -377,6 +414,9 @@ public class Update extends View {
         statusList.setItems(FXCollections.observableArrayList(statusArrayList));
         if(statusIndex != -1){
             statusList.getSelectionModel().select(statusIndex);
+            if(statusArrayList.get(statusIndex).getLabel().equals("Finished")){
+                deliveryCheck.setDisable(true);
+            }
         } else {
             statusList.getSelectionModel().selectFirst();
         }

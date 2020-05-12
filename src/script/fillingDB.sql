@@ -55,16 +55,16 @@ VALUES ('Prioritised', 1500, 750);
 /* Filling Status table */
 
 INSERT INTO `Status` (label)
-VALUES ('En attente');
+VALUES ('Pending');
 
 INSERT INTO `Status` (label)
-VALUES ('Confirmé');
+VALUES ('Confirmed');
 
 INSERT INTO `Status` (label)
-VALUES ('Annulé');
+VALUES ('Cancelled');
 
 INSERT INTO `Status` (label)
-VALUES ('Terminé');
+VALUES ('Finished');
 
 /* Filling PaymentMethod */
 
