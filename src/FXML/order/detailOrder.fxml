@@ -16,7 +16,7 @@
                <children>
                   <HBox prefHeight="54.0" prefWidth="373.0">
                      <children>
-                        <Label prefHeight="55.0" prefWidth="142.0" text="Edit order n°">
+                        <Label prefHeight="54.0" prefWidth="185.0" text="Detail order n°">
                            <font>
                               <Font size="24.0" />
                            </font>

@@ -1,5 +1,6 @@
 package view.order;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
 import controller.OrderController;
@@ -32,6 +33,8 @@ public class Read extends View {
     @FXML
     JFXTextField deliveryDate;
     @FXML
+    JFXButton okBtn;
+    @FXML
     TableView<OrderLineTableFormat> tableArticle;
     @FXML
     TableColumn<OrderLineTableFormat, String> article;
@@ -56,6 +59,7 @@ public class Read extends View {
 
     @Override
     public void init() {
+        okBtn.setOnAction(e -> closeWindow());
 //        orderController = new OrderController();
 //        Order order = orderController.getOrder();
         orderReference.setText("[" + selectedOrder.getReference() + "]");

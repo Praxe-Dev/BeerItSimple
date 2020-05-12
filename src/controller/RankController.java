@@ -15,8 +15,6 @@ public class RankController {
 
     public ArrayList<Rank> getAllRanks(){
         return rankBusiness.getAllRanks();
-        //return FXCollections.observableList(rankList);
-
     }
 
 }

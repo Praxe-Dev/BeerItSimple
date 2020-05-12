@@ -17,7 +17,7 @@
                <children>
                   <HBox prefHeight="54.0" prefWidth="373.0">
                      <children>
-                        <Label prefHeight="55.0" prefWidth="142.0" text="Edit order n°">
+                        <Label prefHeight="54.0" prefWidth="145.0" text="Edit order n°">
                            <font>
                               <Font size="24.0" />
                            </font>
@@ -85,7 +85,7 @@
                         </JFXButton>
                      </children>
                      <VBox.margin>
-                        <Insets top="75.0" />
+                        <Insets top="10.0" />
                      </VBox.margin>
                   </HBox>
                </children>

@@ -261,6 +261,88 @@ public class OrderDBAccess implements OrderDataAccess {
         return orderList;
     }
 
+    @Override
+    public ArrayList<Order> getOrdersFromRanks(Rank rank, Status status, Boolean isPaid) {
+
+        String sqlInstruction = "SELECT DISTINCT o.*, s.*, p.* FROM `order` o\n"+
+                                "JOIN status s ON s.id = o.StatusNumber\n" +
+                                "JOIN paymentmethod p ON p.id = o.paymentMethodId\n" +
+                                "JOIN customer ON customer.RankId = ?\n";
+
+        if( status != null) {
+            sqlInstruction += "WHERE s.id = ?\n";
+            if (isPaid != null) {
+                sqlInstruction += "AND o.isPaid = ?";
+            }
+        } else if (isPaid != null) {
+            sqlInstruction += "WHERE o.isPaid = ?";
+        }
+
+        ArrayList<Order> orders = new ArrayList<>();
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setInt(1, rank.getId());
+
+            if( status != null) {
+                preparedStatement.setInt(2, status.getId());
+                if (isPaid != null) {
+                    preparedStatement.setBoolean(3, isPaid);
+                }
+            } else if (isPaid != null) {
+                preparedStatement.setBoolean(2, isPaid);
+            }
+
+            ResultSet data =  preparedStatement.executeQuery();
+
+            Order o;
+            Status s;
+            Integer customerId;
+            PaymentMethod paymentMethod;
+            GregorianCalendar calendar = null;
+
+            while (data.next()) {
+                customerId = data.getInt("o.CustomerEntityId");
+
+                s = new Status(
+                        data.getInt("s.id"),
+                        data.getString("s.label")
+                );
+
+                paymentMethod = new PaymentMethod(
+                        data.getInt("p.id"),
+                        data.getString("p.label")
+                );
+
+                java.sql.Date startDate = data.getDate("startingDate");
+                if (startDate != null) {
+                    calendar = new GregorianCalendar();
+                    calendar.setTime(startDate);
+                }
+
+                o = new Order(
+                        null,
+                        data.getInt("o.reference"),
+                        data.getBoolean("o.isPaid"),
+                        calendar,
+                        s,
+                        paymentMethod);
+
+                setCustomerFromId(o, customerId);
+                setDeliveryFromOrder(o);
+
+                orders.add(o);
+            }
+
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+
+        return orders;
+    }
+
     public boolean create(Order order) throws SQLException, SQLManageException {
         int affectedRow = 0;
         String sqlInstructionOrder = "INSERT INTO `order` (startingDate, isPaid, StatusNumber, paymentMethodId, CustomerEntityId)\n" +
