@@ -30,7 +30,7 @@ public class Search extends View {
     Tab ordersFromSelectedCustomer;
 
     private final String pathToBetweenDates = "/FXML/search/ordersBetweenTwoDates.fxml";
-    private final String pathToZipCodeSearch = "/FXML/search/zipcodeSearch.fxml";
+    private final String pathToZipCodeSearch = "/FXML/search/zipCodeSearch.fxml";
     private final String pathToCustomerRankSearch = "/FXML/search/customerRankSearch.fxml";
     private final String pathToOrdersFromSelectedCustomer = "/FXML/search/ordersFromSelectedCustomer.fxml";
 
