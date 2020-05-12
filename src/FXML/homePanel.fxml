@@ -3,19 +3,34 @@
 <?import com.jfoenix.controls.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
 <VBox alignment="CENTER" prefHeight="641.0" prefWidth="1072.0" styleClass="center" stylesheets="/view/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.HomeView">
    <children>
-      <Label text="Beer It Simple !" textFill="WHITE">
-         <font>
-            <Font size="27.0" />
-         </font>
+      <HBox alignment="CENTER">
          <VBox.margin>
-            <Insets bottom="100.0" left="20.0" right="20.0" />
+            <Insets left="20.0" right="20.0" top="10.0" />
          </VBox.margin>
-      </Label>
+         <children>
+            <Label text="Beer It Simple !" textFill="WHITE">
+               <font>
+                  <Font size="27.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="333.0" fitWidth="485.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../ressources/shadowLogo.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <HBox.margin>
+                  <Insets right="75.0" />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
       <HBox alignment="CENTER" prefHeight="248.0" prefWidth="1072.0">
          <children>
             <JFXButton buttonType="RAISED" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: teal;" text="Stats" textFill="WHITE">
