@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.*?>
 <?import de.jensd.fx.glyphs.fontawesome.*?>
 <?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -52,18 +53,23 @@
             </JFXButton>
          </children>
       </HBox>
-      <TableView fx:id="incomeTable" prefHeight="1600.0" prefWidth="186.0">
-         <columns>
-            <TableColumn fx:id="productCode" editable="false" prefWidth="106.0" text="Product code" />
-            <TableColumn fx:id="productName" editable="false" prefWidth="130.0" text="Product name" />
-            <TableColumn fx:id="amountSold" editable="false" prefWidth="96.0" style="-fx-alignment: CENTER_RIGHT;" text="Amount sold" />
-            <TableColumn fx:id="income" editable="false" minWidth="1.0" prefWidth="99.0" style="-fx-alignment: CENTER_RIGHT;" text="Income" />
-            <TableColumn fx:id="salePercentage" editable="false" prefWidth="167.0" style="-fx-alignment: CENTER_RIGHT;" text="Sales percentage" />
-         </columns>
+      <HBox>
          <VBox.margin>
             <Insets bottom="10.0" left="40.0" right="40.0" top="10.0" />
          </VBox.margin>
-      </TableView>
+         <children>
+            <TableView fx:id="incomeTable" prefHeight="361.0" prefWidth="1671.0">
+               <columns>
+                  <TableColumn fx:id="productCode" editable="false" prefWidth="106.0" text="Product code" />
+                  <TableColumn fx:id="productName" editable="false" prefWidth="130.0" text="Product name" />
+                  <TableColumn fx:id="amountSold" editable="false" prefWidth="96.0" style="-fx-alignment: CENTER_RIGHT;" text="Amount sold" />
+                  <TableColumn fx:id="income" editable="false" minWidth="1.0" prefWidth="99.0" style="-fx-alignment: CENTER_RIGHT;" text="Income" />
+                  <TableColumn fx:id="salePercentage" editable="false" prefWidth="167.0" style="-fx-alignment: CENTER_RIGHT;" text="Sales percentage" />
+               </columns>
+            </TableView>
+            <PieChart fx:id="pieChart" prefHeight="341.0" prefWidth="1292.0" />
+         </children>
+      </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
             <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Total income : ">

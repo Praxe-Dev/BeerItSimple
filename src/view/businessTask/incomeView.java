@@ -3,7 +3,12 @@ package view.businessTask;
 import com.jfoenix.controls.JFXButton;
 import controller.ProductController;
 import exception.DateException;
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
@@ -42,6 +47,8 @@ public class incomeView extends View {
     @FXML
     TableColumn<ProductIncome, Double> salePercentage;
     @FXML
+    PieChart pieChart;
+    @FXML
     Text totalIncome;
 
 
@@ -69,6 +76,8 @@ public class incomeView extends View {
             total += p.getSalePercentageNumber();
         }
 
+        pieChart.setLabelLineLength(50);
+        pieChart.setLabelsVisible(true);
         initTable();
         updateTable(productIncomes);
     }
@@ -82,11 +91,15 @@ public class incomeView extends View {
 
         incomeTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         for (int i = 0; i < incomeTable.getColumns().size(); i++) {
-            incomeTable.getColumns().get(i).prefWidthProperty().bind(incomeTable.widthProperty().multiply((double) 1 / incomeTable.getColumns().size()));
+            incomeTable.getColumns().get(i).prefWidthProperty().bind(incomeTable.widthProperty().multiply(((double) 1 / incomeTable.getColumns().size()) - 0.001));
         }
     }
 
     void updateTable(ArrayList<ProductIncome> products) {
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+        products.forEach(p -> pieChartData.add(new PieChart.Data(p.getLabel(), p.getSalePercentage())));
+        pieChart.setData(pieChartData);
+
         incomeTable.getItems().setAll(products);
 
         double total = products.stream()
