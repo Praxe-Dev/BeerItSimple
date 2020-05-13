@@ -105,19 +105,23 @@
                   <Insets bottom="20.0" left="20.0" right="10.0" top="20.0" />
                </HBox.margin>
             </Label>
-            <FontAwesomeIcon fx:id="logout" fill="WHITE" glyphName="SIGN_OUT" size="2em" strokeType="OUTSIDE" strokeWidth="0.0">
+            <FontAwesomeIcon fx:id="logout" fill="WHITE" glyphName="SIGN_OUT" size="2em" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="logout">
                <HBox.margin>
                   <Insets right="30.0" />
                </HBox.margin>
             </FontAwesomeIcon>
-            <FontAwesomeIcon fx:id="closeWindow" fill="WHITE" glyphName="CLOSE" size="2em" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="21.85714340209961">
-               <font>
-                  <Font size="15.0" />
-               </font>
+            <JFXButton styleClass="closeBtn" fx:id="closeWindow" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Button" textAlignment="CENTER">
+               <graphic>
+                  <FontAwesomeIcon fill="WHITE" glyphName="CLOSE" size="2em" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="21.85714340209961">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </FontAwesomeIcon>
+               </graphic>
                <HBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                  <Insets right="10.0" />
                </HBox.margin>
-            </FontAwesomeIcon>
+            </JFXButton>
          </children>
          <padding>
             <Insets top="5.0" />
