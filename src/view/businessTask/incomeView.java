@@ -93,6 +93,6 @@ public class incomeView extends View {
                                 .mapToDouble(ProductIncome::getIncome)
                                 .sum();
 
-        totalIncome.setText(Double.toString(total));
+        totalIncome.setText(String.format("%.2f", total));
     }
 }
