@@ -78,6 +78,7 @@ public class ordersFromSelectedCustomer extends View implements Initializable {
         index.updateTable(allOrdersFromCustomer);
         index.hideRefreshButton();
         index.setCustomer(customer);
+        index.getMainContainer().setStyle("-fx-background-color: linear-gradient(to left, #0f2027, #203a43, #2c5364)");
         displayResult.show();
     }
 }
