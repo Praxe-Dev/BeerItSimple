@@ -4,16 +4,12 @@ import dataAccess.OrderLineDBAccess;
 import dataAccess.OrderLineDataAccess;
 import dataAccess.ProductDBAccess;
 import dataAccess.ProductDataAccess;
-import javafx.scene.control.DatePicker;
 import model.OrderLine;
 import model.Product;
 import model.ProductIncome;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
 
 public class ProductBusiness {
     private ProductDataAccess productDao;
@@ -32,18 +28,13 @@ public class ProductBusiness {
         ArrayList<Product> allProducts = productDao.getAllProducts();
         ArrayList<OrderLine> allOrderlines = orderLineDao.getAllOrderLineBetweenDates(startDate, endDate);
 
+        return computeProductsIncome(allProducts, allOrderlines);
+    }
+
+    public ArrayList<ProductIncome> computeProductsIncome(ArrayList<Product> allProducts, ArrayList<OrderLine> allOrderlines) {
         ArrayList<ProductIncome> productIncomes = new ArrayList<>();
+        ProductIncome.resetTotalSold();
 
-//        for (Product p : allProducts) {
-//            productIncomes.add(new ProductIncome(p));
-//            int index = productIncomes.size() - 1;
-//
-//            allOrderlines.stream()
-//                    .filter(x -> x.getProduct().getCode().equals(p.getCode()))
-//                    .forEach(x -> productIncomes.get(index).addAmountSold(x));
-//        }
-
-//        Do the same thing but with Method reference
         for (Product p : allProducts) {
             productIncomes.add(new ProductIncome(p));
             int index = productIncomes.size() - 1;
@@ -52,10 +43,6 @@ public class ProductBusiness {
                     .filter(x -> x.getProduct().getCode().equals(p.getCode()))
                     .forEach(productIncomes.get(index)::addAmountSold);
         }
-
-//        for (ProductIncome p : productIncomes) {
-//            p.calculPercentage();
-//        }
 
         productIncomes.forEach(ProductIncome::calculPercentage);
 

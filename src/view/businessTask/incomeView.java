@@ -22,6 +22,7 @@ import utils.Validators;
 import view.PopUp;
 import view.View;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.function.Function;
@@ -50,7 +51,6 @@ public class incomeView extends View {
     PieChart pieChart;
     @FXML
     Text totalIncome;
-
 
     @Override
     public void init() {
