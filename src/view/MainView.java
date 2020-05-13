@@ -19,7 +19,7 @@ public class MainView extends View{
     @FXML
     HBox topBar;
     @FXML
-    FontAwesomeIcon closeWindow;
+    JFXButton closeWindow;
     @FXML
     FontAwesomeIcon logout;
     @FXML
@@ -90,13 +90,8 @@ public class MainView extends View{
 
         setCenter(pathToHomePanel);
         this.window.undecorated();
-        makeDraggable();
+        makeDraggable(mainPanel);
     }
-
-//    @Override
-//    public Pane getRoot() {
-//        return this.mainPanel;
-//    }
 
     /**
      * Get the view and display it on the center Panel
@@ -113,25 +108,6 @@ public class MainView extends View{
             e.printStackTrace();
         }
 
-    }
-
-    private void makeDraggable(){
-        mainPanel.setOnMousePressed(e -> {
-            x = e.getSceneX();
-            y = e.getSceneY();
-        });
-
-        mainPanel.setOnMouseDragged(e -> {
-            Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-            stage.setX(e.getScreenX() - x);
-            stage.setY(e.getScreenY() - y);
-            stage.setOpacity(0.5);
-        });
-
-        mainPanel.setOnMouseReleased(e -> {
-            Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
-            stage.setOpacity(1);
-        });
     }
 
     public void setUsername(String employeeUsername){
