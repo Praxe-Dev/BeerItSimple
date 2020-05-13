@@ -88,6 +88,7 @@ public class ordersFromRank extends View implements Initializable {
 
         Index index = (Index) displayResult.getView();
         index.updateTable(orderFromRanks);
+        index.getMainContainer().setStyle("-fx-background-color: linear-gradient(to left, #0f2027, #203a43, #2c5364)");
         displayResult.show();
     }
 }

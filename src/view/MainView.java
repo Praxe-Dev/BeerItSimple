@@ -1,13 +1,26 @@
 package view;
 
 import com.jfoenix.controls.JFXButton;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 
 public class MainView extends View{
-
+    private double x = 0, y = 0;
+    @FXML
+    Label username;
+    @FXML
+    HBox topBar;
+    @FXML
+    FontAwesomeIcon closeWindow;
+    @FXML
+    FontAwesomeIcon logout;
     @FXML
     BorderPane mainPanel;
     @FXML
@@ -29,6 +42,8 @@ public class MainView extends View{
 
     @Override
     public void init() {
+        String windowsUser = System.getProperty("user.name");
+        username.setText(windowsUser);
         homeBtn.setOnAction(e -> {
             setCenter(pathToHomePanel);
         });
@@ -42,10 +57,6 @@ public class MainView extends View{
         });
 
         searchBtn.setOnAction(e -> {
-            // TODO: Open new tabPane
-        });
-
-        searchBtn.setOnAction(e -> {
             Window search = new Window("FXML/search/search.fxml", "BeerItSimple - Search in order");
             search.load();
 //            search.getView().setParentView(this);
@@ -53,7 +64,25 @@ public class MainView extends View{
             search.show();
         });
 
+        logout.setOnMouseClicked(e -> {
+            //TODO: replace with close all windows!
+            this.closeWindow();
+            Window login = new Window("FXML/loginPanel.fxml", "Login");
+            login.load();
+            login.show();
+        });
+
+        closeWindow.setOnMouseClicked(e -> {
+            //TODO: replace with close all windows!
+            this.closeWindow();
+            for (java.awt.Window window : java.awt.Window.getWindows()) {
+                window.dispose();
+            }
+        });
+
         setCenter(pathToHomePanel);
+        this.window.undecorated();
+        makeDraggable();
     }
 
 //    @Override
@@ -76,5 +105,28 @@ public class MainView extends View{
             e.printStackTrace();
         }
 
+    }
+
+    private void makeDraggable(){
+        mainPanel.setOnMousePressed(e -> {
+            x = e.getSceneX();
+            y = e.getSceneY();
+        });
+
+        mainPanel.setOnMouseDragged(e -> {
+            Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+            stage.setX(e.getScreenX() - x);
+            stage.setY(e.getScreenY() - y);
+            stage.setOpacity(0.5);
+        });
+
+        mainPanel.setOnMouseReleased(e -> {
+            Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
+            stage.setOpacity(1);
+        });
+    }
+
+    public void setUsername(String employeeUsername){
+        username.setText(employeeUsername);
     }
 }

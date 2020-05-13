@@ -221,4 +221,6 @@ public class Index extends View implements Initializable {
     public void hideRefreshButton(){
         refreshBtn.setVisible(false);
     }
+
+    public VBox getMainContainer() { return this.vbox; }
 }
