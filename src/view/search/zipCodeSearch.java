@@ -43,7 +43,7 @@ public class zipCodeSearch extends View implements Initializable {
         ArrayList<City> allCities = cityController.getAllCities();
         zipCodeBox.setItems(FXCollections.observableArrayList(allCities));
         zipCodeBox.getSelectionModel().selectFirst();
-        zipCodeBox.getStyleClass().add("blackComboBox");
+        zipCodeBox.getStyleClass().add("whiteComboBox");
 
 
         searchBtn.setOnAction(e -> {
