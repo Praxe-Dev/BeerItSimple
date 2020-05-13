@@ -17,6 +17,7 @@ import utils.Validators;
 import view.PopUp;
 import view.View;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.function.Function;
@@ -43,7 +44,6 @@ public class incomeView extends View {
     TableColumn<ProductIncome, Double> salePercentage;
     @FXML
     Text totalIncome;
-
 
     @Override
     public void init() {
@@ -93,6 +93,6 @@ public class incomeView extends View {
                                 .mapToDouble(ProductIncome::getIncome)
                                 .sum();
 
-        totalIncome.setText(Double.toString(total));
+        totalIncome.setText(String.format("%.2f", total));
     }
 }

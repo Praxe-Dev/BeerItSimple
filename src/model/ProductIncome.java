@@ -52,6 +52,22 @@ public class ProductIncome {
         this.salePercentage = ((double) amountSold / totalProductSold * 100);
     }
 
+    public double getSalePercentageNumber() {
+        return this.salePercentage;
+    }
+
+    public static void resetTotalSold() {
+        totalProductSold = 0;
+    }
+
+    public double getPercentage() {
+        if (salePercentage.isNaN())
+            return 0;
+        else {
+            return salePercentage;
+        }
+    }
+
     @Override
     public String toString() {
         return "ProductIncome{" +
@@ -61,9 +77,5 @@ public class ProductIncome {
                 ", income=" + income +
                 ", salePercentage=" + salePercentage +
                 '}';
-    }
-
-    public double getSalePercentageNumber() {
-        return this.salePercentage;
     }
 }
