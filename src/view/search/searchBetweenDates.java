@@ -26,8 +26,6 @@ public class searchBetweenDates extends View implements Initializable {
     @FXML
     DatePicker endDate;
     @FXML
-    JFXButton cancelBtn;
-    @FXML
     JFXButton searchBtn;
 
     Index orderIndex;
@@ -39,11 +37,9 @@ public class searchBetweenDates extends View implements Initializable {
 
     @Override
     public void init() {
-        // to update the table
-//        cancelBtn.setOnAction(e -> {
-//            // TODO: Find how to close the current pane
-//            closeWindow();
-//        });
+
+        startingDate.setValue(LocalDate.now().minusMonths(1));
+        endDate.setValue(LocalDate.now());
 
         searchBtn.setOnAction(e -> {
             executeSearch();

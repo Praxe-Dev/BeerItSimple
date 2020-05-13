@@ -41,8 +41,8 @@ public class MainView extends View{
             setCenter(pathToOrdersPanel);
         });
 
-        searchBtn.setOnAction(e -> {
-            // TODO: Open new tabPane
+        productBtn.setOnAction(e -> {
+            PopUp.showInfo("WIP", "This section is still work in progress, sorry !");
         });
 
         searchBtn.setOnAction(e -> {

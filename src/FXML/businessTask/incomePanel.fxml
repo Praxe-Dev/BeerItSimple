@@ -52,7 +52,7 @@
             </JFXButton>
          </children>
       </HBox>
-      <TableView fx:id="incomeTable" prefHeight="363.0" prefWidth="186.0">
+      <TableView fx:id="incomeTable" prefHeight="1600.0" prefWidth="186.0">
          <columns>
             <TableColumn fx:id="productCode" editable="false" prefWidth="106.0" text="Product code" />
             <TableColumn fx:id="productName" editable="false" prefWidth="130.0" text="Product name" />
@@ -75,6 +75,9 @@
                <font>
                   <Font size="18.0" />
                </font>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
             </Text>
             <Text fill="WHITE" layoutX="88.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="€" wrappingWidth="122.13671875">
                <font>
@@ -82,6 +85,9 @@
                </font>
             </Text>
          </children>
+         <VBox.margin>
+            <Insets bottom="20.0" top="20.0" />
+         </VBox.margin>
       </HBox>
    </children>
 </VBox>
