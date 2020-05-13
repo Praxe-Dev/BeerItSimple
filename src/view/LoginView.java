@@ -40,6 +40,7 @@ public class LoginView extends View {
         setShortcut(new KeyCodeCombination(KeyCode.ENTER), () -> openSession());
 
         employeeController = new EmployeeController();
+        makeDraggable(loginContainer);
     }
 
     private void openSession() {
