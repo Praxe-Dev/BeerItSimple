@@ -4,6 +4,7 @@ import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 public abstract class View extends Node {
 
@@ -39,5 +40,9 @@ public abstract class View extends Node {
 
     public void setShortcut(KeyCombination keyCode, Runnable runnable) {
         this.window.getStage().getScene().getAccelerators().put(keyCode, runnable);
+    }
+
+    public Stage getStage() {
+       return window.getStage();
     }
 }

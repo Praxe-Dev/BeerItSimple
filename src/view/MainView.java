@@ -1,6 +1,7 @@
 package view;
 
 import com.jfoenix.controls.JFXButton;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -29,6 +30,8 @@ public class MainView extends View{
 
     @Override
     public void init() {
+        getStage().setOnHidden(e -> Platform.exit());
+
         homeBtn.setOnAction(e -> {
             setCenter(pathToHomePanel);
         });
