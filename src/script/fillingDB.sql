@@ -83,10 +83,13 @@ VALUES ('Gift card');
 /* Filling Role table */
 
 INSERT INTO Role (name)
-VALUES ('Employé');
+VALUES ('Employee');
 
 INSERT INTO Role (name)
 VALUES ('Manager');
+
+INSERT INTO Role (name)
+VALUES ('Delivery man');
 
 /* Filling Entity table */
 
@@ -147,6 +150,9 @@ VALUES (2, 1, 'admin');
 
 INSERT INTO Employee (EntityId, RoleId,password)
 VALUES (8, 1, 'test');
+
+INSERT INTO Employee (EntityId, RoleId,password)
+VALUES (3, 3, 'livreur');
 
 /* Filling Provider table */
 

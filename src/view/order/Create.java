@@ -255,7 +255,7 @@ public class Create extends View {
 
 //            date.set(deliveryDate.getValue().getYear(), deliveryDate.getValue().getMonthValue(), deliveryDate.getValue().getDayOfMonth());
             delivery = new Delivery(
-                    new Employee(2, "admin"),
+                    new Employee(new Entity(), new Role(), "admin"),
                     gc,
                     newOrder
             );
