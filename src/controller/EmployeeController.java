@@ -2,7 +2,10 @@ package controller;
 
 import business.EmployeeBusiness;
 import exception.EmployeeLoginException;
+import exception.SQLManageException;
 import model.Employee;
+
+import java.util.ArrayList;
 
 public class EmployeeController {
     private EmployeeBusiness employeeBusiness;
@@ -18,5 +21,9 @@ public class EmployeeController {
     public Employee getEmployee(int registrationNumber, String password) throws EmployeeLoginException {
         //Employee e = new Employee(matricule, password);
         return employeeBusiness.getEmployee(registrationNumber, password);
+    }
+
+    public ArrayList<Employee> getAllDeliveryEmployee() throws SQLManageException{
+        return employeeBusiness.getAllDeliveryEmployee();
     }
 }

@@ -4,12 +4,10 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
-import controller.CustomerController;
-import controller.OrderController;
-import controller.PaymentMethodController;
-import controller.ProductController;
+import controller.*;
 import exception.NoRowSelected;
 import exception.SQLManageException;
+import exception.UpdateOrderException;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -40,6 +38,8 @@ public class Create extends View {
     JFXComboBox<Customer> customerList;
     @FXML
     JFXComboBox<PaymentMethod> paymentMethod;
+    @FXML
+    JFXComboBox<Employee> deliveryMan;
     @FXML
     JFXCheckBox deliveryCheck;
     @FXML
@@ -78,6 +78,7 @@ public class Create extends View {
     Group deliveryDisplay;
 
     CustomerController customerController;
+    EmployeeController employeeController;
     PaymentMethodController paymentMethodController;
     ProductController productController;
     OrderController orderController;
@@ -85,6 +86,7 @@ public class Create extends View {
     @Override
     public void init() {
         customerController = new CustomerController();
+        employeeController = new EmployeeController();
         paymentMethodController = new PaymentMethodController();
         productController = new ProductController();
         orderController = new OrderController();
@@ -106,13 +108,23 @@ public class Create extends View {
         productList.setItems(FXCollections.observableArrayList(allProducts));
         productList.getSelectionModel().selectFirst();
 
+        try {
+            ArrayList<Employee> deliveryList = employeeController.getAllDeliveryEmployee();
+            deliveryMan.setItems(FXCollections.observableArrayList(deliveryList));
+        } catch(SQLManageException e){
+            e.showMessage();
+        }
+
         deliveryDisplay.setVisible(false);
+        deliveryMan.setVisible(false);
 
        deliveryCheck.setOnAction(e -> {
            if (deliveryDisplay.isVisible()) {
                deliveryDisplay.setVisible(false);
+               deliveryMan.setVisible(false);
            } else {
                deliveryDisplay.setVisible(true);
+               deliveryMan.setVisible(true);
            }
        });
 
@@ -144,6 +156,8 @@ public class Create extends View {
                     } catch (SQLException ex) {
                         ex.printStackTrace();
                     } catch (SQLManageException ex) {
+                        ex.showMessage();
+                    } catch(UpdateOrderException ex) {
                         ex.showMessage();
                     }
                 }
@@ -219,9 +233,14 @@ public class Create extends View {
     }
 
     private boolean deliveryDateCheck() {
-        if (deliveryCheck.isSelected() && LocalDate.now().isAfter(deliveryDate.getValue())) {
-            PopUp.showError("Date error", "The delivery date can't be earlier than the current date.");
-            return false;
+        if (deliveryCheck.isSelected()){
+            if(deliveryDate.getValue() == null) {
+                PopUp.showError("Delivery error", "Please choose delivery date or unselect the delivery checkbox.");
+                return false;
+            } else if(LocalDate.now().isAfter(deliveryDate.getValue())) {
+                PopUp.showError("Date error", "The delivery date can't be earlier than the current date.");
+                return false;
+            }
         }
         return true;
     }
@@ -237,7 +256,7 @@ public class Create extends View {
         return true;
     }
 
-    private boolean newOrderInsert() throws SQLException, SQLManageException {
+    private boolean newOrderInsert() throws SQLException, SQLManageException, UpdateOrderException {
         ArrayList<OrderLine> orderLines = new ArrayList<>();
         Product product;
         Delivery delivery = null;
@@ -249,13 +268,17 @@ public class Create extends View {
         );
 
         if (deliveryCheck.isSelected()) {
+
+            if(deliveryMan.getSelectionModel().isSelected(-1)){
+                throw new UpdateOrderException("You need to select a delivery man if you want a delivery");
+            }
             LocalDate date = deliveryDate.getValue();
             // Create the right format for delivery.plannedDate (-1 and +1 to get the right value)
             GregorianCalendar gc = new GregorianCalendar(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth() + 1);
 
 //            date.set(deliveryDate.getValue().getYear(), deliveryDate.getValue().getMonthValue(), deliveryDate.getValue().getDayOfMonth());
             delivery = new Delivery(
-                    new Employee(new Entity(), new Role(), "admin"),
+                    deliveryMan.getSelectionModel().getSelectedItem(),
                     gc,
                     newOrder
             );
