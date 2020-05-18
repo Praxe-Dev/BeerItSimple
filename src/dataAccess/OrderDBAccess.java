@@ -585,10 +585,10 @@ public class OrderDBAccess implements OrderDataAccess {
 
     private void setDeliveryFromOrder(Order order) throws SQLException {
         String sqlDelivery = "SELECT d.*, emp.*, e.*, c.*, r.* FROM delivery d\n" +
-                "JOIN employee emp ON emp.EntityId = d.EmployeeEntityId\n" +
-                "JOIN entity e ON e.id = d.EmployeeEntityId\n" +
-                "JOIN city c ON e.CityLabel = c.label AND e.CityZipCode = c.zipCode\n" +
-                "JOIN role r ON r.id = emp.RoleId\n" +
+                "LEFT OUTER JOIN employee emp ON emp.EntityId = d.EmployeeEntityId\n" +
+                "LEFT OUTER JOIN entity e ON e.id = emp.EntityId\n" +
+                "LEFT OUTER JOIN city c ON e.CityLabel = c.label AND e.CityZipCode = c.zipCode\n" +
+                "LEFT OUTER JOIN role r ON r.id = emp.RoleId\n" +
                 "WHERE d.OrderReference = ?";
         PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDelivery);
 

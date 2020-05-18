@@ -11,6 +11,10 @@ public class Employee {
         this.password = password;
     }
 
+    public Employee(Entity entity, Role role) {
+        this(entity, role, null);
+    }
+
     public Entity getEntity() {
         return entity;
     }
@@ -37,10 +41,6 @@ public class Employee {
 
     @Override
     public String toString() {
-        return "Employee{" +
-                "entity=" + entity +
-                ", role=" + role +
-                ", password='" + password + '\'' +
-                '}';
+        return entity.getContactName();
     }
 }

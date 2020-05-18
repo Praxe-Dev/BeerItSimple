@@ -4,10 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
-import controller.OrderController;
-import controller.PaymentMethodController;
-import controller.ProductController;
-import controller.StatusController;
+import controller.*;
 import exception.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -44,6 +41,8 @@ public class Update extends View {
     Label customer;
     @FXML
     JFXComboBox<PaymentMethod> paymentMethod;
+    @FXML
+    JFXComboBox<Employee> deliveryMan;
     @FXML
     JFXCheckBox deliveryCheck;
     @FXML
@@ -87,6 +86,7 @@ public class Update extends View {
 
     Order order = null;
     PaymentMethodController paymentMethodController;
+    EmployeeController employeeController;
     OrderController orderController;
     ProductController productController;
     StatusController statusController;
@@ -97,6 +97,7 @@ public class Update extends View {
         setShortcut(new KeyCodeCombination(KeyCode.DELETE), () -> removeArticle());
 
         paymentMethodController = new PaymentMethodController();
+        employeeController = new EmployeeController();
         orderController = new OrderController();
         productController = new ProductController();
         statusController = new StatusController();
@@ -139,9 +140,11 @@ public class Update extends View {
                 if(order.getDelivery().getDeliveredDate() == null) {
                     if (deliveryDisplay.isVisible()) {
                         deliveryDisplay.setVisible(false);
+                        deliveryMan.setVisible(false);
                         delivered.setVisible(false);
                     } else {
                         deliveryDisplay.setVisible(true);
+                        deliveryMan.setVisible(true);
                         delivered.setVisible(true);
                     }
                 } else {
@@ -150,9 +153,11 @@ public class Update extends View {
             } else {
                 if (deliveryDisplay.isVisible()) {
                     deliveryDisplay.setVisible(false);
+                    deliveryMan.setVisible(false);
                     delivered.setVisible(false);
                 } else {
                     deliveryDisplay.setVisible(true);
+                    deliveryMan.setVisible(true);
                     delivered.setVisible(true);
                 }
             }
@@ -160,18 +165,22 @@ public class Update extends View {
 
         submitBtn.setOnAction(e ->{
             if (!tableArticle.getItems().isEmpty()) {
-                try{
-                    if (updateOrder()) {
-                        PopUp.showSuccess("Order updated !", "The order has been added successfully.");
-                        orderView.updateTable();
-                        closeWindow();
+                if (deliveryDateCheck()) {
+                    try {
+                        if (updateOrder()) {
+                            PopUp.showSuccess("Order updated !", "The order has been added successfully.");
+                            orderView.updateTable();
+                            closeWindow();
+                        }
+                    } catch (SQLManageException ex) {
+                        ex.showMessage();
+                    } catch (PaymentMethodException payErr) {
+                        payErr.showMessage();
+                    } catch (StatusException statusErr) {
+                        statusErr.showMessage();
+                    } catch (UpdateOrderException ex) {
+                        ex.showMessage();
                     }
-                } catch(SQLManageException ex) {
-                    ex.showMessage();
-                } catch (PaymentMethodException payErr){
-                    payErr.showMessage();
-                } catch(StatusException statusErr){
-                    statusErr.showMessage();
                 }
             } else {
                 new UpdateOrderException("You can't save this order without products. If you want, you can delete this order.").showMessage();
@@ -218,7 +227,10 @@ public class Update extends View {
 
     private boolean deliveryDateCheck() {
         if(order.getDelivery() == null || order.getDelivery().getDeliveredDate() == null) {
-            if (deliveryCheck.isSelected() && LocalDate.now().isAfter(deliveryDate.getValue())) {
+            if(deliveryDate.getValue() == null) {
+                PopUp.showError("Delivery error", "Please choose delivery date or unselect the delivery checkbox.");
+                return false;
+            } else if(LocalDate.now().isAfter(deliveryDate.getValue())) {
                 PopUp.showError("Date error", "The delivery date can't be earlier than the current date.");
                 return false;
             }
@@ -267,11 +279,14 @@ public class Update extends View {
         totalAmountVatInc.setText(totalVatIncl);
     }
 
-    private boolean updateOrder() throws SQLManageException, PaymentMethodException, StatusException {
+    private boolean updateOrder() throws SQLManageException, PaymentMethodException, StatusException, UpdateOrderException {
         Product product;
 
         if (deliveryCheck.isSelected()) {
             if(deliveryDate != null) {
+                if(deliveryMan.getSelectionModel().isSelected(-1)){
+                    throw new UpdateOrderException("You need to select a delivery man if you want a delivery");
+                }
 //                GregorianCalendar date = new GregorianCalendar();
 //                date.set(deliveryDate.getValue().getYear(), deliveryDate.getValue().getDayOfMonth(), deliveryDate.getValue().getDayOfMonth());
 
@@ -281,19 +296,14 @@ public class Update extends View {
 
                 // TODO: find a functioner to compare both date ( order.getDelivery().getPlannedDate() != gc is always false )
                 if(order.getDelivery() != null && order.getDelivery().getPlannedDate() != null){
-                    if(deliveryDateCheck()) {
-                        order.getDelivery().setPlannedDate(gc);
-                    }
+                    order.getDelivery().setPlannedDate(gc);
                 } else if(order.getDelivery() == null) {
-                    if(deliveryDateCheck()) {
-                        Delivery delivery = new Delivery(
-                                //TODO: Select d'employé ayant le role livreur
-                                new Employee(new Entity(), new Role(), "admin"),
-                                gc,
-                                order
-                        );
-                        order.setDelivery(delivery);
-                    }
+                    Delivery delivery = new Delivery(
+                            deliveryMan.getSelectionModel().getSelectedItem(),
+                            gc,
+                            order
+                    );
+                    order.setDelivery(delivery);
                 }
 
                 if(delivered.isSelected()){
@@ -376,6 +386,27 @@ public class Update extends View {
         }
     }
 
+    private void setDeliveryList(){
+        try {
+            ArrayList<Employee> deliveryList = employeeController.getAllDeliveryEmployee();
+            int deliveryManIndex = -1;
+            if(order.getDelivery() != null) {
+                for (int i = 0; i < deliveryList.size(); i++) {
+                    if (deliveryList.get(i).getEntity().getId() == order.getDelivery().getEmployee().getEntity().getId()) {
+                        deliveryManIndex = i;
+                        break;
+                    }
+                }
+            }
+            deliveryMan.setItems(FXCollections.observableArrayList(deliveryList));
+            if(deliveryManIndex != -1){
+                deliveryMan.getSelectionModel().select(deliveryManIndex);
+            }
+        } catch(SQLManageException e){
+            e.showMessage();
+        }
+    }
+
     private void setDelivery(){
         if(order.getDelivery() != null) {
             deliveryCheck.setSelected(true);
@@ -386,6 +417,7 @@ public class Update extends View {
                 if (order.getDelivery().getDeliveredDate() != null) {
                     deliveryCheck.setDisable(true);
                     deliveryDate.setDisable(true);
+                    deliveryMan.setDisable(true);
                 }
             }
             if (order.getDelivery().getDeliveredDate() != null) {
@@ -398,7 +430,9 @@ public class Update extends View {
             deliveryDisplay.setVisible(false);
             deliveredAt.setVisible(false);
             delivered.setVisible(false);
+            deliveryMan.setVisible(false);
         }
+        setDeliveryList();
     }
 
     private void setCurrentStatus(){

@@ -64,6 +64,7 @@
                         <Font size="18.0" />
                      </font>
                   </JFXCheckBox>
+                  <JFXComboBox fx:id="deliveryMan" labelFloat="true" layoutX="100.0" layoutY="259.0" prefHeight="25.0" prefWidth="250.0" promptText="Delivery Man" />
                   <Group fx:id="deliveryDisplay">
                      <VBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />

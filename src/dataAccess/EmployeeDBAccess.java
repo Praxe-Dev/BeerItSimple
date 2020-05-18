@@ -1,14 +1,15 @@
 package dataAccess;
 
+import com.mysql.cj.x.protobuf.MysqlxPrepare;
 import exception.EmployeeLoginException;
+import exception.SQLManageException;
 import model.City;
 import model.Employee;
 import model.Entity;
 import model.Role;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
+import java.util.ArrayList;
 
 public class EmployeeDBAccess implements EmployeeDataAccess {
     private Connection connection;
@@ -19,8 +20,6 @@ public class EmployeeDBAccess implements EmployeeDataAccess {
 
     @Override
     public Employee getEmployee(int registrationNumber, String password) throws EmployeeLoginException {
-        System.out.println(registrationNumber);
-        System.out.println(password);
         String sqlInstructions = "SELECT employee.*, e.*, r.*, city.* FROM employee\n" +
                                 "JOIN entity e ON e.id = employee.EntityId\n" +
                                 "JOIN role r ON r.id = employee.RoleId\n" +
@@ -40,7 +39,7 @@ public class EmployeeDBAccess implements EmployeeDataAccess {
                         employeeData.getString("city.label"),
                         employeeData.getInt("city.zipCode")
                 );
-                System.out.println(city);
+
                 Entity entity = new Entity(
                         employeeData.getInt("e.id"),
                         employeeData.getString("e.mail"),
@@ -52,12 +51,12 @@ public class EmployeeDBAccess implements EmployeeDataAccess {
                         employeeData.getString("e.businessNumber"),
                         city
                 );
-                System.out.println(entity);
+
                 Role role = new Role(
                         employeeData.getInt("r.id"),
                         employeeData.getString("r.name")
                 );
-                System.out.println(role);
+
                 return new Employee(entity, role, password);
             }
         } catch (Exception e) {
@@ -65,5 +64,45 @@ public class EmployeeDBAccess implements EmployeeDataAccess {
         }
 
         return null;
+    }
+
+    public ArrayList<Employee> getAllDeliveryEmployee() throws SQLManageException {
+        ArrayList<Employee> deliveryList = new ArrayList<>();
+        String sqlInstruction = "SELECT e.*, entity.*, r.*, c.* FROM employee e JOIN role r ON r.id = e.RoleId JOIN entity ON entity.id = e.EntityId JOIN city c ON c.label = entity.Citylabel AND c.zipCode = entity.CityZipCode WHERE r.name = 'Delivery Man'";
+        ResultSet employeeData;
+        try{
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            employeeData = preparedStatement.executeQuery();
+            while(employeeData.next()){
+                City city = new City(
+                        employeeData.getString("c.label"),
+                        employeeData.getInt("c.zipCode")
+                );
+
+                Entity entity = new Entity(
+                        employeeData.getInt("entity.id"),
+                        employeeData.getString("entity.mail"),
+                        employeeData.getString("entity.contactName"),
+                        employeeData.getString("entity.phoneNumber"),
+                        employeeData.getInt("entity.houseNumber"),
+                        employeeData.getString("entity.street"),
+                        employeeData.getString("entity.bankAccountNumber"),
+                        employeeData.getString("entity.businessNumber"),
+                        city
+                );
+
+                Role role = new Role(
+                        employeeData.getInt("r.id"),
+                        employeeData.getString("r.name")
+                );
+
+                deliveryList.add(new Employee(entity, role));
+            }
+        } catch(SQLException e){
+            throw new SQLManageException(e);
+        }
+
+
+        return deliveryList;
     }
 }
