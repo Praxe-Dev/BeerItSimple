@@ -288,7 +288,7 @@ public class Update extends View {
                     if(deliveryDateCheck()) {
                         Delivery delivery = new Delivery(
                                 //TODO: Select d'employé ayant le role livreur
-                                new Employee(2, "admin"),
+                                new Employee(new Entity(), new Role(), "admin"),
                                 gc,
                                 order
                         );

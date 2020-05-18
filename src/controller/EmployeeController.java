@@ -15,8 +15,8 @@ public class EmployeeController {
         this.employeeBusiness = employeeBusiness;
     }
 
-    public Employee getEmployee(int matricule, String password) throws EmployeeLoginException {
-        Employee e = new Employee(matricule, password);
-        return employeeBusiness.getEmployee(e);
+    public Employee getEmployee(int registrationNumber, String password) throws EmployeeLoginException {
+        //Employee e = new Employee(matricule, password);
+        return employeeBusiness.getEmployee(registrationNumber, password);
     }
 }

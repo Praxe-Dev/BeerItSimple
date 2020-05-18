@@ -16,7 +16,7 @@ public class EmployeeBusiness {
         this.dao = employeeDBAccess;
     }
 
-    public Employee getEmployee(Employee employee) throws EmployeeLoginException {
-        return dao.getEmployee(employee);
+    public Employee getEmployee(int registrationNumber, String password) throws EmployeeLoginException {
+        return dao.getEmployee(registrationNumber, password);
     }
 }

@@ -377,7 +377,7 @@ public class OrderDBAccess implements OrderDataAccess {
                         PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDelivery);
                         preparedStatementDelivery.setDate(1, new java.sql.Date(order.getDelivery().getPlannedDate().getTimeInMillis()));
                         preparedStatementDelivery.setInt(2, orderId);
-                        preparedStatementDelivery.setInt(3, order.getDelivery().getEmployee().getId());
+                        preparedStatementDelivery.setInt(3, order.getDelivery().getEmployee().getEntity().getId());
 
                         preparedStatementDelivery.executeUpdate();
                     }
@@ -584,10 +584,11 @@ public class OrderDBAccess implements OrderDataAccess {
     }
 
     private void setDeliveryFromOrder(Order order) throws SQLException {
-        String sqlDelivery = "SELECT d.*, emp.*, e.*, c.* FROM delivery d\n" +
+        String sqlDelivery = "SELECT d.*, emp.*, e.*, c.*, r.* FROM delivery d\n" +
                 "JOIN employee emp ON emp.EntityId = d.EmployeeEntityId\n" +
                 "JOIN entity e ON e.id = d.EmployeeEntityId\n" +
                 "JOIN city c ON e.CityLabel = c.label AND e.CityZipCode = c.zipCode\n" +
+                "JOIN role r ON r.id = emp.RoleId\n" +
                 "WHERE d.OrderReference = ?";
         PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDelivery);
 
@@ -627,11 +628,16 @@ public class OrderDBAccess implements OrderDataAccess {
                     cityD
             );
 
+            Role role = new Role(
+                    dataDelivery.getInt("r.id"),
+                    dataDelivery.getString("r.name")
+            );
+
             Employee deliveryMan = new Employee(
-                    dataDelivery.getInt("emp.EntityId"),
-                    dataDelivery.getInt("emp.RoleId"),
-                    dataDelivery.getString("emp.password"),
-                    entityDeliveryMan);
+                    entityDeliveryMan,
+                    role,
+                    dataDelivery.getString("emp.password")
+            );
 
             Delivery delivery = new Delivery(
                     deliveryMan,
@@ -719,7 +725,7 @@ public class OrderDBAccess implements OrderDataAccess {
                 PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDelivery);
                 preparedStatementDelivery.setDate(1, new java.sql.Date(order.getDelivery().getPlannedDate().getTimeInMillis()));
                 preparedStatementDelivery.setInt(2, order.getReference());
-                preparedStatementDelivery.setInt(3, order.getDelivery().getEmployee().getId());
+                preparedStatementDelivery.setInt(3, order.getDelivery().getEmployee().getEntity().getId());
 
                 preparedStatementDelivery.executeUpdate();
             }
