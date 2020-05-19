@@ -14,16 +14,15 @@ public class NewsDBAccess implements NewsDataAccess {
     }
     public News getRandomNews() throws SQLManageException{
         News randomNews = null;
-        String sqlInstruction = "SELECT * FROM news WHERE startingDate >= ? AND endDate <= ? ORDER BY RAND() LIMIT 1";
+        String sqlInstruction = "SELECT * FROM news WHERE startingDate <= ? AND endDate >= ? ORDER BY RAND() LIMIT 1";
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
             preparedStatement.setDate(1, new java.sql.Date(System.currentTimeMillis()));
             preparedStatement.setDate(2, new java.sql.Date(System.currentTimeMillis()));
             ResultSet data = preparedStatement.executeQuery();
-            data.next();
 
-            if(!data.wasNull()){
+            if(data.next()){
                 GregorianCalendar startingDateGC = null;
                 GregorianCalendar endDateGC = null;
 

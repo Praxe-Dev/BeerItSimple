@@ -2,19 +2,22 @@ package view;
 
 import com.jfoenix.controls.JFXButton;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
-import view.thread.ThreadNews;
+import javafx.util.Duration;
+import model.News;
+import view.news.ThreadNews;
+import view.news.Index;
 
 public class MainView extends View{
     private double x = 0, y = 0;
+    private News currentShowedNews = null;
     @FXML
     Label username;
     @FXML
@@ -46,7 +49,12 @@ public class MainView extends View{
 
     @Override
     public void init() {
-        ThreadNews threadNews = new ThreadNews();
+        setNewsTransition();
+
+        ThreadNews threadNews = new ThreadNews(this);
+        //threadNews.start();
+        new Thread(threadNews).start();
+
         String windowsUser = System.getProperty("user.name");
         username.setText(windowsUser);
         getStage().setOnHidden(e -> Platform.exit());
@@ -91,7 +99,16 @@ public class MainView extends View{
             }
         });
 
-        threadNews.start();
+        newsLabel.setOnMouseClicked(e -> {
+            if(currentShowedNews != null){
+                //Open window with news details
+                Window newsDetails = new Window("FXML/news/index.fxml", "News details");
+                newsDetails.load();
+                newsDetails.show();
+                Index newsIndex = (Index) newsDetails.getView();
+                newsIndex.setNews(currentShowedNews);
+            }
+        });
 
         setCenter(pathToHomePanel);
         this.window.undecorated();
@@ -115,7 +132,23 @@ public class MainView extends View{
 
     }
 
+    public void setNews(News news){
+        newsLabel.setText("INFO : " + news.getTitle());
+        currentShowedNews = news;
+    }
+
     public void setUsername(String employeeUsername){
         username.setText(employeeUsername);
     }
+
+    private void setNewsTransition(){
+        TranslateTransition transition = new TranslateTransition();
+        transition.setDuration(Duration.millis(15000));
+        transition.setNode(newsLabel);
+        transition.setToX(-1100);
+        transition.setAutoReverse(true);
+        transition.setCycleCount(TranslateTransition.INDEFINITE);
+        transition.play();
+    }
+
 }
