@@ -88,8 +88,10 @@ public class MainView extends View{
         });
 
         setCenter(pathToHomePanel);
+
         this.window.undecorated();
-        makeDraggable(mainPanel);
+        makeDraggable(topBar);
+
     }
 
     /**

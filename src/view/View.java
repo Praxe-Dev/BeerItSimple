@@ -58,7 +58,7 @@ public abstract class View extends Node {
             Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
             stage.setX(e.getScreenX() - x);
             stage.setY(e.getScreenY() - y);
-            stage.setOpacity(0.5);
+            stage.setOpacity(0.7);
         });
 
         main.setOnMouseReleased(e -> {
