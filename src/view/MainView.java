@@ -59,7 +59,6 @@ public class MainView extends View{
             setCenter(pathToOrdersPanel);
         });
 
-        searchBtn.setOnAction(e -> {
         productBtn.setOnAction(e -> {
             PopUp.showInfo("WIP", "This section is still work in progress, sorry !");
         });
