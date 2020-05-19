@@ -193,6 +193,17 @@ VALUES ('Mojito canette 25cl', 2.50, 156, 30, 21);
 INSERT INTO Product (label, unitPrice, currentStock, minStock, VATCodeRate)
 VALUES ('Carapils 25cl', 0.99, 156, 30, 21);
 
+/*FILLING News table*/
+
+INSERT INTO News(title, content, startingDate, endDate, EmployeeEntityId)
+VALUES('Covid-19', 'Merci de respecter la distanciation sociale. Veillez à garder votre masque toute la journée.', '2020-03-15', '2020-08-30', 1);
+
+INSERT INTO News(title, content, startingDate, endDate, EmployeeEntityId)
+VALUES('Vente Jupiler', 'Limite de vente de jupiler à 10 bacs par personne en raison du problème de réapprovisionnement actuel.', '2020-05-15', '2020-06-30', 2);
+
+INSERT INTO News(title, content, startingDate, endDate, EmployeeEntityId)
+VALUES('Retard livraisons', 'Ne pas oublier de prévenir les clients du retard de livraison possible.', '2020-05-01', '2020-06-15', 2);
+
 /* Filling Delivery table */
 
 INSERT INTO Delivery (plannedDate, OrderReference, EmployeeEntityId)

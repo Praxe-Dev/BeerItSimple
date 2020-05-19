@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import view.thread.ThreadNews;
 
 public class MainView extends View{
     private double x = 0, y = 0;
@@ -34,6 +35,8 @@ public class MainView extends View{
     JFXButton productBtn;
     @FXML
     JFXButton searchBtn;
+    @FXML
+    Label newsLabel;
 
     // Path to FXML file to display on center
     private static final String pathToHomePanel = "/FXML/homePanel.fxml";
@@ -43,6 +46,7 @@ public class MainView extends View{
 
     @Override
     public void init() {
+        ThreadNews threadNews = new ThreadNews();
         String windowsUser = System.getProperty("user.name");
         username.setText(windowsUser);
         getStage().setOnHidden(e -> Platform.exit());
@@ -86,6 +90,8 @@ public class MainView extends View{
                 window.dispose();
             }
         });
+
+        threadNews.start();
 
         setCenter(pathToHomePanel);
         this.window.undecorated();

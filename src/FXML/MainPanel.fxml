@@ -62,7 +62,7 @@
    <bottom>
       <AnchorPane prefHeight="60.0" prefWidth="1280.0" style="-fx-background-color: linear-gradient(to left, #0f2027, #203a43, #2c5364);" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" layoutY="-1.0" prefHeight="62.0" prefWidth="1280.0" text="Citation Citation Citation Citation Citation Citation Citation Citation Citation " textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+            <Label fx:id="newsLabel" alignment="CENTER" layoutY="-1.0" prefHeight="62.0" prefWidth="1280.0" text="Citation Citation Citation Citation Citation Citation Citation Citation Citation " textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
          </children>
          <opaqueInsets>
             <Insets />
@@ -110,7 +110,7 @@
                   <Insets right="30.0" />
                </HBox.margin>
             </FontAwesomeIcon>
-            <JFXButton styleClass="closeBtn" fx:id="closeWindow" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Button" textAlignment="CENTER">
+            <JFXButton fx:id="closeWindow" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" styleClass="closeBtn" text="Button" textAlignment="CENTER">
                <graphic>
                   <FontAwesomeIcon fill="WHITE" glyphName="CLOSE" size="2em" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="21.85714340209961">
                      <font>
