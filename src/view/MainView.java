@@ -93,13 +93,16 @@ public class MainView extends View{
 
         logout.setOnMouseClicked(e -> {
             //TODO: replace with close all windows!
-            Window login = new Window("FXML/loginPanel.fxml", "Login");
-            switchWindow(login);
+            if (PopUp.showConfirm("Sign out", "Are you sure you want to sign out ?")) {
+                Window login = new Window("FXML/loginPanel.fxml", "Login");
+                switchWindow(login);
+            }
         });
 
         closeWindow.setOnMouseClicked(e -> {
             //TODO: replace with close all windows!
-            System.exit(0);
+            if (PopUp.showConfirm("Closing", "Are you sure you want to quit the application ?"))
+                System.exit(0);
         });
 
         newsLabel.setOnMouseClicked(e -> {
