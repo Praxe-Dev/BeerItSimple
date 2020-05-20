@@ -1,9 +1,7 @@
 package view.order;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.tool.xml.html.head.Title;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
@@ -126,6 +124,131 @@ public class Read extends View {
             tableArticle.getItems().addAll(orderLines);
         } catch (NoRowSelected e) {
             e.showError();
+        }
+    }
+
+    public void generatePDF() {
+        Document invoice = new Document();
+        final Paragraph space = new Paragraph("\n\n\n\n\n\n");
+        final BaseColor themeColor = new BaseColor(72, 141, 171);
+
+        try {
+            PdfWriter writer = PdfWriter.getInstance(invoice, new FileOutputStream("./src/PDFInvoices/invoice_" + selectedOrder.getReference() + ".pdf"));
+            invoice.open();
+
+            Image image = Image.getInstance("C:\\Users\\lejeu\\IdeaProjects\\BeerItSimple\\src\\ressources\\logoTest.png");
+            image.scaleToFit(100f,100f);
+
+            // Title
+            Paragraph title = new Paragraph("Invoice n°" + selectedOrder.getReference());
+            title.setAlignment(Element.ALIGN_CENTER);
+            title.getFont().setSize(30f);
+            title.add(image);
+            invoice.add(title);
+
+            Paragraph date = new Paragraph("\nDate : " + LocalDate.now().toString());
+            date.setAlignment(Element.ALIGN_RIGHT);
+            invoice.add(date);
+
+            // Company address
+            Paragraph companyAddress = new Paragraph(
+                    "BeerItSimple\n"+
+                    "Rue du pont, 29\n" +
+                    "0659/99.99.99");
+            invoice.add(companyAddress);
+
+            // Customer address
+            Paragraph customerAddress = new Paragraph(
+                            selectedOrder.getCustomer().getEntity().getContactName() +
+                            "\n" + selectedOrder.getCustomer().getEntity().getStreet() + ", " + selectedOrder.getCustomer().getEntity().getHouseNumber() +
+                            "\n" + selectedOrder.getCustomer().getEntity().getPhoneNumber() +
+                            (selectedOrder.getCustomer().getEntity().getMail() != null ? "\n" +selectedOrder.getCustomer().getEntity().getMail() : "N/A" ) + "\n\n"
+            );
+            customerAddress.setAlignment(Element.ALIGN_RIGHT);
+
+            invoice.add(customerAddress);
+
+            invoice.add(space);
+
+            // Order detail
+            PdfPTable orderDetail = new PdfPTable(4);
+            orderDetail.setWidthPercentage(105);
+            orderDetail.setSpacingBefore(11f);
+            orderDetail.setSpacingAfter(11f);
+
+            float[] colWidth = {4f,2f,2f,2f};
+            orderDetail.setWidths(colWidth);
+
+
+
+            Font bold = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+
+            PdfPCell product = new PdfPCell(new Phrase("Product", bold));
+            product.setHorizontalAlignment(Element.ALIGN_CENTER);
+            product.setPadding(5);
+            product.setBackgroundColor(themeColor);
+            PdfPCell qty = new PdfPCell(new Phrase("Quantity", bold));
+            qty.setHorizontalAlignment(Element.ALIGN_CENTER);
+            qty.setPadding(5);
+            qty.setBackgroundColor(themeColor);
+            PdfPCell price = new PdfPCell(new Phrase("Unit price", bold));
+            price.setHorizontalAlignment(Element.ALIGN_CENTER);
+            price.setPadding(5);
+            price.setBackgroundColor(themeColor);
+            PdfPCell total = new PdfPCell(new Phrase("Total", bold));
+            total.setHorizontalAlignment(Element.ALIGN_CENTER);
+            total.setPadding(5);
+            total.setBackgroundColor(themeColor);
+
+            orderDetail.addCell(product);
+            orderDetail.addCell(qty);
+            orderDetail.addCell(price);
+            orderDetail.addCell(total);
+
+            fillInvoiceTable(orderDetail);
+
+            invoice.add(orderDetail);
+
+            // add the balance due
+            Paragraph due = new Paragraph("Balance due : " + totalAmountExclVat.getText() + "€");
+            due.setAlignment(Element.ALIGN_RIGHT);
+//            due.getFont().setColor(BaseColor.WHITE);
+            invoice.add(due);
+
+            invoice.add(space);
+            Paragraph footer = new Paragraph("Thank for your trust in our products, in the hope you'll come back soon !");
+            footer.getFont().setSize(16f);
+//            footer.getFont().setColor(BaseColor.WHITE);
+            footer.setAlignment(Element.ALIGN_CENTER);
+            invoice.add(footer);
+
+            invoice.close();
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        PopUp.showSuccess("Invoice generated", "Invoice generated succesfuly, you can retrive it in the PDFInvoices package !");
+    }
+
+    void fillInvoiceTable(PdfPTable orderDetail) {
+        for (OrderLine ol : selectedOrder.getOrderLineList()) {
+            PdfPCell productRow = new PdfPCell(new Phrase(ol.getProduct().toString()));
+            productRow.setPadding(3);
+            PdfPCell quantityRow = new PdfPCell(new Phrase(ol.getQuantity().toString()));
+            quantityRow.setPadding(3);
+            quantityRow.setHorizontalAlignment(Element.ALIGN_CENTER);
+            PdfPCell unitPriceRow = new PdfPCell(new Phrase(ol.getSalesUnitPrice().toString() + " €"));
+            unitPriceRow.setPadding(3);
+            unitPriceRow.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            PdfPCell totalAmountRow = new PdfPCell(new Phrase(ol.getFormatedTotal()));
+            totalAmountRow.setPadding(3);
+            totalAmountRow.setHorizontalAlignment(Element.ALIGN_RIGHT);
+
+            orderDetail.addCell(productRow);
+            orderDetail.addCell(quantityRow);
+            orderDetail.addCell(unitPriceRow);
+            orderDetail.addCell(totalAmountRow);
         }
     }
 
