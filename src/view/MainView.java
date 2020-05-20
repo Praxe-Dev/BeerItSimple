@@ -99,7 +99,7 @@ public class MainView extends View{
 
         closeWindow.setOnMouseClicked(e -> {
             //TODO: replace with close all windows!
-            Platform.exit();
+            System.exit(0);
         });
 
         newsLabel.setOnMouseClicked(e -> {
