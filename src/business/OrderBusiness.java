@@ -5,10 +5,7 @@ import dataAccess.OrderDataAccess;
 import exception.DeletionExceiption;
 import exception.NoRowSelected;
 import exception.SQLManageException;
-import model.Customer;
-import model.Order;
-import model.OrderLineTableFormat;
-import model.OrderTableFormat;
+import model.*;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -29,7 +26,7 @@ public class OrderBusiness {
         return dao.getAllOrders();
     }
 
-    public boolean create(Order orderLineTableFormats) throws SQLException {
+    public boolean create(Order orderLineTableFormats) throws SQLException, SQLManageException {
         return dao.create(orderLineTableFormats);
     }
 
@@ -47,5 +44,21 @@ public class OrderBusiness {
 
     public boolean updateOrder(Order order) throws SQLManageException {
         return dao.updateOrder(order);
+    }
+
+    public Rank updateCustomerRank(Customer customer) throws SQLManageException {
+        return dao.updateCustomerRank(customer);
+    }
+
+    public ArrayList<Order> getAllOrdersFromCustomer(Customer customer) throws SQLManageException {
+        return dao.getAllOrdersFromCustomer(customer);
+    }
+
+    public ArrayList<Order> getAllOrdersFromZipCode(City city) throws SQLManageException {
+        return dao.getAllOrdersFromZipCode(city);
+    }
+
+    public ArrayList<Order> getOrdersFromRanks(Rank rank, Status status, Boolean isPaid) {
+        return dao.getOrdersFromRanks(rank, status, isPaid);
     }
 }

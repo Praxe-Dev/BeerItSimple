@@ -181,70 +181,6 @@ public class OrderDBAccess implements OrderDataAccess {
                         null
                 );
 
-//                String sqlDeliveryInstruction = "SELECT d.*, emp.*, e.*, c.* FROM delivery d\n" +
-//                                                "JOIN employee emp ON emp.EntityId = d.EmployeeEntityId\n" +
-//                                                "JOIN entity e ON e.id = d.EmployeeEntityId\n" +
-//                                                "JOIN city c ON e.CityLabel = c.label AND e.CityZipCode = c.zipCode\n" +
-//                                                "WHERE d.OrderReference = ?";
-//
-//                // get delivery and all informations
-//                Delivery delivery = null;
-//                Employee employee = null;
-//                Entity entity = null;
-//
-//                PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDeliveryInstruction);
-//                preparedStatementDelivery.setInt(1, order.getReference());
-//                ResultSet dataDelivery = preparedStatementDelivery.executeQuery();
-//
-//                if (dataDelivery.next()) {
-//                    GregorianCalendar plannedDateG = null;
-//                    GregorianCalendar deliveredDateG = null;
-//
-//                    java.sql.Date plannedDate = dataDelivery.getDate("d.plannedDate");
-//                    if (plannedDate != null) {
-//                        plannedDateG = new GregorianCalendar();
-//                        plannedDateG.setTime(plannedDate);
-//                    }
-//
-//                    java.sql.Date deliveredDate = dataDelivery.getDate("d.deliveredDate");
-//                    if (deliveredDate != null) {
-//                        deliveredDateG = new GregorianCalendar();
-//                        deliveredDateG.setTime(deliveredDate);
-//                    }
-//
-//                    City cityD = new City(
-//                            dataDelivery.getString("c.label"),
-//                            dataDelivery.getInt("c.zipCode")
-//                    );
-//
-//                    Entity entityDeliveryMan = new Entity(
-//                            dataDelivery.getInt("e.id"),
-//                            dataDelivery.getString("e.mail"),
-//                            dataDelivery.getString("e.contactName"),
-//                            dataDelivery.getString("e.phoneNumber"),
-//                            dataDelivery.getInt("e.houseNumber"),
-//                            dataDelivery.getString("e.street"),
-//                            dataDelivery.getString("e.bankAccountNumber"),
-//                            dataDelivery.getString("e.businessNumber"),
-//                            cityD
-//                    );
-//
-//                    Employee deliveryMan = new Employee(
-//                            dataDelivery.getInt("emp.EntityId"),
-//                            dataDelivery.getInt("emp.RoleId"),
-//                            dataDelivery.getString("emp.password"),
-//                            entityDeliveryMan);
-//
-//                    delivery = new Delivery(
-//                            deliveryMan,
-//                            dataDelivery.getInt("d.id"),
-//                            plannedDateG,
-//                            deliveredDateG,
-//                            order
-//                    );
-//
-//                    order.setDelivery(delivery);
-//                }
                 setDeliveryFromOrder(order);
                 setCustomerFromId(order, customerId);
                 setOrderLineFromOrder(order);
@@ -262,7 +198,7 @@ public class OrderDBAccess implements OrderDataAccess {
         String sqlInstruction = "SELECT o.*, s.*, p.* FROM `order` o\n"+
                                 "JOIN status s ON s.id = o.StatusNumber\n" +
                                 "JOIN paymentmethod p ON p.id = o.paymentMethodId\n" +
-                                "WHERE ? <= o.startingDate AND o.startingDate <= ?";
+                                "WHERE ? <= o.startingDate AND ? >= o.startingDate";
 
         ArrayList<Order> orderList = new ArrayList<>();
 
@@ -325,7 +261,89 @@ public class OrderDBAccess implements OrderDataAccess {
         return orderList;
     }
 
-    public boolean create(Order order) throws SQLException {
+    @Override
+    public ArrayList<Order> getOrdersFromRanks(Rank rank, Status status, Boolean isPaid) {
+
+        String sqlInstruction = "SELECT DISTINCT o.*, s.*, p.* FROM `order` o\n"+
+                                "JOIN status s ON s.id = o.StatusNumber\n" +
+                                "JOIN paymentmethod p ON p.id = o.paymentMethodId\n" +
+                                "JOIN customer ON customer.RankId = ?\n";
+
+        if( status != null) {
+            sqlInstruction += "WHERE s.id = ?\n";
+            if (isPaid != null) {
+                sqlInstruction += "AND o.isPaid = ?";
+            }
+        } else if (isPaid != null) {
+            sqlInstruction += "WHERE o.isPaid = ?";
+        }
+
+        ArrayList<Order> orders = new ArrayList<>();
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setInt(1, rank.getId());
+
+            if( status != null) {
+                preparedStatement.setInt(2, status.getId());
+                if (isPaid != null) {
+                    preparedStatement.setBoolean(3, isPaid);
+                }
+            } else if (isPaid != null) {
+                preparedStatement.setBoolean(2, isPaid);
+            }
+
+            ResultSet data =  preparedStatement.executeQuery();
+
+            Order o;
+            Status s;
+            Integer customerId;
+            PaymentMethod paymentMethod;
+            GregorianCalendar calendar = null;
+
+            while (data.next()) {
+                customerId = data.getInt("o.CustomerEntityId");
+
+                s = new Status(
+                        data.getInt("s.id"),
+                        data.getString("s.label")
+                );
+
+                paymentMethod = new PaymentMethod(
+                        data.getInt("p.id"),
+                        data.getString("p.label")
+                );
+
+                java.sql.Date startDate = data.getDate("startingDate");
+                if (startDate != null) {
+                    calendar = new GregorianCalendar();
+                    calendar.setTime(startDate);
+                }
+
+                o = new Order(
+                        null,
+                        data.getInt("o.reference"),
+                        data.getBoolean("o.isPaid"),
+                        calendar,
+                        s,
+                        paymentMethod);
+
+                setCustomerFromId(o, customerId);
+                setDeliveryFromOrder(o);
+
+                orders.add(o);
+            }
+
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+
+        return orders;
+    }
+
+    public boolean create(Order order) throws SQLException, SQLManageException {
         int affectedRow = 0;
         String sqlInstructionOrder = "INSERT INTO `order` (startingDate, isPaid, StatusNumber, paymentMethodId, CustomerEntityId)\n" +
                                      "VALUES (?,?,?,?,?)";
@@ -359,7 +377,7 @@ public class OrderDBAccess implements OrderDataAccess {
                         PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDelivery);
                         preparedStatementDelivery.setDate(1, new java.sql.Date(order.getDelivery().getPlannedDate().getTimeInMillis()));
                         preparedStatementDelivery.setInt(2, orderId);
-                        preparedStatementDelivery.setInt(3, order.getDelivery().getEmployee().getId());
+                        preparedStatementDelivery.setInt(3, order.getDelivery().getEmployee().getEntity().getId());
 
                         preparedStatementDelivery.executeUpdate();
                     }
@@ -393,6 +411,43 @@ public class OrderDBAccess implements OrderDataAccess {
         }
 
         return true;
+    }
+
+    public Rank updateCustomerRank(Customer customer) throws SQLManageException {
+        //Get All Orders and orderlines
+        Rank newRank = null;
+        String sqlInstruction = "SELECT sum(ol.salesUnitPrice*ol.quantity) AS ordersSum FROM `order` JOIN `orderline` ol ON ol.Orderreference = order.reference  WHERE order.CustomerEntityId = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setInt(1, customer.getEntity().getId());
+            ResultSet data = preparedStatement.executeQuery();
+            if(data.next()){
+                //Search new rank
+                String sqlSearch = "SELECT * FROM `rank` WHERE minAmountOrder <= ? ORDER BY id DESC LIMIT 1";
+                PreparedStatement preparedRankStatement= connection.prepareStatement(sqlSearch);
+                preparedRankStatement.setDouble(1, data.getDouble("ordersSum"));
+                ResultSet dataRank = preparedRankStatement.executeQuery();
+                if(dataRank.next()){
+                    newRank = new Rank(
+                            dataRank.getInt("id"),
+                            dataRank.getString("label"),
+                            dataRank.getInt("creditLimit"),
+                            dataRank.getInt("minAmountOrder")
+                    );
+                    if(customer.getRank().getId() != newRank.getId()){
+                        //Update rank
+                        String updateRank = "UPDATE customer SET RankId = ? WHERE EntityId = ?";
+                        PreparedStatement preparedUpdateRank= connection.prepareStatement(updateRank);
+                        preparedUpdateRank.setInt(1,newRank.getId());
+                        preparedUpdateRank.setInt(2,customer.getEntity().getId());
+                        preparedUpdateRank.executeUpdate();
+                    }
+                }
+            }
+        } catch(SQLException e){
+            new SQLManageException(e);
+        }
+        return newRank;
     }
 
     public boolean deleteOrder(Order order) throws DeletionExceiption {
@@ -529,10 +584,11 @@ public class OrderDBAccess implements OrderDataAccess {
     }
 
     private void setDeliveryFromOrder(Order order) throws SQLException {
-        String sqlDelivery = "SELECT d.*, emp.*, e.*, c.* FROM delivery d\n" +
-                "JOIN employee emp ON emp.EntityId = d.EmployeeEntityId\n" +
-                "JOIN entity e ON e.id = d.EmployeeEntityId\n" +
-                "JOIN city c ON e.CityLabel = c.label AND e.CityZipCode = c.zipCode\n" +
+        String sqlDelivery = "SELECT d.*, emp.*, e.*, c.*, r.* FROM delivery d\n" +
+                "LEFT OUTER JOIN employee emp ON emp.EntityId = d.EmployeeEntityId\n" +
+                "LEFT OUTER JOIN entity e ON e.id = emp.EntityId\n" +
+                "LEFT OUTER JOIN city c ON e.CityLabel = c.label AND e.CityZipCode = c.zipCode\n" +
+                "LEFT OUTER JOIN role r ON r.id = emp.RoleId\n" +
                 "WHERE d.OrderReference = ?";
         PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDelivery);
 
@@ -572,11 +628,16 @@ public class OrderDBAccess implements OrderDataAccess {
                     cityD
             );
 
+            Role role = new Role(
+                    dataDelivery.getInt("r.id"),
+                    dataDelivery.getString("r.name")
+            );
+
             Employee deliveryMan = new Employee(
-                    dataDelivery.getInt("emp.EntityId"),
-                    dataDelivery.getInt("emp.RoleId"),
-                    dataDelivery.getString("emp.password"),
-                    entityDeliveryMan);
+                    entityDeliveryMan,
+                    role,
+                    dataDelivery.getString("emp.password")
+            );
 
             Delivery delivery = new Delivery(
                     deliveryMan,
@@ -664,7 +725,7 @@ public class OrderDBAccess implements OrderDataAccess {
                 PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDelivery);
                 preparedStatementDelivery.setDate(1, new java.sql.Date(order.getDelivery().getPlannedDate().getTimeInMillis()));
                 preparedStatementDelivery.setInt(2, order.getReference());
-                preparedStatementDelivery.setInt(3, order.getDelivery().getEmployee().getId());
+                preparedStatementDelivery.setInt(3, order.getDelivery().getEmployee().getEntity().getId());
 
                 preparedStatementDelivery.executeUpdate();
             }
@@ -763,5 +824,245 @@ public class OrderDBAccess implements OrderDataAccess {
         } catch(SQLException e){
             throw new SQLManageException(e);
         }
+    }
+
+    public ArrayList<Order> getAllOrdersFromZipCode(City city) throws SQLManageException {
+        ArrayList<Order> orderArrayList = new ArrayList<>();
+        String sqlInstruction = "SELECT o.*, s.*, p.*, e.* FROM `order` o\n" +
+                                    "JOIN `status` s ON s.id = o.StatusNumber\n" +
+                                    "JOIN paymentmethod p ON p.id = o.paymentMethodId\n" +
+                                    "JOIN `entity` e ON e.id = o.CustomerEntityId\n" +
+                                    "WHERE e.CityZipCode = ? AND e.Citylabel = ?";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setInt(1, city.getZipCode());
+            preparedStatement.setString(2, city.getLabel());
+            ResultSet data = preparedStatement.executeQuery();
+
+            Order order;
+            Status status;
+            Integer customerId;
+            PaymentMethod paymentMethod;
+
+            GregorianCalendar calendar = null;
+
+
+            while(data.next()) {
+
+                customerId = data.getInt("o.CustomerEntityId");
+
+                status = new Status(
+                        data.getInt("s.id"),
+                        data.getString("s.label")
+                );
+
+                paymentMethod = new PaymentMethod(
+                        data.getInt("p.id"),
+                        data.getString("p.label")
+                );
+
+                java.sql.Date startingDate = data.getDate("startingDate");
+                if (startingDate != null) {
+                    calendar = new GregorianCalendar();
+                    calendar.setTime(startingDate);
+                }
+
+                order = new Order(
+                        null,
+                        data.getInt("o.reference"),
+                        data.getBoolean("o.isPaid"),
+                        calendar,
+                        status,
+                        paymentMethod
+                );
+
+                setCustomerFromId(order, customerId);
+
+                setDeliveryFromOrder(order);
+
+                String sqlOrderLine = "SELECT o.*, p.*, v.*, provider.*, e.*, city.* FROM OrderLine o\n"+
+                        "JOIN product p ON p.code = o.Productcode\n" +
+                        "JOIN vatcode v ON v.rate = p.VATCodeRate\n" +
+                        "JOIN provider ON provider.entityId = p.ProviderEntityId\n" +
+                        "JOIN entity e ON e.id = provider.entityId\n" +
+                        "JOIN city c ON c.label = provider.entityId\n" +
+                        "JOIN city ON e.CityLabel = city.label AND e.CityZipCode = city.zipCode\n" +
+                        "WHERE Orderreference = ?";
+                PreparedStatement preparedStatement2 = connection.prepareStatement(sqlOrderLine);
+                preparedStatement2.setInt(1, order.getReference());
+                try {
+                    ResultSet dataOrderLine = preparedStatement2.executeQuery();
+                    while(dataOrderLine.next()){
+                        //Add all orderline to already created order object.
+                        City providerCity = new City(
+                                data.getString("e.CityLabel"),
+                                data.getInt("e.CityZipCode")
+                        );
+
+                        Entity providerEntity = new Entity(
+                                dataOrderLine.getInt("e.id"),
+                                data.getString("e.mail"),
+                                data.getString("e.contactName"),
+                                data.getString("e.phoneNumber"),
+                                data.getInt("e.houseNumber"),
+                                data.getString("e.street"),
+                                data.getString("e.bankAccountNumber"),
+                                data.getString("e.businessNumber"),
+                                providerCity
+                        );
+
+                        Provider provider = new Provider(
+                                providerEntity,
+                                dataOrderLine.getString("provider.providerType")
+                        );
+
+                        Product product = new Product(
+                                provider,
+                                dataOrderLine.getInt("p.code"),
+                                dataOrderLine.getString("p.label"),
+                                dataOrderLine.getDouble("p.unitPrice"),
+                                dataOrderLine.getInt("p.currentStock"),
+                                dataOrderLine.getInt("p.maxStock"),
+                                dataOrderLine.getInt("p.minStock"),
+                                dataOrderLine.getInt("v.rate")
+                        );
+                        OrderLine orderLine = new OrderLine(
+                                product,
+                                order,
+                                dataOrderLine.getInt("o.quantity"),
+                                dataOrderLine.getDouble("o.salesUnitPrice")
+                        );
+                        order.addOrderLine(orderLine);
+                    }
+                } catch(SQLException ex){
+                    throw ex;
+                }
+
+                orderArrayList.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orderArrayList;
+    }
+
+    public ArrayList<Order> getAllOrdersFromCustomer(Customer customer) throws SQLManageException {
+        ArrayList<Order> orderArrayList = new ArrayList<>();
+        String sqlInstruction = "SELECT o.*, s.*, p.* FROM `order` o\n"+
+                "JOIN status s ON s.id = o.StatusNumber\n" +
+                "JOIN paymentmethod p ON p.id = o.paymentMethodId\n" +
+                "WHERE o.CustomerEntityId = ?";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setInt(1, customer.getEntity().getId());
+            ResultSet data = preparedStatement.executeQuery();
+
+            Order order;
+            Status status;
+            Integer customerId;
+            PaymentMethod paymentMethod;
+
+            GregorianCalendar calendar = null;
+
+
+            while(data.next()) {
+
+                customerId = data.getInt("o.CustomerEntityId");
+
+                status = new Status(
+                        data.getInt("s.id"),
+                        data.getString("s.label")
+                );
+
+                paymentMethod = new PaymentMethod(
+                        data.getInt("p.id"),
+                        data.getString("p.label")
+                );
+
+                java.sql.Date startingDate = data.getDate("startingDate");
+                if (startingDate != null) {
+                    calendar = new GregorianCalendar();
+                    calendar.setTime(startingDate);
+                }
+
+                order = new Order(
+                        null,
+                        data.getInt("o.reference"),
+                        data.getBoolean("o.isPaid"),
+                        calendar,
+                        status,
+                        paymentMethod
+                );
+
+                setCustomerFromId(order, customerId);
+
+                setDeliveryFromOrder(order);
+
+                String sqlOrderLine = "SELECT o.*, p.*, v.*, provider.*, e.*, city.* FROM OrderLine o\n"+
+                        "JOIN product p ON p.code = o.Productcode\n" +
+                        "JOIN vatcode v ON v.rate = p.VATCodeRate\n" +
+                        "JOIN provider ON provider.entityId = p.ProviderEntityId\n" +
+                        "JOIN entity e ON e.id = provider.entityId\n" +
+                        "JOIN city c ON c.label = provider.entityId\n" +
+                        "JOIN city ON e.CityLabel = city.label AND e.CityZipCode = city.zipCode\n" +
+                        "WHERE Orderreference = ?";
+                PreparedStatement preparedStatement2 = connection.prepareStatement(sqlOrderLine);
+                preparedStatement2.setInt(1, order.getReference());
+                try {
+                    ResultSet dataOrderLine = preparedStatement2.executeQuery();
+                    while(dataOrderLine.next()){
+                        //Add all orderline to already created order object.
+                        City providerCity = new City(
+                                data.getString("e.CityLabel"),
+                                data.getInt("e.CityZipCode")
+                        );
+
+                        Entity providerEntity = new Entity(
+                                dataOrderLine.getInt("e.id"),
+                                data.getString("e.mail"),
+                                data.getString("e.contactName"),
+                                data.getString("e.phoneNumber"),
+                                data.getInt("e.houseNumber"),
+                                data.getString("e.street"),
+                                data.getString("e.bankAccountNumber"),
+                                data.getString("e.businessNumber"),
+                                providerCity
+                        );
+
+                        Provider provider = new Provider(
+                                providerEntity,
+                                dataOrderLine.getString("provider.providerType")
+                        );
+
+                        Product product = new Product(
+                                provider,
+                                dataOrderLine.getInt("p.code"),
+                                dataOrderLine.getString("p.label"),
+                                dataOrderLine.getDouble("p.unitPrice"),
+                                dataOrderLine.getInt("p.currentStock"),
+                                dataOrderLine.getInt("p.maxStock"),
+                                dataOrderLine.getInt("p.minStock"),
+                                dataOrderLine.getInt("v.rate")
+                        );
+                        OrderLine orderLine = new OrderLine(
+                                product,
+                                order,
+                                dataOrderLine.getInt("o.quantity"),
+                                dataOrderLine.getDouble("o.salesUnitPrice")
+                        );
+                        order.addOrderLine(orderLine);
+                    }
+                } catch(SQLException ex){
+                    throw ex;
+                }
+
+                orderArrayList.add(order);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orderArrayList;
     }
 }

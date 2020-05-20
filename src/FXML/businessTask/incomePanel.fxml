@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox fx:id="vbox" alignment="CENTER" prefHeight="641.0" prefWidth="1072.0" style="-fx-background-color: linear-gradient(to left, #0f2027, #203a43, #2c5354);" styleClass="center" stylesheets="/view/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.businessTask.incomeView">
+   <children>
+      <Label fx:id="label" alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="451.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Income" textAlignment="CENTER" textFill="WHITE">
+         <VBox.margin>
+            <Insets bottom="15.0" top="10.0" />
+         </VBox.margin>
+         <font>
+            <Font size="32.0" />
+         </font>
+      </Label>
+      <HBox alignment="CENTER" prefHeight="70.0" prefWidth="1072.0">
+         <children>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Starting Date :">
+               <HBox.margin>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </HBox.margin>
+            </Text>
+            <DatePicker fx:id="startDate">
+               <HBox.margin>
+                  <Insets bottom="20.0" left="20.0" right="40.0" top="20.0" />
+               </HBox.margin>
+            </DatePicker>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="End date :">
+               <HBox.margin>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </HBox.margin>
+            </Text>
+            <DatePicker fx:id="endDate">
+               <HBox.margin>
+                  <Insets bottom="20.0" left="20.0" right="40.0" top="20.0" />
+               </HBox.margin>
+            </DatePicker>
+            <JFXButton fx:id="refreshBtn" contentDisplay="RIGHT" minWidth="142.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="142.0" text="Refresh" textAlignment="RIGHT" textFill="WHITE">
+               <graphic>
+                  <FontAwesomeIcon fill="WHITE" glyphName="REFRESH" size="2em" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="38.42856979370117" />
+               </graphic>
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <HBox.margin>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </HBox.margin>
+            </JFXButton>
+         </children>
+      </HBox>
+      <HBox>
+         <VBox.margin>
+            <Insets bottom="10.0" left="40.0" right="40.0" top="10.0" />
+         </VBox.margin>
+         <children>
+            <TableView fx:id="incomeTable" prefHeight="361.0" prefWidth="1671.0">
+               <columns>
+                  <TableColumn fx:id="productCode" editable="false" prefWidth="106.0" text="Product code" />
+                  <TableColumn fx:id="productName" editable="false" prefWidth="130.0" text="Product name" />
+                  <TableColumn fx:id="amountSold" editable="false" prefWidth="96.0" style="-fx-alignment: CENTER_RIGHT;" text="Amount sold" />
+                  <TableColumn fx:id="income" editable="false" minWidth="1.0" prefWidth="99.0" style="-fx-alignment: CENTER_RIGHT;" text="Income" />
+                  <TableColumn fx:id="salePercentage" editable="false" prefWidth="167.0" style="-fx-alignment: CENTER_RIGHT;" text="Sales percentage" />
+               </columns>
+            </TableView>
+            <PieChart fx:id="pieChart" prefHeight="341.0" prefWidth="1292.0" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Total income : ">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <Text fx:id="totalIncome" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0.00" textAlignment="RIGHT" wrappingWidth="192.13671875">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Text>
+            <Text fill="WHITE" layoutX="88.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="€" wrappingWidth="122.13671875">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+         </children>
+         <VBox.margin>
+            <Insets bottom="20.0" top="20.0" />
+         </VBox.margin>
+      </HBox>
+   </children>
+</VBox>

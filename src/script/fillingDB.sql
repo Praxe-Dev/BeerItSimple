@@ -43,28 +43,28 @@ VALUES (21);
 
 /* Filling rank table */
 
-INSERT INTO `Rank` (label, creditLimit)
-VALUES ('New', null);
+INSERT INTO `Rank` (label, creditLimit, minAmountOrder)
+VALUES ('New', null, 0);
 
-INSERT INTO `Rank` (label, creditLimit)
-VALUES ('Loyal', 500);
+INSERT INTO `Rank` (label, creditLimit, minAmountOrder)
+VALUES ('Loyal', 500, 250);
 
-INSERT INTO `Rank` (label, creditLimit)
-VALUES ('Prioritised', 1500);
+INSERT INTO `Rank` (label, creditLimit, minAmountOrder)
+VALUES ('Prioritised', 1500, 750);
 
 /* Filling Status table */
 
 INSERT INTO `Status` (label)
-VALUES ('En attente');
+VALUES ('Pending');
 
 INSERT INTO `Status` (label)
-VALUES ('Confirmé');
+VALUES ('Confirmed');
 
 INSERT INTO `Status` (label)
-VALUES ('Annulé');
+VALUES ('Cancelled');
 
 INSERT INTO `Status` (label)
-VALUES ('Terminé');
+VALUES ('Finished');
 
 /* Filling PaymentMethod */
 
@@ -83,10 +83,13 @@ VALUES ('Gift card');
 /* Filling Role table */
 
 INSERT INTO Role (name)
-VALUES ('Employé');
+VALUES ('Employee');
 
 INSERT INTO Role (name)
 VALUES ('Manager');
+
+INSERT INTO Role (name)
+VALUES ('Delivery man');
 
 /* Filling Entity table */
 
@@ -148,6 +151,9 @@ VALUES (2, 1, 'admin');
 INSERT INTO Employee (EntityId, RoleId,password)
 VALUES (8, 1, 'test');
 
+INSERT INTO Employee (EntityId, RoleId,password)
+VALUES (3, 3, 'livreur');
+
 /* Filling Provider table */
 
 INSERT INTO Provider (entityId, providerType)
@@ -186,6 +192,17 @@ VALUES ('Mojito canette 25cl', 2.50, 156, 30, 21);
 
 INSERT INTO Product (label, unitPrice, currentStock, minStock, VATCodeRate)
 VALUES ('Carapils 25cl', 0.99, 156, 30, 21);
+
+/*FILLING News table*/
+
+INSERT INTO News(title, content, startingDate, endDate, EmployeeEntityId)
+VALUES('Covid-19', 'Merci de respecter la distanciation sociale. Veillez à garder votre masque toute la journée.', '2020-03-15', '2020-08-30', 1);
+
+INSERT INTO News(title, content, startingDate, endDate, EmployeeEntityId)
+VALUES('Vente Jupiler', 'Limite de vente de jupiler à 10 bacs par personne en raison du problème de réapprovisionnement actuel.', '2020-05-15', '2020-06-30', 2);
+
+INSERT INTO News(title, content, startingDate, endDate, EmployeeEntityId)
+VALUES('Retard livraisons', 'Ne pas oublier de prévenir les clients du retard de livraison possible.', '2020-05-01', '2020-06-15', 2);
 
 /* Filling Delivery table */
 

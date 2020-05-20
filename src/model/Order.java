@@ -110,4 +110,17 @@ public class Order {
         this.orderLineList = orderLineList;
     }
 
+    @Override
+    public String toString() {
+        return "Order{" +
+                "customer=" + customer +
+                ", reference=" + reference +
+                ", isPaid=" + isPaid +
+                ", startingDate=" + startingDate +
+                ", status=" + status +
+                ", paymentMethod=" + paymentMethod +
+                ", orderLineList=" + orderLineList +
+                ", delivery=" + delivery +
+                '}';
+    }
 }

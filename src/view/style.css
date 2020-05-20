@@ -24,10 +24,11 @@
 #mainMenu {
     -fx-background-color: #0f2027;
 }
-
+/*
 .center {
     -fx-background-color: linear-gradient(to left, #0f2027, #203a43, #2c5364);
 }
+ */
 
 .champ-invalide {
     -fx-background-color: rgba(255,0,0,0.3);
@@ -55,3 +56,14 @@
     -fx-text-fill: white;
 }
 
+.whiteComboBox .cell {
+    -fx-text-fill: black;
+}
+
+.whiteComboBox {
+    -fx-background-color: white;
+}
+/*
+.jfx-combo-box .label {
+    -fx-background-color: white;
+}

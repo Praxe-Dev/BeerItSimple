@@ -4,11 +4,25 @@ public class Rank {
     private Integer id;
     private String label;
     private Integer creditLimit;
+    private Integer minAmountOrder;
 
-    public Rank(Integer id, String label, Integer creditLimit){
+    public Rank(Integer id, String label, Integer creditLimit, Integer minAmountOrder){
         setId(id);
         setLabel(label);
         setCreditLimit(creditLimit);
+        setMinAmountOrder(minAmountOrder);
+    }
+
+    public Rank(Integer id, String label, Integer creditLimit){
+        this(id, label, creditLimit, null);
+    }
+
+    public Integer getMinAmountOrder() {
+        return minAmountOrder;
+    }
+
+    public void setMinAmountOrder(Integer minAmountOrder) {
+        this.minAmountOrder = minAmountOrder;
     }
 
     public void setId(int id) {

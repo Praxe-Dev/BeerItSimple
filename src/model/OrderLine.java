@@ -44,4 +44,9 @@ public class OrderLine {
     public void setOrder(Order order) {
         this.order = order;
     }
+
+    public String getFormatedTotal() {
+        double total = salesUnitPrice * quantity;
+        return String.format("%.2f €", total);
+    }
 }

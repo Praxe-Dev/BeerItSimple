@@ -1,13 +1,33 @@
 package view;
 
 import com.jfoenix.controls.JFXButton;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.util.Duration;
+import model.News;
+import model.Role;
+import view.news.ThreadNews;
+import view.news.Read;
 
 public class MainView extends View{
-
+    private double x = 0, y = 0;
+    private News currentShowedNews = null;
+    @FXML
+    Label username;
+    @FXML
+    HBox topBar;
+    @FXML
+    JFXButton closeWindow;
+    @FXML
+    FontAwesomeIcon logout;
     @FXML
     BorderPane mainPanel;
     @FXML
@@ -17,16 +37,32 @@ public class MainView extends View{
     @FXML
     JFXButton ordersBtn;
     @FXML
+    JFXButton productBtn;
+    @FXML
     JFXButton searchBtn;
+    @FXML
+    JFXButton newsBtn;
+    @FXML
+    Label newsLabel;
+    @FXML
+    VBox boxMenu;
 
     // Path to FXML file to display on center
     private static final String pathToHomePanel = "/FXML/homePanel.fxml";
     private static final String pathToCustomersPanel = "/FXML/customer/index.fxml";
     private static final String pathToOrdersPanel = "/FXML/order/index.fxml";
-    private static final String pathToSearchPanel = "/FXML/searchPanel.fxml";
+    private static final String pathToNewsPanel = "/FXML/news/index.fxml";
 
     @Override
     public void init() {
+        setNewsTransition();
+
+        ThreadNews threadNews = new ThreadNews(this);
+        //threadNews.start();
+        new Thread(threadNews).start();
+
+//        getStage().setOnHidden(e -> Platform.exit());
+
         homeBtn.setOnAction(e -> {
             setCenter(pathToHomePanel);
         });
@@ -39,17 +75,51 @@ public class MainView extends View{
             setCenter(pathToOrdersPanel);
         });
 
+        productBtn.setOnAction(e -> {
+            PopUp.showInfo("WIP", "This section is still work in progress, sorry !");
+        });
+
         searchBtn.setOnAction(e -> {
-            // TODO: Open new tabPane
+            Window search = new Window("FXML/search/search.fxml", "BeerItSimple - Search in order");
+            search.load();
+//            search.getView().setParentView(this);
+            search.resizable(false);
+            search.show();
+        });
+
+        newsBtn.setOnAction(e -> {
+            setCenter(pathToNewsPanel);
+        });
+
+        logout.setOnMouseClicked(e -> {
+            //TODO: replace with close all windows!
+            Window login = new Window("FXML/loginPanel.fxml", "Login");
+            switchWindow(login);
+        });
+
+        closeWindow.setOnMouseClicked(e -> {
+            //TODO: replace with close all windows!
+            System.exit(0);
+        });
+
+        newsLabel.setOnMouseClicked(e -> {
+            if(currentShowedNews != null){
+                //Open window with news details
+                Window newsDetails = new Window("FXML/news/read.fxml", "News details");
+                newsDetails.load();
+                newsDetails.show();
+                newsDetails.resizable(false);
+                Read newsRead = (Read) newsDetails.getView();
+                newsRead.setNews(currentShowedNews);
+            }
         });
 
         setCenter(pathToHomePanel);
-    }
 
-//    @Override
-//    public Pane getRoot() {
-//        return this.mainPanel;
-//    }
+        this.window.undecorated();
+        makeDraggable(topBar);
+
+    }
 
     /**
      * Get the view and display it on the center Panel
@@ -67,4 +137,30 @@ public class MainView extends View{
         }
 
     }
+
+    public void setNews(News news){
+        newsLabel.setText("INFO : " + news.getTitle());
+        currentShowedNews = news;
+    }
+
+    public void setUsername(String employeeUsername){
+        username.setText(employeeUsername);
+    }
+
+    public void setRole(Role role){
+        if(!role.getName().equals("Manager")){
+            boxMenu.getChildren().remove(newsBtn);
+        }
+    }
+
+    private void setNewsTransition(){
+        TranslateTransition transition = new TranslateTransition();
+        transition.setDuration(Duration.millis(15000));
+        transition.setNode(newsLabel);
+        transition.setToX(-1100);
+        transition.setAutoReverse(true);
+        transition.setCycleCount(TranslateTransition.INDEFINITE);
+        transition.play();
+    }
+
 }

@@ -4,11 +4,10 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
-import controller.CustomerController;
-import controller.OrderController;
-import controller.PaymentMethodController;
-import controller.ProductController;
+import controller.*;
 import exception.NoRowSelected;
+import exception.SQLManageException;
+import exception.UpdateOrderException;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -16,6 +15,8 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.text.Text;
 import model.*;
 import utils.Validators;
@@ -26,7 +27,9 @@ import java.math.BigDecimal;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Create extends View {
@@ -35,6 +38,8 @@ public class Create extends View {
     JFXComboBox<Customer> customerList;
     @FXML
     JFXComboBox<PaymentMethod> paymentMethod;
+    @FXML
+    JFXComboBox<Employee> deliveryMan;
     @FXML
     JFXCheckBox deliveryCheck;
     @FXML
@@ -73,6 +78,7 @@ public class Create extends View {
     Group deliveryDisplay;
 
     CustomerController customerController;
+    EmployeeController employeeController;
     PaymentMethodController paymentMethodController;
     ProductController productController;
     OrderController orderController;
@@ -80,9 +86,13 @@ public class Create extends View {
     @Override
     public void init() {
         customerController = new CustomerController();
+        employeeController = new EmployeeController();
         paymentMethodController = new PaymentMethodController();
         productController = new ProductController();
         orderController = new OrderController();
+
+        setShortcut(new KeyCodeCombination(KeyCode.ENTER), () -> addArticle());
+        setShortcut(new KeyCodeCombination(KeyCode.DELETE), () -> removeProduct());
 
         Validators.setNumberValidator(productQuantity);
 
@@ -98,45 +108,34 @@ public class Create extends View {
         productList.setItems(FXCollections.observableArrayList(allProducts));
         productList.getSelectionModel().selectFirst();
 
+        try {
+            ArrayList<Employee> deliveryList = employeeController.getAllDeliveryEmployee();
+            deliveryMan.setItems(FXCollections.observableArrayList(deliveryList));
+        } catch(SQLManageException e){
+            e.showMessage();
+        }
+
         deliveryDisplay.setVisible(false);
+        deliveryMan.setVisible(false);
 
        deliveryCheck.setOnAction(e -> {
            if (deliveryDisplay.isVisible()) {
                deliveryDisplay.setVisible(false);
+               deliveryMan.setVisible(false);
            } else {
                deliveryDisplay.setVisible(true);
+               deliveryMan.setVisible(true);
            }
        });
 
        initTable();
 
        addArticleBtn.setOnAction(e -> {
-           if (!productQuantity.getText().equals("") && productQuantity.validate()) {
-//               productQuantity.getStyleClass().remove("error");
-               productQuantity.setStyle("");
-               Product newProduct = productList.getValue();
-               if (!checkPresentProduct(newProduct)) {
-                    PopUp.showError("Duplicate error", "You try to add a product already present in the command !");
-               } else {
-
-                   addProduct(newProduct);
-//                   String newVatAmount = String.format("%.2F", (newAmount) )
-               }
-           } else {
-               productQuantity.setStyle("-fx-background-color: rgba(255,0,0,0.5)");
-//               productQuantity.getStyleClass().add("error");
-
-           }
+           addArticle();
        });
 
        removeArticleBtn.setOnAction(e -> {
-           try {
-               OrderLineTableFormat orderLineTableFormat = tableArticle.getSelectionModel().getSelectedItem();
-               tableArticle.getItems().remove(tableArticle.getSelectionModel().getSelectedItem());
-               removeProduct(orderLineTableFormat);
-           } catch (NullPointerException exception) {
-               new NoRowSelected();
-           }
+           removeProduct();
        });
 
        cancelBtn.setOnAction(e -> {
@@ -156,10 +155,33 @@ public class Create extends View {
                         }
                     } catch (SQLException ex) {
                         ex.printStackTrace();
+                    } catch (SQLManageException ex) {
+                        ex.showMessage();
+                    } catch(UpdateOrderException ex) {
+                        ex.showMessage();
                     }
                 }
            }
        });
+    }
+
+    public void addArticle() {
+        if (!productQuantity.getText().equals("") && productQuantity.validate()) {
+//               productQuantity.getStyleClass().remove("error");
+            productQuantity.setStyle("");
+            Product newProduct = productList.getValue();
+            if (!checkPresentProduct(newProduct)) {
+                PopUp.showError("Duplicate error", "You try to add a product already present in the command !");
+            } else {
+
+                addProduct(newProduct);
+//                   String newVatAmount = String.format("%.2F", (newAmount) )
+            }
+        } else {
+            productQuantity.setStyle("-fx-background-color: rgba(255,0,0,0.5)");
+//               productQuantity.getStyleClass().add("error");
+
+        }
     }
 
     private void addProduct(Product product) {
@@ -183,30 +205,42 @@ public class Create extends View {
         totalAmountVatInc.setText(totalVatIncl);
     }
 
-    private void removeProduct(OrderLineTableFormat orderLineTableFormat) {
+    private void removeProduct() {
+        try {
 
-        double currentAmountExlVat = Double.parseDouble(totalAmountExclVat.getText().replace(',', '.'));
-        double newAmountExclVat = currentAmountExlVat - orderLineTableFormat.getExclVat();
-        String newTotalExclVat = String.format("%.2f", newAmountExclVat);
-        totalAmountExclVat.setText(newTotalExclVat);
+            OrderLineTableFormat orderLineTableFormat = tableArticle.getSelectionModel().getSelectedItem();
+            tableArticle.getItems().remove(tableArticle.getSelectionModel().getSelectedItem());
 
-        double currentVatTotal = Double.parseDouble(totalAmountVatOnly.getText().replace(',', '.'));
-        double newVatTotal = 0;
-        if (newAmountExclVat != 0) {
-            newVatTotal = currentVatTotal - (orderLineTableFormat.getExclVat() * ((double) orderLineTableFormat.getVatCodeRate() / 100.0));
+            double currentAmountExlVat = Double.parseDouble(totalAmountExclVat.getText().replace(',', '.'));
+            double newAmountExclVat = currentAmountExlVat - orderLineTableFormat.getExclVat();
+            String newTotalExclVat = String.format("%.2f", newAmountExclVat);
+            totalAmountExclVat.setText(newTotalExclVat);
+
+            double currentVatTotal = Double.parseDouble(totalAmountVatOnly.getText().replace(',', '.'));
+            double newVatTotal = 0;
+            if (newAmountExclVat != 0) {
+                newVatTotal = currentVatTotal - (orderLineTableFormat.getExclVat() * ((double) orderLineTableFormat.getVatCodeRate() / 100.0));
+            }
+            String totalVat = String.format("%.2f", newVatTotal);
+            totalAmountVatOnly.setText(totalVat);
+
+            double newTotalVatIncl = newAmountExclVat + newVatTotal;
+            String totalVatIncl = String.format("%.2f", newTotalVatIncl);
+            totalAmountVatInc.setText(totalVatIncl);
+        } catch (NullPointerException e) {
+            new NoRowSelected();
         }
-        String totalVat = String.format("%.2f", newVatTotal);
-        totalAmountVatOnly.setText(totalVat);
-
-        double newTotalVatIncl = newAmountExclVat + newVatTotal;
-        String totalVatIncl = String.format("%.2f", newTotalVatIncl);
-        totalAmountVatInc.setText(totalVatIncl);
     }
 
     private boolean deliveryDateCheck() {
-        if (deliveryCheck.isSelected() && LocalDate.now().isAfter(deliveryDate.getValue())) {
-            PopUp.showError("Date error", "The delivery date can't be earlier than the current date.");
-            return false;
+        if (deliveryCheck.isSelected()){
+            if(deliveryDate.getValue() == null) {
+                PopUp.showError("Delivery error", "Please choose delivery date or unselect the delivery checkbox.");
+                return false;
+            } else if(LocalDate.now().isAfter(deliveryDate.getValue())) {
+                PopUp.showError("Date error", "The delivery date can't be earlier than the current date.");
+                return false;
+            }
         }
         return true;
     }
@@ -222,7 +256,7 @@ public class Create extends View {
         return true;
     }
 
-    private boolean newOrderInsert() throws SQLException {
+    private boolean newOrderInsert() throws SQLException, SQLManageException, UpdateOrderException {
         ArrayList<OrderLine> orderLines = new ArrayList<>();
         Product product;
         Delivery delivery = null;
@@ -234,11 +268,18 @@ public class Create extends View {
         );
 
         if (deliveryCheck.isSelected()) {
-            GregorianCalendar date = new GregorianCalendar();
-            date.set(deliveryDate.getValue().getYear(), deliveryDate.getValue().getDayOfMonth(), deliveryDate.getValue().getDayOfMonth());
+
+            if(deliveryMan.getSelectionModel().isSelected(-1)){
+                throw new UpdateOrderException("You need to select a delivery man if you want a delivery");
+            }
+            LocalDate date = deliveryDate.getValue();
+            // Create the right format for delivery.plannedDate (-1 and +1 to get the right value)
+            GregorianCalendar gc = new GregorianCalendar(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth() + 1);
+
+//            date.set(deliveryDate.getValue().getYear(), deliveryDate.getValue().getMonthValue(), deliveryDate.getValue().getDayOfMonth());
             delivery = new Delivery(
-                    new Employee(2, "admin"),
-                    date,
+                    deliveryMan.getSelectionModel().getSelectedItem(),
+                    gc,
                     newOrder
             );
 
@@ -250,7 +291,14 @@ public class Create extends View {
             newOrder.addOrderLine(new OrderLine(product, newOrder, line.getQuantity(), line.getUnitPrice()));
         }
 
-        return orderController.create(newOrder);
+        Boolean orderCreated = orderController.create(newOrder);
+        if(orderCreated){
+            Rank updateRank = orderController.updateCustomerRank(newOrder.getCustomer());
+            if(updateRank != null){
+                PopUp.showSuccess("Rank up !", "Thank the client and announce their new rank is: " + updateRank.getLabel() + ".\n His new credit limit is: " + updateRank.getCreditLimit() + "\n");
+            }
+        }
+        return orderCreated;
     }
 
     private void initTable() {
@@ -259,5 +307,21 @@ public class Create extends View {
         quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         totalExclVat.setCellValueFactory(new PropertyValueFactory<>("exclVat"));
         totalInclVat.setCellValueFactory(new PropertyValueFactory<>("inclVat"));
+    }
+
+    public void selectCustomer(Customer customer){
+        int indexCust = getCustomerIndex(customer);
+        if(indexCust != -1) customerList.getSelectionModel().select(indexCust);
+    }
+
+    private int getCustomerIndex(Customer customer){
+        int index = 0;
+        for(Customer cust : customerList.getItems()){
+            if(cust.getEntity().getId() == customer.getEntity().getId()){
+                return index;
+            }
+            index++;
+        }
+        return index;
     }
 }

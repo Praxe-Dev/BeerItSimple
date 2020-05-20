@@ -3,10 +3,18 @@ package view.customer;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
+import controller.OrderController;
+import exception.SQLManageException;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import model.Customer;
+import model.Order;
+import view.PopUp;
 import view.View;
+import view.Window;
+import view.order.Index;
+
+import java.util.ArrayList;
 
 
 public class Read extends View {
@@ -41,10 +49,12 @@ public class Read extends View {
     JFXButton viewOrdersBtn;
 
     Customer selectedCustomer;
+    OrderController orderController;
 
 
     @Override
     public void init() {
+        orderController = new OrderController();
 
         contactName.setText(selectedCustomer.getEntity().getContactName());
         address.setText(selectedCustomer.getEntity().getStreet());
@@ -86,15 +96,34 @@ public class Read extends View {
             closeWindow();
         });
 
-        /*
         viewOrdersBtn.setOnAction(e -> {
-
+            try {
+                ArrayList<Order> allOrders = orderController.getAllOrdersFromCustomer(selectedCustomer);
+                if (allOrders == null || allOrders.size() == 0) {
+                    PopUp.showError("No order", "This customer doesn't have an order yet.");
+                } else {
+                    openNewTabView(allOrders);
+                }
+            } catch(SQLManageException ex){
+                ex.showMessage();
+            }
         });
-        */
 
     }
 
     public void setCustomer(Customer customer) {
         this.selectedCustomer = customer;
+    }
+
+    private void openNewTabView(ArrayList<Order> allOrdersFromCustomer) {
+        Window displayResult = new Window("FXML/order/index.fxml", "BeerItSimple - All orders from selected customer : " + selectedCustomer.getEntity().getContactName() + " (" + selectedCustomer.getEntity().getPhoneNumber() + ")");
+        displayResult.load();
+        displayResult.getView().setParentView(this);
+        view.order.Index index = (Index) displayResult.getView();
+        index.getMainContainer().setStyle("-fx-background-color: linear-gradient(to left, #0f2027, #203a43, #2c5364)");
+        index.updateTable(allOrdersFromCustomer);
+        index.hideRefreshButton();
+        index.setCustomer(this.selectedCustomer);
+        displayResult.show();
     }
 }

@@ -1,28 +1,18 @@
 package model;
 
 public class Employee {
-    private Integer id;
-    private Integer roleId;
-    private String password;
     private Entity entity;
+    private Role role;
+    private String password;
 
-    public Employee(Integer id, Integer roleId, String password, Entity entity) {
-        this.id = id;
-        this.roleId = roleId;
-        this.password = password;
+    public Employee(Entity entity, Role role, String password) {
         this.entity = entity;
+        this.role = role;
+        this.password = password;
     }
 
-    public Employee(Integer id, Integer roleId, String password) {
-        this(id, roleId, password, null);
-    }
-
-    public Employee (Integer id, String password) {
-        this(id, null, password, null);
-    }
-
-    public int getId() {
-        return this.id;
+    public Employee(Entity entity, Role role) {
+        this(entity, role, null);
     }
 
     public Entity getEntity() {
@@ -37,13 +27,20 @@ public class Employee {
         return this.password;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public String toString() {
-        return "Employee{" +
-                "id=" + id +
-                ", roleId=" + roleId +
-                ", password='" + password + '\'' +
-                ", entity=" + entity +
-                '}';
+        return entity.getContactName();
     }
 }

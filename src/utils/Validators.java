@@ -5,6 +5,8 @@ import com.jfoenix.validation.RegexValidator;
 import com.jfoenix.validation.RequiredFieldValidator;
 import javafx.scene.Node;
 
+import java.time.LocalDate;
+
 public class Validators {
 
     public static void setMailValidators(JFXTextField mail) {
@@ -108,6 +110,10 @@ public class Validators {
                 field.validate();
             }
         });
+    }
+
+    public static boolean validateBetweenDates(LocalDate start, LocalDate end) {
+        return end.isBefore(LocalDate.now().plusDays(1)) && start.isBefore(end.plusDays(1));
     }
 
     public static boolean validate(JFXTextField... elements) {

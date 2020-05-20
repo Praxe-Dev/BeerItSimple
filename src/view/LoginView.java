@@ -40,6 +40,7 @@ public class LoginView extends View {
         setShortcut(new KeyCodeCombination(KeyCode.ENTER), () -> openSession());
 
         employeeController = new EmployeeController();
+        makeDraggable(loginContainer);
     }
 
     private void openSession() {
@@ -54,8 +55,12 @@ public class LoginView extends View {
             session = new Window(PathToMainPanel, "BeerItSimple - Home");
 
             switchWindow(session);
-//            System.out.println(employee);
 
+            MainView mainView = (MainView) session.getView();
+            //TODO: Le modèle employé doit contenir une référence entité. La requete de connexion doit être adaptée.
+            mainView.setUsername(employee.getEntity().getContactName());
+            mainView.setRole(employee.getRole());
+            //mainView.setUsername("Administrator");
         } catch (EmployeeLoginException exception) {
                 exception.showMessage();
         } catch (MatriculException exception) {

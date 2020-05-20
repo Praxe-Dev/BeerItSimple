@@ -94,3 +94,4 @@ fabric.properties
 .idea/compiler.xml
 
 .idea/encodings.xml
+src/PDFInvoices/*

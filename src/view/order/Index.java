@@ -62,6 +62,8 @@ public class Index extends View implements Initializable {
     private TableColumn<OrderTableFormat, String> deliveryMan;
 
     private OrderController orderController;
+    private Customer customer = null;
+    private City city = null;
 
     public Index() {
         this.orderController = new OrderController();
@@ -75,13 +77,6 @@ public class Index extends View implements Initializable {
 
     @Override
     public void init() {
-        searchBtn.setOnAction(e -> {
-            Window search = new Window("FXML/order/search.fxml", "BeerItSimple - Search in order");
-            search.load();
-            search.getView().setParentView(this);
-            search.resizable(false);
-            search.show();
-        });
 
         refreshBtn.setOnAction(e -> {
             updateTable();
@@ -92,7 +87,9 @@ public class Index extends View implements Initializable {
             newOrder.load();
             newOrder.getView().setParentView(this);
             newOrder.resizable(false);
+            Create create = (Create) newOrder.getView();
             newOrder.show();
+            if(customer != null) create.selectCustomer(customer);
         });
 
         editOrderBtn.setOnAction(e -> {
@@ -215,7 +212,18 @@ public class Index extends View implements Initializable {
         for (Order order : orderList) {
             ordersList.add(new OrderTableFormat(order));
         }
-
-         return orderTable.getItems().setAll(ordersList);
+        return orderTable.getItems().setAll(ordersList);
     }
+
+    public void setCustomer(Customer customer){
+        this.customer = customer;
+    }
+
+    public void setZipCode(City city) {this.city = city;}
+
+    public void hideRefreshButton(){
+        refreshBtn.setVisible(false);
+    }
+
+    public VBox getMainContainer() { return this.vbox; }
 }
