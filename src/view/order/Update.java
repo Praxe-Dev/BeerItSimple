@@ -226,12 +226,9 @@ public class Update extends View {
     }
 
     private boolean deliveryDateCheck() {
-        if(order.getDelivery() == null || order.getDelivery().getDeliveredDate() == null) {
-            if(deliveryDate.getValue() == null) {
-                PopUp.showError("Delivery error", "Please choose delivery date or unselect the delivery checkbox.");
-                return false;
-            } else if(LocalDate.now().isAfter(deliveryDate.getValue())) {
-                PopUp.showError("Date error", "The delivery date can't be earlier than the current date.");
+        if (deliveryCheck.isSelected()) {
+            if (deliveryDate.getValue() == null || deliveryDate.getValue().isBefore(LocalDate.now())) {
+                PopUp.showError("Delivery error", "Please, choose a delivery dater after the current date or remove the delivery.");
                 return false;
             }
         }

@@ -43,28 +43,28 @@ VALUES (21);
 
 /* Filling rank table */
 
-INSERT INTO `Rank` (label, creditLimit, minAmountOrder)
-VALUES ('New', null, 0);
+INSERT INTO `Rank` (label, creditLimit)
+VALUES ('New', null);
 
-INSERT INTO `Rank` (label, creditLimit, minAmountOrder)
-VALUES ('Loyal', 500, 250);
+INSERT INTO `Rank` (label, creditLimit)
+VALUES ('Loyal', 500);
 
-INSERT INTO `Rank` (label, creditLimit, minAmountOrder)
-VALUES ('Prioritised', 1500, 750);
+INSERT INTO `Rank` (label, creditLimit)
+VALUES ('Prioritised', 1500);
 
 /* Filling Status table */
 
 INSERT INTO `Status` (label)
-VALUES ('Pending');
+VALUES ('En attente');
 
 INSERT INTO `Status` (label)
-VALUES ('Confirmed');
+VALUES ('Confirmé');
 
 INSERT INTO `Status` (label)
-VALUES ('Cancelled');
+VALUES ('Annulé');
 
 INSERT INTO `Status` (label)
-VALUES ('Finished');
+VALUES ('Terminé');
 
 /* Filling PaymentMethod */
 
@@ -83,13 +83,13 @@ VALUES ('Gift card');
 /* Filling Role table */
 
 INSERT INTO Role (name)
-VALUES ('Employee');
+VALUES ('Employé');
 
 INSERT INTO Role (name)
 VALUES ('Manager');
 
 INSERT INTO Role (name)
-VALUES ('Delivery man');
+VALUES ('Deliverer');
 
 /* Filling Entity table */
 
@@ -146,13 +146,10 @@ INSERT INTO Employee (EntityId, RoleId,password)
 VALUES (1, 1, 'JeSuisUnPoisson');
 
 INSERT INTO Employee (EntityId, RoleId,password)
-VALUES (2, 1, 'admin');
+VALUES (2, 2, 'admin');
 
 INSERT INTO Employee (EntityId, RoleId,password)
-VALUES (8, 1, 'test');
-
-INSERT INTO Employee (EntityId, RoleId,password)
-VALUES (3, 3, 'livreur');
+VALUES (8, 3, 'delivery');
 
 /* Filling Provider table */
 
@@ -193,17 +190,6 @@ VALUES ('Mojito canette 25cl', 2.50, 156, 30, 21);
 INSERT INTO Product (label, unitPrice, currentStock, minStock, VATCodeRate)
 VALUES ('Carapils 25cl', 0.99, 156, 30, 21);
 
-/*FILLING News table*/
-
-INSERT INTO News(title, content, startingDate, endDate, EmployeeEntityId)
-VALUES('Covid-19', 'Merci de respecter la distanciation sociale. Veillez à garder votre masque toute la journée.', '2020-03-15', '2020-08-30', 1);
-
-INSERT INTO News(title, content, startingDate, endDate, EmployeeEntityId)
-VALUES('Vente Jupiler', 'Limite de vente de jupiler à 10 bacs par personne en raison du problème de réapprovisionnement actuel.', '2020-05-15', '2020-06-30', 2);
-
-INSERT INTO News(title, content, startingDate, endDate, EmployeeEntityId)
-VALUES('Retard livraisons', 'Ne pas oublier de prévenir les clients du retard de livraison possible.', '2020-05-01', '2020-06-15', 2);
-
 /* Filling Delivery table */
 
 INSERT INTO Delivery (plannedDate, OrderReference, EmployeeEntityId)
@@ -213,3 +199,14 @@ VALUES ('2020-06-21', 1, 1);
 
 INSERT INTO OrderLine (Productcode, Orderreference, quantity, salesUnitPrice)
 VALUES (1,1,32,2.70);
+
+/* Filling News table*/
+
+INSERT INTO News(title, content, startingDate, endDate, EmployeeEntityId)
+VALUES('Covid-19', 'Merci de respecter la distanciation sociale. Veillez à garder votre masque toute la journée.', '2020-03-15', '2020-08-30', 1);
+
+INSERT INTO News(title, content, startingDate, endDate, EmployeeEntityId)
+VALUES('Vente Jupiler', 'Limite de vente de jupiler à 10 bacs par personne en raison du problème de réapprovisionnement actuel.', '2020-05-15', '2020-06-30', 2);
+
+INSERT INTO News(title, content, startingDate, endDate, EmployeeEntityId)
+VALUES('Retard livraisons', 'Ne pas oublier de prévenir les clients du retard de livraison possible.', '2020-05-01', '2020-06-15', 2);
