@@ -105,4 +105,21 @@ public class EmployeeDBAccess implements EmployeeDataAccess {
 
         return deliveryList;
     }
+
+    public String getEmployeeName(Integer entityId) throws SQLManageException {
+        //Return entity name from entityId
+        String sqlInstruction = "SELECT contactName FROM entity WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setInt(1, entityId);
+            ResultSet data = preparedStatement.executeQuery();
+            if (data.next()) {
+                return data.getString("contactName");
+            }
+        } catch(SQLException e){
+            throw new SQLManageException(e);
+        }
+
+        return null;
+    }
 }

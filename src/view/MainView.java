@@ -10,10 +10,12 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import model.News;
+import model.Role;
 import view.news.ThreadNews;
-import view.news.Index;
+import view.news.Read;
 
 public class MainView extends View{
     private double x = 0, y = 0;
@@ -39,13 +41,17 @@ public class MainView extends View{
     @FXML
     JFXButton searchBtn;
     @FXML
+    JFXButton newsBtn;
+    @FXML
     Label newsLabel;
+    @FXML
+    VBox boxMenu;
 
     // Path to FXML file to display on center
     private static final String pathToHomePanel = "/FXML/homePanel.fxml";
     private static final String pathToCustomersPanel = "/FXML/customer/index.fxml";
     private static final String pathToOrdersPanel = "/FXML/order/index.fxml";
-    private static final String pathToSearchPanel = "/FXML/searchPanel.fxml";
+    private static final String pathToNewsPanel = "/FXML/news/index.fxml";
 
     @Override
     public void init() {
@@ -55,8 +61,6 @@ public class MainView extends View{
         //threadNews.start();
         new Thread(threadNews).start();
 
-        String windowsUser = System.getProperty("user.name");
-        username.setText(windowsUser);
         getStage().setOnHidden(e -> Platform.exit());
 
         homeBtn.setOnAction(e -> {
@@ -83,6 +87,10 @@ public class MainView extends View{
             search.show();
         });
 
+        newsBtn.setOnAction(e -> {
+            setCenter(pathToNewsPanel);
+        });
+
         logout.setOnMouseClicked(e -> {
             //TODO: replace with close all windows!
             this.closeWindow();
@@ -102,11 +110,12 @@ public class MainView extends View{
         newsLabel.setOnMouseClicked(e -> {
             if(currentShowedNews != null){
                 //Open window with news details
-                Window newsDetails = new Window("FXML/news/index.fxml", "News details");
+                Window newsDetails = new Window("FXML/news/read.fxml", "News details");
                 newsDetails.load();
                 newsDetails.show();
-                Index newsIndex = (Index) newsDetails.getView();
-                newsIndex.setNews(currentShowedNews);
+                newsDetails.resizable(false);
+                Read newsRead = (Read) newsDetails.getView();
+                newsRead.setNews(currentShowedNews);
             }
         });
 
@@ -139,6 +148,12 @@ public class MainView extends View{
 
     public void setUsername(String employeeUsername){
         username.setText(employeeUsername);
+    }
+
+    public void setRole(Role role){
+        if(!role.getName().equals("Manager")){
+            boxMenu.getChildren().remove(newsBtn);
+        }
     }
 
     private void setNewsTransition(){

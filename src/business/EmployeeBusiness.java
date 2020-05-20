@@ -26,4 +26,8 @@ public class EmployeeBusiness {
     public ArrayList<Employee> getAllDeliveryEmployee() throws SQLManageException {
         return dao.getAllDeliveryEmployee();
     }
+
+    public String getEmployeeName(Integer entityId) throws SQLManageException {
+        return dao.getEmployeeName(entityId);
+    }
 }
