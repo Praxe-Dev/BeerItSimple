@@ -1,16 +1,19 @@
 package model;
 
+import com.mysql.cj.x.protobuf.MysqlxNotice;
+import javafx.fxml.Initializable;
+
 import java.util.GregorianCalendar;
 
 public class News {
-    private int id;
+    private Integer id;
     private String title;
     private String content;
     private GregorianCalendar startingDate;
     private GregorianCalendar endDate;
-    private int employeeEntityId;
+    private Integer employeeEntityId;
 
-    public News(int id, String title, String content, GregorianCalendar startingDate, GregorianCalendar endDate, int employeeEntityId){
+    public News(Integer id, String title, String content, GregorianCalendar startingDate, GregorianCalendar endDate, Integer employeeEntityId){
         setId(id);
         setTitle(title);
         setContent(content);
@@ -19,11 +22,15 @@ public class News {
         setEmployeeEntityId(employeeEntityId);
     }
 
-    public int getId() {
+    public News(String title, String content, GregorianCalendar startingDate, GregorianCalendar endDate, Integer employeeEntityId){
+        this(null, title, content, startingDate, endDate, employeeEntityId);
+    }
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -59,11 +66,11 @@ public class News {
         this.endDate = endDate;
     }
 
-    public int getEmployeeEntityId() {
+    public Integer getEmployeeEntityId() {
         return employeeEntityId;
     }
 
-    public void setEmployeeEntityId(int employeeEntityId) {
+    public void setEmployeeEntityId(Integer employeeEntityId) {
         this.employeeEntityId = employeeEntityId;
     }
 

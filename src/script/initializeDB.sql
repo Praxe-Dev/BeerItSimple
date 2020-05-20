@@ -128,8 +128,8 @@ CREATE TABLE News (
     id int PRIMARY KEY AUTO_INCREMENT,
     title varchar(100) NOT NULL,
     content char(255) NOT NULL,
-    startingDate date NOT NULL,
-    endDate date NOT NULL,
+    startingDate datetime NOT NULL,
+    endDate datetime NOT NULL,
     EmployeeEntityId int NOT NULL,
     CONSTRAINT EmployeeEntityId FOREIGN KEY (EmployeeEntityId) REFERENCES Employee (EntityId)
 );
