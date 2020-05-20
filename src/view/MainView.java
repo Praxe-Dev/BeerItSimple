@@ -61,7 +61,7 @@ public class MainView extends View{
         //threadNews.start();
         new Thread(threadNews).start();
 
-        getStage().setOnHidden(e -> Platform.exit());
+//        getStage().setOnHidden(e -> Platform.exit());
 
         homeBtn.setOnAction(e -> {
             setCenter(pathToHomePanel);
@@ -93,18 +93,13 @@ public class MainView extends View{
 
         logout.setOnMouseClicked(e -> {
             //TODO: replace with close all windows!
-            this.closeWindow();
             Window login = new Window("FXML/loginPanel.fxml", "Login");
-            login.load();
-            login.show();
+            switchWindow(login);
         });
 
         closeWindow.setOnMouseClicked(e -> {
             //TODO: replace with close all windows!
-            this.closeWindow();
-            for (java.awt.Window window : java.awt.Window.getWindows()) {
-                window.dispose();
-            }
+            Platform.exit();
         });
 
         newsLabel.setOnMouseClicked(e -> {
