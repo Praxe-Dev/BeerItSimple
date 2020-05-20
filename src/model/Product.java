@@ -91,6 +91,6 @@ public class Product {
 
     @Override
     public String toString() {
-        return "[" + code + "] " + label + " (" + unitPrice + " €)" ;
+        return "[" + code + "] " + label  /*+ " (" + unitPrice + " €)"*/ ;
     }
 }
