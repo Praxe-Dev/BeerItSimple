@@ -1,5 +1,9 @@
 package view.order;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.tool.xml.html.head.Title;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
@@ -15,6 +19,7 @@ import javafx.scene.text.Text;
 import model.*;
 import view.View;
 
+import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -52,6 +57,8 @@ public class Read extends View {
     Text totalAmountVatOnly;
     @FXML
     Text totalAmountVatInc;
+    @FXML
+    JFXButton invoiceBtn;
 
 //    OrderController orderController;
 
@@ -93,6 +100,10 @@ public class Read extends View {
         totalAmountExclVat.setText(String.format("%.2f", amountExclVat));
         totalAmountVatOnly.setText(String.format("%.2f", amountOnlyVat));
         totalAmountVatInc.setText(String.format("%.2f", totalAmount));
+
+        invoiceBtn.setOnAction(e -> {
+            generatePDF();
+        });
     }
 
     private void initTable() {
@@ -114,6 +125,23 @@ public class Read extends View {
             tableArticle.getItems().addAll(orderLines);
         } catch (NoRowSelected e) {
             e.showError();
+        }
+    }
+
+    public void generatePDF() {
+        Document invoice = new Document();
+
+        try {
+            PdfWriter writer = PdfWriter.getInstance(invoice, new FileOutputStream("./src/PDFInvoices/invoice_" + selectedOrder.getReference() + ".pdf"));
+            invoice.open();
+//            invoice.addTitle("BeerItSimple - Invoice n°" + selectedOrder.getReference());
+//            invoice.addAuthor("Lejeune Quentin - Author test");
+//            invoice.addCreator("BeerItSimple Program");
+            invoice.add(new Paragraph("BeerItSimple - Test"));
+            invoice.close();
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
