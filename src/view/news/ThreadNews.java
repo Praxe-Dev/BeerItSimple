@@ -19,7 +19,7 @@ public class ThreadNews extends Task<Integer> {
     @Override
     protected Integer call() throws Exception {
         int i = 0;
-        while(true){
+        while(!isCancelled()){
             Platform.runLater(()->{
                 try {
                     //Get le news random et set la news
@@ -32,9 +32,9 @@ public class ThreadNews extends Task<Integer> {
 
             Thread.sleep(10000);
 
-            if (isCancelled()) {
-                break;
-            }
+//            if (isCancelled()) {
+//                break;
+//            }
 
             final int it = i;
             updateValue(it);
