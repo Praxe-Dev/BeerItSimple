@@ -10,4 +10,6 @@ public interface EmployeeDataAccess {
     Employee getEmployee(int registrationNumber, String password) throws EmployeeLoginException;
 
     ArrayList<Employee> getAllDeliveryEmployee() throws SQLManageException;
+
+    public String getEmployeeName(Integer entityId) throws SQLManageException;
 }

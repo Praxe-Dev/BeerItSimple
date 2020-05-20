@@ -15,6 +15,7 @@ set @@session.time_zone = '+00:00';
 /* DROP TABLE entity; */
 /* DROP TABLE city; */
 /* DROP TABLE `rank`; */
+/* DROP TABLE News; */
 
 CREATE TABLE City (
 	label varchar(255) NOT NULL, 
@@ -122,5 +123,15 @@ CREATE TABLE OrderLine (
 	PRIMARY KEY (Productcode, Orderreference),
 	CONSTRAINT Productcode_fk FOREIGN KEY (Productcode) REFERENCES Product (code),
 	CONSTRAINT Orderreference FOREIGN KEY (OrderReference) REFERENCES `Order` (reference));
+
+CREATE TABLE News (
+    id int PRIMARY KEY AUTO_INCREMENT,
+    title varchar(100) NOT NULL,
+    content char(255) NOT NULL,
+    startingDate datetime NOT NULL,
+    endDate datetime NOT NULL,
+    EmployeeEntityId int NOT NULL,
+    CONSTRAINT EmployeeEntityId FOREIGN KEY (EmployeeEntityId) REFERENCES Employee (EntityId)
+);
 
     

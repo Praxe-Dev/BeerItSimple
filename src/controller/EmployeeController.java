@@ -26,4 +26,8 @@ public class EmployeeController {
     public ArrayList<Employee> getAllDeliveryEmployee() throws SQLManageException{
         return employeeBusiness.getAllDeliveryEmployee();
     }
+
+    public String getEmployeeName(Integer entityId) throws SQLManageException {
+        return employeeBusiness.getEmployeeName(entityId);
+    }
 }
