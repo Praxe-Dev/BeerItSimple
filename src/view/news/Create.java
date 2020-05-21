@@ -9,6 +9,7 @@ import exception.SQLManageException;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import model.News;
+import utils.Validators;
 import view.PopUp;
 import view.View;
 
@@ -39,6 +40,13 @@ public class Create extends View {
         startingTime.set24HourView(true);
         endTime.set24HourView(true);
 
+        Validators.setReqField(title);
+        Validators.setReqField(contentArea);
+        Validators.setReqField(startingTime);
+        Validators.setReqField(endTime);
+        Validators.setTextAndNumberValidator(title);
+        Validators.setTextAndNumberValidator(contentArea);
+
         closeBtn.setOnAction(e -> {
             this.closeWindow();
         });
@@ -57,7 +65,26 @@ public class Create extends View {
     }
 
     private boolean validateInfo(){
-        return true;
+        LocalDate start = startingDate.getValue();
+        LocalDate end = endDate.getValue();
+        if(Validators.validate(title) && Validators.validate(contentArea) && Validators.validate(startingTime) && Validators.validate(endTime) && contentArea.validate()){
+            if(startingDate.getValue() == null){
+                PopUp.showError("Date error", "Please choose start date.");
+                return false;
+            }
+
+            if(endDate.getValue() == null){
+                PopUp.showError("Date error", "Please choose end date.");
+                return false;
+            }
+
+            if(Validators.validateBetweenDates(end, start)){
+                PopUp.showError("Date error", "End date must be later than the start date.");
+                return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     public void insertNews() throws SQLManageException {
