@@ -75,8 +75,8 @@ public class Update extends View {
         LocalDate end = endDate.getValue();
         LocalTime startT = startingTime.getValue();
         LocalTime endT = endTime.getValue();
-        GregorianCalendar startGC = new GregorianCalendar(start.getYear(), start.getMonthValue(), start.getDayOfMonth(), startT.getHour(), startT.getMinute(), startT.getSecond());
-        GregorianCalendar endGC = new GregorianCalendar(end.getYear(), end.getMonthValue(), end.getDayOfMonth(), endT.getHour(), endT.getMinute(), endT.getSecond());
+        GregorianCalendar startGC = new GregorianCalendar(start.getYear(), start.getMonthValue()-1, start.getDayOfMonth(), startT.getHour(), startT.getMinute(), startT.getSecond());
+        GregorianCalendar endGC = new GregorianCalendar(end.getYear(), end.getMonthValue()-1, end.getDayOfMonth(), endT.getHour(), endT.getMinute(), endT.getSecond());
         News updateNews = new News(news.getId(), title.getText(), contentArea.getText(), startGC, endGC, 2);
         try {
             newsController.updateNews(updateNews);
@@ -93,13 +93,13 @@ public class Update extends View {
         //Starting
         GregorianCalendar startingDateGC = news.getStartingDate();
         Calendar calendar = startingDateGC;
-        LocalTime startLocalTime = LocalTime.of(calendar.get(Calendar.HOUR), calendar.get(Calendar.MINUTE));
+        LocalTime startLocalTime = LocalTime.of(calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
         startingDate.setValue(LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.DAY_OF_MONTH)));
         startingTime.setValue(startLocalTime);
         //Ending
         GregorianCalendar endingDateGC = news.getEndDate();
         Calendar calendarEnd = endingDateGC;
-        LocalTime endLocalTime = LocalTime.of(calendarEnd.get(Calendar.HOUR), calendarEnd.get(Calendar.MINUTE));
+        LocalTime endLocalTime = LocalTime.of(calendarEnd.get(Calendar.HOUR_OF_DAY), calendarEnd.get(Calendar.MINUTE));
         endDate.setValue(LocalDate.of(calendarEnd.get(Calendar.YEAR), calendarEnd.get(Calendar.MONTH)+1, calendarEnd.get(Calendar.DAY_OF_MONTH)));
         endTime.setValue(endLocalTime);
     }

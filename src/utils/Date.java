@@ -5,7 +5,7 @@ import java.util.GregorianCalendar;
 
 public class Date {
     private static SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
-    private static SimpleDateFormat fmtTime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    private static SimpleDateFormat fmtTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public static String format(GregorianCalendar date){
         return fmt.format(date.getTime());
