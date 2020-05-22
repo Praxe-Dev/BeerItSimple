@@ -1,21 +1,22 @@
 set @@global.time_zone = '+00:00';
 set @@session.time_zone = '+00:00';
 
-/* DROP TABLE OrderLine; */
-/* DROP TABLE delivery; */
-/* DROP TABLE employee; */
-/* DROP TABLE `order`; */
-/* DROP TABLE paymentmethod; */
-/* DROP TABLE product; */
-/* DROP TABLE provider; */
-/* DROP TABLE `role`; */
-/* DROP TABLE `status`; */
-/* DROP TABLE vatcode; */
-/* DROP TABLE customer; */
-/* DROP TABLE entity; */
-/* DROP TABLE city; */
-/* DROP TABLE `rank`; */
-/* DROP TABLE News; */
+/*DROP TABLE OrderLine;*/
+/*DROP TABLE delivery;*/
+/*DROP TABLE News*/
+/*DROP TABLE employee;*/
+/*DROP TABLE `order`;*/
+/*DROP TABLE paymentmethod;*/
+/*DROP TABLE product;*/
+/*DROP TABLE provider;*/
+/*DROP TABLE `role`;*/
+/*DROP TABLE `status`;*/
+/*DROP TABLE vatcode;*/
+/*DROP TABLE customer;*/
+/*DROP TABLE entity;*/
+/*DROP TABLE city;*/
+/*DROP TABLE `rank`;*/
+/*DROP TABLE News;*/
 
 CREATE TABLE City (
 	label varchar(255) NOT NULL, 
