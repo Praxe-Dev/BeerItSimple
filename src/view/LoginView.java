@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextField;
 import controller.EmployeeController;
 import exception.EmployeeLoginException;
 import exception.MatriculException;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
@@ -78,14 +79,5 @@ public class LoginView extends View {
 
     public String getPassword() {
         return employeePassword.getText();
-    }
-
-    public Pane getRoot() {
-        return this.loginContainer;
-    }
-
-    @Override
-    public String toString() {
-        return "It's the class LoginView (I wanna die btw)";
     }
 }

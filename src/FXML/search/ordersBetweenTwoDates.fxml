@@ -13,6 +13,7 @@
                         <Font size="24.0" />
                     </font>
                 </Label>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="141.0" prefWidth="600.0" text="(press enter if you write the date manually)" textFill="WHITE" />
                 <HBox alignment="CENTER_LEFT" prefHeight="141.0" prefWidth="600.0" spacing="40.0">
                     <children>
                         <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="50.0" prefWidth="250.0" text="Starting date :" textAlignment="RIGHT" textFill="WHITE">

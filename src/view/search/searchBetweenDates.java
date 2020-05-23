@@ -50,9 +50,11 @@ public class searchBetweenDates extends View implements Initializable {
     }
 
     public void executeSearch() {
-        LocalDate start = startingDate.getValue() == null ? LocalDate.now() : startingDate.getValue();
-//            System.out.println("Start = " + start);
-        LocalDate end = endDate.getValue() == null ? LocalDate.now() : endDate.getValue();
+        LocalDate start = startingDate.getValue();
+        LocalDate end = null;
+
+        if (endDate.getValue() != null)
+             end = endDate.getValue().plusDays(1);
 
         if (validateBothDates(start, end)) {
             ArrayList<Order> orderBetweenDates = new OrderController().getAllOrdersBetweenDates(start, end);
@@ -75,6 +77,6 @@ public class searchBetweenDates extends View implements Initializable {
     }
 
     private boolean validateBothDates(LocalDate start, LocalDate end) {
-        return end.isBefore(LocalDate.now().plusDays(1)) && start.isBefore(LocalDate.now().plusDays(1)) ;
+            return start != null && end != null && end.isBefore(LocalDate.now().plusDays(2)) && start.isBefore(end) ;
     }
 }
