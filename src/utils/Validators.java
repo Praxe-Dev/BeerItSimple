@@ -35,15 +35,14 @@ public class Validators {
         setReqField(phoneNumber);
     }
 
-    public static void setAddressValidator(JFXTextField address) {
-        String regexPattern = "^([a-zA-Z']+\\s)*[a-zA-Z']+$";
-        String message = "Address should not contains number and extra space";
-        RegexValidator addressValidator = new RegexValidator();
-        addressValidator.setRegexPattern(regexPattern);
-        addressValidator.setMessage("Address should not contains numbers");
+    public static void setNoNumberValidator(JFXTextField field) {
+        String regexPattern = "^([a-zA-Z']+\\s)*[-a-zA-Z']+$";
+        RegexValidator validator = new RegexValidator();
+        validator.setRegexPattern(regexPattern);
+        validator.setMessage("Address should not contains numbers and special characters");
 
-        address.getValidators().add(addressValidator);
-        setReqField(address);
+        field.getValidators().add(validator);
+        setReqField(field);
     }
 
     public static void setHouseNumberValidator(JFXTextField houseNumber) {
