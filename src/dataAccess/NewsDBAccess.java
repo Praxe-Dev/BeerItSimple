@@ -3,10 +3,8 @@ package dataAccess;
 import exception.DeletionExceiption;
 import exception.SQLManageException;
 import model.News;
-import model.Order;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -15,7 +13,7 @@ public class NewsDBAccess implements NewsDataAccess {
     private Connection connection;
 
     public NewsDBAccess() {
-        this.connection = DBConnection.getDBConnection();
+        this.connection = DBConnection.getInstance();
     }
     public News getRandomNews() throws SQLManageException{
         News randomNews = null;

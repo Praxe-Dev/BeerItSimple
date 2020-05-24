@@ -11,7 +11,7 @@ public class CityDBAccess implements CityDataAccess {
     private Connection connection;
 
     public CityDBAccess() {
-        this.connection = DBConnection.getDBConnection();
+        this.connection = DBConnection.getInstance();
     }
 
 

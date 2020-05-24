@@ -1,6 +1,5 @@
 package dataAccess;
 
-import com.mysql.cj.x.protobuf.MysqlxPrepare;
 import exception.EmployeeLoginException;
 import exception.SQLManageException;
 import model.City;
@@ -15,7 +14,7 @@ public class EmployeeDBAccess implements EmployeeDataAccess {
     private Connection connection;
 
     public EmployeeDBAccess() {
-        this.connection = DBConnection.getDBConnection();
+        this.connection = DBConnection.getInstance();
     }
 
     @Override

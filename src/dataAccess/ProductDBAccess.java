@@ -13,7 +13,7 @@ public class ProductDBAccess implements ProductDataAccess {
     private Connection connection;
 
     public ProductDBAccess() {
-        this.connection = DBConnection.getDBConnection();
+        this.connection = DBConnection.getInstance();
     }
 
     @Override

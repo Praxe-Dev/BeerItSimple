@@ -1,6 +1,5 @@
 package dataAccess;
 
-import model.PaymentMethod;
 import model.Status;
 
 import java.sql.Connection;
@@ -13,7 +12,7 @@ public class StatusDBAccess implements StatusDataAccess {
     private Connection connection;
 
     public StatusDBAccess() {
-        this.connection = DBConnection.getDBConnection();
+        this.connection = DBConnection.getInstance();
     }
 
     @Override

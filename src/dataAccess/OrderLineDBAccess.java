@@ -1,7 +1,5 @@
 package dataAccess;
 
-import javafx.scene.control.DatePicker;
-import model.Order;
 import model.OrderLine;
 import model.Product;
 
@@ -10,7 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class OrderLineDBAccess implements OrderLineDataAccess {
-    Connection connection = DBConnection.getDBConnection();
+    Connection connection = DBConnection.getInstance();
 
     @Override
     public ArrayList<OrderLine> getAllOrderLineBetweenDates(LocalDate startDate, LocalDate endDate) {

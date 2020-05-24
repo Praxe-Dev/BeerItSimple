@@ -12,7 +12,7 @@ public class PaymentMethodDBAccess implements PaymentMethodDataAccess {
     private Connection connection;
 
     public PaymentMethodDBAccess() {
-        this.connection = DBConnection.getDBConnection();
+        this.connection = DBConnection.getInstance();
     }
 
     @Override

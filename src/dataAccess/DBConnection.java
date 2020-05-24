@@ -21,8 +21,7 @@ public class DBConnection {
         }
     }
 
-    // TODO: remplacer par getinstance
-    public static Connection getDBConnection() {
+    public static Connection getInstance() {
         if (connection == null)
             new DBConnection();
 

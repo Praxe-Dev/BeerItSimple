@@ -1,12 +1,10 @@
 package dataAccess;
 
 import exception.DeletionExceiption;
-import exception.DuplicataException;
 import exception.NoRowSelected;
 import exception.SQLManageException;
 import model.*;
 
-import javax.swing.*;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,7 +15,7 @@ public class OrderDBAccess implements OrderDataAccess {
     private Connection connection;
 
     public OrderDBAccess() {
-        this.connection = DBConnection.getDBConnection();
+        this.connection = DBConnection.getInstance();
     }
 
     @Override

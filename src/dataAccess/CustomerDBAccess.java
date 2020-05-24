@@ -16,7 +16,7 @@ public class CustomerDBAccess implements CustomerDataAccess {
     private Connection connection;
 
     public CustomerDBAccess() {
-        this.connection = DBConnection.getDBConnection();
+        this.connection = DBConnection.getInstance();
     }
 
     @Override
@@ -223,7 +223,7 @@ public class CustomerDBAccess implements CustomerDataAccess {
     }
 
     public boolean update(Customer customer) throws CustomerUpdateException {
-        int affectedRow;
+        int affectedRow = 0;
 
         String sqlInstruction = "UPDATE customer\n" +
                 "JOIN entity ON customer.EntityId = entity.id\n" +
@@ -263,7 +263,7 @@ public class CustomerDBAccess implements CustomerDataAccess {
             e.printStackTrace();
         }
 
-        return true;
+        return affectedRow != 0;
     }
 
     public boolean delete(Customer customer) {
@@ -291,11 +291,6 @@ public class CustomerDBAccess implements CustomerDataAccess {
             preparedStatementDeleteEntity.setInt(1, customer.getEntity().getId());
             preparedStatementDeleteEntity.executeUpdate();
         } catch (SQLException e) {
-//            try {
-//            connection.prepareStatement("rollback ;").executeUpdate();
-//            } catch (SQLException ex) {
-//                ex.printStackTrace();
-//            }
             e.printStackTrace();
             return false;
         }

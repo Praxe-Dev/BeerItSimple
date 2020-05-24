@@ -1,6 +1,5 @@
 package dataAccess;
 
-import model.Customer;
 import model.Rank;
 
 import java.sql.Connection;
@@ -12,7 +11,7 @@ public class RankDBAccess implements RankDataAccess {
     private Connection connection;
 
     public RankDBAccess() {
-        this.connection = DBConnection.getDBConnection();
+        this.connection = DBConnection.getInstance();
     }
 
     @Override
