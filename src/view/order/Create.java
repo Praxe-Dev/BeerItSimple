@@ -8,7 +8,7 @@ import controller.*;
 import exception.ConnectionException;
 import exception.NoRowSelected;
 import exception.SQLManageException;
-import exception.UpdateOrderException;
+import exception.UpdateException;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -155,10 +155,8 @@ public class Create extends View {
                             index.updateTable();
                             closeWindow();
                         }
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                    } catch (SQLManageException ex) {
-                        ex.showMessage();
+                    } catch (UpdateException ex) {
+                        showError(ex.getTypeError(), ex.getMessage());
                     }
                 }
            }
@@ -178,7 +176,6 @@ public class Create extends View {
             }
         } else {
             productQuantity.setStyle("-fx-background-color: rgba(255,0,0,0.5)");
-
         }
     }
 
@@ -209,25 +206,29 @@ public class Create extends View {
             OrderLineTableFormat orderLineTableFormat = tableArticle.getSelectionModel().getSelectedItem();
             tableArticle.getItems().remove(tableArticle.getSelectionModel().getSelectedItem());
 
-            double currentAmountExlVat = Double.parseDouble(totalAmountExclVat.getText().replace(',', '.'));
-            double newAmountExclVat = currentAmountExlVat - orderLineTableFormat.getExclVat();
-            String newTotalExclVat = String.format("%.2f", newAmountExclVat);
-            totalAmountExclVat.setText(newTotalExclVat);
-
-            double currentVatTotal = Double.parseDouble(totalAmountVatOnly.getText().replace(',', '.'));
-            double newVatTotal = 0;
-            if (newAmountExclVat != 0) {
-                newVatTotal = currentVatTotal - (orderLineTableFormat.getExclVat() * ((double) orderLineTableFormat.getVatCodeRate() / 100.0));
-            }
-            String totalVat = String.format("%.2f", newVatTotal);
-            totalAmountVatOnly.setText(totalVat);
-
-            double newTotalVatIncl = newAmountExclVat + newVatTotal;
-            String totalVatIncl = String.format("%.2f", newTotalVatIncl);
-            totalAmountVatInc.setText(totalVatIncl);
+            computeAndDisplayNewAmount(orderLineTableFormat, totalAmountExclVat, totalAmountVatOnly, totalAmountVatInc);
         } catch (NullPointerException e) {
             new NoRowSelected();
         }
+    }
+
+    static void computeAndDisplayNewAmount(OrderLineTableFormat orderLineTableFormat, Text totalAmountExclVat, Text totalAmountVatOnly, Text totalAmountVatInc) {
+        double currentAmountExlVat = Double.parseDouble(totalAmountExclVat.getText().replace(',', '.'));
+        double newAmountExclVat = currentAmountExlVat - orderLineTableFormat.getExclVat();
+        String newTotalExclVat = String.format("%.2f", newAmountExclVat);
+        totalAmountExclVat.setText(newTotalExclVat);
+
+        double currentVatTotal = Double.parseDouble(totalAmountVatOnly.getText().replace(',', '.'));
+        double newVatTotal = 0;
+        if (newAmountExclVat != 0) {
+            newVatTotal = currentVatTotal - (orderLineTableFormat.getExclVat() * (orderLineTableFormat.getVatCodeRate() / 100.0));
+        }
+        String totalVat = String.format("%.2f", newVatTotal);
+        totalAmountVatOnly.setText(totalVat);
+
+        double newTotalVatIncl = newAmountExclVat + newVatTotal;
+        String totalVatIncl = String.format("%.2f", newTotalVatIncl);
+        totalAmountVatInc.setText(totalVatIncl);
     }
 
     private boolean deliveryDateCheck() {
@@ -254,7 +255,7 @@ public class Create extends View {
         return true;
     }
 
-    private boolean newOrderInsert() throws SQLException, SQLManageException {
+    private boolean newOrderInsert() throws UpdateException {
         Product product;
         Delivery delivery = null;
         Boolean orderCreated = false;

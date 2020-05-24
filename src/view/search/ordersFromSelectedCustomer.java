@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXComboBox;
 import controller.CustomerController;
 import controller.OrderController;
 import exception.ConnectionException;
+import exception.DataQueryException;
 import exception.SQLManageException;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -71,8 +72,8 @@ public class ordersFromSelectedCustomer extends View implements Initializable {
             } else {
                 openNewTabView(allOrders, customer);
             }
-        } catch(SQLManageException e){
-            e.showMessage();
+        } catch(DataQueryException e){
+            showError(e.getTypeError(), e.getMessage());
         }
 
     }

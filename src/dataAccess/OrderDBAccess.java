@@ -308,63 +308,67 @@ public class OrderDBAccess implements OrderDataAccess {
         return orders;
     }
 
-    public boolean create(Order order) throws SQLException, SQLManageException {
+    public boolean create(Order order) throws UpdateException {
         int affectedRow = 0;
         String sqlInstructionOrder = "INSERT INTO `order` (startingDate, isPaid, StatusNumber, paymentMethodId, CustomerEntityId)\n" +
                 "VALUES (?,?,?,?,?)";
 
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement;
 
-        preparedStatement = connection.prepareStatement(sqlInstructionOrder, Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.setDate(1, new java.sql.Date(order.getStartingDate().getTimeInMillis()));
-        preparedStatement.setBoolean(2, order.getPaid());
-        preparedStatement.setInt(3, order.getStatus().getId());
-        preparedStatement.setInt(4, order.getPaymentMethod().getId());
-        preparedStatement.setInt(5, order.getCustomer().getEntity().getId());
+        try {
+            preparedStatement = connection.prepareStatement(sqlInstructionOrder, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setDate(1, new java.sql.Date(order.getStartingDate().getTimeInMillis()));
+            preparedStatement.setBoolean(2, order.getPaid());
+            preparedStatement.setInt(3, order.getStatus().getId());
+            preparedStatement.setInt(4, order.getPaymentMethod().getId());
+            preparedStatement.setInt(5, order.getCustomer().getEntity().getId());
 
-        affectedRow = preparedStatement.executeUpdate();
+            affectedRow = preparedStatement.executeUpdate();
 
-        if (affectedRow != 0) {
-            ResultSet genretadKeys = preparedStatement.getGeneratedKeys();
-            if (genretadKeys.next()) {
-                int orderId = genretadKeys.getInt(1);
+            if (affectedRow != 0) {
+                ResultSet genretadKeys = preparedStatement.getGeneratedKeys();
+                if (genretadKeys.next()) {
+                    int orderId = genretadKeys.getInt(1);
 
-                if (order.getDelivery() != null) {
-                    String sqlDelivery = "INSERT INTO delivery (plannedDate, OrderReference, EmployeeEntityId)\n" +
-                            "VALUES (?,?,?)";
+                    if (order.getDelivery() != null) {
+                        String sqlDelivery = "INSERT INTO delivery (plannedDate, OrderReference, EmployeeEntityId)\n" +
+                                "VALUES (?,?,?)";
 
-                    PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDelivery);
-                    preparedStatementDelivery.setDate(1, new java.sql.Date(order.getDelivery().getPlannedDate().getTimeInMillis()));
-                    preparedStatementDelivery.setInt(2, orderId);
-                    preparedStatementDelivery.setInt(3, order.getDelivery().getEmployee().getEntity().getId());
+                        PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDelivery);
+                        preparedStatementDelivery.setDate(1, new java.sql.Date(order.getDelivery().getPlannedDate().getTimeInMillis()));
+                        preparedStatementDelivery.setInt(2, orderId);
+                        preparedStatementDelivery.setInt(3, order.getDelivery().getEmployee().getEntity().getId());
 
-                    preparedStatementDelivery.executeUpdate();
+                        preparedStatementDelivery.executeUpdate();
+                    }
+
+                    String sqlOrderLine = "INSERT INTO orderline (productCode, Orderreference, quantity, salesUnitPrice)\n" +
+                            "VALUES(?,?,?,?)";
+                    PreparedStatement preparedStatementOrderLine = connection.prepareStatement(sqlOrderLine);
+
+                    for (OrderLine line : order.getOrderLineList()) {
+                        preparedStatementOrderLine.setInt(1, line.getProduct().getCode());
+                        preparedStatementOrderLine.setInt(2, orderId);
+                        preparedStatementOrderLine.setInt(3, line.getQuantity());
+                        preparedStatementOrderLine.setDouble(4, line.getSalesUnitPrice());
+
+                        preparedStatementOrderLine.executeUpdate();
+                    }
                 }
+            } else {
 
-                String sqlOrderLine = "INSERT INTO orderline (productCode, Orderreference, quantity, salesUnitPrice)\n" +
-                        "VALUES(?,?,?,?)";
-                PreparedStatement preparedStatementOrderLine = connection.prepareStatement(sqlOrderLine);
-
-                for (OrderLine line : order.getOrderLineList()) {
-                    preparedStatementOrderLine.setInt(1, line.getProduct().getCode());
-                    preparedStatementOrderLine.setInt(2, orderId);
-                    preparedStatementOrderLine.setInt(3, line.getQuantity());
-                    preparedStatementOrderLine.setDouble(4, line.getSalesUnitPrice());
-
-                    preparedStatementOrderLine.executeUpdate();
-                }
+                String protection = "rollback to security1";
+                connection.prepareStatement(protection).executeUpdate();
+                return false;
             }
-        } else {
-
-            String protection = "rollback to security1";
-            connection.prepareStatement(protection).executeUpdate();
-            return false;
+        } catch (Exception e) {
+            throw new UpdateException();
         }
 
-        return true;
+        return affectedRow != 0;
     }
 
-    public Rank updateCustomerRank(Customer customer) {
+    public Rank updateCustomerRank(Customer customer) throws UpdateException {
         //Get All Orders and orderlines
         Rank newRank = null;
         String sqlInstruction = "SELECT sum(ol.salesUnitPrice*ol.quantity) AS ordersSum FROM `order` JOIN `orderline` ol ON ol.Orderreference = order.reference  WHERE order.CustomerEntityId = ?";
@@ -396,7 +400,7 @@ public class OrderDBAccess implements OrderDataAccess {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new UpdateException();
         }
 
         return newRank;
@@ -891,7 +895,7 @@ public class OrderDBAccess implements OrderDataAccess {
         return orderArrayList;
     }
 
-    public ArrayList<Order> getAllOrdersFromCustomer(Customer customer) throws SQLManageException {
+    public ArrayList<Order> getAllOrdersFromCustomer(Customer customer) throws DataQueryException {
         ArrayList<Order> orderArrayList = new ArrayList<>();
         String sqlInstruction = "SELECT o.*, s.*, p.* FROM `order` o\n" +
                 "JOIN status s ON s.id = o.StatusNumber\n" +
@@ -954,58 +958,55 @@ public class OrderDBAccess implements OrderDataAccess {
                         "WHERE Orderreference = ?";
                 PreparedStatement preparedStatement2 = connection.prepareStatement(sqlOrderLine);
                 preparedStatement2.setInt(1, order.getReference());
-                try {
-                    ResultSet dataOrderLine = preparedStatement2.executeQuery();
-                    while (dataOrderLine.next()) {
-                        //Add all orderline to already created order object.
-                        City providerCity = new City(
-                                data.getString("e.CityLabel"),
-                                data.getInt("e.CityZipCode")
-                        );
 
-                        Entity providerEntity = new Entity(
-                                dataOrderLine.getInt("e.id"),
-                                data.getString("e.mail"),
-                                data.getString("e.contactName"),
-                                data.getString("e.phoneNumber"),
-                                data.getInt("e.houseNumber"),
-                                data.getString("e.street"),
-                                data.getString("e.bankAccountNumber"),
-                                data.getString("e.businessNumber"),
-                                providerCity
-                        );
+                ResultSet dataOrderLine = preparedStatement2.executeQuery();
+                while (dataOrderLine.next()) {
+                    //Add all orderline to already created order object.
+                    City providerCity = new City(
+                            data.getString("e.CityLabel"),
+                            data.getInt("e.CityZipCode")
+                    );
 
-                        Provider provider = new Provider(
-                                providerEntity,
-                                dataOrderLine.getString("provider.providerType")
-                        );
+                    Entity providerEntity = new Entity(
+                            dataOrderLine.getInt("e.id"),
+                            data.getString("e.mail"),
+                            data.getString("e.contactName"),
+                            data.getString("e.phoneNumber"),
+                            data.getInt("e.houseNumber"),
+                            data.getString("e.street"),
+                            data.getString("e.bankAccountNumber"),
+                            data.getString("e.businessNumber"),
+                            providerCity
+                    );
 
-                        Product product = new Product(
-                                provider,
-                                dataOrderLine.getInt("p.code"),
-                                dataOrderLine.getString("p.label"),
-                                dataOrderLine.getDouble("p.unitPrice"),
-                                dataOrderLine.getInt("p.currentStock"),
-                                dataOrderLine.getInt("p.maxStock"),
-                                dataOrderLine.getInt("p.minStock"),
-                                dataOrderLine.getInt("v.rate")
-                        );
-                        OrderLine orderLine = new OrderLine(
-                                product,
-                                order,
-                                dataOrderLine.getInt("o.quantity"),
-                                dataOrderLine.getDouble("o.salesUnitPrice")
-                        );
-                        order.addOrderLine(orderLine);
-                    }
-                } catch (SQLException ex) {
-                    throw ex;
+                    Provider provider = new Provider(
+                            providerEntity,
+                            dataOrderLine.getString("provider.providerType")
+                    );
+
+                    Product product = new Product(
+                            provider,
+                            dataOrderLine.getInt("p.code"),
+                            dataOrderLine.getString("p.label"),
+                            dataOrderLine.getDouble("p.unitPrice"),
+                            dataOrderLine.getInt("p.currentStock"),
+                            dataOrderLine.getInt("p.maxStock"),
+                            dataOrderLine.getInt("p.minStock"),
+                            dataOrderLine.getInt("v.rate")
+                    );
+                    OrderLine orderLine = new OrderLine(
+                            product,
+                            order,
+                            dataOrderLine.getInt("o.quantity"),
+                            dataOrderLine.getDouble("o.salesUnitPrice")
+                    );
+                    order.addOrderLine(orderLine);
                 }
 
                 orderArrayList.add(order);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataQueryException();
         }
         return orderArrayList;
     }

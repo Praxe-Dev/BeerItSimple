@@ -24,7 +24,7 @@ public class OrderBusiness {
         return dao.getAllOrders();
     }
 
-    public boolean create(Order orderLineTableFormats) throws SQLException, SQLManageException {
+    public boolean create(Order orderLineTableFormats) throws UpdateException {
         return dao.create(orderLineTableFormats);
     }
 
@@ -40,15 +40,15 @@ public class OrderBusiness {
         return dao.getAllOrdersBetweenDates(startingDate, endDate);
     }
 
-    public boolean updateOrder(Order order) throws DataQueryException, UpdateOrderException {
+    public boolean updateOrder(Order order) throws DataQueryException, UpdateException {
         return dao.updateOrder(order);
     }
 
-    public Rank updateCustomerRank(Customer customer) throws SQLManageException {
+    public Rank updateCustomerRank(Customer customer) throws UpdateException {
         return dao.updateCustomerRank(customer);
     }
 
-    public ArrayList<Order> getAllOrdersFromCustomer(Customer customer) throws SQLManageException {
+    public ArrayList<Order> getAllOrdersFromCustomer(Customer customer) throws DataQueryException {
         return dao.getAllOrdersFromCustomer(customer);
     }
 

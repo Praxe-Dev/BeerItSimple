@@ -19,7 +19,7 @@ public class OrderController {
         return orderBusiness.getAllOrders();
     }
 
-    public boolean create(Order orderLineTableFormats) throws SQLException, SQLManageException {
+    public boolean create(Order orderLineTableFormats) throws UpdateException {
         return orderBusiness.create(orderLineTableFormats);
     }
 
@@ -31,7 +31,7 @@ public class OrderController {
         return orderBusiness.deleteOrder(order);
     }
 
-    public boolean updateOrder(Order order) throws UpdateOrderException, DataQueryException {
+    public boolean updateOrder(Order order) throws UpdateException, DataQueryException {
         return orderBusiness.updateOrder(order);
     }
 
@@ -39,11 +39,11 @@ public class OrderController {
         return orderBusiness.getAllOrdersBetweenDates(startingDate, endDate);
     }
 
-    public Rank updateCustomerRank(Customer customer) throws SQLManageException {
+    public Rank updateCustomerRank(Customer customer) throws UpdateException {
         return orderBusiness.updateCustomerRank(customer);
     }
 
-    public ArrayList<Order> getAllOrdersFromCustomer(Customer customer) throws SQLManageException{
+    public ArrayList<Order> getAllOrdersFromCustomer(Customer customer) throws DataQueryException{
         return orderBusiness.getAllOrdersFromCustomer(customer);
     }
 

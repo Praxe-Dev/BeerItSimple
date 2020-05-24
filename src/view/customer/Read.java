@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import controller.OrderController;
 import exception.ConnectionException;
+import exception.DataQueryException;
 import exception.SQLManageException;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -109,8 +110,8 @@ public class Read extends View {
                 } else {
                     openNewTabView(allOrders);
                 }
-            } catch(SQLManageException ex){
-                ex.showMessage();
+            } catch(DataQueryException ex){
+                showError(ex.getTypeError(), ex.getMessage());
             }
         });
 

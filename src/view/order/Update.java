@@ -181,7 +181,7 @@ public class Update extends View {
                         payErr.showMessage();
                     } catch (StatusException statusErr) {
                         statusErr.showMessage();
-                    } catch (UpdateOrderException ex) {
+                    } catch (UpdateException ex) {
                         showError(ex.getTypeError(), ex.getMessage());
                     } catch (DataQueryException ex) {
                         showError(ex.getTypeError(), ex.getMessage());
@@ -263,31 +263,16 @@ public class Update extends View {
 
     private void removeProduct(OrderLineTableFormat orderLineTableFormat) {
 
-        double currentAmountExlVat = Double.parseDouble(totalAmountExclVat.getText().replace(',', '.'));
-        double newAmountExclVat = currentAmountExlVat - orderLineTableFormat.getExclVat();
-        String newTotalExclVat = String.format("%.2f", newAmountExclVat);
-        totalAmountExclVat.setText(newTotalExclVat);
-
-        double currentVatTotal = Double.parseDouble(totalAmountVatOnly.getText().replace(',', '.'));
-        double newVatTotal = 0;
-        if (newAmountExclVat != 0) {
-            newVatTotal = currentVatTotal - (orderLineTableFormat.getExclVat() * ((double) orderLineTableFormat.getVatCodeRate() / 100.0));
-        }
-        String totalVat = String.format("%.2f", newVatTotal);
-        totalAmountVatOnly.setText(totalVat);
-
-        double newTotalVatIncl = newAmountExclVat + newVatTotal;
-        String totalVatIncl = String.format("%.2f", newTotalVatIncl);
-        totalAmountVatInc.setText(totalVatIncl);
+        Create.computeAndDisplayNewAmount(orderLineTableFormat, totalAmountExclVat, totalAmountVatOnly, totalAmountVatInc);
     }
 
-    private boolean updateOrder() throws PaymentMethodException, StatusException, UpdateOrderException, DataQueryException {
+    private boolean updateOrder() throws PaymentMethodException, StatusException, UpdateException, DataQueryException {
         Product product;
 
         if (deliveryCheck.isSelected()) {
             if(deliveryDate != null) {
                 if(deliveryMan.getSelectionModel().isSelected(-1)){
-                    throw new UpdateOrderException();
+                    throw new UpdateException();
                 }
 //                GregorianCalendar date = new GregorianCalendar();
 //                date.set(deliveryDate.getValue().getYear(), deliveryDate.getValue().getDayOfMonth(), deliveryDate.getValue().getDayOfMonth());
