@@ -28,68 +28,67 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Update extends View {
+    @FXML
+    private Label orderReference;
+    @FXML
+    private Label createdAt;
+    @FXML
+    private Label deliveredAt;
+    @FXML
+    private JFXComboBox<Status> statusList;
+    @FXML
+    private Label customer;
+    @FXML
+    private JFXComboBox<PaymentMethod> paymentMethod;
+    @FXML
+    private JFXComboBox<Employee> deliveryMan;
+    @FXML
+    private JFXCheckBox deliveryCheck;
+    @FXML
+    private JFXCheckBox paid;
+    @FXML
+    private JFXCheckBox delivered;
+    @FXML
+    private DatePicker deliveryDate;
+    @FXML
+    private JFXButton cancelBtn;
+    @FXML
+    private JFXButton submitBtn;
+    @FXML
+    private JFXComboBox<Product> productList;
+    @FXML
+    private JFXTextField productQuantity;
+    @FXML
+    private JFXButton addArticleBtn;
+    @FXML
+    private TableView<OrderLineTableFormat> tableArticle;
+    @FXML
+    private TableColumn<OrderLineTableFormat, String> article;
+    @FXML
+    private TableColumn<OrderLineTableFormat, Double> price;
+    @FXML
+    private TableColumn<OrderLineTableFormat, Integer> quantity;
+    @FXML
+    private TableColumn<OrderLineTableFormat, Double> totalExclVat;
+    @FXML
+    private TableColumn<OrderLineTableFormat, Double> totalInclVat;
+    @FXML
+    private JFXButton removeArticleBtn;
+    @FXML
+    private Text totalAmountExclVat;
+    @FXML
+    private Text totalAmountVatOnly;
+    @FXML
+    private Text totalAmountVatInc;
+    @FXML
+    private Group deliveryDisplay;
 
-    @FXML
-    Label orderReference;
-    @FXML
-    Label createdAt;
-    @FXML
-    Label deliveredAt;
-    @FXML
-    JFXComboBox<Status> statusList;
-    @FXML
-    Label customer;
-    @FXML
-    JFXComboBox<PaymentMethod> paymentMethod;
-    @FXML
-    JFXComboBox<Employee> deliveryMan;
-    @FXML
-    JFXCheckBox deliveryCheck;
-    @FXML
-    JFXCheckBox paid;
-    @FXML
-    JFXCheckBox delivered;
-    @FXML
-    DatePicker deliveryDate;
-    @FXML
-    JFXButton cancelBtn;
-    @FXML
-    JFXButton submitBtn;
-    @FXML
-    JFXComboBox<Product> productList;
-    @FXML
-    JFXTextField productQuantity;
-    @FXML
-    JFXButton addArticleBtn;
-    @FXML
-    TableView<OrderLineTableFormat> tableArticle;
-    @FXML
-    TableColumn<OrderLineTableFormat, String> article;
-    @FXML
-    TableColumn<OrderLineTableFormat, Double> price;
-    @FXML
-    TableColumn<OrderLineTableFormat, Integer> quantity;
-    @FXML
-    TableColumn<OrderLineTableFormat, Double> totalExclVat;
-    @FXML
-    TableColumn<OrderLineTableFormat, Double> totalInclVat;
-    @FXML
-    JFXButton removeArticleBtn;
-    @FXML
-    Text totalAmountExclVat;
-    @FXML
-    Text totalAmountVatOnly;
-    @FXML
-    Text totalAmountVatInc;
-    @FXML
-    Group deliveryDisplay;
-
-    Order order = null;
-    PaymentMethodController paymentMethodController;
-    EmployeeController employeeController;
-    OrderController orderController;
-    ProductController productController;
-    StatusController statusController;
+    private Order order = null;
+    private PaymentMethodController paymentMethodController;
+    private EmployeeController employeeController;
+    private OrderController orderController;
+    private ProductController productController;
+    private StatusController statusController;
 
     @Override
     public void init(){

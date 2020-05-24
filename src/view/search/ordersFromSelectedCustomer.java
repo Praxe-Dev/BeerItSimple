@@ -21,14 +21,14 @@ import java.util.ResourceBundle;
 
 public class ordersFromSelectedCustomer extends View implements Initializable {
     @FXML
-    JFXComboBox<Customer> customerBox;
+    private JFXComboBox<Customer> customerBox;
     @FXML
-    JFXButton cancelBtn;
+    private JFXButton cancelBtn;
     @FXML
-    JFXButton searchBtn;
+    private JFXButton searchBtn;
 
-    CustomerController customerController;
-    OrderController orderController;
+    private CustomerController customerController;
+    private OrderController orderController;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

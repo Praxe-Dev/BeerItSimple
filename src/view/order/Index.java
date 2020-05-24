@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class Index extends View implements Initializable {
-
     @FXML
     private VBox vbox;
     @FXML
@@ -33,7 +32,7 @@ public class Index extends View implements Initializable {
     @FXML
     private JFXButton editOrderBtn;
     @FXML
-    JFXButton detailBtn;
+    private JFXButton detailBtn;
     @FXML
     private JFXButton deleteBtn;
     @FXML

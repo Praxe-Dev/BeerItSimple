@@ -18,38 +18,37 @@ import java.util.ArrayList;
 
 
 public class Read extends View {
+    @FXML
+    private JFXRadioButton privateCustomer;
+    @FXML
+    private JFXRadioButton businessCustomer;
+    @FXML
+    private JFXTextField customerRank;
+    @FXML
+    private JFXTextField contactName;
+    @FXML
+    private JFXTextField phoneNumber;
+    @FXML
+    private JFXTextField mail;
+    @FXML
+    private JFXTextField houseNumber;
+    @FXML
+    private JFXTextField region;
+    @FXML
+    private JFXTextField address;
+    @FXML
+    private JFXTextField accountNumber;
+    @FXML
+    private JFXTextField businessNumber;
+    @FXML
+    private Group businessView;
+    @FXML
+    private JFXButton closeBtn;
+    @FXML
+    private JFXButton viewOrdersBtn;
 
-    @FXML
-    JFXRadioButton privateCustomer;
-    @FXML
-    JFXRadioButton businessCustomer;
-    @FXML
-    JFXTextField customerRank;
-    @FXML
-    JFXTextField contactName;
-    @FXML
-    JFXTextField phoneNumber;
-    @FXML
-    JFXTextField mail;
-    @FXML
-    JFXTextField houseNumber;
-    @FXML
-    JFXTextField region;
-    @FXML
-    JFXTextField address;
-    @FXML
-    JFXTextField accountNumber;
-    @FXML
-    JFXTextField businessNumber;
-    @FXML
-    Group businessView;
-    @FXML
-    JFXButton closeBtn;
-    @FXML
-    JFXButton viewOrdersBtn;
-
-    Customer selectedCustomer;
-    OrderController orderController;
+    private Customer selectedCustomer;
+    private OrderController orderController;
 
 
     @Override

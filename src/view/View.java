@@ -9,8 +9,7 @@ import javafx.stage.Stage;
 public abstract class View extends Node {
     private double x = 0.0;
     private double y = 0.0;
-
-    Window window;
+    protected Window window;
     private View parentView = null;
 
     public final void init(Window window) {

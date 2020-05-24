@@ -33,55 +33,54 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Create extends View {
+    @FXML
+    private JFXComboBox<Customer> customerList;
+    @FXML
+    private JFXComboBox<PaymentMethod> paymentMethod;
+    @FXML
+    private JFXComboBox<Employee> deliveryMan;
+    @FXML
+    private JFXCheckBox deliveryCheck;
+    @FXML
+    private DatePicker deliveryDate;
+    @FXML
+    private JFXButton cancelBtn;
+    @FXML
+    private JFXButton submitBtn;
+    @FXML
+    private JFXComboBox<Product> productList;
+    @FXML
+    private JFXTextField productQuantity;
+    @FXML
+    private JFXButton addArticleBtn;
+    @FXML
+    private TableView<OrderLineTableFormat> tableArticle;
+    @FXML
+    private TableColumn<OrderLineTableFormat, String> article;
+    @FXML
+    private TableColumn<OrderLineTableFormat, Double> price;
+    @FXML
+    private TableColumn<OrderLineTableFormat, Integer> quantity;
+    @FXML
+    private TableColumn<OrderLineTableFormat, Double> totalExclVat;
+    @FXML
+    private TableColumn<OrderLineTableFormat, Double> totalInclVat;
+    @FXML
+    private JFXButton removeArticleBtn;
+    @FXML
+    private Text totalAmountExclVat;
+    @FXML
+    private Text totalAmountVatOnly;
+    @FXML
+    private Text totalAmountVatInc;
+    @FXML
+    private Group deliveryDisplay;
 
-    @FXML
-    JFXComboBox<Customer> customerList;
-    @FXML
-    JFXComboBox<PaymentMethod> paymentMethod;
-    @FXML
-    JFXComboBox<Employee> deliveryMan;
-    @FXML
-    JFXCheckBox deliveryCheck;
-    @FXML
-    DatePicker deliveryDate;
-    @FXML
-    JFXButton cancelBtn;
-    @FXML
-    JFXButton submitBtn;
-    @FXML
-    JFXComboBox<Product> productList;
-    @FXML
-    JFXTextField productQuantity;
-    @FXML
-    JFXButton addArticleBtn;
-    @FXML
-    TableView<OrderLineTableFormat> tableArticle;
-    @FXML
-    TableColumn<OrderLineTableFormat, String> article;
-    @FXML
-    TableColumn<OrderLineTableFormat, Double> price;
-    @FXML
-    TableColumn<OrderLineTableFormat, Integer> quantity;
-    @FXML
-    TableColumn<OrderLineTableFormat, Double> totalExclVat;
-    @FXML
-    TableColumn<OrderLineTableFormat, Double> totalInclVat;
-    @FXML
-    JFXButton removeArticleBtn;
-    @FXML
-    Text totalAmountExclVat;
-    @FXML
-    Text totalAmountVatOnly;
-    @FXML
-    Text totalAmountVatInc;
-    @FXML
-    Group deliveryDisplay;
-
-    CustomerController customerController;
-    EmployeeController employeeController;
-    PaymentMethodController paymentMethodController;
-    ProductController productController;
-    OrderController orderController;
+    private CustomerController customerController;
+    private EmployeeController employeeController;
+    private PaymentMethodController paymentMethodController;
+    private ProductController productController;
+    private OrderController orderController;
 
     @Override
     public void init() {

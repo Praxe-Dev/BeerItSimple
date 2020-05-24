@@ -22,13 +22,13 @@ import java.util.ResourceBundle;
 
 public class searchBetweenDates extends View implements Initializable {
     @FXML
-    DatePicker startingDate;
+    private DatePicker startingDate;
     @FXML
-    DatePicker endDate;
+    private DatePicker endDate;
     @FXML
-    JFXButton searchBtn;
+    private JFXButton searchBtn;
 
-    Index orderIndex;
+    private Index orderIndex;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

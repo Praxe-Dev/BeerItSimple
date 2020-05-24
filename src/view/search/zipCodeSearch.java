@@ -21,15 +21,13 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class zipCodeSearch extends View implements Initializable {
-
     @FXML
-    JFXComboBox<City> zipCodeBox;
+    private JFXComboBox<City> zipCodeBox;
     @FXML
-    JFXButton searchBtn;
+    private JFXButton searchBtn;
 
-    CityController cityController;
-    OrderController orderController;
-
+    private CityController cityController;
+    private OrderController orderController;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -44,7 +42,6 @@ public class zipCodeSearch extends View implements Initializable {
         zipCodeBox.setItems(FXCollections.observableArrayList(allCities));
         zipCodeBox.getSelectionModel().selectFirst();
         zipCodeBox.getStyleClass().add("whiteComboBox");
-
 
         searchBtn.setOnAction(e -> {
             search();
@@ -63,8 +60,6 @@ public class zipCodeSearch extends View implements Initializable {
         } catch(SQLManageException e){
             e.showMessage();
         }
-
-
     }
 
     private void openNewTabView(ArrayList<Order> allOrdersFromZipcode, City city) {

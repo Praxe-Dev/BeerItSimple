@@ -19,15 +19,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Search extends View {
-
     @FXML
-    Tab betweenDateSearch;
+    private Tab betweenDateSearch;
     @FXML
-    Tab zipCodeSearch;
+    private Tab zipCodeSearch;
     @FXML
-    Tab customerRankSearch;
+    private Tab customerRankSearch;
     @FXML
-    Tab ordersFromSelectedCustomer;
+    private Tab ordersFromSelectedCustomer;
 
     private final String pathToBetweenDates = "/FXML/search/ordersBetweenTwoDates.fxml";
     private final String pathToZipCodeSearch = "/FXML/search/zipcodeSearch.fxml";

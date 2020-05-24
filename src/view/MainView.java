@@ -21,31 +21,31 @@ public class MainView extends View{
     private double x = 0, y = 0;
     private News currentShowedNews = null;
     @FXML
-    Label username;
+    private Label username;
     @FXML
-    HBox topBar;
+    private HBox topBar;
     @FXML
-    JFXButton closeWindow;
+    private JFXButton closeWindow;
     @FXML
-    FontAwesomeIcon logout;
+    private FontAwesomeIcon logout;
     @FXML
-    BorderPane mainPanel;
+    private BorderPane mainPanel;
     @FXML
-    JFXButton homeBtn;
+    private JFXButton homeBtn;
     @FXML
-    JFXButton customersBtn;
+    private JFXButton customersBtn;
     @FXML
-    JFXButton ordersBtn;
+    private JFXButton ordersBtn;
     @FXML
-    JFXButton productBtn;
+    private JFXButton productBtn;
     @FXML
-    JFXButton searchBtn;
+    private JFXButton searchBtn;
     @FXML
-    JFXButton newsBtn;
+    private JFXButton newsBtn;
     @FXML
-    Label newsLabel;
+    private Label newsLabel;
     @FXML
-    VBox boxMenu;
+    private VBox boxMenu;
 
     // Path to FXML file to display on center
     private static final String pathToHomePanel = "/FXML/homePanel.fxml";

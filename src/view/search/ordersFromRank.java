@@ -23,22 +23,21 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class ordersFromRank extends View implements Initializable {
+    @FXML
+    private JFXComboBox<Rank> rankList;
+    @FXML
+    private JFXComboBox<Status> statusList;
+    @FXML
+    private JFXRadioButton bothRadio;
+    @FXML
+    private JFXRadioButton paidRadio;
+    @FXML
+    private JFXRadioButton notPaidRadio;
+    @FXML
+    private JFXButton searchBtn;
 
-    @FXML
-    JFXComboBox<Rank> rankList;
-    @FXML
-    JFXComboBox<Status> statusList;
-    @FXML
-    JFXRadioButton bothRadio;
-    @FXML
-    JFXRadioButton paidRadio;
-    @FXML
-    JFXRadioButton notPaidRadio;
-    @FXML
-    JFXButton searchBtn;
-
-    RankController rankController;
-    StatusController statusController;
+    private RankController rankController;
+    private StatusController statusController;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

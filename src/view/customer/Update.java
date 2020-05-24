@@ -18,42 +18,40 @@ import view.View;
 import java.util.ArrayList;
 
 public class Update extends View {
+    @FXML
+    private JFXRadioButton privateCustomer;
+    @FXML
+    private JFXRadioButton businessCustomer;
+    @FXML
+    private JFXComboBox<Rank> customerRank;
+    @FXML
+    private JFXTextField contactName;
+    @FXML
+    private JFXTextField address;
+    @FXML
+    private JFXTextField houseNumber;
+    @FXML
+    private JFXTextField mail;
+    @FXML
+    private JFXTextField phoneNumber;
+    @FXML
+    private JFXComboBox<City> region;
+    @FXML
+    private JFXTextField accountNumber;
+    @FXML
+    private JFXTextField businessNumber;
+    @FXML
+    private Group businessView;
+    @FXML
+    private JFXButton cancelBtn;
+    @FXML
+    private JFXButton submitBtn;
 
-    @FXML
-    JFXRadioButton privateCustomer;
-    @FXML
-    JFXRadioButton businessCustomer;
-    @FXML
-    JFXComboBox<Rank> customerRank;
-    @FXML
-    JFXTextField contactName;
-    @FXML
-    JFXTextField address;
-    @FXML
-    JFXTextField houseNumber;
-    @FXML
-    JFXTextField mail;
-    @FXML
-    JFXTextField phoneNumber;
-    @FXML
-    JFXComboBox<City> region;
-    @FXML
-    JFXTextField accountNumber;
-    @FXML
-    JFXTextField businessNumber;
-    @FXML
-    Group businessView;
-    @FXML
-    JFXButton cancelBtn;
-    @FXML
-    JFXButton submitBtn;
-
-    Customer selectedCustomer;
-
-    CityController cityController;
-    RankController rankController;
-    CustomerController customerController;
-    Index customersView;
+    private Customer selectedCustomer;
+    private CityController cityController;
+    private RankController rankController;
+    private CustomerController customerController;
+    private Index customersView;
 
     @Override
     public void init() {

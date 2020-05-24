@@ -23,37 +23,36 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Create extends View {
-
     @FXML
-    ToggleGroup customerType;
+    private ToggleGroup customerType;
     @FXML
-    JFXRadioButton privateCustomer;
+    private JFXRadioButton privateCustomer;
     @FXML
-    JFXRadioButton businessCustomer;
+    private JFXRadioButton businessCustomer;
     @FXML
-    JFXComboBox<Rank> customerRank;
+    private JFXComboBox<Rank> customerRank;
     @FXML
-    JFXTextField contactName;
+    private JFXTextField contactName;
     @FXML
-    JFXTextField phoneNumber;
+    private JFXTextField phoneNumber;
     @FXML
-    JFXTextField mail;
+    private JFXTextField mail;
     @FXML
-    JFXTextField houseNumber;
+    private JFXTextField houseNumber;
     @FXML
-    JFXTextField address;
+    private JFXTextField address;
     @FXML
-    JFXComboBox<City> regionBox;
+    private JFXComboBox<City> regionBox;
     @FXML
-    JFXTextField accountNumber;
+    private JFXTextField accountNumber;
     @FXML
-    JFXTextField businessNumber;
+    private JFXTextField businessNumber;
     @FXML
-    Group businessView;
+    private Group businessView;
     @FXML
-    JFXButton cancelBtn;
+    private JFXButton cancelBtn;
     @FXML
-    JFXButton submitBtn;
+    private JFXButton submitBtn;
 
     RankController rankController;
     CityController cityController;
