@@ -123,9 +123,7 @@ public class Read extends View {
             }
 
             tableArticle.getItems().addAll(orderLines);
-        } catch (NoRowSelected e) {
-            e.showError();
-        } catch (ConnectionException e) {
+        } catch (ConnectionException | NoRowSelected e) {
             showError(e.getTypeError(), e.getMessage());
         }
     }

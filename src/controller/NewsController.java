@@ -1,10 +1,7 @@
 package controller;
 
 import business.NewsBusiness;
-import exception.ConnectionException;
-import exception.DataQueryException;
-import exception.DeletionExceiption;
-import exception.SQLManageException;
+import exception.*;
 import model.News;
 
 import java.sql.SQLException;
@@ -29,11 +26,11 @@ public class NewsController {
         return newsBusiness.getAllNews();
     }
 
-    public News getNewsFromId(Integer id) throws SQLManageException {
+    public News getNewsFromId(Integer id) throws NoRowSelected {
         return newsBusiness.getNewsFromId(id);
     }
 
-    public void insertNews(News news) throws SQLManageException {
+    public void insertNews(News news) throws DataQueryException {
         newsBusiness.insertNews(news);
     }
 

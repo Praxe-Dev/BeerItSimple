@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import controller.NewsController;
 import exception.ConnectionException;
+import exception.DataQueryException;
 import exception.SQLManageException;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
@@ -48,33 +49,29 @@ public class Create extends View {
         });
 
         submitBtn.setOnAction(e -> {
-            if(validateInfo()){
-                try {
-                    insertNews();
-                    PopUp.showSuccess("News added", "Your news has been successfully added");
-                    this.closeWindow();
-                } catch(SQLManageException err){
-                    err.showMessage();
-                }
+            if (validateInfo()) {
+                insertNews();
+                PopUp.showSuccess("News added", "Your news has been successfully added");
+                this.closeWindow();
             }
         });
     }
 
-    private boolean validateInfo(){
+    private boolean validateInfo() {
         LocalDate start = startingDate.getValue();
         LocalDate end = endDate.getValue();
-        if(Validators.validate(title) && Validators.validate(contentArea) && contentArea.validate()){
-            if(startingDate.getValue() == null){
+        if (Validators.validate(title) && Validators.validate(contentArea) && contentArea.validate()) {
+            if (startingDate.getValue() == null) {
                 PopUp.showError("Date error", "Please choose start date.");
                 return false;
             }
 
-            if(endDate.getValue() == null){
+            if (endDate.getValue() == null) {
                 PopUp.showError("Date error", "Please choose end date.");
                 return false;
             }
 
-            if(Validators.validateBetweenDates(end, start)){
+            if (Validators.validateBetweenDates(end, start)) {
                 PopUp.showError("Date error", "End date must be later than the start date.");
                 return false;
             }
@@ -83,17 +80,17 @@ public class Create extends View {
         return false;
     }
 
-    public void insertNews() throws SQLManageException {
+    public void insertNews() {
         LocalDate start = startingDate.getValue();
         LocalDate end = endDate.getValue();
-        GregorianCalendar startGC = new GregorianCalendar(start.getYear(), start.getMonthValue()-1, start.getDayOfMonth());
-        GregorianCalendar endGC = new GregorianCalendar(end.getYear(), end.getMonthValue()-1, end.getDayOfMonth());
+        GregorianCalendar startGC = new GregorianCalendar(start.getYear(), start.getMonthValue() - 1, start.getDayOfMonth());
+        GregorianCalendar endGC = new GregorianCalendar(end.getYear(), end.getMonthValue() - 1, end.getDayOfMonth());
         News news = new News(title.getText(), contentArea.getText(), startGC, endGC, 2);
         System.out.println(utils.Date.formatTime(news.getStartingDate()));
         try {
             newsController.insertNews(news);
-        } catch(SQLManageException e){
-            throw e;
+        } catch (DataQueryException e) {
+            showError(e.getTypeError(), e.getMessage());
         }
     }
 }

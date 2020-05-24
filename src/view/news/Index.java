@@ -144,8 +144,8 @@ public class Index extends View implements Initializable {
         News news = null;
         try {
             news = newsController.getNewsFromId(newsTable.getSelectionModel().getSelectedItem().getId());
-        } catch (Exception e) {
-            new NoRowSelected();
+        } catch (NoRowSelected e) {
+            showError(e.getTypeError(), e.getMessage());
         }
 
         return news;

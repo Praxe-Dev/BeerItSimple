@@ -1,9 +1,6 @@
 package dataAccess;
 
-import exception.ConnectionException;
-import exception.DataQueryException;
-import exception.DeletionExceiption;
-import exception.SQLManageException;
+import exception.*;
 import model.News;
 
 import java.sql.*;
@@ -68,7 +65,7 @@ public class NewsDBAccess implements NewsDataAccess {
         return newsArrayList;
     }
 
-    public News getNewsFromId(Integer id) throws SQLManageException{
+    public News getNewsFromId(Integer id) throws NoRowSelected {
         String sqlInstruction = "SELECT * FROM news WHERE id = ?";
         try{
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
@@ -86,7 +83,7 @@ public class NewsDBAccess implements NewsDataAccess {
                 return news;
             }
         } catch(SQLException e){
-            throw new SQLManageException(e);
+            throw new NoRowSelected();
         }
         return null;
     }
@@ -100,7 +97,7 @@ public class NewsDBAccess implements NewsDataAccess {
         return dateGC;
     }
 
-    public void insertNews(News news) throws SQLManageException {
+    public void insertNews(News news) throws DataQueryException {
         String sqlInstruction = "INSERT INTO news(title, content, startingDate, endDate, EmployeeEntityId) VALUES(?,?,?,?,?)";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
@@ -111,7 +108,7 @@ public class NewsDBAccess implements NewsDataAccess {
             preparedStatement.setInt(5, news.getEmployeeEntityId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLManageException(e);
+            throw new DataQueryException();
         }
     }
 

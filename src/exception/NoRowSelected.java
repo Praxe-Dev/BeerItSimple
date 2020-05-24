@@ -2,15 +2,17 @@ package exception;
 
 import utils.PopUp;
 
-public class NoRowSelected extends Exception {
+public class NoRowSelected extends BISException {
     private final String errorType = "No row selected";
     private final String message = "You should have select one row to perform this action";
 
-    public NoRowSelected() {
-        showError();
+    @Override
+    public String getTypeError() {
+        return null;
     }
 
-    public void showError() {
-        PopUp.showError(errorType, message);
+    @Override
+    public String getMessage() {
+        return null;
     }
 }

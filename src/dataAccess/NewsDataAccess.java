@@ -2,6 +2,7 @@ package dataAccess;
 
 import exception.DataQueryException;
 import exception.DeletionExceiption;
+import exception.NoRowSelected;
 import exception.SQLManageException;
 import model.News;
 import model.Order;
@@ -14,9 +15,9 @@ public interface NewsDataAccess {
 
     ArrayList<News> getAllNews() throws DataQueryException;
 
-    News getNewsFromId(Integer id) throws SQLManageException;
+    News getNewsFromId(Integer id) throws NoRowSelected;
 
-    void insertNews(News news) throws SQLManageException;
+    void insertNews(News news) throws DataQueryException;
 
     boolean deleteNews(News news) throws DeletionExceiption;
 

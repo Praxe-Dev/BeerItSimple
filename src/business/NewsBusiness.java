@@ -2,10 +2,7 @@ package business;
 
 import dataAccess.NewsDBAccess;
 import dataAccess.NewsDataAccess;
-import exception.ConnectionException;
-import exception.DataQueryException;
-import exception.DeletionExceiption;
-import exception.SQLManageException;
+import exception.*;
 import model.News;
 
 import java.sql.SQLException;
@@ -30,11 +27,11 @@ public class NewsBusiness {
         return dao.getAllNews();
     }
 
-    public News getNewsFromId(Integer id) throws SQLManageException {
+    public News getNewsFromId(Integer id) throws NoRowSelected {
         return dao.getNewsFromId(id);
     }
 
-    public void insertNews(News news) throws SQLManageException {
+    public void insertNews(News news) throws DataQueryException {
         dao.insertNews(news);
     }
 
