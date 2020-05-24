@@ -17,6 +17,25 @@
                 <Font size="32.0" />
             </font>
         </Label>
+        <HBox>
+            <VBox.margin>
+                <Insets />
+            </VBox.margin>
+            <children>
+                <Label prefHeight="48.0" prefWidth="1800.0" />
+                <JFXButton fx:id="refreshBtn" contentDisplay="RIGHT" layoutX="20.0" layoutY="10.0" minWidth="142.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="142.0" text="Refresh" textAlignment="RIGHT" textFill="WHITE">
+                    <graphic>
+                        <FontAwesomeIcon fill="WHITE" glyphName="REFRESH" size="2em" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="38.42856979370117" />
+                    </graphic>
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                    <HBox.margin>
+                        <Insets right="10.0" />
+                    </HBox.margin>
+                </JFXButton>
+            </children>
+        </HBox>
         <TableView fx:id="newsTable" prefHeight="1000.0" prefWidth="1000.0">
             <columns>
                 <TableColumn fx:id="id" prefWidth="75.0" text="Id #" />

@@ -27,10 +27,6 @@ public class Index extends View implements Initializable {
     @FXML
     private VBox vbox;
     @FXML
-    private Label label;
-    @FXML
-    private JFXButton searchBtn;
-    @FXML
     private JFXButton refreshBtn;
     @FXML
     private JFXButton newOrderBtn;

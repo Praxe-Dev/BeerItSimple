@@ -8,14 +8,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.VBox;
 import model.Customer;
 import model.CustomerTableFormat;
 import view.PopUp;
 import view.View;
 import view.Window;
-import view.customer.Update;
-import view.customer.Read;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -24,9 +21,7 @@ import java.util.ResourceBundle;
 public class Index extends View implements Initializable {
 
     @FXML
-    private VBox vbox;
-    @FXML
-    private Label label;
+    private JFXButton refreshBtn;
     @FXML
     private JFXButton newCustomer;
     @FXML
@@ -70,7 +65,7 @@ public class Index extends View implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        refreshBtn.setOnAction(e -> updateTable() );
         init();
         initTableCustomer();
     }

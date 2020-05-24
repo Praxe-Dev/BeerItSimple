@@ -158,12 +158,10 @@ public class MainView extends View{
 
     private void setNewsTransition(){
         TranslateTransition transition = new TranslateTransition();
-        transition.setDuration(Duration.millis(15000));
+        transition.setDuration(Duration.millis(10000));
         transition.setNode(newsLabel);
-        transition.setToX(-1100);
-        transition.setAutoReverse(true);
+        transition.setToX(-1800);
         transition.setCycleCount(TranslateTransition.INDEFINITE);
         transition.play();
     }
-
 }
