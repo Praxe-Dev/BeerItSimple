@@ -154,6 +154,7 @@ public class MainView extends View{
         if(!role.getName().equals("Manager")){
             boxMenu.getChildren().remove(newsBtn);
         }
+        username.setText(username.getText() + " (" + role.getName() + ")");
     }
 
     private void setNewsTransition(){
