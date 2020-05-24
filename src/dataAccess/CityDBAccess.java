@@ -1,6 +1,7 @@
 package dataAccess;
 
 import exception.ConnectionException;
+import exception.DataQueryException;
 import model.City;
 
 import java.sql.Connection;
@@ -17,7 +18,7 @@ public class CityDBAccess implements CityDataAccess {
 
 
     @Override
-    public ArrayList<City> getAllCities() {
+    public ArrayList<City> getAllCities() throws DataQueryException {
         String sqlInstruction = "SELECT * FROM City";
         ArrayList<City> cityList = new ArrayList<>();
 
@@ -31,7 +32,7 @@ public class CityDBAccess implements CityDataAccess {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataQueryException();
         }
 
         return cityList;

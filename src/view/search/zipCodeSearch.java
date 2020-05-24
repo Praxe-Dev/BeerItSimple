@@ -40,13 +40,15 @@ public class zipCodeSearch extends View implements Initializable {
 
     @Override
     public void init() {
+        ArrayList<City> allCities = null;
         try {
             cityController = new CityController();
             orderController = new OrderController();
-        } catch (ConnectionException e) {
+            allCities = cityController.getAllCities();
+        } catch (ConnectionException | DataQueryException e) {
             showError(e.getTypeError(), e.getMessage());
         }
-        ArrayList<City> allCities = cityController.getAllCities();
+
         zipCodeBox.setItems(FXCollections.observableArrayList(allCities));
         zipCodeBox.getSelectionModel().selectFirst();
         zipCodeBox.getStyleClass().add("whiteComboBox");
@@ -57,7 +59,7 @@ public class zipCodeSearch extends View implements Initializable {
         });
     }
 
-    private void search(){
+    private void search() {
         try {
             City city = zipCodeBox.getSelectionModel().getSelectedItem();
             ArrayList<Order> allOrders = orderController.getAllOrdersFromZipCode(city);

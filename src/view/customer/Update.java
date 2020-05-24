@@ -1,11 +1,13 @@
 package view.customer;
 
+import com.itextpdf.text.pdf.ArabicLigaturizer;
 import com.jfoenix.controls.*;
 import controller.CityController;
 import controller.CustomerController;
 import controller.RankController;
 import exception.ConnectionException;
 import exception.CustomerUpdateException;
+import exception.DataQueryException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -118,12 +120,18 @@ public class Update extends View {
             businessView.setVisible(true);
         });
 
-        ArrayList<City> cityList = cityController.getAllCities();
+        ArrayList<City> cityList = null;
+        ArrayList<Rank> rankList = null;
+        try {
+            cityList = cityController.getAllCities();
+            rankList = rankController.getAllRanks();
+        } catch (DataQueryException e) {
+            e.printStackTrace();
+        }
         ObservableList<City> cityObservableList = FXCollections.observableArrayList(cityList);
         region.setItems(cityObservableList);
         region.getSelectionModel().select(findIndexOfCity(cityObservableList));
 
-        ArrayList<Rank> rankList = rankController.getAllRanks();
         ObservableList<Rank> rankObservableList = FXCollections.observableArrayList(rankList);
         customerRank.setItems(rankObservableList);
         customerRank.getSelectionModel().select(findIndexOfRank(rankObservableList));

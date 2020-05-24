@@ -52,11 +52,11 @@ public class ordersFromRank extends View implements Initializable {
         try {
             rankController = new RankController();
             statusController = new StatusController();
-        } catch (ConnectionException e) {
+            rankList.getItems().setAll(rankController.getAllRanks());
+        } catch (ConnectionException | DataQueryException e) {
             showError(e.getTypeError(), e.getMessage());
         }
 
-        rankList.getItems().setAll(rankController.getAllRanks());
         rankList.getSelectionModel().selectFirst();
         rankList.getStyleClass().add("whiteComboBox");
 

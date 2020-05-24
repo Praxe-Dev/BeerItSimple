@@ -9,6 +9,7 @@ import controller.CustomerController;
 import controller.RankController;
 import exception.ConnectionException;
 import exception.CustomerInsertionException;
+import exception.DataQueryException;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -95,11 +96,17 @@ public class Create extends View {
         });
 
         //Remplis la combobox Rank
-        ArrayList<Rank> rankList = rankController.getAllRanks();
+        ArrayList<Rank> rankList = null;
+        ArrayList<City> cityList = null;
+        try {
+            rankList = rankController.getAllRanks();
+            cityList = cityController.getAllCities();
+        } catch (DataQueryException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
         customerRank.setItems(FXCollections.observableArrayList(rankList));
         customerRank.getSelectionModel().selectFirst();
 
-        ArrayList<City> cityList = cityController.getAllCities();
         regionBox.setItems(FXCollections.observableArrayList(cityList));
         regionBox.getSelectionModel().selectFirst();
 
