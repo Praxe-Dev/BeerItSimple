@@ -3,6 +3,7 @@ package dataAccess;
 import exception.CustomerException;
 import exception.DuplicataException;
 import exception.CustomerNotFoundException;
+import exception.InsertionError;
 import model.City;
 import model.Customer;
 import model.Entity;
@@ -12,7 +13,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
-public class CustomerDBAccess implements CustomerDataAccess{
+public class CustomerDBAccess implements CustomerDataAccess {
     private Connection connection;
 
     public CustomerDBAccess() {
@@ -22,9 +23,9 @@ public class CustomerDBAccess implements CustomerDataAccess{
     @Override
     public ArrayList<Customer> getAllCustomers() {
         String sqlInstruction = "SELECT customer.*, e.*, r.*, city.*\n" +
-                                "FROM customer JOIN entity e ON customer.EntityId = e.id\n" +
-                                "JOIN `rank` r ON r .id = customer.RankId\n" +
-                                "JOIN city ON e.CityLabel = city.label AND e.CityZipCode = city.zipCode";
+                "FROM customer JOIN entity e ON customer.EntityId = e.id\n" +
+                "JOIN `rank` r ON r .id = customer.RankId\n" +
+                "JOIN city ON e.CityLabel = city.label AND e.CityZipCode = city.zipCode";
         ArrayList<Customer> customerList = new ArrayList<>();
         try {
             ResultSet data = connection.createStatement().executeQuery(sqlInstruction);
@@ -40,7 +41,7 @@ public class CustomerDBAccess implements CustomerDataAccess{
             String businessNumber;
 
 
-            while(data.next()) {
+            while (data.next()) {
                 city = new City(
                         data.getString("CityLabel"),
                         data.getInt("CityZipCode")
@@ -96,10 +97,10 @@ public class CustomerDBAccess implements CustomerDataAccess{
     @Override
     public Customer getCustomer(Integer id) throws CustomerNotFoundException {
         String sqlInstruction = "SELECT customer.*, entity.*, r.*, city.* FROM customer\n" +
-                                "JOIN entity ON customer.EntityId = entity.id\n" +
-                                "JOIN `rank` r ON r.id = customer.RankId\n" +
-                                "JOIN city ON entity.cityLabel = city.label AND entity.CityZipCode = city.zipCode\n" +
-                                "WHERE customer.EntityId = ?";
+                "JOIN entity ON customer.EntityId = entity.id\n" +
+                "JOIN `rank` r ON r.id = customer.RankId\n" +
+                "JOIN city ON entity.cityLabel = city.label AND entity.CityZipCode = city.zipCode\n" +
+                "WHERE customer.EntityId = ?";
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
@@ -162,11 +163,11 @@ public class CustomerDBAccess implements CustomerDataAccess{
         return null;
     }
 
-    public boolean create(Customer c) throws SQLException {
-        int affectedRowsEntity = 0;
+    public boolean create(Customer c) throws InsertionError {
+        int affectedRowsEntity;
         int affectedRowsCustomer = 0;
         int entityID = 0;
-        PreparedStatement preparedStatementEntity = null;
+        PreparedStatement preparedStatementEntity;
 
         //Entity
         try {
@@ -184,12 +185,11 @@ public class CustomerDBAccess implements CustomerDataAccess{
             preparedStatementEntity.setString(8, city.getLabel());
             preparedStatementEntity.setInt(9, city.getZipCode());
             affectedRowsEntity = preparedStatementEntity.executeUpdate();
-        }catch(SQLException ex) {
-                throw ex;
-        }
-        //Customer
-        if(affectedRowsEntity != 0) {
-            try (ResultSet generatedKeys = preparedStatementEntity.getGeneratedKeys()) {
+
+            //Customer
+            if (affectedRowsEntity != 0) {
+
+                ResultSet generatedKeys = preparedStatementEntity.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     String sqlCustomer = "INSERT INTO customer(`EntityId`,`RankId`,`subscriptionDate`) values(?,?,?)";
                     PreparedStatement preparedStatementCustomer = connection.prepareStatement(sqlCustomer);
@@ -203,14 +203,22 @@ public class CustomerDBAccess implements CustomerDataAccess{
                 } else {
                     throw new SQLException("No ID obtained from entity.");
                 }
-            } catch(SQLException ex){
-                String sqlEntityDel = "DELETE FROM entity WHERE id = ?";
+
+            } else {
+                throw new SQLException("Creating Entity failed.");
+            }
+        } catch (SQLException ex) {
+            String sqlEntityDel = "DELETE FROM entity WHERE id = ?";
+            try {
+
                 PreparedStatement preparedStatementEntityDel = connection.prepareStatement(sqlEntityDel);
                 preparedStatementEntityDel.setInt(1, entityID);
                 preparedStatementEntityDel.executeUpdate();
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                throw new InsertionError(c);
             }
-        } else {
-            throw new SQLException("Creating Entity failed.");
         }
         return affectedRowsCustomer != 0;
     }
@@ -219,19 +227,19 @@ public class CustomerDBAccess implements CustomerDataAccess{
         int affectedRow = 0;
 
         String sqlInstruction = "UPDATE customer\n" +
-                                "JOIN entity ON customer.EntityId = entity.id\n" +
-                                "SET\n" +
-                                " customer.RankId = ?,\n" +
-                                " entity.mail = ?,\n" +
-                                " entity.contactName = ?,\n" +
-                                "entity.phoneNumber = ?,\n" +
-                                "entity.houseNumber = ?,\n" +
-                                "entity.street = ?,\n" +
-                                "entity.bankAccountNumber = ?,\n" +
-                                "entity.businessNumber = ?,\n" +
-                                "entity.CityLabel = ?,\n" +
-                                "entity.CityZipCode = ?\n" +
-                                "WHERE customer.EntityId = ?";
+                "JOIN entity ON customer.EntityId = entity.id\n" +
+                "SET\n" +
+                " customer.RankId = ?,\n" +
+                " entity.mail = ?,\n" +
+                " entity.contactName = ?,\n" +
+                "entity.phoneNumber = ?,\n" +
+                "entity.houseNumber = ?,\n" +
+                "entity.street = ?,\n" +
+                "entity.bankAccountNumber = ?,\n" +
+                "entity.businessNumber = ?,\n" +
+                "entity.CityLabel = ?,\n" +
+                "entity.CityZipCode = ?\n" +
+                "WHERE customer.EntityId = ?";
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
@@ -260,7 +268,7 @@ public class CustomerDBAccess implements CustomerDataAccess{
     public boolean delete(Customer customer) {
 
         String sqlUpdateOrder = "UPDATE `order` SET CustomerEntityid = null\n" +
-                                "WHERE CustomerEntityid = ?";
+                "WHERE CustomerEntityid = ?";
 
         try {
             PreparedStatement preparedStatementOrder = connection.prepareStatement(sqlUpdateOrder);
@@ -269,14 +277,14 @@ public class CustomerDBAccess implements CustomerDataAccess{
             preparedStatementOrder.executeUpdate();
 
             String sqlDeleteCustomer = "DELETE FROM customer\n" +
-                                    "WHERE EntityId = ?";
+                    "WHERE EntityId = ?";
 
             PreparedStatement preparedStatementDeleteCustomer = connection.prepareStatement(sqlDeleteCustomer);
             preparedStatementDeleteCustomer.setInt(1, customer.getEntity().getId());
             preparedStatementDeleteCustomer.executeUpdate();
 
             String sqlDeleteEntity = "DELETE FROM entity\n" +
-                                    "WHERE id = ? AND id NOT IN (SELECT EntityId FROM employee)";
+                    "WHERE id = ? AND id NOT IN (SELECT EntityId FROM employee)";
 
             PreparedStatement preparedStatementDeleteEntity = connection.prepareStatement(sqlDeleteEntity);
             preparedStatementDeleteEntity.setInt(1, customer.getEntity().getId());

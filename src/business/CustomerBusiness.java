@@ -5,6 +5,7 @@ import dataAccess.CustomerDataAccess;
 import exception.CustomerException;
 import exception.DuplicataException;
 import exception.CustomerNotFoundException;
+import exception.InsertionError;
 import model.Customer;
 
 import java.sql.SQLException;
@@ -25,7 +26,7 @@ public class CustomerBusiness {
         return dao.getAllCustomers();
     }
 
-    public boolean create(Customer customer) throws SQLException {
+    public boolean create(Customer customer) throws InsertionError {
         return dao.create(customer);
     }
 
