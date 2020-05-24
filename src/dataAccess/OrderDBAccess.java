@@ -428,19 +428,21 @@ public class OrderDBAccess implements OrderDataAccess {
                 preparedRankStatement.setDouble(1, data.getDouble("ordersSum"));
                 ResultSet dataRank = preparedRankStatement.executeQuery();
                 if(dataRank.next()){
-                    newRank = new Rank(
-                            dataRank.getInt("id"),
-                            dataRank.getString("label"),
-                            dataRank.getInt("creditLimit"),
-                            dataRank.getInt("minAmountOrder")
-                    );
-                    if(customer.getRank().getId() != newRank.getId()){
-                        //Update rank
-                        String updateRank = "UPDATE customer SET RankId = ? WHERE EntityId = ?";
-                        PreparedStatement preparedUpdateRank= connection.prepareStatement(updateRank);
-                        preparedUpdateRank.setInt(1,newRank.getId());
-                        preparedUpdateRank.setInt(2,customer.getEntity().getId());
-                        preparedUpdateRank.executeUpdate();
+                    if(customer.getRank().getId() != dataRank.getInt("id")) {
+                        newRank = new Rank(
+                                dataRank.getInt("id"),
+                                dataRank.getString("label"),
+                                dataRank.getInt("creditLimit"),
+                                dataRank.getInt("minAmountOrder")
+                        );
+                        if (customer.getRank().getId() != newRank.getId()) {
+                            //Update rank
+                            String updateRank = "UPDATE customer SET RankId = ? WHERE EntityId = ?";
+                            PreparedStatement preparedUpdateRank = connection.prepareStatement(updateRank);
+                            preparedUpdateRank.setInt(1, newRank.getId());
+                            preparedUpdateRank.setInt(2, customer.getEntity().getId());
+                            preparedUpdateRank.executeUpdate();
+                        }
                     }
                 }
             }
@@ -495,9 +497,7 @@ public class OrderDBAccess implements OrderDataAccess {
     private void setCustomerFromId(Order order, int customerId) throws SQLException {
         Entity entity;
         if (customerId != 0) {
-
             Customer customer;
-            Entity customerEntity;
             City city;
             Rank rank;
             GregorianCalendar subscriptionDateGregorian = null;
@@ -556,7 +556,6 @@ public class OrderDBAccess implements OrderDataAccess {
         String sqlOrderLine = "SELECT o.*, p.*\n" +
                               "FROM orderline o JOIN product p ON o.Productcode = p.code\n"+
                               "WHERE o.Orderreference = ?;";
-        ArrayList<OrderLine> orderLines = new ArrayList<>();
 
         PreparedStatement preparedStatement = connection.prepareStatement(sqlOrderLine);
         preparedStatement.setInt(1, order.getReference());
@@ -594,7 +593,7 @@ public class OrderDBAccess implements OrderDataAccess {
 
         preparedStatementDelivery.setInt(1, order.getReference());
         ResultSet dataDelivery = preparedStatementDelivery.executeQuery();
-//                dataDelivery.next();
+
         if(dataDelivery.next()){
             GregorianCalendar plannedDateG = null;
             GregorianCalendar deliveredDateG = null;
