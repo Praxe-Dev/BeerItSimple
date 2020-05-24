@@ -63,7 +63,7 @@ public class NewsDBAccess implements NewsDataAccess {
                 newsArrayList.add(news);
             }
         } catch(SQLException e){
-            throw new DataQueryException(e);
+            throw new SQLManageException(e);
         }
         return newsArrayList;
     }
