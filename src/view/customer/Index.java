@@ -5,6 +5,7 @@ import controller.CustomerController;
 import exception.ConnectionException;
 import exception.CustomerException;
 import exception.CustomerNotFoundException;
+import exception.DataQueryException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -186,7 +187,12 @@ public class Index extends View implements Initializable {
 
     public void updateTable() {
         // Transforme les customers en CustomerTableFormat pour l'affichage
-        ArrayList<Customer> customersList = customersController.getAllCustomers();
+        ArrayList<Customer> customersList = null;
+        try {
+            customersList = customersController.getAllCustomers();
+        } catch (DataQueryException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
         ArrayList<CustomerTableFormat> customersRow = new ArrayList<>();
         for (Customer customer : customersList) {
             customersRow.add(new CustomerTableFormat(customer));

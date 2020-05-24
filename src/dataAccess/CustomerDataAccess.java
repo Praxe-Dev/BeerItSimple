@@ -6,7 +6,7 @@ import model.Customer;
 import java.util.ArrayList;
 
 public interface CustomerDataAccess {
-    ArrayList<Customer> getAllCustomers();
+    ArrayList<Customer> getAllCustomers() throws DataQueryException;
 
     boolean create(Customer customer) throws CustomerInsertionException;
 

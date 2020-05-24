@@ -18,7 +18,7 @@ public class CustomerBusiness {
         this.dao = dao;
     }
 
-    public ArrayList<Customer> getAllCustomers() {
+    public ArrayList<Customer> getAllCustomers() throws DataQueryException {
         return dao.getAllCustomers();
     }
 

@@ -351,7 +351,12 @@ public class Update extends View {
 
     private void setPaymentMethod(){
         String paymentSelected = order.getPaymentMethod().getId().toString();
-        ArrayList<PaymentMethod> allPaymentMethod = paymentMethodController.getAllPaymentMethod();
+        ArrayList<PaymentMethod> allPaymentMethod = null;
+        try {
+            allPaymentMethod = paymentMethodController.getAllPaymentMethod();
+        } catch (DataQueryException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
         int paymentIndex = -1;
         for(int i = 0; i < allPaymentMethod.size(); i++){
             if(allPaymentMethod.get(i).getId().toString().equals(paymentSelected)){

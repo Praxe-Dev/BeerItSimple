@@ -1,9 +1,6 @@
 package dataAccess;
 
-import exception.ConnectionException;
-import exception.CustomerUpdateException;
-import exception.CustomerNotFoundException;
-import exception.CustomerInsertionException;
+import exception.*;
 import model.City;
 import model.Customer;
 import model.Entity;
@@ -21,7 +18,7 @@ public class CustomerDBAccess implements CustomerDataAccess {
     }
 
     @Override
-    public ArrayList<Customer> getAllCustomers() {
+    public ArrayList<Customer> getAllCustomers() throws DataQueryException {
         String sqlInstruction = "SELECT customer.*, e.*, r.*, city.*\n" +
                 "FROM customer JOIN entity e ON customer.EntityId = e.id\n" +
                 "JOIN `rank` r ON r .id = customer.RankId\n" +
@@ -88,7 +85,7 @@ public class CustomerDBAccess implements CustomerDataAccess {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataQueryException();
         }
 
         return customerList;

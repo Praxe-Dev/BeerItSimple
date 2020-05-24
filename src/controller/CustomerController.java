@@ -17,7 +17,7 @@ public class CustomerController {
      * Ask the business package to get allCustomer from DB
      * @return an array of CustomerViewTable that contains the right format to be displayed
      */
-    public ArrayList<Customer> getAllCustomers() {
+    public ArrayList<Customer> getAllCustomers() throws DataQueryException {
         return customerBusiness.getAllCustomers();
     }
 

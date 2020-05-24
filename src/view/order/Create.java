@@ -95,11 +95,17 @@ public class Create extends View {
 
         Validators.setNumberValidator(productQuantity);
 
-        ArrayList<Customer> allCustomers = customerController.getAllCustomers();
+        ArrayList<Customer> allCustomers = null;
+        ArrayList<PaymentMethod> allPaymentMethod = null;
+        try {
+            allCustomers = customerController.getAllCustomers();
+            allPaymentMethod = paymentMethodController.getAllPaymentMethod();
+        } catch (DataQueryException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
         customerList.setItems(FXCollections.observableArrayList(allCustomers));
         customerList.getSelectionModel().selectFirst();
 
-        ArrayList<PaymentMethod> allPaymentMethod = paymentMethodController.getAllPaymentMethod();
         paymentMethod.setItems(FXCollections.observableArrayList(allPaymentMethod));
         paymentMethod.getSelectionModel().selectFirst();
 

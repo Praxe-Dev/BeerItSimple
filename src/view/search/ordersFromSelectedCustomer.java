@@ -48,7 +48,12 @@ public class ordersFromSelectedCustomer extends View implements Initializable {
 
 
         //Init customerBox
-        ArrayList<Customer> allCustomers = customerController.getAllCustomers();
+        ArrayList<Customer> allCustomers = null;
+        try {
+            allCustomers = customerController.getAllCustomers();
+        } catch (DataQueryException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
         customerBox.setItems(FXCollections.observableArrayList(allCustomers));
         customerBox.getSelectionModel().selectFirst();
         customerBox.getStyleClass().add("whiteComboBox");
