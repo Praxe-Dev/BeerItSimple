@@ -1,5 +1,6 @@
 package dataAccess;
 
+import exception.ConnectionException;
 import model.OrderLine;
 import model.Product;
 
@@ -8,7 +9,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class OrderLineDBAccess implements OrderLineDataAccess {
-    Connection connection = DBConnection.getInstance();
+    Connection connection;
+
+    public OrderLineDBAccess() throws ConnectionException {
+        connection = DBConnection.getInstance();
+    }
 
     @Override
     public ArrayList<OrderLine> getAllOrderLineBetweenDates(LocalDate startDate, LocalDate endDate) {

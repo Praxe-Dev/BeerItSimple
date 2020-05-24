@@ -1,7 +1,6 @@
 package exception;
 
-import model.Customer;
-import view.PopUp;
+import utils.PopUp;
 
 public class CustomerException extends Exception {
     private static String typeError;

@@ -1,6 +1,6 @@
 package exception;
 
-import view.PopUp;
+import utils.PopUp;
 
 public class UpdateOrderException extends Throwable{
     private static String exception;

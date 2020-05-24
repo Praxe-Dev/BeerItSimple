@@ -15,7 +15,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import model.*;
-import view.PopUp;
+import utils.PopUp;
 import view.View;
 
 import java.io.FileOutputStream;

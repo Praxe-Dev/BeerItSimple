@@ -10,7 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import model.Customer;
 import model.Order;
-import view.PopUp;
+import utils.PopUp;
 import view.View;
 import view.Window;
 import view.order.Index;

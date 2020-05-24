@@ -10,7 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.Customer;
 import model.CustomerTableFormat;
-import view.PopUp;
+import utils.PopUp;
 import view.View;
 import view.Window;
 

@@ -1,6 +1,6 @@
 package exception;
 
-import view.PopUp;
+import utils.PopUp;
 
 public class PaymentMethodException extends Throwable {
     private static final String typeError = "Payment method error";

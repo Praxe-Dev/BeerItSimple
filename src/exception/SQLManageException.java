@@ -1,8 +1,7 @@
 package exception;
 
-import view.PopUp;
+import utils.PopUp;
 
-import java.awt.*;
 import java.sql.SQLException;
 
 public class SQLManageException extends Exception {

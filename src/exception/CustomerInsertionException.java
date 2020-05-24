@@ -1,7 +1,6 @@
 package exception;
 
 import model.Customer;
-import view.PopUp;
 
 public class CustomerInsertionException extends Exception {
     private Customer customer;

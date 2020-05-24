@@ -1,6 +1,6 @@
 package exception;
 
-import view.PopUp;
+import utils.PopUp;
 
 public class NoRowSelected extends Exception {
     private final String errorType = "No row selected";

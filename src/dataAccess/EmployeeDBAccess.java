@@ -1,5 +1,6 @@
 package dataAccess;
 
+import exception.ConnectionException;
 import exception.EmployeeLoginException;
 import exception.SQLManageException;
 import model.City;
@@ -13,12 +14,12 @@ import java.util.ArrayList;
 public class EmployeeDBAccess implements EmployeeDataAccess {
     private Connection connection;
 
-    public EmployeeDBAccess() {
+    public EmployeeDBAccess() throws ConnectionException {
         this.connection = DBConnection.getInstance();
     }
 
     @Override
-    public Employee getEmployee(int registrationNumber, String password) throws EmployeeLoginException {
+    public Employee getEmployee(int login, String password) throws EmployeeLoginException {
         String sqlInstructions = "SELECT employee.*, e.*, r.*, city.* FROM employee\n" +
                                 "JOIN entity e ON e.id = employee.EntityId\n" +
                                 "JOIN role r ON r.id = employee.RoleId\n" +
@@ -28,7 +29,7 @@ public class EmployeeDBAccess implements EmployeeDataAccess {
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstructions);
-            preparedStatement.setInt(1, registrationNumber);
+            preparedStatement.setInt(1, login);
             preparedStatement.setString(2, password);
             employeeData = preparedStatement.executeQuery();
             employeeData.next();

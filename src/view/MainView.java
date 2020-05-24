@@ -3,7 +3,6 @@ package view;
 import com.jfoenix.controls.JFXButton;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.animation.TranslateTransition;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,6 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import model.News;
 import model.Role;
+import utils.PopUp;
 import view.news.ThreadNews;
 import view.news.Read;
 

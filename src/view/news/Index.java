@@ -13,10 +13,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.News;
 import model.NewsTableFormat;
-import view.PopUp;
+import utils.PopUp;
 import view.View;
 import view.Window;
-import view.news.Update;
 
 import java.net.URL;
 import java.util.ArrayList;

@@ -1,5 +1,6 @@
 package dataAccess;
 
+import exception.ConnectionException;
 import exception.DeletionExceiption;
 import exception.SQLManageException;
 import model.News;
@@ -12,7 +13,7 @@ import java.util.GregorianCalendar;
 public class NewsDBAccess implements NewsDataAccess {
     private Connection connection;
 
-    public NewsDBAccess() {
+    public NewsDBAccess() throws ConnectionException {
         this.connection = DBConnection.getInstance();
     }
     public News getRandomNews() throws SQLManageException{

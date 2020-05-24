@@ -63,7 +63,7 @@ public class LoginView extends View {
             mainView.setRole(employee.getRole());
             //mainView.setUsername("Administrator");
         } catch (EmployeeLoginException exception) {
-                exception.showMessage();
+
         } catch (MatriculException exception) {
                 exception.showMessage();
         }

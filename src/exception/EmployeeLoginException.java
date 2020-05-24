@@ -1,14 +1,15 @@
 package exception;
 
-import model.Employee;
-import view.PopUp;
-
 public class EmployeeLoginException extends Exception {
-    private Employee employee;
-    private final static String typeError = "Connection Error";
-    private final static String message = "Login and password doesn't match.";
+    private final String typeError = "Connection Error";
+    private final String message = "Login and password doesn't match.";
 
-    public void showMessage() {
-        PopUp.showError(typeError, message);
+    public String getTypeError() {
+        return typeError;
+    }
+
+    @Override
+    public String getMessage() {
+        return message;
     }
 }

@@ -17,7 +17,7 @@ import model.Customer;
 import model.Entity;
 import model.Rank;
 import utils.Validators;
-import view.PopUp;
+import utils.PopUp;
 import view.View;
 
 import java.util.ArrayList;

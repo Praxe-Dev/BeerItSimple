@@ -9,7 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Group;
 import model.Customer;
 import model.Order;
-import view.PopUp;
+import utils.PopUp;
 import view.View;
 import view.Window;
 import view.order.Index;

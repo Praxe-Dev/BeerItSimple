@@ -1,7 +1,5 @@
 package exception;
 
-import view.PopUp;
-
 public class CustomerNotFoundException extends Exception {
     private int id;
     private final String typeError = "Entity not found";

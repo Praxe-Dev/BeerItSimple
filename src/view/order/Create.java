@@ -20,16 +20,12 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.text.Text;
 import model.*;
 import utils.Validators;
-import view.PopUp;
+import utils.PopUp;
 import view.View;
-
-import java.math.BigDecimal;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Create extends View {

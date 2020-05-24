@@ -3,9 +3,7 @@ package view.businessTask;
 import com.jfoenix.controls.JFXButton;
 import controller.ProductController;
 import exception.DateException;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
@@ -15,17 +13,12 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
-import model.OrderTableFormat;
-import model.Product;
 import model.ProductIncome;
 import utils.Validators;
-import view.PopUp;
 import view.View;
 
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.function.Function;
 
 public class incomeView extends View {
 

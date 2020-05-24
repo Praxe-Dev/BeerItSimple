@@ -9,7 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import model.News;
 import utils.Validators;
-import view.PopUp;
+import utils.PopUp;
 import view.View;
 
 import java.time.LocalDate;

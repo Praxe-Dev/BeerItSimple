@@ -19,7 +19,7 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.text.Text;
 import model.*;
 import utils.Date;
-import view.PopUp;
+import utils.PopUp;
 import view.View;
 
 import java.time.LocalDate;

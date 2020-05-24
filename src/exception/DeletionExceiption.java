@@ -1,6 +1,6 @@
 package exception;
 
-import view.PopUp;
+import utils.PopUp;
 
 public class DeletionExceiption extends Throwable {
     private static String typeError = "Deletion issue";

@@ -1,5 +1,6 @@
 package dataAccess;
 
+import exception.ConnectionException;
 import exception.CustomerUpdateException;
 import exception.CustomerNotFoundException;
 import exception.CustomerInsertionException;
@@ -15,7 +16,7 @@ import java.util.GregorianCalendar;
 public class CustomerDBAccess implements CustomerDataAccess {
     private Connection connection;
 
-    public CustomerDBAccess() {
+    public CustomerDBAccess() throws ConnectionException {
         this.connection = DBConnection.getInstance();
     }
 

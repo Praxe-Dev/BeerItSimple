@@ -6,16 +6,14 @@ import exception.*;
 import model.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
-import view.PopUp;
+import utils.PopUp;
 import view.View;
 import view.Window;
-import view.order.Update;
 
 import java.net.URL;
 import java.sql.SQLException;

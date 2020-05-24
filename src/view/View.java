@@ -1,10 +1,10 @@
 package view;
 
 import javafx.scene.Node;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import utils.PopUp;
 
 public abstract class View extends Node {
     private double x = 0.0;
@@ -63,5 +63,9 @@ public abstract class View extends Node {
             Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
             stage.setOpacity(1);
         });
+    }
+
+    public void showError(String typeError, String message) {
+        PopUp.showError(typeError, message);
     }
 }

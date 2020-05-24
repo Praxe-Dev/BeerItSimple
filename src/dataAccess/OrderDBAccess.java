@@ -1,5 +1,6 @@
 package dataAccess;
 
+import exception.ConnectionException;
 import exception.DeletionExceiption;
 import exception.NoRowSelected;
 import exception.SQLManageException;
@@ -14,7 +15,7 @@ import java.sql.Date;
 public class OrderDBAccess implements OrderDataAccess {
     private Connection connection;
 
-    public OrderDBAccess() {
+    public OrderDBAccess() throws ConnectionException {
         this.connection = DBConnection.getInstance();
     }
 
