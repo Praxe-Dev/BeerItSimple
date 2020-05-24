@@ -3,6 +3,7 @@ package business;
 import dataAccess.EmployeeDBAccess;
 import dataAccess.EmployeeDataAccess;
 import exception.ConnectionException;
+import exception.DataQueryException;
 import exception.EmployeeLoginException;
 import exception.SQLManageException;
 import model.Employee;
@@ -24,11 +25,11 @@ public class EmployeeBusiness {
         return dao.getEmployee(registrationNumber, password);
     }
 
-    public ArrayList<Employee> getAllDeliveryEmployee() throws SQLManageException {
+    public ArrayList<Employee> getAllDeliveryEmployee() throws DataQueryException {
         return dao.getAllDeliveryEmployee();
     }
 
-    public String getEmployeeName(Integer entityId) throws SQLManageException {
+    public String getEmployeeName(Integer entityId) throws DataQueryException {
         return dao.getEmployeeName(entityId);
     }
 }

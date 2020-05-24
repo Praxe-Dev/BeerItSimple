@@ -6,11 +6,11 @@ import model.Customer;
 import java.util.ArrayList;
 
 public interface CustomerDataAccess {
-    public ArrayList<Customer> getAllCustomers();
+    ArrayList<Customer> getAllCustomers();
 
-    public boolean create(Customer customer) throws CustomerInsertionException;
+    boolean create(Customer customer) throws CustomerInsertionException;
 
-    public Customer getCustomer(Integer id) throws CustomerException, CustomerNotFoundException;
+    Customer getCustomer(Integer id) throws CustomerException, CustomerNotFoundException;
 
     boolean update(Customer customer) throws CustomerUpdateException;
 

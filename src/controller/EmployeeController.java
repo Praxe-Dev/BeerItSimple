@@ -2,6 +2,7 @@ package controller;
 
 import business.EmployeeBusiness;
 import exception.ConnectionException;
+import exception.DataQueryException;
 import exception.EmployeeLoginException;
 import exception.SQLManageException;
 import model.Employee;
@@ -24,11 +25,11 @@ public class EmployeeController {
         return employeeBusiness.getEmployee(registrationNumber, password);
     }
 
-    public ArrayList<Employee> getAllDeliveryEmployee() throws SQLManageException{
+    public ArrayList<Employee> getAllDeliveryEmployee() throws DataQueryException {
         return employeeBusiness.getAllDeliveryEmployee();
     }
 
-    public String getEmployeeName(Integer entityId) throws SQLManageException {
+    public String getEmployeeName(Integer entityId) throws DataQueryException {
         return employeeBusiness.getEmployeeName(entityId);
     }
 }

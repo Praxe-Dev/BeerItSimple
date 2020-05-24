@@ -389,8 +389,8 @@ public class Update extends View {
             if(deliveryManIndex != -1){
                 deliveryMan.getSelectionModel().select(deliveryManIndex);
             }
-        } catch(SQLManageException e){
-            e.showMessage();
+        } catch (DataQueryException e) {
+            showError(e.getTypeError(), e.getMessage());
         }
     }
 

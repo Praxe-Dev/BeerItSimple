@@ -5,10 +5,7 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import controller.*;
-import exception.ConnectionException;
-import exception.NoRowSelected;
-import exception.SQLManageException;
-import exception.UpdateException;
+import exception.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -113,8 +110,8 @@ public class Create extends View {
         try {
             ArrayList<Employee> deliveryList = employeeController.getAllDeliveryEmployee();
             deliveryMan.setItems(FXCollections.observableArrayList(deliveryList));
-        } catch(SQLManageException e){
-            e.showMessage();
+        } catch(DataQueryException e){
+            showError(e.getTypeError(), e.getMessage());
         }
 
         deliveryDisplay.setVisible(false);
