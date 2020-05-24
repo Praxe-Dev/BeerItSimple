@@ -50,17 +50,12 @@ public class ordersFromRank extends View implements Initializable {
         rankList.getItems().setAll(rankController.getAllRanks());
         rankList.getSelectionModel().selectFirst();
         rankList.getStyleClass().add("whiteComboBox");
-//        rankList.setTextFill(Color.WHITE);
 
         statusController = new StatusController();
         statusList.getItems().add(new Status(null, "No matter"));
         statusList.getItems().addAll(statusController.getAllStatus());
         statusList.getSelectionModel().selectFirst();
         statusList.getStyleClass().add("whiteComboBox");
-//        statusList.setFocusColor(Color.WHITE);
-
-
-
 
         searchBtn.setOnAction(e -> executeSearch());
     }
@@ -77,7 +72,6 @@ public class ordersFromRank extends View implements Initializable {
             isPaid = paidRadio.isSelected();
 
         ArrayList<Order> orderFromRanks = new OrderController().getOrdersFromRanks(rank, status, isPaid);
-
         openNewTabview(orderFromRanks);
 
     }
@@ -89,7 +83,9 @@ public class ordersFromRank extends View implements Initializable {
 
         Index index = (Index) displayResult.getView();
         index.updateTable(orderFromRanks);
+        index.hideRefreshButton();
         index.getMainContainer().setStyle("-fx-background-color: linear-gradient(to left, #0f2027, #203a43, #2c5364)");
+
         displayResult.show();
     }
 }

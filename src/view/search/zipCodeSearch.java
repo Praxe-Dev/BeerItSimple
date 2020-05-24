@@ -66,10 +66,13 @@ public class zipCodeSearch extends View implements Initializable {
         Window displayResult = new Window("FXML/order/index.fxml", "BeerItSimple - All orders from the selected zipcode : " + city.getZipCode() + " - " + city.getLabel());
         displayResult.load();
         displayResult.getView().setParentView(this);
+
         Index index = (Index) displayResult.getView();
+        index.getMainContainer().setStyle("-fx-background-color: linear-gradient(to left, #0f2027, #203a43, #2c5364)");
         index.updateTable(allOrdersFromZipcode);
         index.hideRefreshButton();
         index.setZipCode(city);
+
         displayResult.show();
     }
 

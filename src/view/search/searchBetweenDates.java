@@ -69,10 +69,12 @@ public class searchBetweenDates extends View implements Initializable {
         Window displayResult = new Window("FXML/order/index.fxml", "BeerItSimple - Search result");
         displayResult.load();
         displayResult.getView().setParentView(this);
-        Index index = (Index) displayResult.getView();
 
+        Index index = (Index) displayResult.getView();
         index.updateTable(orderBetweenDates);
+        index.hideRefreshButton();
         index.getMainContainer().setStyle("-fx-background-color: linear-gradient(to left, #0f2027, #203a43, #2c5364)");
+
         displayResult.show();
     }
 
