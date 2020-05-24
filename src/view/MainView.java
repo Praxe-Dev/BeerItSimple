@@ -52,6 +52,7 @@ public class MainView extends View{
     private static final String pathToCustomersPanel = "/FXML/customer/index.fxml";
     private static final String pathToOrdersPanel = "/FXML/order/index.fxml";
     private static final String pathToNewsPanel = "/FXML/news/index.fxml";
+    private TranslateTransition transition;
 
     @Override
     public void init() {
@@ -117,6 +118,14 @@ public class MainView extends View{
             }
         });
 
+        newsLabel.setOnMouseEntered(e -> {
+            transition.pause();
+        });
+
+        newsLabel.setOnMouseExited(e -> {
+            transition.play();
+        });
+
         setCenter(pathToHomePanel);
 
         this.window.undecorated();
@@ -158,7 +167,7 @@ public class MainView extends View{
     }
 
     private void setNewsTransition(){
-        TranslateTransition transition = new TranslateTransition();
+        transition = new TranslateTransition();
         transition.setDuration(Duration.millis(10000));
         transition.setNode(newsLabel);
         transition.setToX(-1800);
