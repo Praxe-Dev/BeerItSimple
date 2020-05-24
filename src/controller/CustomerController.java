@@ -3,14 +3,10 @@ package controller;
 import business.CustomerBusiness;
 import exception.CustomerException;
 import exception.DuplicataException;
-import exception.NoCustomerFoundException;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import exception.CustomerNotFoundException;
 import model.Customer;
-import model.CustomerTableFormat;
 
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
 public class CustomerController {
@@ -32,7 +28,7 @@ public class CustomerController {
         return customerBusiness.create(customer);
     }
 
-    public Customer getCustomer(Integer id) throws CustomerException, NoCustomerFoundException {
+    public Customer getCustomer(Integer id) throws CustomerException, CustomerNotFoundException {
         return customerBusiness.getCustomer(id);
     }
 

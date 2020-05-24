@@ -3,7 +3,7 @@ package view.customer;
 import com.jfoenix.controls.JFXButton;
 import controller.CustomerController;
 import exception.CustomerException;
-import exception.NoCustomerFoundException;
+import exception.CustomerNotFoundException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -157,8 +157,8 @@ public class Index extends View implements Initializable {
                 customer = getSelectedCustomer();
             } catch (CustomerException ex) {
                 ex.showMessage();
-            } catch (NoCustomerFoundException ex) {
-                ex.showMessage();
+            } catch (CustomerNotFoundException ex) {
+                PopUp.showError(ex.getTypeError(), ex.getMessage());
             } catch (NullPointerException ex) {
                 PopUp.showError("No customer selected", "To delete a customer you must select one.");
             }
@@ -171,7 +171,7 @@ public class Index extends View implements Initializable {
         });
     }
 
-    private Customer getSelectedCustomer() throws CustomerException, NoCustomerFoundException {
+    private Customer getSelectedCustomer() throws CustomerException, CustomerNotFoundException {
         CustomerTableFormat customerTableFormat = customersTable.getSelectionModel().getSelectedItem();
         Customer customer = null;
 

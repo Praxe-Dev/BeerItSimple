@@ -4,11 +4,10 @@ import dataAccess.CustomerDBAccess;
 import dataAccess.CustomerDataAccess;
 import exception.CustomerException;
 import exception.DuplicataException;
-import exception.NoCustomerFoundException;
+import exception.CustomerNotFoundException;
 import model.Customer;
 
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
 public class CustomerBusiness {
@@ -30,7 +29,7 @@ public class CustomerBusiness {
         return dao.create(customer);
     }
 
-    public Customer getCustomer(Integer id) throws CustomerException, NoCustomerFoundException {
+    public Customer getCustomer(Integer id) throws CustomerException, CustomerNotFoundException {
         return dao.getCustomer(id);
     }
 

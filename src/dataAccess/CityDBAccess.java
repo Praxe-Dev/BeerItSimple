@@ -18,27 +18,21 @@ public class CityDBAccess implements CityDataAccess {
     @Override
     public ArrayList<City> getAllCities() {
         String sqlInstruction = "SELECT * FROM City";
-
         ArrayList<City> cityList = new ArrayList<>();
 
         try {
             ResultSet data = connection.createStatement().executeQuery(sqlInstruction);
-
             City city;
 
             while (data.next()) {
-                //System.out.println("Label : " + data.getString("Label"));
-                //System.out.println("zipCode : " + data.getInt("zipCode"));
-
                 city = new City(data.getString("Label"), data.getInt("zipCode"));
                 cityList.add(city);
             }
 
-            return cityList;
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return null;
+        return cityList;
     }
 }

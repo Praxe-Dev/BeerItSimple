@@ -2,12 +2,10 @@ package dataAccess;
 
 import exception.CustomerException;
 import exception.DuplicataException;
-import exception.NoCustomerFoundException;
+import exception.CustomerNotFoundException;
 import model.Customer;
-import model.Rank;
 
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
 public interface CustomerDataAccess {
@@ -15,7 +13,7 @@ public interface CustomerDataAccess {
 
     public boolean create(Customer customer) throws SQLException;
 
-    public Customer getCustomer(Integer id) throws CustomerException, NoCustomerFoundException;
+    public Customer getCustomer(Integer id) throws CustomerException, CustomerNotFoundException;
 
     boolean update(Customer customer) throws DuplicataException;
 

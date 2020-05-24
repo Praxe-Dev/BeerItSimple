@@ -2,7 +2,7 @@ package dataAccess;
 
 import exception.CustomerException;
 import exception.DuplicataException;
-import exception.NoCustomerFoundException;
+import exception.CustomerNotFoundException;
 import model.City;
 import model.Customer;
 import model.Entity;
@@ -25,18 +25,16 @@ public class CustomerDBAccess implements CustomerDataAccess{
                                 "FROM customer JOIN entity e ON customer.EntityId = e.id\n" +
                                 "JOIN `rank` r ON r .id = customer.RankId\n" +
                                 "JOIN city ON e.CityLabel = city.label AND e.CityZipCode = city.zipCode";
-        ArrayList<Customer> customerList;
+        ArrayList<Customer> customerList = new ArrayList<>();
         try {
             ResultSet data = connection.createStatement().executeQuery(sqlInstruction);
 
-            customerList = new ArrayList<>();
             Customer customer;
             Entity entity;
             City city;
             Rank rank;
 
             String mail;
-            String VATNumber;
             GregorianCalendar calendar = null;
             String accountNumber;
             String businessNumber;
@@ -88,16 +86,15 @@ public class CustomerDBAccess implements CustomerDataAccess{
                 customerList.add(customer);
             }
 
-            return customerList;
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        return null;
+        return customerList;
     }
 
     @Override
-    public Customer getCustomer(Integer id) throws CustomerException, NoCustomerFoundException {
+    public Customer getCustomer(Integer id) throws CustomerNotFoundException {
         String sqlInstruction = "SELECT customer.*, entity.*, r.*, city.* FROM customer\n" +
                                 "JOIN entity ON customer.EntityId = entity.id\n" +
                                 "JOIN `rank` r ON r.id = customer.RankId\n" +
@@ -155,12 +152,14 @@ public class CustomerDBAccess implements CustomerDataAccess{
 
                 return new Customer(entity, rank, calendar);
 
-            } else {{
-                throw new NoCustomerFoundException();
-            }}
+            } else {
+                throw new CustomerNotFoundException(id);
+            }
         } catch (SQLException e) {
-            throw new CustomerException();
+            e.printStackTrace();
         }
+
+        return null;
     }
 
     public boolean create(Customer c) throws SQLException {
