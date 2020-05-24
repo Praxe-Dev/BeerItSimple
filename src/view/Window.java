@@ -69,7 +69,4 @@ public class Window extends Parent {
     }
 
     public View getView() { return this.view; }
-
-    public void setController(Index orderIndex) {
-    }
 }

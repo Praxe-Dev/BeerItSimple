@@ -70,9 +70,9 @@ public class Create extends View {
         businessView.setVisible(false);
 
         Validators.setMailValidators(mail);
-        Validators.setReqField(contactName);
+        Validators.setNoNumberValidator(contactName);
         Validators.setPhoneNumberValidator(phoneNumber);
-        Validators.setAddressValidator(address);
+        Validators.setNoNumberValidator(address);
         Validators.setHouseNumberValidator(houseNumber);
         Validators.setAccountNumberValidator(accountNumber);
         Validators.setBusinessNumberValidator(businessNumber);
@@ -131,7 +131,6 @@ public class Create extends View {
         submitBtn.setOnAction(e -> {
 //            System.out.println("Check mail :" + checkMail());
             if(Validators.validate(contactName, phoneNumber, address, houseNumber)  && Validators.validateNullableValue(mail, businessNumber, accountNumber)) {
-                System.out.println("INSERTION");
                 try {
                     insertCustomer();
                     PopUp.showSuccess("Client créé avec succès !", "Success");

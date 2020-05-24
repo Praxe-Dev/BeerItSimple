@@ -1,9 +1,12 @@
 package utils;
 
+import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXTimePicker;
 import com.jfoenix.validation.RegexValidator;
 import com.jfoenix.validation.RequiredFieldValidator;
 import javafx.scene.Node;
+import javafx.scene.control.DatePicker;
 
 import java.time.LocalDate;
 
@@ -32,15 +35,14 @@ public class Validators {
         setReqField(phoneNumber);
     }
 
-    public static void setAddressValidator(JFXTextField address) {
-        String regexPattern = "^([a-zA-Z']+\\s)*[a-zA-Z']+$";
-        String message = "Address should not contains number and extra space";
-        RegexValidator addressValidator = new RegexValidator();
-        addressValidator.setRegexPattern(regexPattern);
-        addressValidator.setMessage("Address should not contains numbers");
+    public static void setNoNumberValidator(JFXTextField field) {
+        String regexPattern = "^([a-zA-Z']+\\s)*[-a-zA-Z']+$";
+        RegexValidator validator = new RegexValidator();
+        validator.setRegexPattern(regexPattern);
+        validator.setMessage("Address should not contains numbers and special characters");
 
-        address.getValidators().add(addressValidator);
-        setReqField(address);
+        field.getValidators().add(validator);
+        setReqField(field);
     }
 
     public static void setHouseNumberValidator(JFXTextField houseNumber) {
@@ -85,6 +87,46 @@ public class Validators {
         addListener(field);
     }
 
+    public static void setReqField(JFXTextArea area) {
+        RequiredFieldValidator reqField = new RequiredFieldValidator();
+        reqField.setMessage("Required field");
+
+        area.getValidators().add(0, reqField);
+
+        addListener(area);
+    }
+
+    public static void setReqField(JFXTimePicker time) {
+        RequiredFieldValidator reqField = new RequiredFieldValidator();
+        reqField.setMessage("Required field");
+
+        time.getValidators().add(0, reqField);
+
+        addListener(time);
+    }
+
+    public static void setTextAndNumberValidator(JFXTextField field){
+        String regexPattern = "^[A-Za-z0-9]+";
+        String message = "Should only contains characters and number";
+        RegexValidator fieldValidator = new RegexValidator();
+        fieldValidator.setRegexPattern(regexPattern);
+        fieldValidator.setMessage(message);
+
+        field.getValidators().add(fieldValidator);
+        addListener(field);
+    }
+
+    public static void setTextAndNumberValidator(JFXTextArea area){
+        String regexPattern = "^[A-Za-z0-9]+";
+        String message = "Should only contains characters and number";
+        RegexValidator fieldValidator = new RegexValidator();
+        fieldValidator.setRegexPattern(regexPattern);
+        fieldValidator.setMessage(message);
+
+        area.getValidators().add(fieldValidator);
+        addListener(area);
+    }
+
     public static void setNumberValidator(JFXTextField field) {
         String regexPattern = "(^[1-9])[0-9]{0,3}";
         String message = "Should only contains number";
@@ -100,6 +142,22 @@ public class Validators {
         field.focusedProperty().addListener((o, oldVal, newVal) -> {
             if (!newVal && !newVal.equals("")) {
                 field.validate();
+            }
+        });
+    }
+
+    private static void addListener(JFXTextArea area) {
+        area.focusedProperty().addListener((o, oldVal, newVal) -> {
+            if (!newVal && !newVal.equals("")) {
+                area.validate();
+            }
+        });
+    }
+
+    private static void addListener(JFXTimePicker time) {
+        time.focusedProperty().addListener((o, oldVal, newVal) -> {
+            if (!newVal && !newVal.equals("")) {
+                time.validate();
             }
         });
     }
@@ -120,6 +178,32 @@ public class Validators {
         boolean check = true;
         for (JFXTextField element : elements) {
             if (element.getText() != null) {
+                if (!element.validate()) {
+                    check = false;
+                }
+            }
+        }
+
+        return check;
+    }
+
+    public static boolean validate(JFXTextArea... elements) {
+        boolean check = true;
+        for (JFXTextArea element : elements) {
+            if (element.getText() != null) {
+                if (!element.validate()) {
+                    check = false;
+                }
+            }
+        }
+
+        return check;
+    }
+
+    public static boolean validate(JFXTimePicker... elements) {
+        boolean check = true;
+        for (JFXTimePicker element : elements) {
+            if (element.getValue() == null) {
                 if (!element.validate()) {
                     check = false;
                 }

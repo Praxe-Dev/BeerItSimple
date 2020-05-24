@@ -63,9 +63,9 @@ public class Update extends View {
         customersView = (Index) this.getParentView();
 
         Validators.setMailValidators(mail);
-        Validators.setReqField(contactName);
+        Validators.setNoNumberValidator(contactName);
         Validators.setPhoneNumberValidator(phoneNumber);
-        Validators.setAddressValidator(address);
+        Validators.setNoNumberValidator(address);
         Validators.setHouseNumberValidator(houseNumber);
         Validators.setAccountNumberValidator(accountNumber);
         Validators.setBusinessNumberValidator(businessNumber);
