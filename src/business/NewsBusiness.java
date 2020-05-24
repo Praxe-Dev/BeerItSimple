@@ -3,6 +3,7 @@ package business;
 import dataAccess.NewsDBAccess;
 import dataAccess.NewsDataAccess;
 import exception.ConnectionException;
+import exception.DataQueryException;
 import exception.DeletionExceiption;
 import exception.SQLManageException;
 import model.News;
@@ -25,7 +26,7 @@ public class NewsBusiness {
         return dao.getRandomNews();
     }
 
-    public ArrayList<News> getAllNews() throws SQLManageException {
+    public ArrayList<News> getAllNews() throws DataQueryException {
         return dao.getAllNews();
     }
 

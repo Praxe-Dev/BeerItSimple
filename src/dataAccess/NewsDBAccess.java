@@ -1,6 +1,7 @@
 package dataAccess;
 
 import exception.ConnectionException;
+import exception.DataQueryException;
 import exception.DeletionExceiption;
 import exception.SQLManageException;
 import model.News;
@@ -16,7 +17,7 @@ public class NewsDBAccess implements NewsDataAccess {
     public NewsDBAccess() throws ConnectionException {
         this.connection = DBConnection.getInstance();
     }
-    public News getRandomNews() throws SQLManageException{
+    public News getRandomNews() throws SQLManageException {
         News randomNews = null;
         String sqlInstruction = "SELECT * FROM news WHERE startingDate <= ? AND endDate >= ? ORDER BY RAND() LIMIT 1";
 
@@ -42,7 +43,7 @@ public class NewsDBAccess implements NewsDataAccess {
         return randomNews;
     }
 
-    public ArrayList<News> getAllNews() throws SQLManageException{
+    public ArrayList<News> getAllNews() throws DataQueryException{
         ArrayList<News> newsArrayList = new ArrayList<>();
         String sqlInstruction = "SELECT * FROM news ORDER BY endDate ASC, startingDate ASC";
 

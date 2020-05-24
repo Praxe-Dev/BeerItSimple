@@ -1,5 +1,6 @@
 package dataAccess;
 
+import exception.DataQueryException;
 import exception.DeletionExceiption;
 import exception.SQLManageException;
 import model.News;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 public interface NewsDataAccess {
     News getRandomNews() throws SQLManageException;
 
-    ArrayList<News> getAllNews() throws SQLManageException;
+    ArrayList<News> getAllNews() throws DataQueryException;
 
     News getNewsFromId(Integer id) throws SQLManageException;
 

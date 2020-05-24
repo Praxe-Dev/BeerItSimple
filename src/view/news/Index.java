@@ -2,10 +2,7 @@ package view.news;
 
 import com.jfoenix.controls.JFXButton;
 import controller.NewsController;
-import exception.ConnectionException;
-import exception.DeletionExceiption;
-import exception.NoRowSelected;
-import exception.SQLManageException;
+import exception.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.SelectionMode;
@@ -126,8 +123,8 @@ public class Index extends View implements Initializable {
         ArrayList<News> newsList = new ArrayList<News>();
         try{
             newsList = newsController.getAllNews();
-        } catch(SQLManageException ex){
-           ex.showMessage();
+        } catch(DataQueryException ex){
+           showError(ex.getTypeError(), ex.getMessage());
         }
         ArrayList<NewsTableFormat> newsRow = new ArrayList<>();
         for (News news : newsList) {
@@ -157,8 +154,8 @@ public class Index extends View implements Initializable {
     private void updateTable() {
         try {
             updateTable(newsController.getAllNews());
-        } catch (SQLManageException e) {
-            e.showMessage();
+        } catch(DataQueryException ex){
+            showError(ex.getTypeError(), ex.getMessage());
         }
     }
 

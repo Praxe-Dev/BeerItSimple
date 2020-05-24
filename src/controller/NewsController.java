@@ -2,6 +2,7 @@ package controller;
 
 import business.NewsBusiness;
 import exception.ConnectionException;
+import exception.DataQueryException;
 import exception.DeletionExceiption;
 import exception.SQLManageException;
 import model.News;
@@ -24,7 +25,7 @@ public class NewsController {
         return newsBusiness.getRandomNews();
     }
 
-    public ArrayList<News> getAllNews() throws SQLManageException {
+    public ArrayList<News> getAllNews() throws DataQueryException {
         return newsBusiness.getAllNews();
     }
 
