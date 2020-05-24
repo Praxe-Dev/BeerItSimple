@@ -170,7 +170,6 @@ public class OrderDBAccess implements OrderDataAccess {
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
-//            java.sql.Date start = new Date(0);
             Date start = Date.valueOf(startingDate);
             Date end = Date.valueOf(endDate);
 
@@ -301,8 +300,8 @@ public class OrderDBAccess implements OrderDataAccess {
             }
 
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
 
@@ -316,9 +315,7 @@ public class OrderDBAccess implements OrderDataAccess {
 
         PreparedStatement preparedStatement = null;
 
-//        try {
         preparedStatement = connection.prepareStatement(sqlInstructionOrder, Statement.RETURN_GENERATED_KEYS);
-//            preparedStatement.setDate(1, Date.valueOf(java.time.LocalDate.now()));
         preparedStatement.setDate(1, new java.sql.Date(order.getStartingDate().getTimeInMillis()));
         preparedStatement.setBoolean(2, order.getPaid());
         preparedStatement.setInt(3, order.getStatus().getId());
@@ -326,12 +323,8 @@ public class OrderDBAccess implements OrderDataAccess {
         preparedStatement.setInt(5, order.getCustomer().getEntity().getId());
 
         affectedRow = preparedStatement.executeUpdate();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
 
         if (affectedRow != 0) {
-//            try {
             ResultSet genretadKeys = preparedStatement.getGeneratedKeys();
             if (genretadKeys.next()) {
                 int orderId = genretadKeys.getInt(1);
@@ -361,25 +354,17 @@ public class OrderDBAccess implements OrderDataAccess {
                     preparedStatementOrderLine.executeUpdate();
                 }
             }
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
         } else {
-//            try {
 
             String protection = "rollback to security1";
-            PreparedStatement preparedStatement1 = null;
             connection.prepareStatement(protection).executeUpdate();
             return false;
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
         }
 
         return true;
     }
 
-    public Rank updateCustomerRank(Customer customer) throws SQLManageException {
+    public Rank updateCustomerRank(Customer customer) {
         //Get All Orders and orderlines
         Rank newRank = null;
         String sqlInstruction = "SELECT sum(ol.salesUnitPrice*ol.quantity) AS ordersSum FROM `order` JOIN `orderline` ol ON ol.Orderreference = order.reference  WHERE order.CustomerEntityId = ?";
@@ -411,8 +396,9 @@ public class OrderDBAccess implements OrderDataAccess {
                 }
             }
         } catch (SQLException e) {
-            new SQLManageException(e);
+            e.printStackTrace();
         }
+
         return newRank;
     }
 
@@ -431,8 +417,7 @@ public class OrderDBAccess implements OrderDataAccess {
             preparedStatement.executeUpdate();
 
             if (order.getDelivery() != null) {
-                String sqlDelivery = /*"SET SQL_SAFE_UPDATES = 0;\n" +*/
-                        "DELETE FROM delivery\n" +
+                String sqlDelivery = "DELETE FROM delivery\n" +
                                 "WHERE OrderReference = ?;\n";
 
                 PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDelivery);

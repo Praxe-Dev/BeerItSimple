@@ -110,9 +110,7 @@ public class Index extends View implements Initializable {
                     }
                 }
             } catch (DeletionExceiption ex) {
-                ex.showError();
-            } catch (NullPointerException ex) {
-                new NoRowSelected();
+                showError(ex.getTypeError(), ex.getMessage());
             }
         });
     }
