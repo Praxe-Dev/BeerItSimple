@@ -24,21 +24,15 @@ class ProductBusinessTest {
         } catch (ConnectionException exception) {
             exception.printStackTrace();
         }
+
         allProducts = new ArrayList<>();
-//        allProducts.add(new Product(null, 1, "productTest", 10.0, null, null, null,null));
-
         allOrderLines = new ArrayList<>();
-//        allOrderLines.add(new OrderLine(new Product(1), null, 2, 10.0));
-
     }
 
     @Test
     void totalPercentageOneProduct() {
         // one product, one orderline -> 100%
-//        allProducts = new ArrayList<>();
         allProducts.add(new Product(null, 1, "productTest", 10.0, null, null, null,null));
-
-//        allOrderLines = new ArrayList<>();
         allOrderLines.add(new OrderLine(new Product(1), null, 2, 10.0));
 
         ArrayList<ProductIncome> productIncomes = productBusiness.computeProductsIncome(allProducts, allOrderLines);
@@ -49,10 +43,7 @@ class ProductBusinessTest {
     @Test
     void totalPercentageNoOrderLine() {
         // one product, no orderline -> 0%
-//        allProducts = new ArrayList<>();
         allProducts.add(new Product(null, 1, "productTest", 10.0, null, null, null,null));
-
-//        allOrderLines = new ArrayList<>();
 
         ArrayList<ProductIncome> productIncomes = productBusiness.computeProductsIncome(allProducts, allOrderLines);
         productIncomes.get(0).calculPercentage();
@@ -62,10 +53,7 @@ class ProductBusinessTest {
     @Test
     void totalPercentageNoOrderLineForThisProduct() {
         // one product, one orderline but not for the product -> 0%
-//        allProducts = new ArrayList<>();
         allProducts.add(new Product(null, 1, "productTest", 10.0, null, null, null,null));
-
-//        allOrderLines = new ArrayList<>();
         allOrderLines.add(new OrderLine(new Product(2), null, 2, 10.0));
 
         ArrayList<ProductIncome> productIncomes = productBusiness.computeProductsIncome(allProducts, allOrderLines);

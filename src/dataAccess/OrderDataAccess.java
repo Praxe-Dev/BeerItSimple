@@ -1,5 +1,6 @@
 package dataAccess;
 
+import exception.DataQueryException;
 import exception.DeletionExceiption;
 import exception.NoRowSelected;
 import exception.SQLManageException;
@@ -10,7 +11,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public interface OrderDataAccess {
-    public ArrayList<Order> getAllOrders() throws SQLException;
+    public ArrayList<Order> getAllOrders() throws DataQueryException;
 
     boolean create(Order orderLineTableFormats) throws SQLException, SQLManageException;
 

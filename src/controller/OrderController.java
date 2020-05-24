@@ -1,10 +1,7 @@
 package controller;
 
 import business.OrderBusiness;
-import exception.ConnectionException;
-import exception.DeletionExceiption;
-import exception.NoRowSelected;
-import exception.SQLManageException;
+import exception.*;
 import model.*;
 
 import java.sql.SQLException;
@@ -18,7 +15,7 @@ public class OrderController {
         this.orderBusiness = new OrderBusiness();
     }
 
-    public ArrayList<Order> getAllOrders() throws SQLException {
+    public ArrayList<Order> getAllOrders() throws DataQueryException {
         return orderBusiness.getAllOrders();
     }
 

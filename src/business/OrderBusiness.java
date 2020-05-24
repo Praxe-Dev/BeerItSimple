@@ -2,10 +2,7 @@ package business;
 
 import dataAccess.OrderDBAccess;
 import dataAccess.OrderDataAccess;
-import exception.ConnectionException;
-import exception.DeletionExceiption;
-import exception.NoRowSelected;
-import exception.SQLManageException;
+import exception.*;
 import model.*;
 
 import java.sql.SQLException;
@@ -23,7 +20,7 @@ public class OrderBusiness {
         this.dao = dao;
     }
 
-    public ArrayList<Order> getAllOrders() throws SQLException {
+    public ArrayList<Order> getAllOrders() throws DataQueryException {
         return dao.getAllOrders();
     }
 

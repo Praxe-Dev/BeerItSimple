@@ -1,9 +1,6 @@
 package dataAccess;
 
-import exception.ConnectionException;
-import exception.DeletionExceiption;
-import exception.NoRowSelected;
-import exception.SQLManageException;
+import exception.*;
 import model.*;
 
 import java.sql.*;
@@ -20,8 +17,8 @@ public class OrderDBAccess implements OrderDataAccess {
     }
 
     @Override
-    public ArrayList<Order> getAllOrders() throws SQLException {
-        String sqlInstruction = "SELECT o.*, s.*, p.* FROM `order` o\n"+
+    public ArrayList<Order> getAllOrders() throws DataQueryException {
+        String sqlInstruction = "SELECT o.*, s.*, p.* FROM `order` o\n" +
                 "JOIN status s ON s.id = o.StatusNumber\n" +
                 "JOIN paymentmethod p ON p.id = o.paymentMethodId\n";
 
@@ -38,7 +35,7 @@ public class OrderDBAccess implements OrderDataAccess {
             GregorianCalendar calendar = null;
 
 
-            while(data.next()) {
+            while (data.next()) {
 
                 customerId = data.getInt("o.CustomerEntityId");
 
@@ -71,68 +68,38 @@ public class OrderDBAccess implements OrderDataAccess {
 
                 setDeliveryFromOrder(order);
 
-                String sqlOrderLine = "SELECT o.*, p.*, v.*, provider.*, e.*, city.* FROM OrderLine o\n"+
+                String sqlOrderLine = "SELECT o.*, p.*, v.* FROM OrderLine o\n" +
                         "JOIN product p ON p.code = o.Productcode\n" +
                         "JOIN vatcode v ON v.rate = p.VATCodeRate\n" +
-                        "JOIN provider ON provider.entityId = p.ProviderEntityId\n" +
-                        "JOIN entity e ON e.id = provider.entityId\n" +
-                        "JOIN city c ON c.label = provider.entityId\n" +
-                        "JOIN city ON e.CityLabel = city.label AND e.CityZipCode = city.zipCode\n" +
                         "WHERE Orderreference = ?";
                 PreparedStatement preparedStatement = connection.prepareStatement(sqlOrderLine);
                 preparedStatement.setInt(1, order.getReference());
-                try {
-                    ResultSet dataOrderLine = preparedStatement.executeQuery();
-                    while(dataOrderLine.next()){
-                        //Add all orderline to already created order object.
-                        City providerCity = new City(
-                                data.getString("e.CityLabel"),
-                                data.getInt("e.CityZipCode")
-                        );
 
-                        Entity providerEntity = new Entity(
-                                dataOrderLine.getInt("e.id"),
-                                data.getString("e.mail"),
-                                data.getString("e.contactName"),
-                                data.getString("e.phoneNumber"),
-                                data.getInt("e.houseNumber"),
-                                data.getString("e.street"),
-                                data.getString("e.bankAccountNumber"),
-                                data.getString("e.businessNumber"),
-                                providerCity
-                        );
-
-                        Provider provider = new Provider(
-                                providerEntity,
-                                dataOrderLine.getString("provider.providerType")
-                        );
-
-                        Product product = new Product(
-                                provider,
-                                dataOrderLine.getInt("p.code"),
-                                dataOrderLine.getString("p.label"),
-                                dataOrderLine.getDouble("p.unitPrice"),
-                                dataOrderLine.getInt("p.currentStock"),
-                                dataOrderLine.getInt("p.maxStock"),
-                                dataOrderLine.getInt("p.minStock"),
-                                dataOrderLine.getInt("v.rate")
-                        );
-                        OrderLine orderLine = new OrderLine(
-                                product,
-                                order,
-                                dataOrderLine.getInt("o.quantity"),
-                                dataOrderLine.getDouble("o.salesUnitPrice")
-                        );
-                        order.addOrderLine(orderLine);
-                    }
-                } catch(SQLException ex){
-                    throw ex;
+                ResultSet dataOrderLine = preparedStatement.executeQuery();
+                while (dataOrderLine.next()) {
+                    Product product = new Product(
+                            null,
+                            dataOrderLine.getInt("p.code"),
+                            dataOrderLine.getString("p.label"),
+                            dataOrderLine.getDouble("p.unitPrice"),
+                            dataOrderLine.getInt("p.currentStock"),
+                            dataOrderLine.getInt("p.maxStock"),
+                            dataOrderLine.getInt("p.minStock"),
+                            dataOrderLine.getInt("v.rate")
+                    );
+                    OrderLine orderLine = new OrderLine(
+                            product,
+                            order,
+                            dataOrderLine.getInt("o.quantity"),
+                            dataOrderLine.getDouble("o.salesUnitPrice")
+                    );
+                    order.addOrderLine(orderLine);
                 }
 
                 orderList.add(order);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataQueryException();
         }
 
         return orderList;
@@ -194,10 +161,10 @@ public class OrderDBAccess implements OrderDataAccess {
 
     @Override
     public ArrayList<Order> getAllOrdersBetweenDates(LocalDate startingDate, LocalDate endDate) {
-        String sqlInstruction = "SELECT o.*, s.*, p.* FROM `order` o\n"+
-                                "JOIN status s ON s.id = o.StatusNumber\n" +
-                                "JOIN paymentmethod p ON p.id = o.paymentMethodId\n" +
-                                "WHERE ? <= o.startingDate AND ? >= o.startingDate";
+        String sqlInstruction = "SELECT o.*, s.*, p.* FROM `order` o\n" +
+                "JOIN status s ON s.id = o.StatusNumber\n" +
+                "JOIN paymentmethod p ON p.id = o.paymentMethodId\n" +
+                "WHERE ? <= o.startingDate AND ? >= o.startingDate";
 
         ArrayList<Order> orderList = new ArrayList<>();
 
@@ -263,12 +230,12 @@ public class OrderDBAccess implements OrderDataAccess {
     @Override
     public ArrayList<Order> getOrdersFromRanks(Rank rank, Status status, Boolean isPaid) {
 
-        String sqlInstruction = "SELECT DISTINCT o.*, s.*, p.* FROM `order` o\n"+
-                                "JOIN status s ON s.id = o.StatusNumber\n" +
-                                "JOIN paymentmethod p ON p.id = o.paymentMethodId\n" +
-                                "JOIN customer ON customer.RankId = ?\n";
+        String sqlInstruction = "SELECT DISTINCT o.*, s.*, p.* FROM `order` o\n" +
+                "JOIN status s ON s.id = o.StatusNumber\n" +
+                "JOIN paymentmethod p ON p.id = o.paymentMethodId\n" +
+                "JOIN customer ON customer.RankId = ?\n";
 
-        if( status != null) {
+        if (status != null) {
             sqlInstruction += "WHERE s.id = ?\n";
             if (isPaid != null) {
                 sqlInstruction += "AND o.isPaid = ?";
@@ -283,7 +250,7 @@ public class OrderDBAccess implements OrderDataAccess {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
             preparedStatement.setInt(1, rank.getId());
 
-            if( status != null) {
+            if (status != null) {
                 preparedStatement.setInt(2, status.getId());
                 if (isPaid != null) {
                     preparedStatement.setBoolean(3, isPaid);
@@ -292,7 +259,7 @@ public class OrderDBAccess implements OrderDataAccess {
                 preparedStatement.setBoolean(2, isPaid);
             }
 
-            ResultSet data =  preparedStatement.executeQuery();
+            ResultSet data = preparedStatement.executeQuery();
 
             Order o;
             Status s;
@@ -345,7 +312,7 @@ public class OrderDBAccess implements OrderDataAccess {
     public boolean create(Order order) throws SQLException, SQLManageException {
         int affectedRow = 0;
         String sqlInstructionOrder = "INSERT INTO `order` (startingDate, isPaid, StatusNumber, paymentMethodId, CustomerEntityId)\n" +
-                                     "VALUES (?,?,?,?,?)";
+                "VALUES (?,?,?,?,?)";
 
         PreparedStatement preparedStatement = null;
 
@@ -365,35 +332,35 @@ public class OrderDBAccess implements OrderDataAccess {
 
         if (affectedRow != 0) {
 //            try {
-                ResultSet genretadKeys = preparedStatement.getGeneratedKeys();
-                if (genretadKeys.next()) {
-                    int orderId = genretadKeys.getInt(1);
+            ResultSet genretadKeys = preparedStatement.getGeneratedKeys();
+            if (genretadKeys.next()) {
+                int orderId = genretadKeys.getInt(1);
 
-                    if (order.getDelivery() != null) {
-                        String sqlDelivery = "INSERT INTO delivery (plannedDate, OrderReference, EmployeeEntityId)\n" +
-                                             "VALUES (?,?,?)";
+                if (order.getDelivery() != null) {
+                    String sqlDelivery = "INSERT INTO delivery (plannedDate, OrderReference, EmployeeEntityId)\n" +
+                            "VALUES (?,?,?)";
 
-                        PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDelivery);
-                        preparedStatementDelivery.setDate(1, new java.sql.Date(order.getDelivery().getPlannedDate().getTimeInMillis()));
-                        preparedStatementDelivery.setInt(2, orderId);
-                        preparedStatementDelivery.setInt(3, order.getDelivery().getEmployee().getEntity().getId());
+                    PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDelivery);
+                    preparedStatementDelivery.setDate(1, new java.sql.Date(order.getDelivery().getPlannedDate().getTimeInMillis()));
+                    preparedStatementDelivery.setInt(2, orderId);
+                    preparedStatementDelivery.setInt(3, order.getDelivery().getEmployee().getEntity().getId());
 
-                        preparedStatementDelivery.executeUpdate();
-                    }
-
-                    String sqlOrderLine = "INSERT INTO orderline (productCode, Orderreference, quantity, salesUnitPrice)\n" +
-                                          "VALUES(?,?,?,?)";
-                    PreparedStatement preparedStatementOrderLine = connection.prepareStatement(sqlOrderLine);
-
-                    for (OrderLine line : order.getOrderLineList()) {
-                        preparedStatementOrderLine.setInt(1, line.getProduct().getCode());
-                        preparedStatementOrderLine.setInt(2, orderId);
-                        preparedStatementOrderLine.setInt(3, line.getQuantity());
-                        preparedStatementOrderLine.setDouble(4, line.getSalesUnitPrice());
-
-                        preparedStatementOrderLine.executeUpdate();
-                    }
+                    preparedStatementDelivery.executeUpdate();
                 }
+
+                String sqlOrderLine = "INSERT INTO orderline (productCode, Orderreference, quantity, salesUnitPrice)\n" +
+                        "VALUES(?,?,?,?)";
+                PreparedStatement preparedStatementOrderLine = connection.prepareStatement(sqlOrderLine);
+
+                for (OrderLine line : order.getOrderLineList()) {
+                    preparedStatementOrderLine.setInt(1, line.getProduct().getCode());
+                    preparedStatementOrderLine.setInt(2, orderId);
+                    preparedStatementOrderLine.setInt(3, line.getQuantity());
+                    preparedStatementOrderLine.setDouble(4, line.getSalesUnitPrice());
+
+                    preparedStatementOrderLine.executeUpdate();
+                }
+            }
 //            } catch (SQLException e) {
 //                e.printStackTrace();
 //            }
@@ -420,30 +387,30 @@ public class OrderDBAccess implements OrderDataAccess {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
             preparedStatement.setInt(1, customer.getEntity().getId());
             ResultSet data = preparedStatement.executeQuery();
-            if(data.next()){
+            if (data.next()) {
                 //Search new rank
                 String sqlSearch = "SELECT * FROM `rank` WHERE minAmountOrder <= ? ORDER BY id DESC LIMIT 1";
-                PreparedStatement preparedRankStatement= connection.prepareStatement(sqlSearch);
+                PreparedStatement preparedRankStatement = connection.prepareStatement(sqlSearch);
                 preparedRankStatement.setDouble(1, data.getDouble("ordersSum"));
                 ResultSet dataRank = preparedRankStatement.executeQuery();
-                if(dataRank.next()){
+                if (dataRank.next()) {
                     newRank = new Rank(
                             dataRank.getInt("id"),
                             dataRank.getString("label"),
                             dataRank.getInt("creditLimit"),
                             dataRank.getInt("minAmountOrder")
                     );
-                    if(customer.getRank().getId() != newRank.getId()){
+                    if (customer.getRank().getId() != newRank.getId()) {
                         //Update rank
                         String updateRank = "UPDATE customer SET RankId = ? WHERE EntityId = ?";
-                        PreparedStatement preparedUpdateRank= connection.prepareStatement(updateRank);
-                        preparedUpdateRank.setInt(1,newRank.getId());
-                        preparedUpdateRank.setInt(2,customer.getEntity().getId());
+                        PreparedStatement preparedUpdateRank = connection.prepareStatement(updateRank);
+                        preparedUpdateRank.setInt(1, newRank.getId());
+                        preparedUpdateRank.setInt(2, customer.getEntity().getId());
                         preparedUpdateRank.executeUpdate();
                     }
                 }
             }
-        } catch(SQLException e){
+        } catch (SQLException e) {
             new SQLManageException(e);
         }
         return newRank;
@@ -457,7 +424,7 @@ public class OrderDBAccess implements OrderDataAccess {
 
 
             String sqlOrderline = "DELETE FROM orderline\n" +
-                                "WHERE Orderreference = ?;\n";
+                    "WHERE Orderreference = ?;\n";
 
             PreparedStatement preparedStatement = connection.prepareStatement(sqlOrderline);
             preparedStatement.setInt(1, order.getReference());
@@ -465,8 +432,8 @@ public class OrderDBAccess implements OrderDataAccess {
 
             if (order.getDelivery() != null) {
                 String sqlDelivery = /*"SET SQL_SAFE_UPDATES = 0;\n" +*/
-                                 "DELETE FROM delivery\n" +
-                                 "WHERE OrderReference = ?;\n";
+                        "DELETE FROM delivery\n" +
+                                "WHERE OrderReference = ?;\n";
 
                 PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDelivery);
                 preparedStatementDelivery.setInt(1, order.getReference());
@@ -477,7 +444,7 @@ public class OrderDBAccess implements OrderDataAccess {
             connection.prepareStatement(sqlInstruction).execute();
 
             String sqlOrder = "DELETE FROM `order`\n" +
-                              "WHERE `reference` = ?";
+                    "WHERE `reference` = ?";
             PreparedStatement preparedStatementOrder = connection.prepareStatement(sqlOrder);
             preparedStatementOrder.setInt(1, order.getReference());
             preparedStatementOrder.executeUpdate();
@@ -553,33 +520,33 @@ public class OrderDBAccess implements OrderDataAccess {
 
     private void setOrderLineFromOrder(Order order) throws SQLException {
         String sqlOrderLine = "SELECT o.*, p.*\n" +
-                              "FROM orderline o JOIN product p ON o.Productcode = p.code\n"+
-                              "WHERE o.Orderreference = ?;";
+                "FROM orderline o JOIN product p ON o.Productcode = p.code\n" +
+                "WHERE o.Orderreference = ?;";
         ArrayList<OrderLine> orderLines = new ArrayList<>();
 
         PreparedStatement preparedStatement = connection.prepareStatement(sqlOrderLine);
         preparedStatement.setInt(1, order.getReference());
 
-            ResultSet dataOrderLine = preparedStatement.executeQuery();
-            while(dataOrderLine.next()){
-                Product product = new Product(
-                        null,
-                        dataOrderLine.getInt("p.code"),
-                        dataOrderLine.getString("p.label"),
-                        dataOrderLine.getDouble("p.unitPrice"),
-                        dataOrderLine.getInt("p.currentStock"),
-                        dataOrderLine.getInt("p.maxStock"),
-                        dataOrderLine.getInt("p.minStock"),
-                        dataOrderLine.getInt("p.VATCodeRate")
-                );
-                OrderLine orderLine = new OrderLine(
-                        product,
-                        order,
-                        dataOrderLine.getInt("o.quantity"),
-                        dataOrderLine.getDouble("o.salesUnitPrice")
-                );
-                order.addOrderLine(orderLine);
-            }
+        ResultSet dataOrderLine = preparedStatement.executeQuery();
+        while (dataOrderLine.next()) {
+            Product product = new Product(
+                    null,
+                    dataOrderLine.getInt("p.code"),
+                    dataOrderLine.getString("p.label"),
+                    dataOrderLine.getDouble("p.unitPrice"),
+                    dataOrderLine.getInt("p.currentStock"),
+                    dataOrderLine.getInt("p.maxStock"),
+                    dataOrderLine.getInt("p.minStock"),
+                    dataOrderLine.getInt("p.VATCodeRate")
+            );
+            OrderLine orderLine = new OrderLine(
+                    product,
+                    order,
+                    dataOrderLine.getInt("o.quantity"),
+                    dataOrderLine.getDouble("o.salesUnitPrice")
+            );
+            order.addOrderLine(orderLine);
+        }
     }
 
     private void setDeliveryFromOrder(Order order) throws SQLException {
@@ -594,7 +561,7 @@ public class OrderDBAccess implements OrderDataAccess {
         preparedStatementDelivery.setInt(1, order.getReference());
         ResultSet dataDelivery = preparedStatementDelivery.executeQuery();
 //                dataDelivery.next();
-        if(dataDelivery.next()){
+        if (dataDelivery.next()) {
             GregorianCalendar plannedDateG = null;
             GregorianCalendar deliveredDateG = null;
 
@@ -664,7 +631,7 @@ public class OrderDBAccess implements OrderDataAccess {
             preparedStatement.executeUpdate();
 
             //Delivery update
-            if(order.getDelivery() != null) {
+            if (order.getDelivery() != null) {
                 updateDelivery(order);
             } else {
                 deleteDelivery(order);
@@ -688,7 +655,7 @@ public class OrderDBAccess implements OrderDataAccess {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlDeleteDelivery);
             preparedStatement.setInt(1, order.getReference());
             preparedStatement.executeUpdate();
-        } catch(SQLException e){
+        } catch (SQLException e) {
             throw new SQLManageException(e);
         }
     }
@@ -700,10 +667,10 @@ public class OrderDBAccess implements OrderDataAccess {
             PreparedStatement preparedStatement2 = connection.prepareStatement(sqlDeliveryInstruction);
             preparedStatement2.setInt(1, order.getReference());
             ResultSet dataDelivery = preparedStatement2.executeQuery();
-            if(dataDelivery.next()) {
+            if (dataDelivery.next()) {
                 //Delivery update
                 Date deliveredDate = null;
-                if(order.getDelivery().getDeliveredDate() != null){
+                if (order.getDelivery().getDeliveredDate() != null) {
                     deliveredDate = new Date(order.getDelivery().getDeliveredDate().getTimeInMillis());
                 }
                 String updateDelivery = "UPDATE `delivery`\n" +
@@ -728,14 +695,14 @@ public class OrderDBAccess implements OrderDataAccess {
 
                 preparedStatementDelivery.executeUpdate();
             }
-        } catch(SQLException e){
+        } catch (SQLException e) {
             throw new SQLManageException(e);
         }
     }
 
     private void updateOrderLines(Order order) throws SQLManageException {
         //Check if update necessary for all orderLine
-        for(OrderLine orderLine : order.getOrderLineList()){
+        for (OrderLine orderLine : order.getOrderLineList()) {
             //Chercher si une ligne existe pour ce produit. Si oui, update la quantité. Si non, l'ajouter.
             String selectOrderLine = "SELECT * FROM orderline WHERE Orderreference = ? AND Productcode = ?";
             try {
@@ -744,10 +711,10 @@ public class OrderDBAccess implements OrderDataAccess {
                 preparedStatement.setInt(2, orderLine.getProduct().getCode());
 
                 ResultSet data = preparedStatement.executeQuery();
-                if(data.next()){
+                if (data.next()) {
                     //Update quantity if necessary
                     Integer currentQuantity = data.getInt("quantity");
-                    if(currentQuantity != orderLine.getQuantity()){
+                    if (currentQuantity != orderLine.getQuantity()) {
                         String updateOrderLine = "UPDATE orderLine SET quantity = ? WHERE Orderreference = ? AND Productcode = ?";
                         PreparedStatement preparedStatementUpdate = connection.prepareStatement(updateOrderLine);
                         preparedStatementUpdate.setInt(1, orderLine.getQuantity());
@@ -758,7 +725,7 @@ public class OrderDBAccess implements OrderDataAccess {
                 } else {
                     //Add new line to this order
                     String sqlOrderLine = "INSERT INTO orderline (Productcode, Orderreference, quantity, salesUnitPrice)\n" +
-                                        "VALUES(?,?,?,?)";
+                            "VALUES(?,?,?,?)";
                     try {
                         PreparedStatement preparedStatementOrderLine = connection.prepareStatement(sqlOrderLine);
                         preparedStatementOrderLine.setInt(1, orderLine.getProduct().getCode());
@@ -767,18 +734,18 @@ public class OrderDBAccess implements OrderDataAccess {
                         preparedStatementOrderLine.setDouble(4, orderLine.getSalesUnitPrice());
 
                         preparedStatementOrderLine.executeUpdate();
-                    }catch(SQLException e){
+                    } catch (SQLException e) {
                         throw new SQLManageException(e);
                     }
                 }
-            } catch(SQLException e){
+            } catch (SQLException e) {
                 throw new SQLManageException(e);
             }
         }
         checkOrderLinesToDelete(order);
     }
 
-    private void checkOrderLinesToDelete(Order order) throws SQLManageException{
+    private void checkOrderLinesToDelete(Order order) throws SQLManageException {
         //Loop on all order line of mentionned order if exist in order.getOrderLineList. If not, need to delete !
         String selectOrderLine = "SELECT * FROM orderline WHERE Orderreference = ?";
         try {
@@ -787,14 +754,14 @@ public class OrderDBAccess implements OrderDataAccess {
 
             ResultSet data = preparedStatement.executeQuery();
             ArrayList<OrderLine> orderLinesExists = new ArrayList<>();
-            while(data.next()){
+            while (data.next()) {
                 //Select product from this orderline to create OrderLine object
                 String selectProduct = "SELECT * FROM product WHERE code = ?";
                 PreparedStatement preparedStatementProduct = connection.prepareStatement(selectProduct);
                 preparedStatementProduct.setInt(1, data.getInt("Productcode"));
 
                 ResultSet dataProduct = preparedStatementProduct.executeQuery();
-                if(dataProduct.next()){
+                if (dataProduct.next()) {
                     Product product = new Product(dataProduct.getInt("code"));
                     OrderLine orderLine = new OrderLine(product, order, data.getInt("quantity"), data.getDouble("salesUnitPrice"));
                     orderLinesExists.add(orderLine);
@@ -802,14 +769,14 @@ public class OrderDBAccess implements OrderDataAccess {
             }
 
             ArrayList<OrderLine> orderLinesFromUpdate = order.getOrderLineList();
-            for(OrderLine orderLineExist : orderLinesExists){
+            for (OrderLine orderLineExist : orderLinesExists) {
                 //Check if this code product and reference order exist in order.getOrderLineList. If not, delete from database.
-                for(int i = 0; i < orderLinesFromUpdate.size(); i++){
-                    if(orderLinesFromUpdate.get(i).getProduct().getCode() == orderLineExist.getProduct().getCode()){
+                for (int i = 0; i < orderLinesFromUpdate.size(); i++) {
+                    if (orderLinesFromUpdate.get(i).getProduct().getCode() == orderLineExist.getProduct().getCode()) {
                         break;
                     }
 
-                    if (i+1 == orderLinesFromUpdate.size()) {
+                    if (i + 1 == orderLinesFromUpdate.size()) {
                         //Delete orderLineExist from db
                         String deleteOrderLine = "DELETE FROM orderline WHERE Productcode = ? AND Orderreference = ?";
                         PreparedStatement preparedDeleteOrderLine = connection.prepareStatement(deleteOrderLine);
@@ -820,7 +787,7 @@ public class OrderDBAccess implements OrderDataAccess {
                     }
                 }
             }
-        } catch(SQLException e){
+        } catch (SQLException e) {
             throw new SQLManageException(e);
         }
     }
@@ -828,10 +795,10 @@ public class OrderDBAccess implements OrderDataAccess {
     public ArrayList<Order> getAllOrdersFromZipCode(City city) throws SQLManageException {
         ArrayList<Order> orderArrayList = new ArrayList<>();
         String sqlInstruction = "SELECT o.*, s.*, p.*, e.* FROM `order` o\n" +
-                                    "JOIN `status` s ON s.id = o.StatusNumber\n" +
-                                    "JOIN paymentmethod p ON p.id = o.paymentMethodId\n" +
-                                    "JOIN `entity` e ON e.id = o.CustomerEntityId\n" +
-                                    "WHERE e.CityZipCode = ? AND e.Citylabel = ?";
+                "JOIN `status` s ON s.id = o.StatusNumber\n" +
+                "JOIN paymentmethod p ON p.id = o.paymentMethodId\n" +
+                "JOIN `entity` e ON e.id = o.CustomerEntityId\n" +
+                "WHERE e.CityZipCode = ? AND e.Citylabel = ?";
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
@@ -847,7 +814,7 @@ public class OrderDBAccess implements OrderDataAccess {
             GregorianCalendar calendar = null;
 
 
-            while(data.next()) {
+            while (data.next()) {
 
                 customerId = data.getInt("o.CustomerEntityId");
 
@@ -880,7 +847,7 @@ public class OrderDBAccess implements OrderDataAccess {
 
                 setDeliveryFromOrder(order);
 
-                String sqlOrderLine = "SELECT o.*, p.*, v.*, provider.*, e.*, city.* FROM OrderLine o\n"+
+                String sqlOrderLine = "SELECT o.*, p.*, v.*, provider.*, e.*, city.* FROM OrderLine o\n" +
                         "JOIN product p ON p.code = o.Productcode\n" +
                         "JOIN vatcode v ON v.rate = p.VATCodeRate\n" +
                         "JOIN provider ON provider.entityId = p.ProviderEntityId\n" +
@@ -892,7 +859,7 @@ public class OrderDBAccess implements OrderDataAccess {
                 preparedStatement2.setInt(1, order.getReference());
                 try {
                     ResultSet dataOrderLine = preparedStatement2.executeQuery();
-                    while(dataOrderLine.next()){
+                    while (dataOrderLine.next()) {
                         //Add all orderline to already created order object.
                         City providerCity = new City(
                                 data.getString("e.CityLabel"),
@@ -934,7 +901,7 @@ public class OrderDBAccess implements OrderDataAccess {
                         );
                         order.addOrderLine(orderLine);
                     }
-                } catch(SQLException ex){
+                } catch (SQLException ex) {
                     throw ex;
                 }
 
@@ -948,7 +915,7 @@ public class OrderDBAccess implements OrderDataAccess {
 
     public ArrayList<Order> getAllOrdersFromCustomer(Customer customer) throws SQLManageException {
         ArrayList<Order> orderArrayList = new ArrayList<>();
-        String sqlInstruction = "SELECT o.*, s.*, p.* FROM `order` o\n"+
+        String sqlInstruction = "SELECT o.*, s.*, p.* FROM `order` o\n" +
                 "JOIN status s ON s.id = o.StatusNumber\n" +
                 "JOIN paymentmethod p ON p.id = o.paymentMethodId\n" +
                 "WHERE o.CustomerEntityId = ?";
@@ -966,7 +933,7 @@ public class OrderDBAccess implements OrderDataAccess {
             GregorianCalendar calendar = null;
 
 
-            while(data.next()) {
+            while (data.next()) {
 
                 customerId = data.getInt("o.CustomerEntityId");
 
@@ -999,7 +966,7 @@ public class OrderDBAccess implements OrderDataAccess {
 
                 setDeliveryFromOrder(order);
 
-                String sqlOrderLine = "SELECT o.*, p.*, v.*, provider.*, e.*, city.* FROM OrderLine o\n"+
+                String sqlOrderLine = "SELECT o.*, p.*, v.*, provider.*, e.*, city.* FROM OrderLine o\n" +
                         "JOIN product p ON p.code = o.Productcode\n" +
                         "JOIN vatcode v ON v.rate = p.VATCodeRate\n" +
                         "JOIN provider ON provider.entityId = p.ProviderEntityId\n" +
@@ -1011,7 +978,7 @@ public class OrderDBAccess implements OrderDataAccess {
                 preparedStatement2.setInt(1, order.getReference());
                 try {
                     ResultSet dataOrderLine = preparedStatement2.executeQuery();
-                    while(dataOrderLine.next()){
+                    while (dataOrderLine.next()) {
                         //Add all orderline to already created order object.
                         City providerCity = new City(
                                 data.getString("e.CityLabel"),
@@ -1053,7 +1020,7 @@ public class OrderDBAccess implements OrderDataAccess {
                         );
                         order.addOrderLine(orderLine);
                     }
-                } catch(SQLException ex){
+                } catch (SQLException ex) {
                     throw ex;
                 }
 

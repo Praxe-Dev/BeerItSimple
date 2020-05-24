@@ -179,9 +179,10 @@ public class Index extends View implements Initializable {
         ArrayList<Order> orderList = new ArrayList<Order>();
         try{
             orderList = orderController.getAllOrders();
-        } catch(SQLException ex){
-            new SQLManageException(ex).showMessage();
+        } catch(DataQueryException ex){
+            showError(ex.getTypeError(), ex.getMessage());
         }
+
         ArrayList<OrderTableFormat> ordersRow = new ArrayList<>();
         for (Order order : orderList) {
             ordersRow.add(new OrderTableFormat(order));
@@ -199,8 +200,8 @@ public class Index extends View implements Initializable {
     public void updateTable() {
         try {
             updateTable(orderController.getAllOrders());
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (DataQueryException e) {
+            showError(e.getTypeError(), e.getMessage());
         }
     }
 
