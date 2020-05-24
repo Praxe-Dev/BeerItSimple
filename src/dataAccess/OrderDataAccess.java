@@ -1,9 +1,6 @@
 package dataAccess;
 
-import exception.DataQueryException;
-import exception.DeletionExceiption;
-import exception.NoRowSelected;
-import exception.SQLManageException;
+import exception.*;
 import model.*;
 
 import java.sql.SQLException;
@@ -19,7 +16,7 @@ public interface OrderDataAccess {
 
     boolean deleteOrder(Order order) throws DeletionExceiption;
 
-    boolean updateOrder(Order order) throws SQLManageException;
+    boolean updateOrder(Order order) throws DataQueryException, UpdateOrderException;
 
     ArrayList<Order> getAllOrdersBetweenDates(LocalDate startingDate, LocalDate endDate);
 

@@ -418,7 +418,7 @@ public class OrderDBAccess implements OrderDataAccess {
 
             if (order.getDelivery() != null) {
                 String sqlDelivery = "DELETE FROM delivery\n" +
-                                "WHERE OrderReference = ?;\n";
+                        "WHERE OrderReference = ?;\n";
 
                 PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDelivery);
                 preparedStatementDelivery.setInt(1, order.getReference());
@@ -601,7 +601,7 @@ public class OrderDBAccess implements OrderDataAccess {
         }
     }
 
-    public boolean updateOrder(Order order) throws SQLManageException {
+    public boolean updateOrder(Order order) throws DataQueryException {
         int affectedRow = 0;
 
         String sqlInstruction = "UPDATE `order` SET `isPaid` = ?, `statusNumber` = ?, `paymentMethodId` = ? WHERE `reference` = ?";
@@ -613,7 +613,7 @@ public class OrderDBAccess implements OrderDataAccess {
             preparedStatement.setInt(2, order.getStatus().getId());
             preparedStatement.setInt(3, order.getPaymentMethod().getId());
             preparedStatement.setInt(4, order.getReference());
-            preparedStatement.executeUpdate();
+            affectedRow = preparedStatement.executeUpdate();
 
             //Delivery update
             if (order.getDelivery() != null) {
@@ -625,64 +625,57 @@ public class OrderDBAccess implements OrderDataAccess {
             //Orderlines update
             updateOrderLines(order);
 
-        } catch (SQLIntegrityConstraintViolationException e) {
-            throw new SQLManageException(e);
-        } catch (SQLException e) {
-            throw new SQLManageException(e);
+        } catch (SQLException | SQLManageException e) {
+            throw new DataQueryException();
         }
 
-        return true;
+        return affectedRow != 0;
     }
 
-    private void deleteDelivery(Order order) throws SQLManageException {
+    private void deleteDelivery(Order order) throws SQLException {
         String sqlDeleteDelivery = "DELETE FROM delivery WHERE OrderReference = ?";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sqlDeleteDelivery);
-            preparedStatement.setInt(1, order.getReference());
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new SQLManageException(e);
-        }
+
+        PreparedStatement preparedStatement = connection.prepareStatement(sqlDeleteDelivery);
+        preparedStatement.setInt(1, order.getReference());
+        preparedStatement.executeUpdate();
     }
 
-    private void updateDelivery(Order order) throws SQLManageException {
+    private void updateDelivery(Order order) throws SQLException {
         //Delivery select
         String sqlDeliveryInstruction = "SELECT * FROM delivery WHERE OrderReference = ?";
-        try {
-            PreparedStatement preparedStatement2 = connection.prepareStatement(sqlDeliveryInstruction);
-            preparedStatement2.setInt(1, order.getReference());
-            ResultSet dataDelivery = preparedStatement2.executeQuery();
-            if (dataDelivery.next()) {
-                //Delivery update
-                Date deliveredDate = null;
-                if (order.getDelivery().getDeliveredDate() != null) {
-                    deliveredDate = new Date(order.getDelivery().getDeliveredDate().getTimeInMillis());
-                }
-                String updateDelivery = "UPDATE `delivery`\n" +
-                        "SET\n" +
-                        " `plannedDate` = ?,\n" +
-                        " `deliveredDate` = ?\n" +
-                        "WHERE `id` = ?";
-                PreparedStatement preparedStatementDelivery = connection.prepareStatement(updateDelivery);
-                preparedStatementDelivery.setDate(1, new java.sql.Date(order.getDelivery().getPlannedDate().getTimeInMillis()));
-                preparedStatementDelivery.setDate(2, deliveredDate);
-                preparedStatementDelivery.setInt(3, dataDelivery.getInt("id"));
-                preparedStatementDelivery.executeUpdate();
-            } else {
-                //Create delivery
-                String sqlDelivery = "INSERT INTO delivery (plannedDate, OrderReference, EmployeeEntityId)\n" +
-                        "VALUES (?,?,?)";
 
-                PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDelivery);
-                preparedStatementDelivery.setDate(1, new java.sql.Date(order.getDelivery().getPlannedDate().getTimeInMillis()));
-                preparedStatementDelivery.setInt(2, order.getReference());
-                preparedStatementDelivery.setInt(3, order.getDelivery().getEmployee().getEntity().getId());
-
-                preparedStatementDelivery.executeUpdate();
+        PreparedStatement preparedStatement2 = connection.prepareStatement(sqlDeliveryInstruction);
+        preparedStatement2.setInt(1, order.getReference());
+        ResultSet dataDelivery = preparedStatement2.executeQuery();
+        if (dataDelivery.next()) {
+            //Delivery update
+            Date deliveredDate = null;
+            if (order.getDelivery().getDeliveredDate() != null) {
+                deliveredDate = new Date(order.getDelivery().getDeliveredDate().getTimeInMillis());
             }
-        } catch (SQLException e) {
-            throw new SQLManageException(e);
+            String updateDelivery = "UPDATE `delivery`\n" +
+                    "SET\n" +
+                    " `plannedDate` = ?,\n" +
+                    " `deliveredDate` = ?\n" +
+                    "WHERE `id` = ?";
+            PreparedStatement preparedStatementDelivery = connection.prepareStatement(updateDelivery);
+            preparedStatementDelivery.setDate(1, new java.sql.Date(order.getDelivery().getPlannedDate().getTimeInMillis()));
+            preparedStatementDelivery.setDate(2, deliveredDate);
+            preparedStatementDelivery.setInt(3, dataDelivery.getInt("id"));
+            preparedStatementDelivery.executeUpdate();
+        } else {
+            //Create delivery
+            String sqlDelivery = "INSERT INTO delivery (plannedDate, OrderReference, EmployeeEntityId)\n" +
+                    "VALUES (?,?,?)";
+
+            PreparedStatement preparedStatementDelivery = connection.prepareStatement(sqlDelivery);
+            preparedStatementDelivery.setDate(1, new java.sql.Date(order.getDelivery().getPlannedDate().getTimeInMillis()));
+            preparedStatementDelivery.setInt(2, order.getReference());
+            preparedStatementDelivery.setInt(3, order.getDelivery().getEmployee().getEntity().getId());
+
+            preparedStatementDelivery.executeUpdate();
         }
+
     }
 
     private void updateOrderLines(Order order) throws SQLManageException {

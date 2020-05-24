@@ -2,14 +2,16 @@ package exception;
 
 import utils.PopUp;
 
-public class UpdateOrderException extends Throwable{
-    private static String exception;
+public class UpdateOrderException extends Exception{
+    private final String typeError = "Update error";
+    private final String message = "The update failed, retry later.";
 
-    public UpdateOrderException(String exception){
-        this.exception = exception;
+    public String getTypeError() {
+        return typeError;
     }
 
-    public void showMessage(){
-        PopUp.showError("Erreur..", exception);
+    @Override
+    public String getMessage() {
+        return message;
     }
 }

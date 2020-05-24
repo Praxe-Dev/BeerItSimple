@@ -40,7 +40,7 @@ public class OrderBusiness {
         return dao.getAllOrdersBetweenDates(startingDate, endDate);
     }
 
-    public boolean updateOrder(Order order) throws SQLManageException {
+    public boolean updateOrder(Order order) throws DataQueryException, UpdateOrderException {
         return dao.updateOrder(order);
     }
 

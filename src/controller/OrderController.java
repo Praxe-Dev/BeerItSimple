@@ -31,7 +31,7 @@ public class OrderController {
         return orderBusiness.deleteOrder(order);
     }
 
-    public boolean updateOrder(Order order) throws SQLManageException {
+    public boolean updateOrder(Order order) throws UpdateOrderException, DataQueryException {
         return orderBusiness.updateOrder(order);
     }
 

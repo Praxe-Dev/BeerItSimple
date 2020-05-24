@@ -159,8 +159,6 @@ public class Create extends View {
                         ex.printStackTrace();
                     } catch (SQLManageException ex) {
                         ex.showMessage();
-                    } catch(UpdateOrderException ex) {
-                        ex.showMessage();
                     }
                 }
            }
@@ -177,11 +175,9 @@ public class Create extends View {
             } else {
 
                 addProduct(newProduct);
-//                   String newVatAmount = String.format("%.2F", (newAmount) )
             }
         } else {
             productQuantity.setStyle("-fx-background-color: rgba(255,0,0,0.5)");
-//               productQuantity.getStyleClass().add("error");
 
         }
     }
@@ -258,10 +254,10 @@ public class Create extends View {
         return true;
     }
 
-    private boolean newOrderInsert() throws SQLException, SQLManageException, UpdateOrderException {
-        ArrayList<OrderLine> orderLines = new ArrayList<>();
+    private boolean newOrderInsert() throws SQLException, SQLManageException {
         Product product;
         Delivery delivery = null;
+        Boolean orderCreated = false;
 
         Order newOrder = new Order(
                 customerList.getValue(),
@@ -270,34 +266,36 @@ public class Create extends View {
         );
 
         if (deliveryCheck.isSelected()) {
+            Employee deliverer = deliveryMan.getValue();
 
-            if(deliveryMan.getSelectionModel().isSelected(-1)){
-                throw new UpdateOrderException("You need to select a delivery man if you want a delivery");
-            }
-            LocalDate date = deliveryDate.getValue();
-            // Create the right format for delivery.plannedDate (-1 and +1 to get the right value)
-            GregorianCalendar gc = new GregorianCalendar(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth() + 1);
+            if(deliverer == null){
+                PopUp.showError("Delivery error","You need to select a delivery man if you want a delivery");
+            } else {
 
-//            date.set(deliveryDate.getValue().getYear(), deliveryDate.getValue().getMonthValue(), deliveryDate.getValue().getDayOfMonth());
-            delivery = new Delivery(
-                    deliveryMan.getSelectionModel().getSelectedItem(),
-                    gc,
-                    newOrder
-            );
+                LocalDate date = deliveryDate.getValue();
+                // Create the right format for delivery.plannedDate (-1 and +1 to get the right value)
+                GregorianCalendar gc = new GregorianCalendar(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth() + 1);
 
-            newOrder.setDelivery(delivery);
-        }
+                delivery = new Delivery(
+                        deliverer,
+                        gc,
+                        newOrder
+                );
 
-        for (OrderLineTableFormat line : tableArticle.getItems()) {
-            product = productList.getItems().get(line.getProductCode() - 1);
-            newOrder.addOrderLine(new OrderLine(product, newOrder, line.getQuantity(), line.getUnitPrice()));
-        }
+                newOrder.setDelivery(delivery);
 
-        Boolean orderCreated = orderController.create(newOrder);
-        if(orderCreated){
-            Rank updateRank = orderController.updateCustomerRank(newOrder.getCustomer());
-            if(updateRank != null){
-                PopUp.showSuccess("Rank up !", "Thank the client and announce their new rank is: " + updateRank.getLabel() + ".\n His new credit limit is: " + updateRank.getCreditLimit() + "\n");
+                for (OrderLineTableFormat line : tableArticle.getItems()) {
+                    product = productList.getItems().get(line.getProductCode() - 1);
+                    newOrder.addOrderLine(new OrderLine(product, newOrder, line.getQuantity(), line.getUnitPrice()));
+                }
+
+                orderCreated = orderController.create(newOrder);
+                if(orderCreated){
+                    Rank updateRank = orderController.updateCustomerRank(newOrder.getCustomer());
+                    if(updateRank != null){
+                        PopUp.showSuccess("Rank up !", "Thank the client and announce their new rank is: " + updateRank.getLabel() + ".\n His new credit limit is: " + updateRank.getCreditLimit() + "\n");
+                    }
+                }
             }
         }
         return orderCreated;

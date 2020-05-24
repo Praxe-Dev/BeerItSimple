@@ -177,18 +177,18 @@ public class Update extends View {
                             orderView.updateTable();
                             closeWindow();
                         }
-                    } catch (SQLManageException ex) {
-                        ex.showMessage();
                     } catch (PaymentMethodException payErr) {
                         payErr.showMessage();
                     } catch (StatusException statusErr) {
                         statusErr.showMessage();
                     } catch (UpdateOrderException ex) {
-                        ex.showMessage();
+                        showError(ex.getTypeError(), ex.getMessage());
+                    } catch (DataQueryException ex) {
+                        showError(ex.getTypeError(), ex.getMessage());
                     }
                 }
             } else {
-                new UpdateOrderException("You can't save this order without products. If you want, you can delete this order.").showMessage();
+                PopUp.showError("Order error", "You can't save an order without atleast one orderline.");;
             }
         });
 
@@ -281,13 +281,13 @@ public class Update extends View {
         totalAmountVatInc.setText(totalVatIncl);
     }
 
-    private boolean updateOrder() throws SQLManageException, PaymentMethodException, StatusException, UpdateOrderException {
+    private boolean updateOrder() throws PaymentMethodException, StatusException, UpdateOrderException, DataQueryException {
         Product product;
 
         if (deliveryCheck.isSelected()) {
             if(deliveryDate != null) {
                 if(deliveryMan.getSelectionModel().isSelected(-1)){
-                    throw new UpdateOrderException("You need to select a delivery man if you want a delivery");
+                    throw new UpdateOrderException();
                 }
 //                GregorianCalendar date = new GregorianCalendar();
 //                date.set(deliveryDate.getValue().getYear(), deliveryDate.getValue().getDayOfMonth(), deliveryDate.getValue().getDayOfMonth());
