@@ -32,10 +32,6 @@ public class ThreadNews extends Task<Integer> {
 
             Thread.sleep(10000);
 
-//            if (isCancelled()) {
-//                break;
-//            }
-
             final int it = i;
             updateValue(it);
             i++;
