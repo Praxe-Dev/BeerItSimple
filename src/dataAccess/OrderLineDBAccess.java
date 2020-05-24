@@ -1,6 +1,7 @@
 package dataAccess;
 
 import exception.ConnectionException;
+import exception.DataQueryException;
 import model.OrderLine;
 import model.Product;
 
@@ -16,7 +17,7 @@ public class OrderLineDBAccess implements OrderLineDataAccess {
     }
 
     @Override
-    public ArrayList<OrderLine> getAllOrderLineBetweenDates(LocalDate startDate, LocalDate endDate) {
+    public ArrayList<OrderLine> getAllOrderLineBetweenDates(LocalDate startDate, LocalDate endDate) throws DataQueryException {
 
         String sqlInstructions = "SELECT ol.* FROM OrderLine ol\n" +
                                  "JOIN `order` o ON o.reference = ol.Orderreference\n" +
@@ -46,7 +47,7 @@ public class OrderLineDBAccess implements OrderLineDataAccess {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataQueryException();
         }
 
         return orderLinesList;

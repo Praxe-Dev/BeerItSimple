@@ -2,7 +2,7 @@ package exception;
 
 import utils.PopUp;
 
-public class UpdateException extends Exception{
+public class UpdateException extends BISException{
     private final String typeError = "Update error";
     private final String message = "The update failed, retry later.";
 
