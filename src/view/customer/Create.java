@@ -92,35 +92,10 @@ public class Create extends View {
         ArrayList<Rank> rankList = rankController.getAllRanks();
         customerRank.setItems(FXCollections.observableArrayList(rankList));
         customerRank.getSelectionModel().selectFirst();
-//        customerRank.setConverter(new StringConverter<Rank>() {
-//            @Override
-//            public String toString(Rank object) {
-//                return object.getLabel() + " (" + object.getCreditLimit() + "€)";
-//            }
-//
-//            @Override
-//            public Rank fromString(String string) {
-//                return null;
-//            }
-//        });
 
-        /*ObservableList<String> cityList = cityController.getAllCities();
-        regionBox.getItems().addAll(cityList);
-        */
         ArrayList<City> cityList = cityController.getAllCities();
         regionBox.setItems(FXCollections.observableArrayList(cityList));
         regionBox.getSelectionModel().selectFirst();
-//        regionBox.setConverter(new StringConverter<City>() {
-//            @Override
-//            public String toString(City object) {
-//                return object.getZipCode() + " " + object.getLabel();
-//            }
-//
-//            @Override
-//            public City fromString(String string) {
-//                return null;
-//            }
-//        });
 
 
         // Associe l'action aux buttons
@@ -142,7 +117,6 @@ public class Create extends View {
                 }
             }
         });
-
     }
 
     private boolean insertCustomer() throws SQLException{

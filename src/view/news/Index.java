@@ -43,6 +43,8 @@ public class Index extends View implements Initializable {
     private TableColumn<NewsTableFormat, String> endDate;
     @FXML
     private TableColumn<NewsTableFormat, String> author;
+    @FXML
+    private JFXButton refreshBtn;
 
     private NewsController newsController;
 
@@ -58,6 +60,11 @@ public class Index extends View implements Initializable {
 
     @Override
     public void init() {
+
+        refreshBtn.setOnAction(e -> {
+            updateTable();
+        });
+
         addNews.setOnAction(e -> {
             Window createNews = new Window("FXML/news/create.fxml", "BeerItSimple - Add news");
             createNews.resizable(false);
