@@ -17,7 +17,7 @@ public class ProductController {
         this.productBusiness = new ProductBusiness();
     }
 
-    public ArrayList<Product> getAllProducts() {
+    public ArrayList<Product> getAllProducts() throws DataQueryException {
         return productBusiness.getAllProducts();
     }
 

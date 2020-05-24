@@ -1,6 +1,7 @@
 package dataAccess;
 
 import exception.ConnectionException;
+import exception.DataQueryException;
 import model.Product;
 import model.VATCodeRate;
 
@@ -18,7 +19,7 @@ public class ProductDBAccess implements ProductDataAccess {
     }
 
     @Override
-    public ArrayList<Product> getAllProducts() {
+    public ArrayList<Product> getAllProducts() throws DataQueryException {
         String sqlInstruction = "SELECT * FROM product";
 
         ArrayList<Product> productList = new ArrayList<>();
@@ -46,7 +47,7 @@ public class ProductDBAccess implements ProductDataAccess {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataQueryException();
         }
 
         return productList;

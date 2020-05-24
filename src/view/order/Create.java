@@ -97,9 +97,12 @@ public class Create extends View {
 
         ArrayList<Customer> allCustomers = null;
         ArrayList<PaymentMethod> allPaymentMethod = null;
+        ArrayList<Product> allProducts = null;
+
         try {
             allCustomers = customerController.getAllCustomers();
             allPaymentMethod = paymentMethodController.getAllPaymentMethod();
+            allProducts = productController.getAllProducts();
         } catch (DataQueryException e) {
             showError(e.getTypeError(), e.getMessage());
         }
@@ -109,7 +112,6 @@ public class Create extends View {
         paymentMethod.setItems(FXCollections.observableArrayList(allPaymentMethod));
         paymentMethod.getSelectionModel().selectFirst();
 
-        ArrayList<Product> allProducts = productController.getAllProducts();
         productList.setItems(FXCollections.observableArrayList(allProducts));
         productList.getSelectionModel().selectFirst();
 

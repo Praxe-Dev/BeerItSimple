@@ -1,9 +1,10 @@
 package dataAccess;
 
+import exception.DataQueryException;
 import model.Product;
 
 import java.util.ArrayList;
 
 public interface ProductDataAccess {
-    public ArrayList<Product> getAllProducts();
+    ArrayList<Product> getAllProducts() throws DataQueryException;
 }

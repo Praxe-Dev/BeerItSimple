@@ -22,7 +22,7 @@ public class ProductBusiness {
         this.orderLineDao = new OrderLineDBAccess();
     }
 
-    public ArrayList<Product> getAllProducts() {
+    public ArrayList<Product> getAllProducts() throws DataQueryException {
         return productDao.getAllProducts();
     }
 
