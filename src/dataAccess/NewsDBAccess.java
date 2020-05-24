@@ -124,7 +124,7 @@ public class NewsDBAccess implements NewsDataAccess {
         return true;
     }
 
-    public void updateNews(News news) throws SQLManageException {
+    public void updateNews(News news) throws UpdateException {
         String sqlInstruction = "UPDATE news SET title = ?, content = ?, startingDate = ?, endDate = ? WHERE id = ?";
         try{
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
@@ -135,7 +135,7 @@ public class NewsDBAccess implements NewsDataAccess {
             preparedStatement.setInt(5, news.getId());
             preparedStatement.executeUpdate();
         } catch(SQLException e){
-            throw new SQLManageException(e);
+            throw new UpdateException();
         }
     }
 

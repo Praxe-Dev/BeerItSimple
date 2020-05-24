@@ -39,7 +39,7 @@ public class NewsBusiness {
         return dao.deleteNews(news);
     }
 
-    public void updateNews(News news) throws SQLManageException {
+    public void updateNews(News news) throws UpdateException {
         dao.updateNews(news);
     }
 }

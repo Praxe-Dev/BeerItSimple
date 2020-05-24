@@ -38,7 +38,7 @@ public class NewsController {
         return newsBusiness.deleteNews(news);
     }
 
-    public void updateNews(News news) throws SQLManageException {
+    public void updateNews(News news) throws UpdateException {
         newsBusiness.updateNews(news);
     }
 }

@@ -1,9 +1,6 @@
 package dataAccess;
 
-import exception.DataQueryException;
-import exception.DeletionExceiption;
-import exception.NoRowSelected;
-import exception.SQLManageException;
+import exception.*;
 import model.News;
 import model.Order;
 
@@ -21,5 +18,5 @@ public interface NewsDataAccess {
 
     boolean deleteNews(News news) throws DeletionExceiption;
 
-    void updateNews(News news) throws SQLManageException;
+    void updateNews(News news) throws UpdateException;
 }

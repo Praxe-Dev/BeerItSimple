@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextField;
 import controller.NewsController;
 import exception.ConnectionException;
 import exception.SQLManageException;
+import exception.UpdateException;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import model.News;
@@ -101,8 +102,8 @@ public class Update extends View {
         News updateNews = new News(news.getId(), title.getText(), contentArea.getText(), startGC, endGC, 2);
         try {
             newsController.updateNews(updateNews);
-        } catch(SQLManageException e){
-            throw e;
+        } catch(UpdateException e){
+            showError(e.getTypeError(), e.getMessage());
         }
     }
 
