@@ -3,6 +3,7 @@ package business;
 import dataAccess.StatusDBAccess;
 import dataAccess.StatusDataAccess;
 import exception.ConnectionException;
+import exception.DataQueryException;
 import model.Status;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class StatusBusiness {
     }
 
 
-    public ArrayList<Status> getAllStatus() {
+    public ArrayList<Status> getAllStatus() throws DataQueryException {
         return dao.getAllStatus();
     }
 }

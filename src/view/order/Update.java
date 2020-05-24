@@ -110,11 +110,12 @@ public class Update extends View {
             ArrayList<Product> allProducts = productController.getAllProducts();
             productList.setItems(FXCollections.observableArrayList(allProducts));
             productList.getSelectionModel().selectFirst();
+
+            setCurrentStatus();
         } catch (ConnectionException | DataQueryException e) {
             showError(e.getTypeError(), e.getMessage());
         }
         setCustomer();
-        setCurrentStatus();
         setPaymentMethod();
         setDelivery();
         initTable();
@@ -426,7 +427,7 @@ public class Update extends View {
         setDeliveryList();
     }
 
-    private void setCurrentStatus() {
+    private void setCurrentStatus() throws DataQueryException {
         String currentStatus = order.getStatus().getId().toString();
         ArrayList<Status> statusArrayList = statusController.getAllStatus();
         int statusIndex = -1;
