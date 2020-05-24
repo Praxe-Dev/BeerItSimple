@@ -1,9 +1,8 @@
 package dataAccess;
 
-import exception.CustomerException;
-import exception.DuplicataException;
+import exception.CustomerUpdateException;
 import exception.CustomerNotFoundException;
-import exception.InsertionError;
+import exception.CustomerInsertionException;
 import model.City;
 import model.Customer;
 import model.Entity;
@@ -163,7 +162,7 @@ public class CustomerDBAccess implements CustomerDataAccess {
         return null;
     }
 
-    public boolean create(Customer c) throws InsertionError {
+    public boolean create(Customer c) throws CustomerInsertionException {
         int affectedRowsEntity;
         int affectedRowsCustomer = 0;
         int entityID = 0;
@@ -217,14 +216,14 @@ public class CustomerDBAccess implements CustomerDataAccess {
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                throw new InsertionError(c);
+                throw new CustomerInsertionException(c);
             }
         }
         return affectedRowsCustomer != 0;
     }
 
-    public boolean update(Customer customer) throws DuplicataException {
-        int affectedRow = 0;
+    public boolean update(Customer customer) throws CustomerUpdateException {
+        int affectedRow;
 
         String sqlInstruction = "UPDATE customer\n" +
                 "JOIN entity ON customer.EntityId = entity.id\n" +
@@ -255,9 +254,11 @@ public class CustomerDBAccess implements CustomerDataAccess {
             preparedStatement.setInt(10, customer.getEntity().getCity().getZipCode());
             preparedStatement.setInt(11, customer.getEntity().getId());
 
-            preparedStatement.executeUpdate();
-        } catch (SQLIntegrityConstraintViolationException e) {
-            throw new DuplicataException(e.getMessage());
+            affectedRow = preparedStatement.executeUpdate();
+
+            if (affectedRow == 0) {
+                throw new CustomerUpdateException(customer);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

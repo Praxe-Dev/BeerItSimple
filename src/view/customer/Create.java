@@ -7,7 +7,7 @@ import com.jfoenix.controls.JFXTextField;
 import controller.CityController;
 import controller.CustomerController;
 import controller.RankController;
-import exception.InsertionError;
+import exception.CustomerInsertionException;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -20,7 +20,6 @@ import utils.Validators;
 import view.PopUp;
 import view.View;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Create extends View {
@@ -113,14 +112,14 @@ public class Create extends View {
                     Index customersView = (Index) getParentView();
                     customersView.updateTable();
                     closeWindow();
-                } catch (InsertionError exception) {
-                    PopUp.showError(exception.getType(), exception.getMessage());
+                } catch (CustomerInsertionException exception) {
+                    PopUp.showError(exception.getTypeError(), exception.getMessage());
                 }
             }
         });
     }
 
-    private boolean insertCustomer() throws InsertionError {
+    private boolean insertCustomer() throws CustomerInsertionException {
 
         Customer newCustomer;
         Entity newEntity = new Entity();

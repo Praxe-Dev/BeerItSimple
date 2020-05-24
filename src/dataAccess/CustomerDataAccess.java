@@ -1,22 +1,18 @@
 package dataAccess;
 
-import exception.CustomerException;
-import exception.DuplicataException;
-import exception.CustomerNotFoundException;
-import exception.InsertionError;
+import exception.*;
 import model.Customer;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface CustomerDataAccess {
     public ArrayList<Customer> getAllCustomers();
 
-    public boolean create(Customer customer) throws InsertionError;
+    public boolean create(Customer customer) throws CustomerInsertionException;
 
     public Customer getCustomer(Integer id) throws CustomerException, CustomerNotFoundException;
 
-    boolean update(Customer customer) throws DuplicataException;
+    boolean update(Customer customer) throws CustomerUpdateException;
 
     boolean delete(Customer customer);
 }

@@ -4,7 +4,7 @@ import com.jfoenix.controls.*;
 import controller.CityController;
 import controller.CustomerController;
 import controller.RankController;
-import exception.DuplicataException;
+import exception.CustomerUpdateException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,6 +13,7 @@ import model.City;
 import model.Customer;
 import model.Rank;
 import utils.Validators;
+import view.PopUp;
 import view.View;
 
 import java.util.ArrayList;
@@ -134,8 +135,8 @@ public class Update extends View {
                             customersView.updateTable();
                             closeWindow();
                         }
-                    } catch (DuplicataException exception) {
-                        exception.showError();
+                    } catch (CustomerUpdateException excpetion) {
+                        PopUp.showError(excpetion.getTypeError(), excpetion.getMessage());
                     }
                 }
         });
@@ -152,7 +153,6 @@ public class Update extends View {
             if (city.toString().equals(selectedCustomer.getEntity().getCity().toString())) {
                 return i;
             }
-
             i++;
         }
 
@@ -179,7 +179,7 @@ public class Update extends View {
         return true;
     }
 
-    public boolean updateCostumer() throws DuplicataException {
+    public boolean updateCostumer() throws CustomerUpdateException {
         selectedCustomer.setRank(customerRank.getSelectionModel().getSelectedItem());
         selectedCustomer.getEntity().setContactName(contactName.getText());
         selectedCustomer.getEntity().setStreet(address.getText());
