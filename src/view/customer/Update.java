@@ -130,7 +130,6 @@ public class Update extends View {
                 if (Validators.validate(contactName, phoneNumber, address, houseNumber, houseNumber) && Validators.validateNullableValue(mail, businessNumber, accountNumber)) {
                     try {
                         if (updateCostumer()) {
-                            System.out.println("Done");
                             customersView.updateTable();
                             closeWindow();
                         }

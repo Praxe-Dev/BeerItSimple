@@ -104,7 +104,6 @@ public class Create extends View {
         });
 
         submitBtn.setOnAction(e -> {
-//            System.out.println("Check mail :" + checkMail());
             if(Validators.validate(contactName, phoneNumber, address, houseNumber)  && Validators.validateNullableValue(mail, businessNumber, accountNumber)) {
                 try {
                     insertCustomer();
@@ -137,9 +136,6 @@ public class Create extends View {
             if (businessNumber.validate())
                 newEntity.setBusinessNumber(businessNumber.getText());
         }
-
-        System.out.println("Business Number : " + newEntity.getBusinessNumber());
-        System.out.println("Account number : " + newEntity.getBankAccountNumber());
 
         Rank selectedRank = customerRank.getValue();
         City city = regionBox.getValue();
