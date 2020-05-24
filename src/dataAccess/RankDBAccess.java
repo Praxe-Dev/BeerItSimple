@@ -1,5 +1,6 @@
 package dataAccess;
 
+import exception.ConnectionException;
 import model.Rank;
 
 import java.sql.Connection;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 public class RankDBAccess implements RankDataAccess {
     private Connection connection;
 
-    public RankDBAccess() {
+    public RankDBAccess() throws ConnectionException {
         this.connection = DBConnection.getInstance();
     }
 

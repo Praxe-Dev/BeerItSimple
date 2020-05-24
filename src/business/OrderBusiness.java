@@ -2,6 +2,7 @@ package business;
 
 import dataAccess.OrderDBAccess;
 import dataAccess.OrderDataAccess;
+import exception.ConnectionException;
 import exception.DeletionExceiption;
 import exception.NoRowSelected;
 import exception.SQLManageException;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 public class OrderBusiness {
     private OrderDataAccess dao;
 
-    public OrderBusiness() {
+    public OrderBusiness() throws ConnectionException {
         setDao(new OrderDBAccess());
     }
 

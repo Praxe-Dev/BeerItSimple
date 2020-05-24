@@ -1,6 +1,7 @@
 package controller;
 
 import business.EmployeeBusiness;
+import exception.ConnectionException;
 import exception.EmployeeLoginException;
 import exception.SQLManageException;
 import model.Employee;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 public class EmployeeController {
     private EmployeeBusiness employeeBusiness;
 
-    public EmployeeController() {
+    public EmployeeController() throws ConnectionException {
         setEmployeeBusiness(new EmployeeBusiness());
     }
 

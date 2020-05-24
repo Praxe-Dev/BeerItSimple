@@ -2,6 +2,7 @@ package view.customer;
 
 import com.jfoenix.controls.JFXButton;
 import controller.CustomerController;
+import exception.ConnectionException;
 import exception.CustomerException;
 import exception.CustomerNotFoundException;
 import javafx.fxml.FXML;
@@ -60,7 +61,11 @@ public class Index extends View implements Initializable {
     private CustomerController customersController;
 
     public Index() {
-        this.customersController = new CustomerController();
+        try {
+            this.customersController = new CustomerController();
+        } catch (ConnectionException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
     }
 
     @Override

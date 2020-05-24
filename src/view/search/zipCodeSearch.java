@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXComboBox;
 import controller.CityController;
 
 import controller.OrderController;
+import exception.ConnectionException;
 import exception.SQLManageException;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -38,8 +39,12 @@ public class zipCodeSearch extends View implements Initializable {
 
     @Override
     public void init() {
-        cityController = new CityController();
-        orderController = new OrderController();
+        try {
+            cityController = new CityController();
+            orderController = new OrderController();
+        } catch (ConnectionException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
         ArrayList<City> allCities = cityController.getAllCities();
         zipCodeBox.setItems(FXCollections.observableArrayList(allCities));
         zipCodeBox.getSelectionModel().selectFirst();

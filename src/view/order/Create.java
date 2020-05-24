@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import controller.*;
+import exception.ConnectionException;
 import exception.NoRowSelected;
 import exception.SQLManageException;
 import exception.UpdateOrderException;
@@ -81,11 +82,16 @@ public class Create extends View {
 
     @Override
     public void init() {
-        customerController = new CustomerController();
-        employeeController = new EmployeeController();
-        paymentMethodController = new PaymentMethodController();
-        productController = new ProductController();
-        orderController = new OrderController();
+        try {
+
+            customerController = new CustomerController();
+            employeeController = new EmployeeController();
+            paymentMethodController = new PaymentMethodController();
+            productController = new ProductController();
+            orderController = new OrderController();
+        } catch (ConnectionException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
 
         setShortcut(new KeyCodeCombination(KeyCode.ENTER), () -> addArticle());
         setShortcut(new KeyCodeCombination(KeyCode.DELETE), () -> removeProduct());

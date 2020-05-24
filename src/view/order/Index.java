@@ -60,7 +60,11 @@ public class Index extends View implements Initializable {
     private City city = null;
 
     public Index() {
-        this.orderController = new OrderController();
+        try {
+            this.orderController = new OrderController();
+        } catch (ConnectionException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

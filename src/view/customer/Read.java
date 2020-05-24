@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import controller.OrderController;
+import exception.ConnectionException;
 import exception.SQLManageException;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -54,7 +55,11 @@ public class Read extends View {
 
     @Override
     public void init() {
-        orderController = new OrderController();
+        try {
+            orderController = new OrderController();
+        } catch (ConnectionException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
 
         contactName.setText(selectedCustomer.getEntity().getContactName());
         address.setText(selectedCustomer.getEntity().getStreet());

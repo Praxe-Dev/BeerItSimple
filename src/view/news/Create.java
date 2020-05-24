@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import controller.NewsController;
+import exception.ConnectionException;
 import exception.SQLManageException;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
@@ -29,8 +30,15 @@ public class Create extends View {
     @FXML
     private JFXButton submitBtn;
 
+    NewsController newsController;
+
     @Override
     public void init() {
+        try {
+            newsController = new NewsController();
+        } catch (ConnectionException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
 
         Validators.setReqField(title);
         Validators.setReqField(contentArea);
@@ -76,7 +84,6 @@ public class Create extends View {
     }
 
     public void insertNews() throws SQLManageException {
-        NewsController newsController = new NewsController();
         LocalDate start = startingDate.getValue();
         LocalDate end = endDate.getValue();
         GregorianCalendar startGC = new GregorianCalendar(start.getYear(), start.getMonthValue()-1, start.getDayOfMonth());

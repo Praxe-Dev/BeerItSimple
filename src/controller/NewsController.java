@@ -1,6 +1,7 @@
 package controller;
 
 import business.NewsBusiness;
+import exception.ConnectionException;
 import exception.DeletionExceiption;
 import exception.SQLManageException;
 import model.News;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 public class NewsController {
     private NewsBusiness newsBusiness;
 
-    public NewsController() {
+    public NewsController() throws ConnectionException {
         setNewsBusiness(new NewsBusiness());
     }
 

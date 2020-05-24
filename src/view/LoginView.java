@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import controller.EmployeeController;
+import exception.ConnectionException;
 import exception.EmployeeLoginException;
 import exception.MatriculException;
 import javafx.application.Platform;
@@ -33,6 +34,12 @@ public class LoginView extends View {
 
     @Override
     public void init() {
+        try {
+            employeeController = new EmployeeController();
+        } catch (ConnectionException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
+
         signinButton.setOnAction(e -> {
             // TODO: Tenter de se connecter
             openSession();
@@ -40,7 +47,6 @@ public class LoginView extends View {
 
         setShortcut(new KeyCodeCombination(KeyCode.ENTER), () -> openSession());
 
-        employeeController = new EmployeeController();
         makeDraggable(loginContainer);
     }
 

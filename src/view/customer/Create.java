@@ -7,6 +7,7 @@ import com.jfoenix.controls.JFXTextField;
 import controller.CityController;
 import controller.CustomerController;
 import controller.RankController;
+import exception.ConnectionException;
 import exception.CustomerInsertionException;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -62,9 +63,14 @@ public class Create extends View {
     @Override
     public void init() {
         // Initialise le controller
-        rankController = new RankController();
-        cityController = new CityController();
-        customerController = new CustomerController();
+        try {
+
+            rankController = new RankController();
+            cityController = new CityController();
+            customerController = new CustomerController();
+        } catch (ConnectionException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
 
         // affiche de base pour un client particulier
         businessView.setVisible(false);

@@ -1,5 +1,6 @@
 package dataAccess;
 
+import exception.ConnectionException;
 import model.PaymentMethod;
 
 import java.sql.Connection;
@@ -11,7 +12,7 @@ public class PaymentMethodDBAccess implements PaymentMethodDataAccess {
 
     private Connection connection;
 
-    public PaymentMethodDBAccess() {
+    public PaymentMethodDBAccess() throws ConnectionException {
         this.connection = DBConnection.getInstance();
     }
 

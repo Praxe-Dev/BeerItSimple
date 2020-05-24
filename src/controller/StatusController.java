@@ -1,6 +1,7 @@
 package controller;
 
 import business.StatusBusiness;
+import exception.ConnectionException;
 import model.Status;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 public class StatusController {
     private StatusBusiness statusBusiness;
 
-    public StatusController() {
+    public StatusController() throws ConnectionException {
         this.statusBusiness = new StatusBusiness();
     }
 

@@ -4,6 +4,7 @@ import com.jfoenix.controls.*;
 import controller.CityController;
 import controller.CustomerController;
 import controller.RankController;
+import exception.ConnectionException;
 import exception.CustomerUpdateException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -58,9 +59,13 @@ public class Update extends View {
 
     @Override
     public void init() {
-        cityController = new CityController();
-        rankController = new RankController();
-        customerController = new CustomerController();
+        try {
+            cityController = new CityController();
+            rankController = new RankController();
+            customerController = new CustomerController();
+        } catch (ConnectionException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
         customersView = (Index) this.getParentView();
 
         Validators.setMailValidators(mail);

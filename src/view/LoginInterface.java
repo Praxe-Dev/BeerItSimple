@@ -21,9 +21,6 @@ public class LoginInterface extends Application {
     @Override
     public void start(Stage stage) {
         Window login = new Window("FXML/loginPanel.fxml", "Login");
-        Document doc = new Document();
-
-//        Locale.setDefault(Locale.ENGLISH);
         login.load();
         login.show();
     }

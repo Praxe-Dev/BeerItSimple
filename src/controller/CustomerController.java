@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class CustomerController {
     private CustomerBusiness customerBusiness;
 
-    public CustomerController() {
+    public CustomerController() throws ConnectionException {
         this.customerBusiness = new CustomerBusiness();
     }
 

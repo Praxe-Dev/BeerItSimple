@@ -2,6 +2,7 @@ package business;
 
 import dataAccess.EmployeeDBAccess;
 import dataAccess.EmployeeDataAccess;
+import exception.ConnectionException;
 import exception.EmployeeLoginException;
 import exception.SQLManageException;
 import model.Employee;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 public class EmployeeBusiness {
     private EmployeeDataAccess dao;
 
-    public EmployeeBusiness() {
+    public EmployeeBusiness() throws ConnectionException {
         setDao(new EmployeeDBAccess());
     }
 

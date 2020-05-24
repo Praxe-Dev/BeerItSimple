@@ -1,6 +1,7 @@
 package controller;
 
 import business.ProductBusiness;
+import exception.ConnectionException;
 import javafx.scene.control.DatePicker;
 import model.Product;
 import model.ProductIncome;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 public class ProductController {
     private ProductBusiness productBusiness;
 
-    public ProductController() {
+    public ProductController() throws ConnectionException {
         this.productBusiness = new ProductBusiness();
     }
 

@@ -2,6 +2,7 @@ package view.businessTask;
 
 import com.jfoenix.controls.JFXButton;
 import controller.ProductController;
+import exception.ConnectionException;
 import exception.DateException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,6 +14,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
+import model.Product;
 import model.ProductIncome;
 import utils.Validators;
 import view.View;
@@ -45,14 +47,22 @@ public class incomeView extends View {
     @FXML
     Text totalIncome;
 
+    ProductController productController;
+
     @Override
     public void init() {
+        try {
+            productController = new ProductController();
+        } catch (ConnectionException exception) {
+            showError(exception.getTypeError(), exception.getMessage());
+        }
+
         refreshBtn.setOnAction(e -> {
             LocalDate start = startDate.getValue();
             LocalDate end = endDate.getValue();
 
             if (Validators.validateBetweenDates(start, end)) {
-                ArrayList<ProductIncome> productIncomes = new ProductController().getAllProductsIncome(start, end);
+                ArrayList<ProductIncome> productIncomes = productController.getAllProductsIncome(start, end);
                 updateTable(productIncomes);
 
             } else {
@@ -63,7 +73,7 @@ public class incomeView extends View {
         startDate.setValue(LocalDate.now().minusYears(1));
         endDate.setValue(LocalDate.now());
 
-        ArrayList<ProductIncome> productIncomes = new ProductController().getAllProductsIncome(startDate.getValue(), endDate.getValue());
+        ArrayList<ProductIncome> productIncomes = productController.getAllProductsIncome(startDate.getValue(), endDate.getValue());
         double total = 0;
         for (ProductIncome p : productIncomes) {
             total += p.getSalePercentageNumber();

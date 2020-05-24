@@ -2,6 +2,7 @@ package business;
 
 import dataAccess.PaymentMethodDBAccess;
 import dataAccess.PaymentMethodDataAccess;
+import exception.ConnectionException;
 import model.PaymentMethod;
 
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 public class PaymentMethodBusiness {
     private PaymentMethodDataAccess dao;
 
-    public PaymentMethodBusiness() {
+    public PaymentMethodBusiness() throws ConnectionException {
         this.dao = new PaymentMethodDBAccess();
     }
 

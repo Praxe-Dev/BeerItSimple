@@ -2,6 +2,7 @@ package view.news;
 
 import com.jfoenix.controls.JFXButton;
 import controller.NewsController;
+import exception.ConnectionException;
 import exception.DeletionExceiption;
 import exception.NoRowSelected;
 import exception.SQLManageException;
@@ -47,10 +48,6 @@ public class Index extends View implements Initializable {
 
     private NewsController newsController;
 
-    public Index(){
-        newsController = new NewsController();
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         init();
@@ -59,7 +56,11 @@ public class Index extends View implements Initializable {
 
     @Override
     public void init() {
-
+        try {
+            newsController = new NewsController();
+        } catch (ConnectionException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
         refreshBtn.setOnAction(e -> {
             updateTable();
         });

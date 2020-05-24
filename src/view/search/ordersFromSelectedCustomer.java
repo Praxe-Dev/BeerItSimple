@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import controller.CustomerController;
 import controller.OrderController;
+import exception.ConnectionException;
 import exception.SQLManageException;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -37,8 +38,14 @@ public class ordersFromSelectedCustomer extends View implements Initializable {
 
     @Override
     public void init() {
-        customerController = new CustomerController();
-        orderController = new OrderController();
+        try {
+            customerController = new CustomerController();
+            orderController = new OrderController();
+        } catch (ConnectionException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
+
+
         //Init customerBox
         ArrayList<Customer> allCustomers = customerController.getAllCustomers();
         customerBox.setItems(FXCollections.observableArrayList(allCustomers));

@@ -2,10 +2,7 @@ package business;
 
 import dataAccess.CustomerDBAccess;
 import dataAccess.CustomerDataAccess;
-import exception.CustomerException;
-import exception.CustomerInsertionException;
-import exception.CustomerNotFoundException;
-import exception.CustomerUpdateException;
+import exception.*;
 import model.Customer;
 
 import java.util.ArrayList;
@@ -13,7 +10,7 @@ import java.util.ArrayList;
 public class CustomerBusiness {
     private CustomerDataAccess dao;
 
-    public CustomerBusiness() {
+    public CustomerBusiness() throws ConnectionException {
         setDao(new CustomerDBAccess());
     }
 

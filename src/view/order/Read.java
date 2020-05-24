@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
 import controller.OrderController;
+import exception.ConnectionException;
 import exception.NoRowSelected;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -124,6 +125,8 @@ public class Read extends View {
             tableArticle.getItems().addAll(orderLines);
         } catch (NoRowSelected e) {
             e.showError();
+        } catch (ConnectionException e) {
+            showError(e.getTypeError(), e.getMessage());
         }
     }
 

@@ -7,6 +7,7 @@ import com.jfoenix.controls.JFXRadioButton;
 import controller.OrderController;
 import controller.RankController;
 import controller.StatusController;
+import exception.ConnectionException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ToggleGroup;
@@ -47,21 +48,21 @@ public class ordersFromRank extends View implements Initializable {
 
     @Override
     public void init() {
-        rankController = new RankController();
+        try {
+            rankController = new RankController();
+            statusController = new StatusController();
+        } catch (ConnectionException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
+
         rankList.getItems().setAll(rankController.getAllRanks());
         rankList.getSelectionModel().selectFirst();
         rankList.getStyleClass().add("whiteComboBox");
-//        rankList.setTextFill(Color.WHITE);
 
-        statusController = new StatusController();
         statusList.getItems().add(new Status(null, "No matter"));
         statusList.getItems().addAll(statusController.getAllStatus());
         statusList.getSelectionModel().selectFirst();
         statusList.getStyleClass().add("whiteComboBox");
-//        statusList.setFocusColor(Color.WHITE);
-
-
-
 
         searchBtn.setOnAction(e -> executeSearch());
     }
@@ -77,10 +78,14 @@ public class ordersFromRank extends View implements Initializable {
         if (paidRadio.isSelected() || notPaidRadio.isSelected())
             isPaid = paidRadio.isSelected();
 
-        ArrayList<Order> orderFromRanks = new OrderController().getOrdersFromRanks(rank, status, isPaid);
+        ArrayList<Order> orderFromRanks = null;
+        try {
+            orderFromRanks = new OrderController().getOrdersFromRanks(rank, status, isPaid);
+        } catch (ConnectionException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
 
         openNewTabview(orderFromRanks);
-
     }
 
     private void openNewTabview(ArrayList<Order> orderFromRanks) {

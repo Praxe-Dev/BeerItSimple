@@ -1,5 +1,6 @@
 package dataAccess;
 
+import exception.ConnectionException;
 import model.Status;
 
 import java.sql.Connection;
@@ -11,7 +12,7 @@ public class StatusDBAccess implements StatusDataAccess {
 
     private Connection connection;
 
-    public StatusDBAccess() {
+    public StatusDBAccess() throws ConnectionException {
         this.connection = DBConnection.getInstance();
     }
 

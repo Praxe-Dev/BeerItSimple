@@ -96,11 +96,16 @@ public class Update extends View {
         setShortcut(new KeyCodeCombination(KeyCode.ENTER), () -> addArticle());
         setShortcut(new KeyCodeCombination(KeyCode.DELETE), () -> removeArticle());
 
-        paymentMethodController = new PaymentMethodController();
-        employeeController = new EmployeeController();
-        orderController = new OrderController();
-        productController = new ProductController();
-        statusController = new StatusController();
+        try {
+            paymentMethodController = new PaymentMethodController();
+            employeeController = new EmployeeController();
+            orderController = new OrderController();
+            productController = new ProductController();
+            statusController = new StatusController();
+        } catch (ConnectionException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
+
         Index orderView = (Index) getParentView();
 
         orderReference.setText("[" + order.getReference() + "]");

@@ -4,6 +4,7 @@ import dataAccess.OrderLineDBAccess;
 import dataAccess.OrderLineDataAccess;
 import dataAccess.ProductDBAccess;
 import dataAccess.ProductDataAccess;
+import exception.ConnectionException;
 import model.OrderLine;
 import model.Product;
 import model.ProductIncome;
@@ -15,7 +16,7 @@ public class ProductBusiness {
     private ProductDataAccess productDao;
     private OrderLineDataAccess orderLineDao;
 
-    public ProductBusiness() {
+    public ProductBusiness() throws ConnectionException {
         this.productDao = new ProductDBAccess();
         this.orderLineDao = new OrderLineDBAccess();
     }

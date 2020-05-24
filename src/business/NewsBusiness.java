@@ -2,6 +2,7 @@ package business;
 
 import dataAccess.NewsDBAccess;
 import dataAccess.NewsDataAccess;
+import exception.ConnectionException;
 import exception.DeletionExceiption;
 import exception.SQLManageException;
 import model.News;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 public class NewsBusiness {
     private NewsDataAccess dao;
 
-    public NewsBusiness(){
+    public NewsBusiness() throws ConnectionException {
         setDao(new NewsDBAccess());
     }
 

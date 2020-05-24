@@ -1,5 +1,6 @@
 package business;
 
+import exception.ConnectionException;
 import model.Order;
 import model.OrderLine;
 import model.Product;
@@ -18,7 +19,11 @@ class ProductBusinessTest {
 
     @BeforeEach
     void setUp() {
-        productBusiness = new ProductBusiness();
+        try {
+            productBusiness = new ProductBusiness();
+        } catch (ConnectionException exception) {
+            exception.printStackTrace();
+        }
         allProducts = new ArrayList<>();
 //        allProducts.add(new Product(null, 1, "productTest", 10.0, null, null, null,null));
 

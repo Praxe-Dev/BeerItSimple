@@ -1,6 +1,7 @@
 package controller;
 
 import business.OrderBusiness;
+import exception.ConnectionException;
 import exception.DeletionExceiption;
 import exception.NoRowSelected;
 import exception.SQLManageException;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 public class OrderController {
     private OrderBusiness orderBusiness;
 
-    public OrderController() {
+    public OrderController() throws ConnectionException {
         this.orderBusiness = new OrderBusiness();
     }
 

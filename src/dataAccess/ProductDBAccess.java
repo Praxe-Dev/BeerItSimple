@@ -1,5 +1,6 @@
 package dataAccess;
 
+import exception.ConnectionException;
 import model.Product;
 import model.VATCodeRate;
 
@@ -12,7 +13,7 @@ public class ProductDBAccess implements ProductDataAccess {
 
     private Connection connection;
 
-    public ProductDBAccess() {
+    public ProductDBAccess() throws ConnectionException {
         this.connection = DBConnection.getInstance();
     }
 

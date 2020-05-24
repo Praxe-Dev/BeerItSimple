@@ -1,6 +1,7 @@
 package model;
 
 import controller.EmployeeController;
+import exception.ConnectionException;
 import exception.SQLManageException;
 
 import java.util.GregorianCalendar;
@@ -37,6 +38,8 @@ public class NewsTableFormat {
             name = employeeController.getEmployeeName(entityId);
         } catch(SQLManageException e){
             e.showMessage(); //Not show here
+        } catch (ConnectionException e) {
+            e.printStackTrace();
         }
         return name;
     }

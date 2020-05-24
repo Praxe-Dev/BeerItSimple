@@ -2,6 +2,7 @@ package view.search;
 
 import com.jfoenix.controls.JFXButton;
 import controller.OrderController;
+import exception.ConnectionException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.DatePicker;
@@ -54,7 +55,12 @@ public class searchBetweenDates extends View implements Initializable {
              end = endDate.getValue().plusDays(1);
 
         if (validateBothDates(start, end)) {
-            ArrayList<Order> orderBetweenDates = new OrderController().getAllOrdersBetweenDates(start, end);
+            ArrayList<Order> orderBetweenDates = null;
+            try {
+                orderBetweenDates = new OrderController().getAllOrdersBetweenDates(start, end);
+            } catch (ConnectionException e) {
+                showError(e.getTypeError(), e.getMessage());
+            }
 
             openNewTableView(orderBetweenDates);
         } else {
