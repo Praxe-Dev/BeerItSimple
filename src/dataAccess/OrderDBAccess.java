@@ -160,7 +160,7 @@ public class OrderDBAccess implements OrderDataAccess {
     }
 
     @Override
-    public ArrayList<Order> getAllOrdersBetweenDates(LocalDate startingDate, LocalDate endDate) {
+    public ArrayList<Order> getAllOrdersBetweenDates(LocalDate startingDate, LocalDate endDate) throws DataQueryException {
         String sqlInstruction = "SELECT o.*, s.*, p.* FROM `order` o\n" +
                 "JOIN status s ON s.id = o.StatusNumber\n" +
                 "JOIN paymentmethod p ON p.id = o.paymentMethodId\n" +
@@ -220,14 +220,14 @@ public class OrderDBAccess implements OrderDataAccess {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataQueryException();
         }
 
         return orderList;
     }
 
     @Override
-    public ArrayList<Order> getOrdersFromRanks(Rank rank, Status status, Boolean isPaid) {
+    public ArrayList<Order> getOrdersFromRanks(Rank rank, Status status, Boolean isPaid) throws DataQueryException {
 
         String sqlInstruction = "SELECT DISTINCT o.*, s.*, p.* FROM `order` o\n" +
                 "JOIN status s ON s.id = o.StatusNumber\n" +
@@ -301,7 +301,7 @@ public class OrderDBAccess implements OrderDataAccess {
 
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataQueryException();
         }
 
 
@@ -774,7 +774,7 @@ public class OrderDBAccess implements OrderDataAccess {
         }
     }
 
-    public ArrayList<Order> getAllOrdersFromZipCode(City city) throws SQLManageException {
+    public ArrayList<Order> getAllOrdersFromZipCode(City city) throws DataQueryException {
         ArrayList<Order> orderArrayList = new ArrayList<>();
         String sqlInstruction = "SELECT o.*, s.*, p.*, e.* FROM `order` o\n" +
                 "JOIN `status` s ON s.id = o.StatusNumber\n" +
@@ -890,7 +890,7 @@ public class OrderDBAccess implements OrderDataAccess {
                 orderArrayList.add(order);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataQueryException();
         }
         return orderArrayList;
     }

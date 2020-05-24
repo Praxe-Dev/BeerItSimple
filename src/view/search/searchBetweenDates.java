@@ -3,6 +3,7 @@ package view.search;
 import com.jfoenix.controls.JFXButton;
 import controller.OrderController;
 import exception.ConnectionException;
+import exception.DataQueryException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.DatePicker;
@@ -58,10 +59,9 @@ public class searchBetweenDates extends View implements Initializable {
             ArrayList<Order> orderBetweenDates = null;
             try {
                 orderBetweenDates = new OrderController().getAllOrdersBetweenDates(start, end);
-            } catch (ConnectionException e) {
+            } catch (ConnectionException | DataQueryException e) {
                 showError(e.getTypeError(), e.getMessage());
             }
-
             openNewTableView(orderBetweenDates);
         } else {
             PopUp.showError("Wrong date", "The starting date must be one day earlier than the current date\n (Either the end date won't \"back to the future\")");

@@ -1,6 +1,6 @@
 package exception;
 
-public class DataQueryException extends Exception {
+public class DataQueryException extends BISException {
     private final String typeError = "Data error";
     private final String message = "We couldn't retrieve the data. Please refresh the page and then retry.";
 

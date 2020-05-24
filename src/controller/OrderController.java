@@ -35,7 +35,7 @@ public class OrderController {
         return orderBusiness.updateOrder(order);
     }
 
-    public ArrayList<Order> getAllOrdersBetweenDates(LocalDate startingDate, LocalDate endDate) {
+    public ArrayList<Order> getAllOrdersBetweenDates(LocalDate startingDate, LocalDate endDate) throws DataQueryException {
         return orderBusiness.getAllOrdersBetweenDates(startingDate, endDate);
     }
 
@@ -47,11 +47,11 @@ public class OrderController {
         return orderBusiness.getAllOrdersFromCustomer(customer);
     }
 
-    public ArrayList<Order> getAllOrdersFromZipCode(City city) throws SQLManageException{
+    public ArrayList<Order> getAllOrdersFromZipCode(City city) throws DataQueryException{
         return orderBusiness.getAllOrdersFromZipCode(city);
     }
 
-    public ArrayList<Order> getOrdersFromRanks(Rank rank, Status status, Boolean isPaid) {
+    public ArrayList<Order> getOrdersFromRanks(Rank rank, Status status, Boolean isPaid) throws DataQueryException {
         return orderBusiness.getOrdersFromRanks(rank, status, isPaid);
     }
 }

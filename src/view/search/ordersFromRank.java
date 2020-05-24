@@ -8,6 +8,7 @@ import controller.OrderController;
 import controller.RankController;
 import controller.StatusController;
 import exception.ConnectionException;
+import exception.DataQueryException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ToggleGroup;
@@ -69,7 +70,7 @@ public class ordersFromRank extends View implements Initializable {
 
     private void executeSearch() {
         Rank rank = rankList.getValue();
-        // If no matter is selected, the id value is null, so we don't search for the status
+        // in the case [no matter] is selected, the id value is null, so we don't search for the status
         Status status = (statusList.getValue().getId() == null ? null : statusList.getValue());
 
         //  true = paid | false = not paid | Null = Both
@@ -81,7 +82,7 @@ public class ordersFromRank extends View implements Initializable {
         ArrayList<Order> orderFromRanks = null;
         try {
             orderFromRanks = new OrderController().getOrdersFromRanks(rank, status, isPaid);
-        } catch (ConnectionException e) {
+        } catch (ConnectionException | DataQueryException e) {
             showError(e.getTypeError(), e.getMessage());
         }
 

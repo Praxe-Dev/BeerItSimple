@@ -6,6 +6,7 @@ import controller.CityController;
 
 import controller.OrderController;
 import exception.ConnectionException;
+import exception.DataQueryException;
 import exception.SQLManageException;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -65,8 +66,8 @@ public class zipCodeSearch extends View implements Initializable {
             } else {
                 openNewTabView(allOrders, city);
             }
-        } catch(SQLManageException e){
-            e.showMessage();
+        } catch (DataQueryException e) {
+            showError(e.getTypeError(), e.getMessage());
         }
 
 

@@ -36,7 +36,7 @@ public class OrderBusiness {
         return dao.deleteOrder(order);
     }
 
-    public ArrayList<Order> getAllOrdersBetweenDates(LocalDate startingDate, LocalDate endDate) {
+    public ArrayList<Order> getAllOrdersBetweenDates(LocalDate startingDate, LocalDate endDate) throws DataQueryException {
         return dao.getAllOrdersBetweenDates(startingDate, endDate);
     }
 
@@ -52,11 +52,11 @@ public class OrderBusiness {
         return dao.getAllOrdersFromCustomer(customer);
     }
 
-    public ArrayList<Order> getAllOrdersFromZipCode(City city) throws SQLManageException {
+    public ArrayList<Order> getAllOrdersFromZipCode(City city) throws DataQueryException {
         return dao.getAllOrdersFromZipCode(city);
     }
 
-    public ArrayList<Order> getOrdersFromRanks(Rank rank, Status status, Boolean isPaid) {
+    public ArrayList<Order> getOrdersFromRanks(Rank rank, Status status, Boolean isPaid) throws DataQueryException {
         return dao.getOrdersFromRanks(rank, status, isPaid);
     }
 }
