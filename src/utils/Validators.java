@@ -1,5 +1,6 @@
 package utils;
 
+import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTimePicker;
@@ -79,6 +80,15 @@ public class Validators {
         addListener(businessNumber);
     }
 
+    public static void setReqField(JFXPasswordField field) {
+        RequiredFieldValidator reqField = new RequiredFieldValidator();
+        reqField.setMessage("Required field");
+
+        field.getValidators().add(0, reqField);
+
+        addListener(field);
+    }
+
     public static void setReqField(JFXTextField field) {
         RequiredFieldValidator reqField = new RequiredFieldValidator();
         reqField.setMessage("Required field");
@@ -140,6 +150,14 @@ public class Validators {
     }
 
     private static void addListener(JFXTextField field) {
+        field.focusedProperty().addListener((o, oldVal, newVal) -> {
+            if (!newVal && !newVal.equals("")) {
+                field.validate();
+            }
+        });
+    }
+
+    private static void addListener(JFXPasswordField field) {
         field.focusedProperty().addListener((o, oldVal, newVal) -> {
             if (!newVal && !newVal.equals("")) {
                 field.validate();

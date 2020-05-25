@@ -18,7 +18,7 @@ public class NewsBusiness {
         dao = newsDBAccess;
     }
 
-    public News getRandomNews() throws SQLManageException {
+    public News getRandomNews() throws ThreadNewsException {
         return dao.getRandomNews();
     }
 

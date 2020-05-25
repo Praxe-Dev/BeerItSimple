@@ -17,7 +17,7 @@ public class NewsController {
         this.newsBusiness = newsBusiness;
     }
 
-    public News getRandomNews() throws SQLManageException {
+    public News getRandomNews() throws ThreadNewsException {
         return newsBusiness.getRandomNews();
     }
 
