@@ -35,7 +35,6 @@ public class Window extends Parent {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
             parent = fxmlLoader.load(getClass().getClassLoader().getResource(pathToFxml).openStream());
-
             view = fxmlLoader.getController();
 
         } catch (IOException e) {

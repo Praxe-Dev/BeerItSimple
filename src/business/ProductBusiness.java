@@ -46,8 +46,6 @@ public class ProductBusiness {
             productIncomes.add(new ProductIncome(p));
             index = productIncomes.size() - 1;
 
-//            allOrderlines.forEach(x -> System.out.println(x.getProduct().getCode()));
-
             allOrderlines.stream()
                     .filter(x -> x.getProduct().getCode().equals(p.getCode()))
                     .forEach(productIncomes.get(index)::addAmountSold);

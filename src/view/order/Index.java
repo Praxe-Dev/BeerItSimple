@@ -61,7 +61,7 @@ public class Index extends View implements Initializable {
         try {
             this.orderController = new OrderController();
         } catch (ConnectionException e) {
-            e.printStackTrace();
+            showError(e.getTypeError(),e.getMessage());
         }
     }
 

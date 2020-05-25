@@ -121,7 +121,7 @@ public class Update extends View {
             cityList = cityController.getAllCities();
             rankList = rankController.getAllRanks();
         } catch (DataQueryException e) {
-            e.printStackTrace();
+            showError(e.getTypeError(), e.getMessage());
         }
         ObservableList<City> cityObservableList = FXCollections.observableArrayList(cityList);
         region.setItems(cityObservableList);

@@ -142,7 +142,7 @@ public class MainView extends View{
             center = FXMLLoader.load(getClass().getResource(pathToFxml));
             mainPanel.setCenter(center);
         } catch (Exception e) {
-            e.printStackTrace();
+            showError("Loading error", "An error occured while we tried to load the page.");
         }
 
     }
