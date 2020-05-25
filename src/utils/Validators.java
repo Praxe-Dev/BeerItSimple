@@ -174,6 +174,14 @@ public class Validators {
         return end.isBefore(LocalDate.now().plusDays(1)) && start.isBefore(end.plusDays(1));
     }
 
+    public static boolean startingDateIsBeforeNow(LocalDate start){
+        return start.isBefore(LocalDate.now());
+    }
+
+    public static boolean endIsAfterStart(LocalDate start, LocalDate end){
+        return start.isBefore(end.plusDays(1));
+    }
+
     public static boolean validate(JFXTextField... elements) {
         boolean check = true;
         for (JFXTextField element : elements) {

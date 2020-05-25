@@ -71,7 +71,12 @@ public class Create extends View {
                 return false;
             }
 
-            if (Validators.validateBetweenDates(end, start)) {
+            if(Validators.startingDateIsBeforeNow(start)){
+                PopUp.showError("Date error", "Starting date must be today or later.");
+                return false;
+            }
+
+            if (!Validators.endIsAfterStart(start, end)) {
                 PopUp.showError("Date error", "End date must be later than the start date.");
                 return false;
             }
