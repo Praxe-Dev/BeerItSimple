@@ -18,7 +18,6 @@ import view.news.ThreadNews;
 import view.news.Read;
 
 public class MainView extends View{
-    private double x = 0, y = 0;
     private News currentShowedNews = null;
     @FXML
     private Label username;

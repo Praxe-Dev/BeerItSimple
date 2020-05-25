@@ -52,6 +52,7 @@ public class ordersFromRank extends View implements Initializable {
             rankController = new RankController();
             statusController = new StatusController();
             rankList.getItems().setAll(rankController.getAllRanks());
+            statusList.getItems().addAll(statusController.getAllStatus());
         } catch (ConnectionException | DataQueryException e) {
             showError(e.getTypeError(), e.getMessage());
         }
@@ -60,7 +61,6 @@ public class ordersFromRank extends View implements Initializable {
         rankList.getStyleClass().add("whiteComboBox");
 
         statusList.getItems().add(new Status(null, "No matter"));
-        statusList.getItems().addAll(statusController.getAllStatus());
         statusList.getSelectionModel().selectFirst();
         statusList.getStyleClass().add("whiteComboBox");
 
