@@ -27,6 +27,7 @@ public class LoginView extends View {
     public void init() {
         Validators.setNumberValidator(employeeMatricule);
         Validators.setReqField(employeeMatricule);
+        Validators.setReqField(employeePassword);
 
         this.getStage().setOnCloseRequest(e -> {
             System.exit(0);
@@ -39,7 +40,7 @@ public class LoginView extends View {
         }
 
         signinButton.setOnAction(e -> {
-            // TODO: Tenter de se connecter
+            //Tenter de se connecter
             openSession();
         });
 
@@ -50,7 +51,7 @@ public class LoginView extends View {
 
         try {
             int matricule = -1;
-            if (employeeMatricule.validate())
+            if (employeeMatricule.validate() && employeePassword.validate())
                 matricule = getMatricule();
             String password = getPassword();
 
