@@ -36,13 +36,13 @@ public class OrderLineDBAccess implements OrderLineDataAccess {
 
             OrderLine ol;
             while (data.next()) {
+
                 ol = new OrderLine(
                         new Product(data.getInt("ol.Productcode")),
                         null,
                         data.getInt("ol.quantity"),
                         data.getDouble("ol.salesUnitPrice")
                 );
-
                 orderLinesList.add(ol);
             }
 

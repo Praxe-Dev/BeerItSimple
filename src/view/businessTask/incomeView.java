@@ -52,6 +52,7 @@ public class incomeView extends View {
 
     @Override
     public void init() {
+        this.getStage().setResizable(false);
         try {
             productController = new ProductController();
         } catch (ConnectionException exception) {
