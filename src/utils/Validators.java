@@ -14,7 +14,8 @@ import java.time.LocalDate;
 public class Validators {
 
     public static void setMailValidators(JFXTextField mail) {
-        String regexPattern = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+        //String regexPattern = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+        String regexPattern = "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)(\\.([-a-zA-Z]{2,10})){1,2}$";
         String message = "Format sould be : abc@domain.eu";
 
         RegexValidator mailValidator = new RegexValidator();
