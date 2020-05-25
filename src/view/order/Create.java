@@ -162,6 +162,8 @@ public class Create extends View {
                         }
                     } catch (UpdateException ex) {
                         showError(ex.getTypeError(), ex.getMessage());
+                    } catch (NullObjectException nullObjectException) {
+                        System.out.println(nullObjectException.getMessage());
                     }
                 }
            }
@@ -263,7 +265,7 @@ public class Create extends View {
         return true;
     }
 
-    private boolean newOrderInsert() throws UpdateException {
+    private boolean newOrderInsert() throws UpdateException, NullObjectException {
         Product product;
         Delivery delivery = null;
         Boolean orderCreated = false;
@@ -300,11 +302,15 @@ public class Create extends View {
             newOrder.addOrderLine(new OrderLine(product, newOrder, line.getQuantity(), line.getUnitPrice()));
         }
 
-        orderCreated = orderController.create(newOrder);
+        try {
+            orderCreated = orderController.create(newOrder);
+        } catch (NullObjectException e) {
+            System.out.println(e.getMessage());
+        }
         if(orderCreated){
             Rank updateRank = orderController.updateCustomerRank(newOrder.getCustomer());
             if(updateRank != null){
-                PopUp.showSuccess("Rank up !", "Thank the client and announce their new rank is: " + updateRank.getLabel() + ".\n His new credit limit is: " + updateRank.getCreditLimit() + "\n");
+                showSuccess("Rank up !", "Thank the client and announce their new rank is: " + updateRank.getLabel() + ".\n His new credit limit is: " + updateRank.getCreditLimit() + "\n");
             }
         }
         return orderCreated;

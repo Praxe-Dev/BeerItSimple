@@ -4,6 +4,7 @@ import business.EmployeeBusiness;
 import exception.ConnectionException;
 import exception.DataQueryException;
 import exception.LoginException;
+import exception.NullObjectException;
 import model.Employee;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class EmployeeController {
         this.employeeBusiness = employeeBusiness;
     }
 
-    public Employee getEmployee(int registrationNumber, String password) throws LoginException {
+    public Employee getEmployee(int registrationNumber, String password) throws LoginException, NullObjectException {
         //Employee e = new Employee(matricule, password);
         return employeeBusiness.getEmployee(registrationNumber, password);
     }
@@ -28,7 +29,9 @@ public class EmployeeController {
         return employeeBusiness.getAllDeliveryEmployee();
     }
 
-    public String getEmployeeName(Integer entityId) throws DataQueryException {
+    public String getEmployeeName(Integer entityId) throws DataQueryException, NullObjectException {
+
+
         return employeeBusiness.getEmployeeName(entityId);
     }
 }

@@ -25,19 +25,19 @@ public class NewsController {
         return newsBusiness.getAllNews();
     }
 
-    public News getNewsFromId(Integer id) throws NoRowSelected {
+    public News getNewsFromId(Integer id) throws NoRowSelected, NullObjectException {
         return newsBusiness.getNewsFromId(id);
     }
 
-    public void insertNews(News news) throws DataQueryException {
+    public void insertNews(News news) throws DataQueryException, NullObjectException {
         newsBusiness.insertNews(news);
     }
 
-    public boolean deleteNews(News news) throws DeletionException {
+    public boolean deleteNews(News news) throws DeletionException, NullObjectException {
         return newsBusiness.deleteNews(news);
     }
 
-    public void updateNews(News news) throws UpdateException {
+    public void updateNews(News news) throws UpdateException, NullObjectException {
         newsBusiness.updateNews(news);
     }
 }

@@ -442,7 +442,6 @@ public class OrderDBAccess implements OrderDataAccess {
 
 
         } catch (SQLException e) {
-//            e.printStackTrace();
             throw new DeletionException();
         }
 

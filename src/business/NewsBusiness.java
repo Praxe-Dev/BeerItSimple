@@ -26,19 +26,31 @@ public class NewsBusiness {
         return dao.getAllNews();
     }
 
-    public News getNewsFromId(Integer id) throws NoRowSelected {
+    public News getNewsFromId(Integer id) throws NoRowSelected, NullObjectException {
+        if (id == null)
+            throw new NullObjectException(id.getClass().getName());
+
         return dao.getNewsFromId(id);
     }
 
-    public void insertNews(News news) throws DataQueryException {
+    public void insertNews(News news) throws DataQueryException, NullObjectException {
+        if (news == null)
+            throw new NullObjectException(news.getClass().getName());
+
         dao.insertNews(news);
     }
 
-    public boolean deleteNews(News news) throws DeletionException {
+    public boolean deleteNews(News news) throws DeletionException, NullObjectException {
+        if (news == null)
+            throw new NullObjectException(news.getClass().getName());
+
         return dao.deleteNews(news);
     }
 
-    public void updateNews(News news) throws UpdateException {
+    public void updateNews(News news) throws UpdateException, NullObjectException {
+        if (news == null)
+            throw new NullObjectException(news.getClass().getName());
+
         dao.updateNews(news);
     }
 }

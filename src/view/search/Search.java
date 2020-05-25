@@ -49,7 +49,7 @@ public class Search extends View {
             view = FXMLLoader.load(getClass().getResource(pathToFxml));
             tab.setContent(view);
         } catch (Exception e) {
-            e.printStackTrace();
+            showError("Loading error", "An error occured while we tried to load the page.");
         }
     }
 

@@ -67,4 +67,8 @@ public abstract class View extends Node {
     public void showError(String typeError, String message) {
         PopUp.showError(typeError, message);
     }
+
+    public void showSuccess(String typeError, String message) {
+        PopUp.showSuccess(typeError, message);
+    }
 }

@@ -177,6 +177,8 @@ public class Update extends View {
                         }
                     } catch (UpdateException | DataQueryException ex) {
                         showError(ex.getTypeError(), ex.getMessage());
+                    } catch (NullObjectException nullObjectException) {
+                        System.out.println(nullObjectException.getMessage());
                     }
                 }
             } else {
@@ -257,7 +259,7 @@ public class Update extends View {
         Create.computeAndDisplayNewAmount(orderLineTableFormat, totalAmountExclVat, totalAmountVatOnly, totalAmountVatInc);
     }
 
-    private boolean updateOrder() throws UpdateException, DataQueryException {
+    private boolean updateOrder() throws UpdateException, DataQueryException, NullObjectException {
         Product product;
 
         if (deliveryCheck.isSelected()) {
@@ -265,14 +267,11 @@ public class Update extends View {
                 if (deliveryMan.getSelectionModel().isSelected(-1)) {
                     throw new UpdateException();
                 }
-//                GregorianCalendar date = new GregorianCalendar();
-//                date.set(deliveryDate.getValue().getYear(), deliveryDate.getValue().getDayOfMonth(), deliveryDate.getValue().getDayOfMonth());
 
                 LocalDate date = deliveryDate.getValue();
                 // Create the right format for delivery.plannedDate (-1 and +1 to get the right value)
                 GregorianCalendar gc = new GregorianCalendar(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth() + 1);
 
-                // TODO: find a functioner to compare both date ( order.getDelivery().getPlannedDate() != gc is always false )
                 if (order.getDelivery() != null && order.getDelivery().getPlannedDate() != null) {
                     order.getDelivery().setPlannedDate(gc);
                 } else if (order.getDelivery() == null) {

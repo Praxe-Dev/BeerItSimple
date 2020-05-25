@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import controller.OrderController;
 import exception.ConnectionException;
 import exception.DataQueryException;
+import exception.NullObjectException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.DatePicker;
@@ -57,6 +58,8 @@ public class searchBetweenDates extends View implements Initializable {
                 orderBetweenDates = new OrderController().getAllOrdersBetweenDates(start, end);
             } catch (ConnectionException | DataQueryException e) {
                 showError(e.getTypeError(), e.getMessage());
+            } catch (NullObjectException e) {
+                System.out.println(e.getMessage());
             }
             openNewTableView(orderBetweenDates);
         } else {

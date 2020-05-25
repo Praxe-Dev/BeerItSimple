@@ -9,6 +9,7 @@ import controller.RankController;
 import controller.StatusController;
 import exception.ConnectionException;
 import exception.DataQueryException;
+import exception.NullObjectException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ToggleGroup;
@@ -83,6 +84,8 @@ public class ordersFromRank extends View implements Initializable {
             orderFromRanks = new OrderController().getOrdersFromRanks(rank, status, isPaid);
         } catch (ConnectionException | DataQueryException e) {
             showError(e.getTypeError(), e.getMessage());
+        } catch (NullObjectException e) {
+            System.out.println(e.getMessage());
         }
 
         openNewTabview(orderFromRanks);
