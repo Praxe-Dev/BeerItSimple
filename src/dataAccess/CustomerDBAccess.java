@@ -238,10 +238,8 @@ public class CustomerDBAccess implements CustomerDataAccess {
             if (affectedRow == 0) {
                 throw new UpdateException();
             }
-        } catch (SQLIntegrityConstraintViolationException e) {
-            throw new DuplicataException(e.getMessage());
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DuplicataException(e.getMessage());
         }
 
         return affectedRow != 0;

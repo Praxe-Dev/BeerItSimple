@@ -24,8 +24,6 @@ import java.util.ArrayList;
 
 public class Create extends View {
     @FXML
-    private ToggleGroup customerType;
-    @FXML
     private JFXRadioButton privateCustomer;
     @FXML
     private JFXRadioButton businessCustomer;
