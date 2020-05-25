@@ -133,13 +133,15 @@ public class Index extends View implements Initializable {
         deleteBtn.setOnAction(e -> {
             try {
                 ArrayList<Order> orders = getMultipleSelectedOrder();
-                if (orders.size() > 0) {
-                    String message = (orders.size() > 1) ? "Are you sur you want to delete these multiple orders ?" : "Are you sur you want to delete this order ?";
-                    if(PopUp.showConfirm("Confirm delete", message)) {
-                        for (Order o : orders) {
-                            if (orderController.deleteOrder(o)) {
-                                updateTable();
-                            }
+
+                if (orders.isEmpty())
+                    throw new NoRowSelected();
+
+                String message = (orders.size() > 1) ? "Are you sur you want to delete these multiple orders ?" : "Are you sur you want to delete this order ?";
+                if(PopUp.showConfirm("Confirm delete", message)) {
+                    for (Order o : orders) {
+                        if (orderController.deleteOrder(o)) {
+                            updateTable();
                         }
                     }
                 } else {
@@ -150,8 +152,6 @@ public class Index extends View implements Initializable {
             } catch (NullObjectException nullObjectException) {
                 System.out.println(nullObjectException.getMessage());
             }
-
-            updateTable();
         });
     }
 

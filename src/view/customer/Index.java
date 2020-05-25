@@ -151,18 +151,24 @@ public class Index extends View implements Initializable {
         });
 
         deleteBtn.setOnAction(e -> {
-            Customer customer = getSelectedCustomer();
+            try {
+                ArrayList<Customer> customers = getMultipleSelectedCustomer();
 
-            if (customer != null && PopUp.showConfirm("Confirm delete", "Are you sur you want to delete " + customer.getEntity().getContactName() + " ?")) {
-                try {
-                    if (customersController.delete(customer)) {
-                        updateTable();
+                if (customers.isEmpty())
+                    throw new NoRowSelected();
+
+                String message = (customers.size() > 1) ? "Are you sur you want to delete these multiple customers ?" : "Are you sur you want to delete the customer " + customers.get(0).getEntity() + " ?";
+                if (PopUp.showConfirm("Confirm delete", message)) {
+                    for (Customer c : customers) {
+                        if (customersController.delete(c)) {
+                            updateTable();
+                        }
                     }
-                } catch (DeletionException ex) {
-                    showError(ex.getTypeError(), ex.getMessage());
-                } catch (NullObjectException nullObjectException) {
-                    System.out.println(nullObjectException.getMessage());
                 }
+            } catch (DeletionException | NoRowSelected ex) {
+                showError(ex.getTypeError(), ex.getMessage());
+            } catch (NullObjectException nullObjectException) {
+                System.out.println(nullObjectException.getMessage());
             }
         });
     }
@@ -182,8 +188,22 @@ public class Index extends View implements Initializable {
             System.out.println(e.getMessage());
         }
 
-
         return customer;
+    }
+
+    private ArrayList<Customer> getMultipleSelectedCustomer() {
+        ArrayList<Customer> selectedCustomers = new ArrayList<>();
+        customersTable.getSelectionModel().getSelectedItems().forEach(c -> {
+            try {
+                selectedCustomers.add(customersController.getCustomer(c.getId()));
+            } catch (DataQueryException e) {
+                e.printStackTrace();
+            } catch (NullObjectException e) {
+                e.printStackTrace();
+            }
+        });
+
+        return selectedCustomers;
     }
 
     public void updateTable() {
