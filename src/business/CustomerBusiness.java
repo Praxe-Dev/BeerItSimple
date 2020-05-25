@@ -26,7 +26,7 @@ public class CustomerBusiness {
         return dao.create(customer);
     }
 
-    public Customer getCustomer(Integer id) throws CustomerException, CustomerNotFoundException {
+    public Customer getCustomer(Integer id) throws DataQueryException {
         return dao.getCustomer(id);
     }
 

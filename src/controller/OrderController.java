@@ -23,7 +23,7 @@ public class OrderController {
         return orderBusiness.create(orderLineTableFormats);
     }
 
-    public Order getOrder(int reference) throws NoRowSelected {
+    public Order getOrder(int reference) throws DataQueryException {
         return orderBusiness.getOrder(reference);
     }
 

@@ -14,6 +14,7 @@ public class NewsDBAccess implements NewsDataAccess {
     public NewsDBAccess() throws ConnectionException {
         this.connection = DBConnection.getInstance();
     }
+
     public News getRandomNews() throws SQLManageException {
         News randomNews = null;
         String sqlInstruction = "SELECT * FROM news WHERE startingDate <= ? AND endDate >= ? ORDER BY RAND() LIMIT 1";
@@ -24,7 +25,7 @@ public class NewsDBAccess implements NewsDataAccess {
             preparedStatement.setDate(2, new java.sql.Date(System.currentTimeMillis()));
             ResultSet data = preparedStatement.executeQuery();
 
-            if(data.next()){
+            if (data.next()) {
                 randomNews = new News(
                         data.getInt("id"),
                         data.getString("title"),
@@ -34,20 +35,20 @@ public class NewsDBAccess implements NewsDataAccess {
                         data.getInt("employeeEntityId")
                 );
             }
-        } catch(SQLException e){
+        } catch (SQLException e) {
             throw new SQLManageException(e);
         }
         return randomNews;
     }
 
-    public ArrayList<News> getAllNews() throws DataQueryException{
+    public ArrayList<News> getAllNews() throws DataQueryException {
         ArrayList<News> newsArrayList = new ArrayList<>();
         String sqlInstruction = "SELECT * FROM news ORDER BY endDate ASC, startingDate ASC";
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
             ResultSet data = preparedStatement.executeQuery();
-            while(data.next()){
+            while (data.next()) {
                 News news = new News(
                         data.getInt("id"),
                         data.getString("title"),
@@ -59,7 +60,7 @@ public class NewsDBAccess implements NewsDataAccess {
 
                 newsArrayList.add(news);
             }
-        } catch(SQLException e){
+        } catch (SQLException e) {
             throw new DataQueryException();
         }
         return newsArrayList;
@@ -67,12 +68,13 @@ public class NewsDBAccess implements NewsDataAccess {
 
     public News getNewsFromId(Integer id) throws NoRowSelected {
         String sqlInstruction = "SELECT * FROM news WHERE id = ?";
-        try{
+        News news = null;
+        try {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
             preparedStatement.setInt(1, id);
             ResultSet data = preparedStatement.executeQuery();
-            if(data.next()){
-                News news = new News(
+            if (data.next()) {
+                news = new News(
                         data.getInt("id"),
                         data.getString("title"),
                         data.getString("content"),
@@ -80,15 +82,15 @@ public class NewsDBAccess implements NewsDataAccess {
                         convertDateToGC(data.getTimestamp("endDate")),
                         data.getInt("employeeEntityId")
                 );
-                return news;
             }
-        } catch(SQLException e){
+        } catch (SQLException e) {
             throw new NoRowSelected();
         }
-        return null;
+
+        return news;
     }
 
-    private GregorianCalendar convertDateToGC(Timestamp date){
+    private GregorianCalendar convertDateToGC(Timestamp date) {
         GregorianCalendar dateGC = null;
         if (date != null) {
             dateGC = new GregorianCalendar();
@@ -114,7 +116,7 @@ public class NewsDBAccess implements NewsDataAccess {
 
     public boolean deleteNews(News news) throws DeletionExceiption {
         String deleteInstruction = "DELETE FROM news WHERE id = ?";
-        try{
+        try {
             PreparedStatement preparedStatement = connection.prepareStatement(deleteInstruction);
             preparedStatement.setInt(1, news.getId());
             preparedStatement.executeUpdate();
@@ -126,7 +128,7 @@ public class NewsDBAccess implements NewsDataAccess {
 
     public void updateNews(News news) throws UpdateException {
         String sqlInstruction = "UPDATE news SET title = ?, content = ?, startingDate = ?, endDate = ? WHERE id = ?";
-        try{
+        try {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
             preparedStatement.setString(1, news.getTitle());
             preparedStatement.setString(2, news.getContent());
@@ -134,12 +136,12 @@ public class NewsDBAccess implements NewsDataAccess {
             preparedStatement.setTimestamp(4, java.sql.Timestamp.valueOf(getLocalDateTime(news.getEndDate())));
             preparedStatement.setInt(5, news.getId());
             preparedStatement.executeUpdate();
-        } catch(SQLException e){
+        } catch (SQLException e) {
             throw new UpdateException();
         }
     }
 
-    private LocalDateTime getLocalDateTime(GregorianCalendar date){
+    private LocalDateTime getLocalDateTime(GregorianCalendar date) {
         return date.toZonedDateTime().toLocalDateTime();
     }
 }

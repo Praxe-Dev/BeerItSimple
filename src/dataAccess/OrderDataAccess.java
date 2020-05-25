@@ -12,7 +12,7 @@ public interface OrderDataAccess {
 
     boolean create(Order orderLineTableFormats) throws UpdateException;
 
-    Order getOrder(int reference) throws NoRowSelected;
+    Order getOrder(int reference) throws DataQueryException;
 
     boolean deleteOrder(Order order) throws DeletionExceiption;
 

@@ -2,10 +2,7 @@ package view.customer;
 
 import com.jfoenix.controls.JFXButton;
 import controller.CustomerController;
-import exception.ConnectionException;
-import exception.CustomerException;
-import exception.CustomerNotFoundException;
-import exception.DataQueryException;
+import exception.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -70,7 +67,7 @@ public class Index extends View implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        refreshBtn.setOnAction(e -> updateTable() );
+        refreshBtn.setOnAction(e -> updateTable());
         init();
         initTableCustomer();
     }
@@ -133,8 +130,8 @@ public class Index extends View implements Initializable {
             }
         });
 
-        detailBtn.setOnAction( e -> {
-            Window readCustomer = new Window ("FXML/customer/read.fxml", "BeerItSimple - Details");
+        detailBtn.setOnAction(e -> {
+            Window readCustomer = new Window("FXML/customer/read.fxml", "BeerItSimple - Details");
 
             readCustomer.load();
             readCustomer.resizable(false);
@@ -157,18 +154,9 @@ public class Index extends View implements Initializable {
         });
 
         deleteBtn.setOnAction(e -> {
-            Customer customer = null;
-            try {
-                customer = getSelectedCustomer();
-            } catch (CustomerException ex) {
-                ex.showMessage();
-            } catch (CustomerNotFoundException ex) {
-                PopUp.showError(ex.getTypeError(), ex.getMessage());
-            } catch (NullPointerException ex) {
-                PopUp.showError("No customer selected", "To delete a customer you must select one.");
-            }
+            Customer customer = getSelectedCustomer();
 
-            if(PopUp.showConfirm("Confirm delete", "Are you sur you want to delete " + customer.getEntity().getContactName() + " ?")) {
+            if (customer != null && PopUp.showConfirm("Confirm delete", "Are you sur you want to delete " + customer.getEntity().getContactName() + " ?")) {
                 if (customersController.delete(customer)) {
                     updateTable();
                 }
@@ -176,11 +164,20 @@ public class Index extends View implements Initializable {
         });
     }
 
-    private Customer getSelectedCustomer() throws CustomerException, CustomerNotFoundException {
-        CustomerTableFormat customerTableFormat = customersTable.getSelectionModel().getSelectedItem();
+    private Customer getSelectedCustomer() {
         Customer customer = null;
 
-        customer = customersController.getCustomer(customerTableFormat.getId());
+        try {
+            CustomerTableFormat customerTableFormat = customersTable.getSelectionModel().getSelectedItem();
+            if (customerTableFormat == null)
+                throw new NoRowSelected();
+
+            customer = customersController.getCustomer(customerTableFormat.getId());
+        } catch (DataQueryException | NoRowSelected e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
+
+
         return customer;
     }
 

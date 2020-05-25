@@ -134,7 +134,7 @@ public class Index extends View implements Initializable {
         deleteBtn.setOnAction(e -> {
             try {
                 Order order = getSelectedOrder();
-                if(PopUp.showConfirm("Confirm delete", "Are you sur you want to delete the order [" + order.getReference() + "] ?")) {
+                if(order != null && PopUp.showConfirm("Confirm delete", "Are you sur you want to delete the order [" + order.getReference() + "] ?")) {
                     if (orderController.deleteOrder(order)) {
                         updateTable();
                     }
@@ -151,8 +151,12 @@ public class Index extends View implements Initializable {
         Order order = null;
         try {
             OrderTableFormat orderTableFormat = orderTable.getSelectionModel().getSelectedItem();
+
+            if (orderTableFormat == null)
+                throw new NoRowSelected();
+
             order = orderController.getOrder(orderTableFormat.getReference());
-        } catch (NoRowSelected e) {
+        } catch (DataQueryException | NoRowSelected e) {
             showError(e.getTypeError(), e.getMessage());
         }
 

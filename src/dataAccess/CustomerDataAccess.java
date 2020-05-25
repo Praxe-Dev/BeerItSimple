@@ -10,7 +10,7 @@ public interface CustomerDataAccess {
 
     boolean create(Customer customer) throws CustomerInsertionException;
 
-    Customer getCustomer(Integer id) throws CustomerException, CustomerNotFoundException;
+    Customer getCustomer(Integer id) throws DataQueryException;
 
     boolean update(Customer customer) throws CustomerUpdateException;
 

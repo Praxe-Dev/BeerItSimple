@@ -92,7 +92,7 @@ public class CustomerDBAccess implements CustomerDataAccess {
     }
 
     @Override
-    public Customer getCustomer(Integer id) throws CustomerNotFoundException {
+    public Customer getCustomer(Integer id) throws DataQueryException {
         String sqlInstruction = "SELECT customer.*, entity.*, r.*, city.* FROM customer\n" +
                 "JOIN entity ON customer.EntityId = entity.id\n" +
                 "JOIN `rank` r ON r.id = customer.RankId\n" +
@@ -150,11 +150,9 @@ public class CustomerDBAccess implements CustomerDataAccess {
 
                 return new Customer(entity, rank, calendar);
 
-            } else {
-                throw new CustomerNotFoundException(id);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataQueryException();
         }
 
         return null;

@@ -101,7 +101,7 @@ public class Index extends View implements Initializable {
         deleteNews.setOnAction(e -> {
             try {
                 News news = getSelectedNews();
-                if(PopUp.showConfirm("Confirm delete", "Are you sur you want to delete the news [(" + news.getId() + ") " + news.getTitle() + "] ?")) {
+                if(news != null && PopUp.showConfirm("Confirm delete", "Are you sur you want to delete the news [(" + news.getId() + ") " + news.getTitle() + "] ?")) {
                     if (newsController.deleteNews(news)) {
                         updateTable();
                     }
@@ -142,8 +142,14 @@ public class Index extends View implements Initializable {
 
     private News getSelectedNews() {
         News news = null;
+
         try {
-            news = newsController.getNewsFromId(newsTable.getSelectionModel().getSelectedItem().getId());
+            NewsTableFormat newsSelected = newsTable.getSelectionModel().getSelectedItem();
+            if (newsSelected != null)
+                news = newsController.getNewsFromId(newsSelected.getId());
+            else
+                throw new NoRowSelected();
+
         } catch (NoRowSelected e) {
             showError(e.getTypeError(), e.getMessage());
         }

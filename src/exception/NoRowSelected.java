@@ -8,11 +8,11 @@ public class NoRowSelected extends BISException {
 
     @Override
     public String getTypeError() {
-        return null;
+        return errorType;
     }
 
     @Override
     public String getMessage() {
-        return null;
+        return message;
     }
 }

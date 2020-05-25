@@ -25,7 +25,7 @@ public class CustomerController {
         return customerBusiness.create(customer);
     }
 
-    public Customer getCustomer(Integer id) throws CustomerException, CustomerNotFoundException {
+    public Customer getCustomer(Integer id) throws DataQueryException {
         return customerBusiness.getCustomer(id);
     }
 

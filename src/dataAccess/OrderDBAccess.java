@@ -105,7 +105,7 @@ public class OrderDBAccess implements OrderDataAccess {
         return orderList;
     }
 
-    public Order getOrder(int reference) throws NoRowSelected {
+    public Order getOrder(int reference) throws DataQueryException {
         Order order = null;
         Status status = null;
         PaymentMethod paymentMethod = null;
@@ -153,7 +153,7 @@ public class OrderDBAccess implements OrderDataAccess {
 
             }
         } catch (SQLException e) {
-            throw new NoRowSelected();
+            throw new DataQueryException();
         }
 
         return order;

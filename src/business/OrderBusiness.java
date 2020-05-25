@@ -28,7 +28,7 @@ public class OrderBusiness {
         return dao.create(orderLineTableFormats);
     }
 
-    public Order getOrder(int reference) throws NoRowSelected {
+    public Order getOrder(int reference) throws DataQueryException {
         return dao.getOrder(reference);
     }
 
