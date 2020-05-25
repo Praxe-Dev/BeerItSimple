@@ -33,7 +33,7 @@ public class CustomerController {
         return customerBusiness.update(customer);
     }
 
-    public boolean delete(Customer customer) {
+    public boolean delete(Customer customer) throws DeletionException {
         return customerBusiness.delete(customer);
     }
 }

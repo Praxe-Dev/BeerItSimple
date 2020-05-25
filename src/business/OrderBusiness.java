@@ -5,7 +5,6 @@ import dataAccess.OrderDataAccess;
 import exception.*;
 import model.*;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -32,7 +31,7 @@ public class OrderBusiness {
         return dao.getOrder(reference);
     }
 
-    public boolean deleteOrder(Order order) throws DeletionExceiption {
+    public boolean deleteOrder(Order order) throws DeletionException {
         return dao.deleteOrder(order);
     }
 

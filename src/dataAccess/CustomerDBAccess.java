@@ -247,7 +247,7 @@ public class CustomerDBAccess implements CustomerDataAccess {
         return affectedRow != 0;
     }
 
-    public boolean delete(Customer customer) {
+    public boolean delete(Customer customer) throws DeletionException {
 
         String sqlUpdateOrder = "UPDATE `order` SET CustomerEntityid = null\n" +
                 "WHERE CustomerEntityid = ?";
@@ -272,8 +272,7 @@ public class CustomerDBAccess implements CustomerDataAccess {
             preparedStatementDeleteEntity.setInt(1, customer.getEntity().getId());
             preparedStatementDeleteEntity.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            throw new DeletionException();
         }
         return true;
     }

@@ -408,7 +408,7 @@ public class OrderDBAccess implements OrderDataAccess {
         return newRank;
     }
 
-    public boolean deleteOrder(Order order) throws DeletionExceiption {
+    public boolean deleteOrder(Order order) throws DeletionException {
         try {
 
             String sqlInstruction = "SET SQL_SAFE_UPDATES = 0";
@@ -443,7 +443,7 @@ public class OrderDBAccess implements OrderDataAccess {
 
         } catch (SQLException e) {
 //            e.printStackTrace();
-            throw new DeletionExceiption();
+            throw new DeletionException();
         }
 
         return true;

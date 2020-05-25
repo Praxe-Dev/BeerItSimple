@@ -114,14 +114,14 @@ public class NewsDBAccess implements NewsDataAccess {
         }
     }
 
-    public boolean deleteNews(News news) throws DeletionExceiption {
+    public boolean deleteNews(News news) throws DeletionException {
         String deleteInstruction = "DELETE FROM news WHERE id = ?";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(deleteInstruction);
             preparedStatement.setInt(1, news.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new DeletionExceiption();
+            throw new DeletionException();
         }
         return true;
     }
