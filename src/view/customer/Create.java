@@ -115,18 +115,20 @@ public class Create extends View {
             if(Validators.validate(contactName, phoneNumber, address, houseNumber)  && Validators.validateNullableValue(mail, businessNumber, accountNumber)) {
                 try {
                     insertCustomer();
-                    PopUp.showSuccess("Client créé avec succès !", "Success");
+                    PopUp.showSuccess("Customer created with success !", "Success");
                     Index customersView = (Index) getParentView();
                     customersView.updateTable();
                     closeWindow();
                 } catch (DuplicataException exception) {
                     PopUp.showError(exception.getTypeError(), exception.getMessage());
+                } catch (NullObjectException nullObjectException) {
+                    System.out.println(nullObjectException.getMessage());
                 }
             }
         });
     }
 
-    private boolean insertCustomer() throws DuplicataException {
+    private boolean insertCustomer() throws DuplicataException, NullObjectException {
 
         Customer newCustomer;
         Entity newEntity = new Entity();

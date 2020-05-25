@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public interface OrderDataAccess {
     ArrayList<Order> getAllOrders() throws DataQueryException;
 
-    boolean create(Order orderLineTableFormats) throws UpdateException;
+    boolean create(Order order) throws UpdateException;
 
     Order getOrder(int reference) throws DataQueryException;
 

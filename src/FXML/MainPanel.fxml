@@ -68,7 +68,7 @@
       </VBox>
    </left>
    <bottom>
-      <AnchorPane prefHeight="60.0" prefWidth="1280.0" style="-fx-background-color: linear-gradient(to left, #0f2027, #203a43, #2c5364);" BorderPane.alignment="CENTER">
+      <AnchorPane fx:id="anchorPane" prefHeight="60.0" prefWidth="1280.0" style="-fx-background-color: linear-gradient(to left, #0f2027, #203a43, #2c5364);" BorderPane.alignment="CENTER">
          <children>
             <Label fx:id="newsLabel" alignment="CENTER_RIGHT" prefHeight="62.0" prefWidth="1572.0" text="Citation Citation Citation Citation Citation Citation Citation Citation Citation " textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-292.0" />
          </children>

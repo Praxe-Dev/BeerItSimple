@@ -116,11 +116,11 @@ public class Index extends View implements Initializable {
             // assurément Update car on le crée nous même juste avant
             Update Update = (Update) editCustomer.getView();
             Customer customer = null;
-            try {
-                customer = getSelectedCustomer();
-            } catch (Exception exception) {
-                PopUp.showError("Customer not found", "You may be didn't selected a customer in the table.");
-            }
+//            try {
+            customer = getSelectedCustomer();
+//            } catch (Exception exception) {
+//                PopUp.showError("Customer not found", "You may be didn't selected a customer in the table.");
+//            }
 
             if (customer != null) {
                 Update.setCustomer(customer);
@@ -139,11 +139,8 @@ public class Index extends View implements Initializable {
 
             Read Read = (Read) readCustomer.getView();
             Customer customer = null;
-            try {
-                customer = getSelectedCustomer();
-            } catch (Exception exception) {
-                PopUp.showError("Customer not found", "You may be didn't selected a customer in the table.");
-            }
+
+            customer = getSelectedCustomer();
 
             if (customer != null) {
                 Read.setCustomer(customer);
@@ -163,6 +160,8 @@ public class Index extends View implements Initializable {
                     }
                 } catch (DeletionException ex) {
                     showError(ex.getTypeError(), ex.getMessage());
+                } catch (NullObjectException nullObjectException) {
+                    System.out.println(nullObjectException.getMessage());
                 }
             }
         });
@@ -179,6 +178,8 @@ public class Index extends View implements Initializable {
             customer = customersController.getCustomer(customerTableFormat.getId());
         } catch (DataQueryException | NoRowSelected e) {
             showError(e.getTypeError(), e.getMessage());
+        } catch (NullObjectException e) {
+            System.out.println(e.getMessage());
         }
 
 

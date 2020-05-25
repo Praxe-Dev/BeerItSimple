@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -45,6 +46,8 @@ public class MainView extends View{
     private Label newsLabel;
     @FXML
     private VBox boxMenu;
+    @FXML
+    private AnchorPane anchorPane;
 
     // Path to FXML file to display on center
     private static final String pathToHomePanel = "/FXML/homePanel.fxml";
@@ -101,7 +104,7 @@ public class MainView extends View{
                 System.exit(0);
         });
 
-        newsLabel.setOnMouseClicked(e -> {
+        anchorPane.setOnMouseClicked(e -> {
             if(currentShowedNews != null) {
                 //Open window with news details
                 Window newsDetails = new Window("FXML/news/read.fxml", "News details");
@@ -113,11 +116,11 @@ public class MainView extends View{
             }
         });
 
-        newsLabel.setOnMouseEntered(e -> {
+        anchorPane.setOnMouseEntered(e -> {
             transition.pause();
         });
 
-        newsLabel.setOnMouseExited(e -> {
+        anchorPane.setOnMouseExited(e -> {
             transition.play();
         });
 

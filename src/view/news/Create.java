@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextField;
 import controller.NewsController;
 import exception.ConnectionException;
 import exception.DataQueryException;
+import exception.NullObjectException;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import model.News;
@@ -94,6 +95,8 @@ public class Create extends View {
             newsController.insertNews(news);
         } catch (DataQueryException e) {
             showError(e.getTypeError(), e.getMessage());
+        } catch (NullObjectException e) {
+            System.out.println(e.getMessage());
         }
     }
 }

@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import controller.NewsController;
 import exception.ConnectionException;
+import exception.NullObjectException;
 import exception.UpdateException;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
@@ -104,6 +105,8 @@ public class Update extends View {
             newsController.updateNews(updateNews);
         } catch(UpdateException e){
             showError(e.getTypeError(), e.getMessage());
+        } catch (NullObjectException e) {
+            System.out.println(e.getMessage());
         }
     }
 

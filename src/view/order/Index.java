@@ -140,6 +140,8 @@ public class Index extends View implements Initializable {
                 }
             } catch (DeletionException ex) {
                 showError(ex.getTypeError(), ex.getMessage());
+            } catch (NullObjectException nullObjectException) {
+                System.out.println(nullObjectException.getMessage());
             }
 
             updateTable();

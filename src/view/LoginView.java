@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextField;
 import controller.EmployeeController;
 import exception.ConnectionException;
 import exception.LoginException;
+import exception.NullObjectException;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -62,6 +63,8 @@ public class LoginView extends View {
 
         } catch (LoginException exception) {
             showError(exception.getTypeError(), exception.getMessage());
+        } catch (NullObjectException e) {
+            System.out.println(e.getMessage());
         }
     }
 

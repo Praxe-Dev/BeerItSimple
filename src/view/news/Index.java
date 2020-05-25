@@ -108,6 +108,8 @@ public class Index extends View implements Initializable {
                 }
             } catch (DeletionException ex) {
                 showError(ex.getTypeError(), ex.getMessage());
+            } catch (NullObjectException nullObjectException) {
+                System.out.println(nullObjectException.getMessage());
             }
         });
     }
@@ -152,6 +154,8 @@ public class Index extends View implements Initializable {
 
         } catch (NoRowSelected e) {
             showError(e.getTypeError(), e.getMessage());
+        } catch (NullObjectException e) {
+            System.out.println(e.getMessage());
         }
 
         return news;
