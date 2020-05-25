@@ -86,7 +86,6 @@ public class Create extends View {
         GregorianCalendar startGC = new GregorianCalendar(start.getYear(), start.getMonthValue() - 1, start.getDayOfMonth());
         GregorianCalendar endGC = new GregorianCalendar(end.getYear(), end.getMonthValue() - 1, end.getDayOfMonth());
         News news = new News(title.getText(), contentArea.getText(), startGC, endGC, 2);
-        System.out.println(utils.Date.formatTime(news.getStartingDate()));
         try {
             newsController.insertNews(news);
         } catch (DataQueryException e) {

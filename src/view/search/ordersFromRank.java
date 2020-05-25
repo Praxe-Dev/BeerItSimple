@@ -25,22 +25,21 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class ordersFromRank extends View implements Initializable {
+    @FXML
+    private JFXComboBox<Rank> rankList;
+    @FXML
+    private JFXComboBox<Status> statusList;
+    @FXML
+    private JFXRadioButton bothRadio;
+    @FXML
+    private JFXRadioButton paidRadio;
+    @FXML
+    private JFXRadioButton notPaidRadio;
+    @FXML
+    private JFXButton searchBtn;
 
-    @FXML
-    JFXComboBox<Rank> rankList;
-    @FXML
-    JFXComboBox<Status> statusList;
-    @FXML
-    JFXRadioButton bothRadio;
-    @FXML
-    JFXRadioButton paidRadio;
-    @FXML
-    JFXRadioButton notPaidRadio;
-    @FXML
-    JFXButton searchBtn;
-
-    RankController rankController;
-    StatusController statusController;
+    private RankController rankController;
+    private StatusController statusController;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -96,7 +95,9 @@ public class ordersFromRank extends View implements Initializable {
 
         Index index = (Index) displayResult.getView();
         index.updateTable(orderFromRanks);
+        index.hideRefreshButton();
         index.getMainContainer().setStyle("-fx-background-color: linear-gradient(to left, #0f2027, #203a43, #2c5364)");
+
         displayResult.show();
     }
 }

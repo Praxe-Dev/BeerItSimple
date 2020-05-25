@@ -9,15 +9,15 @@ import view.View;
 
 public class Read extends View {
     @FXML
-    Label title;
+    private Label title;
     @FXML
-    Label startingDate;
+    private Label startingDate;
     @FXML
-    Label endDate;
+    private Label endDate;
     @FXML
-    JFXTextArea contentArea;
+    private JFXTextArea contentArea;
     @FXML
-    JFXButton closeBtn;
+    private JFXButton closeBtn;
 
     @Override
     public void init() {

@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class Index extends View implements Initializable {
-
     @FXML
     private JFXButton refreshBtn;
     @FXML
@@ -31,7 +30,7 @@ public class Index extends View implements Initializable {
     @FXML
     private JFXButton detailBtn;
     @FXML
-    TableView<CustomerTableFormat> customersTable;
+    private TableView<CustomerTableFormat> customersTable;
     @FXML
     private TableColumn<CustomerTableFormat, Integer> customerId;
     @FXML

@@ -26,27 +26,27 @@ import java.util.ArrayList;
 public class incomeView extends View {
 
     @FXML
-    DatePicker startDate;
+    private DatePicker startDate;
     @FXML
-    DatePicker endDate;
+    private DatePicker endDate;
     @FXML
-    JFXButton refreshBtn;
+    private JFXButton refreshBtn;
     @FXML
-    TableView<ProductIncome> incomeTable;
+    private TableView<ProductIncome> incomeTable;
     @FXML
-    TableColumn<ProductIncome, Integer> productCode;
+    private TableColumn<ProductIncome, Integer> productCode;
     @FXML
-    TableColumn<ProductIncome, String> productName;
+    private TableColumn<ProductIncome, String> productName;
     @FXML
-    TableColumn<ProductIncome, Integer> amountSold;
+    private TableColumn<ProductIncome, Integer> amountSold;
     @FXML
-    TableColumn<ProductIncome, Double> income;
+    private TableColumn<ProductIncome, Double> income;
     @FXML
-    TableColumn<ProductIncome, Double> salePercentage;
+    private TableColumn<ProductIncome, Double> salePercentage;
     @FXML
-    PieChart pieChart;
+    private PieChart pieChart;
     @FXML
-    Text totalIncome;
+    private Text totalIncome;
 
     ProductController productController;
 

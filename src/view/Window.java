@@ -24,7 +24,6 @@ public class Window extends Parent {
      * @param title est le titre de la fenêtre
      */
     public Window (String pathToFxml, String title) {
-
         this.pathToFxml = pathToFxml;
         this.title = title;
         this.stage = new Stage();

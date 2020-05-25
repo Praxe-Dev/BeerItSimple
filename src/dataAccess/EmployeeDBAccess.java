@@ -70,10 +70,11 @@ public class EmployeeDBAccess implements EmployeeDataAccess {
 
     public ArrayList<Employee> getAllDeliveryEmployee() throws DataQueryException {
         ArrayList<Employee> deliveryList = new ArrayList<>();
-        String sqlInstruction = "SELECT e.*, entity.*, r.*, c.* FROM employee e JOIN role r ON r.id = e.RoleId JOIN entity ON entity.id = e.EntityId JOIN city c ON c.label = entity.Citylabel AND c.zipCode = entity.CityZipCode WHERE r.name = 'Deliverer'";
+        String sqlInstruction = "SELECT e.*, entity.*, r.*, c.* FROM employee e JOIN role r ON r.id = e.RoleId JOIN entity ON entity.id = e.EntityId JOIN city c ON c.label = entity.Citylabel AND c.zipCode = entity.CityZipCode WHERE r.id = ?";
         ResultSet employeeData;
         try{
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstruction);
+            preparedStatement.setInt(1, 3);
             employeeData = preparedStatement.executeQuery();
             while(employeeData.next()){
                 City city = new City(

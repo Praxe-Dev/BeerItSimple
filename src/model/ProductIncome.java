@@ -11,10 +11,33 @@ public class ProductIncome {
     private Double salePercentage;
 
     public ProductIncome (Product p) {
-        this.code = p.getCode();
-        this.label = p.getLabel();
+        setCode(p.getCode());
+        setLabel(p.getLabel());
+        setAmountSold();
+        setIncome();
+    }
 
+    public void setCode(Integer code) {
+        this.code = code;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public void setAmountSold(Integer amountSold) {
+        this.amountSold = amountSold;
+    }
+
+    public void setAmountSold() {
         this.amountSold = 0;
+    }
+
+    public void setIncome(Double income) {
+        this.income = income;
+    }
+
+    public void setIncome() {
         this.income = 0.0;
     }
 

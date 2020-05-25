@@ -23,15 +23,13 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class zipCodeSearch extends View implements Initializable {
-
     @FXML
-    JFXComboBox<City> zipCodeBox;
+    private JFXComboBox<City> zipCodeBox;
     @FXML
-    JFXButton searchBtn;
+    private JFXButton searchBtn;
 
-    CityController cityController;
-    OrderController orderController;
-
+    private CityController cityController;
+    private OrderController orderController;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -53,7 +51,6 @@ public class zipCodeSearch extends View implements Initializable {
         zipCodeBox.getSelectionModel().selectFirst();
         zipCodeBox.getStyleClass().add("whiteComboBox");
 
-
         searchBtn.setOnAction(e -> {
             search();
         });
@@ -71,18 +68,19 @@ public class zipCodeSearch extends View implements Initializable {
         } catch (DataQueryException e) {
             showError(e.getTypeError(), e.getMessage());
         }
-
-
     }
 
     private void openNewTabView(ArrayList<Order> allOrdersFromZipcode, City city) {
         Window displayResult = new Window("FXML/order/index.fxml", "BeerItSimple - All orders from the selected zipcode : " + city.getZipCode() + " - " + city.getLabel());
         displayResult.load();
         displayResult.getView().setParentView(this);
+
         Index index = (Index) displayResult.getView();
+        index.getMainContainer().setStyle("-fx-background-color: linear-gradient(to left, #0f2027, #203a43, #2c5364)");
         index.updateTable(allOrdersFromZipcode);
         index.hideRefreshButton();
         index.setZipCode(city);
+
         displayResult.show();
     }
 

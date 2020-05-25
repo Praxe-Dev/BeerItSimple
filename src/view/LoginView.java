@@ -18,18 +18,16 @@ import javafx.scene.layout.VBox;
 import model.Employee;
 
 public class LoginView extends View {
-
     @FXML
-    VBox loginContainer;
+    private VBox loginContainer;
     @FXML
-    JFXTextField employeeMatricule;
+    private JFXTextField employeeMatricule;
     @FXML
-    JFXPasswordField employeePassword;
+    private JFXPasswordField employeePassword;
     @FXML
-    JFXButton signinButton;
+    private JFXButton signinButton;
 
     private static final String PathToMainPanel = "FXML/MainPanel.fxml";
-
     private EmployeeController employeeController;
 
     @Override

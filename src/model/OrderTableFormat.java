@@ -1,9 +1,6 @@
 package model;
 
-import javafx.scene.control.cell.PropertyValueFactory;
-
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class OrderTableFormat {
@@ -98,16 +95,7 @@ public class OrderTableFormat {
     }
 
     public String getDeliveredDate() {
-//        return (deliveredDate == null) ? ((plannedDate == null) ? "N/A" : "Not delivered yet") : dateFormat(deliveredDate);
-        String deliveryDate = "N/A";
-            if (deliveredDate == null) {
-                if(plannedDate != null)
-                    deliveryDate = "Not delivered yet";
-            } else {
-                deliveryDate = dateFormat(deliveredDate);
-            }
-
-            return deliveryDate;
+        return (deliveredDate == null) ? ((plannedDate == null) ? "N/A" : "Not delivered yet") : dateFormat(deliveredDate);
     }
 
     public void setDeliveredDate(GregorianCalendar deliveredDate) {

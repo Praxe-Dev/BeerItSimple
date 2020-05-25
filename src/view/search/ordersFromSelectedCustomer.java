@@ -23,14 +23,14 @@ import java.util.ResourceBundle;
 
 public class ordersFromSelectedCustomer extends View implements Initializable {
     @FXML
-    JFXComboBox<Customer> customerBox;
+    private JFXComboBox<Customer> customerBox;
     @FXML
-    JFXButton cancelBtn;
+    private JFXButton cancelBtn;
     @FXML
-    JFXButton searchBtn;
+    private JFXButton searchBtn;
 
-    CustomerController customerController;
-    OrderController orderController;
+    private CustomerController customerController;
+    private OrderController orderController;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -87,11 +87,13 @@ public class ordersFromSelectedCustomer extends View implements Initializable {
         Window displayResult = new Window("FXML/order/index.fxml", "BeerItSimple - All orders from selected customer : " + customer.getEntity().getContactName() + " (" + customer.getEntity().getPhoneNumber() + ")");
         displayResult.load();
         displayResult.getView().setParentView(this);
+        
         Index index = (Index) displayResult.getView();
         index.updateTable(allOrdersFromCustomer);
         index.hideRefreshButton();
         index.setCustomer(customer);
         index.getMainContainer().setStyle("-fx-background-color: linear-gradient(to left, #0f2027, #203a43, #2c5364)");
+
         displayResult.show();
     }
 }

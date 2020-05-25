@@ -25,45 +25,42 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Read extends View {
+    @FXML
+    private Label orderReference;
+    @FXML
+    private JFXTextField customer;
+    @FXML
+    private JFXTextField paymentMethod;
+    @FXML
+    private JFXCheckBox deliveryCheck;
+    @FXML
+    private Group deliveryDisplay;
+    @FXML
+    private JFXTextField deliveryDate;
+    @FXML
+    private JFXButton okBtn;
+    @FXML
+    private TableView<OrderLineTableFormat> tableArticle;
+    @FXML
+    private TableColumn<OrderLineTableFormat, String> article;
+    @FXML
+    private TableColumn<OrderLineTableFormat, Double> price;
+    @FXML
+    private TableColumn<OrderLineTableFormat, Integer> quantity;
+    @FXML
+    private TableColumn<OrderLineTableFormat, Double> totalExclVat;
+    @FXML
+    private TableColumn<OrderLineTableFormat, Double> totalInclVat;
+    @FXML
+    private Text totalAmountExclVat;
+    @FXML
+    private Text totalAmountVatOnly;
+    @FXML
+    private Text totalAmountVatInc;
+    @FXML
+    private JFXButton invoiceBtn;
 
-    @FXML
-    Label orderReference;
-    @FXML
-    JFXTextField customer;
-    @FXML
-    JFXTextField paymentMethod;
-    @FXML
-    JFXCheckBox deliveryCheck;
-    @FXML
-    Group deliveryDisplay;
-    @FXML
-    JFXTextField deliveryDate;
-    @FXML
-    JFXButton okBtn;
-    @FXML
-    TableView<OrderLineTableFormat> tableArticle;
-    @FXML
-    TableColumn<OrderLineTableFormat, String> article;
-    @FXML
-    TableColumn<OrderLineTableFormat, Double> price;
-    @FXML
-    TableColumn<OrderLineTableFormat, Integer> quantity;
-    @FXML
-    TableColumn<OrderLineTableFormat, Double> totalExclVat;
-    @FXML
-    TableColumn<OrderLineTableFormat, Double> totalInclVat;
-    @FXML
-    Text totalAmountExclVat;
-    @FXML
-    Text totalAmountVatOnly;
-    @FXML
-    Text totalAmountVatInc;
-    @FXML
-    JFXButton invoiceBtn;
-
-//    OrderController orderController;
-
-    Order selectedOrder;
+    private Order selectedOrder;
 
     @Override
     public void init() {
