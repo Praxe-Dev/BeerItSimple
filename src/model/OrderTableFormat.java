@@ -21,7 +21,7 @@ public class OrderTableFormat {
         if (order.getCustomer() != null) {
             setCustomerName(order.getCustomer().getEntity().getContactName());
         } else {
-            setCustomerName("N/A");
+            setCustomerName("Deleted Customer");
         }
 //        setCustomerName(order.getCustomer().getEntity().getContactName());
         setPaid(order.getPaid());

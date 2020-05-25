@@ -6,6 +6,7 @@ import dataAccess.ProductDBAccess;
 import dataAccess.ProductDataAccess;
 import exception.ConnectionException;
 import exception.DataQueryException;
+import exception.NullObjectException;
 import model.OrderLine;
 import model.Product;
 import model.ProductIncome;
@@ -26,7 +27,10 @@ public class ProductBusiness {
         return productDao.getAllProducts();
     }
 
-    public ArrayList<ProductIncome> getAllProductsIncome(LocalDate startDate, LocalDate endDate) throws DataQueryException {
+    public ArrayList<ProductIncome> getAllProductsIncome(LocalDate startDate, LocalDate endDate) throws DataQueryException, NullObjectException {
+        if (startDate == null || endDate == null)
+            throw new NullObjectException(startDate.getClass().getName());
+
         ArrayList<Product> allProducts = productDao.getAllProducts();
         ArrayList<OrderLine> allOrderlines = orderLineDao.getAllOrderLineBetweenDates(startDate, endDate);
 
@@ -36,10 +40,11 @@ public class ProductBusiness {
     public ArrayList<ProductIncome> computeProductsIncome(ArrayList<Product> allProducts, ArrayList<OrderLine> allOrderlines) {
         ArrayList<ProductIncome> productIncomes = new ArrayList<>();
         ProductIncome.resetTotalSold();
+        int index;
 
         for (Product p : allProducts) {
             productIncomes.add(new ProductIncome(p));
-            int index = productIncomes.size() - 1;
+            index = productIncomes.size() - 1;
 
             allOrderlines.stream()
                     .filter(x -> x.getProduct().getCode().equals(p.getCode()))

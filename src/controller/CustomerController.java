@@ -13,27 +13,26 @@ public class CustomerController {
         this.customerBusiness = new CustomerBusiness();
     }
 
-    /**
-     * Ask the business package to get allCustomer from DB
-     * @return an array of CustomerViewTable that contains the right format to be displayed
-     */
     public ArrayList<Customer> getAllCustomers() throws DataQueryException {
         return customerBusiness.getAllCustomers();
     }
 
-    public boolean create(Customer customer) throws CustomerInsertionException {
+    public boolean create(Customer customer) throws DuplicataException, NullObjectException {
+        if (customer == null)
+            throw new NullObjectException(customer.getClass().getName());
+
         return customerBusiness.create(customer);
     }
 
-    public Customer getCustomer(Integer id) throws DataQueryException {
+    public Customer getCustomer(Integer id) throws DataQueryException, NullObjectException {
         return customerBusiness.getCustomer(id);
     }
 
-    public boolean update(Customer customer) throws CustomerUpdateException {
+    public boolean update(Customer customer) throws DuplicataException, UpdateException, NullObjectException {
         return customerBusiness.update(customer);
     }
 
-    public boolean delete(Customer customer) {
+    public boolean delete(Customer customer) throws DeletionException, NullObjectException {
         return customerBusiness.delete(customer);
     }
 }

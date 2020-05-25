@@ -5,7 +5,7 @@ import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import controller.NewsController;
 import exception.ConnectionException;
-import exception.SQLManageException;
+import exception.NullObjectException;
 import exception.UpdateException;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
@@ -51,13 +51,9 @@ public class Update extends View {
 
             submitBtn.setOnAction(e -> {
                 if (validateInfo()) {
-                    try {
-                        updateNews();
-                        PopUp.showSuccess("News updated", "Your news has been successfully updated");
-                        this.closeWindow();
-                    } catch (SQLManageException err) {
-                        err.showMessage();
-                    }
+                    updateNews();
+                    PopUp.showSuccess("News updated", "Your news has been successfully updated");
+                    this.closeWindow();
                 }
             });
         } else {
@@ -79,7 +75,12 @@ public class Update extends View {
                 return false;
             }
 
-            if(Validators.validateBetweenDates(end, start)){
+            if(Validators.startingDateIsBeforeNow(start)){
+                PopUp.showError("Date error", "Starting date must be today or later.");
+                return false;
+            }
+
+            if (!Validators.endIsAfterStart(start, end)) {
                 PopUp.showError("Date error", "End date must be later than the start date.");
                 return false;
             }
@@ -88,7 +89,7 @@ public class Update extends View {
         return false;
     }
 
-    public void updateNews() throws SQLManageException {
+    public void updateNews() {
         NewsController newsController = null;
         try {
             newsController = new NewsController();
@@ -104,6 +105,8 @@ public class Update extends View {
             newsController.updateNews(updateNews);
         } catch(UpdateException e){
             showError(e.getTypeError(), e.getMessage());
+        } catch (NullObjectException e) {
+            System.out.println(e.getMessage());
         }
     }
 

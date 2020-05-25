@@ -11,6 +11,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.News;
 import model.NewsTableFormat;
+import model.Order;
 import utils.PopUp;
 import view.View;
 import view.Window;
@@ -48,7 +49,13 @@ public class Index extends View implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         init();
-        initTableNews();
+        try {
+            initTableNews();
+        } catch (ConnectionException | DataQueryException exception) {
+            showError(exception.getTypeError(), exception.getMessage());
+        } catch (NullObjectException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
@@ -100,19 +107,27 @@ public class Index extends View implements Initializable {
 
         deleteNews.setOnAction(e -> {
             try {
-                News news = getSelectedNews();
-                if(news != null && PopUp.showConfirm("Confirm delete", "Are you sur you want to delete the news [(" + news.getId() + ") " + news.getTitle() + "] ?")) {
-                    if (newsController.deleteNews(news)) {
-                        updateTable();
+                ArrayList<News> news = getMultipleSelectedNews();
+                if (news.isEmpty())
+                    throw new NoRowSelected();
+
+                String message = (news.size() > 1) ? "Are you sur you want to delete these multiple news ?" : "Are you sur you want to delete this news ?";
+                if(PopUp.showConfirm("Confirm delete", message)) {
+                    for (News n : news) {
+                        if (newsController.deleteNews(n)) {
+                            updateTable();
+                        }
                     }
                 }
-            } catch (DeletionExceiption ex) {
+            } catch (DeletionException | NoRowSelected ex) {
                 showError(ex.getTypeError(), ex.getMessage());
+            } catch (NullObjectException nullObjectException) {
+                System.out.println(nullObjectException.getMessage());
             }
         });
     }
 
-    public void initTableNews() {
+    public void initTableNews() throws ConnectionException, DataQueryException, NullObjectException {
         id.setCellValueFactory(new PropertyValueFactory<NewsTableFormat, Integer>("id"));
         title.setCellValueFactory(new PropertyValueFactory<NewsTableFormat, String>("title"));
         startingDate.setCellValueFactory(new PropertyValueFactory<NewsTableFormat, String>("startingDate"));
@@ -152,20 +167,39 @@ public class Index extends View implements Initializable {
 
         } catch (NoRowSelected e) {
             showError(e.getTypeError(), e.getMessage());
+        } catch (NullObjectException e) {
+            System.out.println(e.getMessage());
         }
 
         return news;
     }
 
+    private ArrayList<News> getMultipleSelectedNews() {
+        ArrayList<News> selectedNews = new ArrayList<>();
+        newsTable.getSelectionModel().getSelectedItems().forEach(n -> {
+            try {
+                selectedNews.add(newsController.getNewsFromId(n.getId()));
+            } catch (NoRowSelected e) {
+                showError(e.getTypeError(), e.getMessage());
+            } catch (NullObjectException e) {
+                System.out.println(e.getMessage());
+            }
+        });
+
+        return selectedNews;
+    }
+
     private void updateTable() {
         try {
             updateTable(newsController.getAllNews());
-        } catch(DataQueryException ex){
+        } catch(DataQueryException | ConnectionException ex){
             showError(ex.getTypeError(), ex.getMessage());
+        } catch (NullObjectException ex) {
+            System.out.println(ex.getMessage());
         }
     }
 
-    private boolean updateTable(ArrayList<News> newsArrayList) {
+    private boolean updateTable(ArrayList<News> newsArrayList) throws ConnectionException, DataQueryException, NullObjectException {
         ArrayList<NewsTableFormat> newsTableFormatArrayList = new ArrayList<>();
 
         for (News news : newsArrayList) {

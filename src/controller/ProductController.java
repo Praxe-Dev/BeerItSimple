@@ -3,6 +3,7 @@ package controller;
 import business.ProductBusiness;
 import exception.ConnectionException;
 import exception.DataQueryException;
+import exception.NullObjectException;
 import javafx.scene.control.DatePicker;
 import model.Product;
 import model.ProductIncome;
@@ -21,7 +22,7 @@ public class ProductController {
         return productBusiness.getAllProducts();
     }
 
-    public ArrayList<ProductIncome> getAllProductsIncome(LocalDate startDate, LocalDate endDate) throws DataQueryException {
+    public ArrayList<ProductIncome> getAllProductsIncome(LocalDate startDate, LocalDate endDate) throws DataQueryException, NullObjectException {
         return productBusiness.getAllProductsIncome(startDate, endDate);
     }
 }

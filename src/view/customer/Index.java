@@ -116,11 +116,11 @@ public class Index extends View implements Initializable {
             // assurément Update car on le crée nous même juste avant
             Update Update = (Update) editCustomer.getView();
             Customer customer = null;
-            try {
-                customer = getSelectedCustomer();
-            } catch (Exception exception) {
-                PopUp.showError("Customer not found", "You may be didn't selected a customer in the table.");
-            }
+//            try {
+            customer = getSelectedCustomer();
+//            } catch (Exception exception) {
+//                PopUp.showError("Customer not found", "You may be didn't selected a customer in the table.");
+//            }
 
             if (customer != null) {
                 Update.setCustomer(customer);
@@ -139,11 +139,8 @@ public class Index extends View implements Initializable {
 
             Read Read = (Read) readCustomer.getView();
             Customer customer = null;
-            try {
-                customer = getSelectedCustomer();
-            } catch (Exception exception) {
-                PopUp.showError("Customer not found", "You may be didn't selected a customer in the table.");
-            }
+
+            customer = getSelectedCustomer();
 
             if (customer != null) {
                 Read.setCustomer(customer);
@@ -154,12 +151,24 @@ public class Index extends View implements Initializable {
         });
 
         deleteBtn.setOnAction(e -> {
-            Customer customer = getSelectedCustomer();
+            try {
+                ArrayList<Customer> customers = getMultipleSelectedCustomer();
 
-            if (customer != null && PopUp.showConfirm("Confirm delete", "Are you sur you want to delete " + customer.getEntity().getContactName() + " ?")) {
-                if (customersController.delete(customer)) {
-                    updateTable();
+                if (customers.isEmpty())
+                    throw new NoRowSelected();
+
+                String message = (customers.size() > 1) ? "Are you sur you want to delete these multiple customers ?" : "Are you sur you want to delete the customer " + customers.get(0).getEntity() + " ?";
+                if (PopUp.showConfirm("Confirm delete", message)) {
+                    for (Customer c : customers) {
+                        if (customersController.delete(c)) {
+                            updateTable();
+                        }
+                    }
                 }
+            } catch (DeletionException | NoRowSelected ex) {
+                showError(ex.getTypeError(), ex.getMessage());
+            } catch (NullObjectException nullObjectException) {
+                System.out.println(nullObjectException.getMessage());
             }
         });
     }
@@ -175,10 +184,26 @@ public class Index extends View implements Initializable {
             customer = customersController.getCustomer(customerTableFormat.getId());
         } catch (DataQueryException | NoRowSelected e) {
             showError(e.getTypeError(), e.getMessage());
+        } catch (NullObjectException e) {
+            System.out.println(e.getMessage());
         }
 
-
         return customer;
+    }
+
+    private ArrayList<Customer> getMultipleSelectedCustomer() {
+        ArrayList<Customer> selectedCustomers = new ArrayList<>();
+        customersTable.getSelectionModel().getSelectedItems().forEach(c -> {
+            try {
+                selectedCustomers.add(customersController.getCustomer(c.getId()));
+            } catch (DataQueryException e) {
+                e.printStackTrace();
+            } catch (NullObjectException e) {
+                e.printStackTrace();
+            }
+        });
+
+        return selectedCustomers;
     }
 
     public void updateTable() {

@@ -19,7 +19,7 @@ public class CityDBAccess implements CityDataAccess {
 
     @Override
     public ArrayList<City> getAllCities() throws DataQueryException {
-        String sqlInstruction = "SELECT * FROM City";
+        String sqlInstruction = "SELECT * FROM City ORDER BY zipCode";
         ArrayList<City> cityList = new ArrayList<>();
 
         try {

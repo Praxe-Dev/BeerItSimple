@@ -175,14 +175,10 @@ public class Update extends View {
                             orderView.updateTable();
                             closeWindow();
                         }
-                    } catch (PaymentMethodException payErr) {
-                        payErr.showMessage();
-                    } catch (StatusException statusErr) {
-                        statusErr.showMessage();
-                    } catch (UpdateException ex) {
+                    } catch (UpdateException | DataQueryException ex) {
                         showError(ex.getTypeError(), ex.getMessage());
-                    } catch (DataQueryException ex) {
-                        showError(ex.getTypeError(), ex.getMessage());
+                    } catch (NullObjectException nullObjectException) {
+                        System.out.println(nullObjectException.getMessage());
                     }
                 }
             } else {
@@ -263,7 +259,7 @@ public class Update extends View {
         Create.computeAndDisplayNewAmount(orderLineTableFormat, totalAmountExclVat, totalAmountVatOnly, totalAmountVatInc);
     }
 
-    private boolean updateOrder() throws PaymentMethodException, StatusException, UpdateException, DataQueryException {
+    private boolean updateOrder() throws UpdateException, DataQueryException, NullObjectException {
         Product product;
 
         if (deliveryCheck.isSelected()) {
@@ -271,14 +267,11 @@ public class Update extends View {
                 if (deliveryMan.getSelectionModel().isSelected(-1)) {
                     throw new UpdateException();
                 }
-//                GregorianCalendar date = new GregorianCalendar();
-//                date.set(deliveryDate.getValue().getYear(), deliveryDate.getValue().getDayOfMonth(), deliveryDate.getValue().getDayOfMonth());
 
                 LocalDate date = deliveryDate.getValue();
                 // Create the right format for delivery.plannedDate (-1 and +1 to get the right value)
                 GregorianCalendar gc = new GregorianCalendar(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth() + 1);
 
-                // TODO: find a functioner to compare both date ( order.getDelivery().getPlannedDate() != gc is always false )
                 if (order.getDelivery() != null && order.getDelivery().getPlannedDate() != null) {
                     order.getDelivery().setPlannedDate(gc);
                 } else if (order.getDelivery() == null) {
@@ -309,7 +302,7 @@ public class Update extends View {
 
             if (selectedStatus.getLabel().equals("Finished")) {
                 if (order.getDelivery().getPlannedDate() != null && order.getDelivery().getDeliveredDate() == null) {
-                    throw new StatusException("You can't finish order if delivery programmed but not done");
+                    PopUp.showError("Order error", "You can't finish order if delivery programmed but not done");
                 } else {
                     order.setPaid(true);
                     order.setStatus(selectedStatus);
@@ -322,7 +315,7 @@ public class Update extends View {
         if (paymentMethod.getSelectionModel().getSelectedItem().getId() != order.getPaymentMethod().getId()) {
             if (order.getPaid()) {
                 //Can't change payment method after paid
-                throw new PaymentMethodException();
+                showError("Payment method error", "You can't change payment method after order is paid.");
             } else {
                 order.setPaymentMethod(paymentMethod.getSelectionModel().getSelectedItem());
             }
@@ -343,7 +336,11 @@ public class Update extends View {
     }
 
     private void setCustomer() {
-        customer.setText(order.getCustomer().getEntity().getContactName());
+        if(order.getCustomer() != null) {
+            customer.setText(order.getCustomer().getEntity().getContactName());
+        } else {
+            customer.setText("Deleted Customer");
+        }
     }
 
     private void setPaymentMethod() {

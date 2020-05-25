@@ -6,7 +6,7 @@ import com.jfoenix.controls.JFXTextField;
 import controller.OrderController;
 import exception.ConnectionException;
 import exception.DataQueryException;
-import exception.SQLManageException;
+import exception.NullObjectException;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import model.Customer;
@@ -111,6 +111,8 @@ public class Read extends View {
                 }
             } catch(DataQueryException ex){
                 showError(ex.getTypeError(), ex.getMessage());
+            } catch (NullObjectException nullObjectException) {
+                System.out.println(nullObjectException.getMessage());
             }
         });
 

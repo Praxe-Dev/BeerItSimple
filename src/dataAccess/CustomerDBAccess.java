@@ -158,7 +158,7 @@ public class CustomerDBAccess implements CustomerDataAccess {
         return null;
     }
 
-    public boolean create(Customer c) throws CustomerInsertionException {
+    public boolean create(Customer c) throws DuplicataException {
         int affectedRowsEntity;
         int affectedRowsCustomer = 0;
         int entityID = 0;
@@ -193,32 +193,15 @@ public class CustomerDBAccess implements CustomerDataAccess {
                     preparedStatementCustomer.setInt(2, c.getRank().getId());
                     preparedStatementCustomer.setDate(3, Date.valueOf(java.time.LocalDate.now()));
                     affectedRowsCustomer = preparedStatementCustomer.executeUpdate();
-
-
-                } else {
-                    throw new SQLException("No ID obtained from entity.");
                 }
-
-            } else {
-                throw new SQLException("Creating Entity failed.");
             }
         } catch (SQLException ex) {
-            String sqlEntityDel = "DELETE FROM entity WHERE id = ?";
-            try {
-
-                PreparedStatement preparedStatementEntityDel = connection.prepareStatement(sqlEntityDel);
-                preparedStatementEntityDel.setInt(1, entityID);
-                preparedStatementEntityDel.executeUpdate();
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                throw new CustomerInsertionException(c);
-            }
+            throw new DuplicataException(ex.getMessage());
         }
         return affectedRowsCustomer != 0;
     }
 
-    public boolean update(Customer customer) throws CustomerUpdateException {
+    public boolean update(Customer customer) throws DuplicataException, UpdateException {
         int affectedRow = 0;
 
         String sqlInstruction = "UPDATE customer\n" +
@@ -253,16 +236,16 @@ public class CustomerDBAccess implements CustomerDataAccess {
             affectedRow = preparedStatement.executeUpdate();
 
             if (affectedRow == 0) {
-                throw new CustomerUpdateException(customer);
+                throw new UpdateException();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DuplicataException(e.getMessage());
         }
 
         return affectedRow != 0;
     }
 
-    public boolean delete(Customer customer) {
+    public boolean delete(Customer customer) throws DeletionException {
 
         String sqlUpdateOrder = "UPDATE `order` SET CustomerEntityid = null\n" +
                 "WHERE CustomerEntityid = ?";
@@ -287,8 +270,7 @@ public class CustomerDBAccess implements CustomerDataAccess {
             preparedStatementDeleteEntity.setInt(1, customer.getEntity().getId());
             preparedStatementDeleteEntity.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            throw new DeletionException();
         }
         return true;
     }

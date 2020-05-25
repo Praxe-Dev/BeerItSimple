@@ -16,7 +16,6 @@ import view.View;
 import view.Window;
 
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -62,7 +61,7 @@ public class Index extends View implements Initializable {
         try {
             this.orderController = new OrderController();
         } catch (ConnectionException e) {
-            e.printStackTrace();
+            showError(e.getTypeError(),e.getMessage());
         }
     }
 
@@ -133,17 +132,26 @@ public class Index extends View implements Initializable {
 
         deleteBtn.setOnAction(e -> {
             try {
-                Order order = getSelectedOrder();
-                if(order != null && PopUp.showConfirm("Confirm delete", "Are you sur you want to delete the order [" + order.getReference() + "] ?")) {
-                    if (orderController.deleteOrder(order)) {
-                        updateTable();
-                    }
-                }
-            } catch (DeletionExceiption ex) {
-                showError(ex.getTypeError(), ex.getMessage());
-            }
+                ArrayList<Order> orders = getMultipleSelectedOrder();
 
-            updateTable();
+                if (orders.isEmpty())
+                    throw new NoRowSelected();
+
+                String message = (orders.size() > 1) ? "Are you sur you want to delete these multiple orders ?" : "Are you sur you want to delete this order ?";
+                if(PopUp.showConfirm("Confirm delete", message)) {
+                    for (Order o : orders) {
+                        if (orderController.deleteOrder(o)) {
+                            updateTable();
+                        }
+                    }
+                } else {
+                    throw new NoRowSelected();
+                }
+            } catch (DeletionException | NoRowSelected ex) {
+                showError(ex.getTypeError(), ex.getMessage());
+            } catch (NullObjectException nullObjectException) {
+                System.out.println(nullObjectException.getMessage());
+            }
         });
     }
 
@@ -161,6 +169,19 @@ public class Index extends View implements Initializable {
         }
 
         return order;
+    }
+
+    private ArrayList<Order> getMultipleSelectedOrder() {
+        ArrayList<Order> selectedOrders = new ArrayList<>();
+        orderTable.getSelectionModel().getSelectedItems().forEach(o -> {
+            try {
+                selectedOrders.add(orderController.getOrder(o.getReference()));
+            } catch (DataQueryException e) {
+                showError(e.getTypeError(), e.getMessage());
+            }
+        });
+
+        return selectedOrders;
     }
 
     public void initTableOrder() {

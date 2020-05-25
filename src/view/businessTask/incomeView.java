@@ -5,6 +5,7 @@ import controller.ProductController;
 import exception.ConnectionException;
 import exception.DataQueryException;
 import exception.DateException;
+import exception.NullObjectException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -52,6 +53,7 @@ public class incomeView extends View {
 
     @Override
     public void init() {
+        this.getStage().setResizable(false);
         try {
             productController = new ProductController();
         } catch (ConnectionException exception) {
@@ -68,6 +70,8 @@ public class incomeView extends View {
                     productIncomes = productController.getAllProductsIncome(start, end);
                 } catch (DataQueryException ex) {
                     showError(ex.getTypeError(), ex.getMessage());
+                } catch (NullObjectException nullObjectException) {
+                    System.out.println(nullObjectException.getMessage());
                 }
                 updateTable(productIncomes);
 
@@ -84,6 +88,8 @@ public class incomeView extends View {
             productIncomes = productController.getAllProductsIncome(startDate.getValue(), endDate.getValue());
         } catch (DataQueryException e) {
             showError(e.getTypeError(), e.getMessage());
+        } catch (NullObjectException e) {
+            System.out.println(e.getMessage());
         }
         double total = 0;
         for (ProductIncome p : productIncomes) {

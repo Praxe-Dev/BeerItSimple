@@ -2,13 +2,11 @@ package dataAccess;
 
 import exception.*;
 import model.News;
-import model.Order;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface NewsDataAccess {
-    News getRandomNews() throws SQLManageException;
+    News getRandomNews() throws ThreadNewsException;
 
     ArrayList<News> getAllNews() throws DataQueryException;
 
@@ -16,7 +14,7 @@ public interface NewsDataAccess {
 
     void insertNews(News news) throws DataQueryException;
 
-    boolean deleteNews(News news) throws DeletionExceiption;
+    boolean deleteNews(News news) throws DeletionException;
 
     void updateNews(News news) throws UpdateException;
 }

@@ -28,14 +28,13 @@ public class Window extends Parent {
         this.pathToFxml = pathToFxml;
         this.title = title;
         this.stage = new Stage();
-        this.stage.getIcons().add(new Image("/ressources/logoTest.PNG"));
+        this.stage.getIcons().add(new Image("/ressources/logoClear.PNG"));
     }
 
     public void load() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
             parent = fxmlLoader.load(getClass().getClassLoader().getResource(pathToFxml).openStream());
-
             view = fxmlLoader.getController();
 
         } catch (IOException e) {

@@ -5,7 +5,6 @@ import dataAccess.NewsDataAccess;
 import exception.*;
 import model.News;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class NewsBusiness {
@@ -19,7 +18,7 @@ public class NewsBusiness {
         dao = newsDBAccess;
     }
 
-    public News getRandomNews() throws SQLManageException {
+    public News getRandomNews() throws ThreadNewsException {
         return dao.getRandomNews();
     }
 
@@ -27,19 +26,31 @@ public class NewsBusiness {
         return dao.getAllNews();
     }
 
-    public News getNewsFromId(Integer id) throws NoRowSelected {
+    public News getNewsFromId(Integer id) throws NoRowSelected, NullObjectException {
+        if (id == null)
+            throw new NullObjectException(id.getClass().getName());
+
         return dao.getNewsFromId(id);
     }
 
-    public void insertNews(News news) throws DataQueryException {
+    public void insertNews(News news) throws DataQueryException, NullObjectException {
+        if (news == null)
+            throw new NullObjectException(news.getClass().getName());
+
         dao.insertNews(news);
     }
 
-    public boolean deleteNews(News news) throws DeletionExceiption {
+    public boolean deleteNews(News news) throws DeletionException, NullObjectException {
+        if (news == null)
+            throw new NullObjectException(news.getClass().getName());
+
         return dao.deleteNews(news);
     }
 
-    public void updateNews(News news) throws UpdateException {
+    public void updateNews(News news) throws UpdateException, NullObjectException {
+        if (news == null)
+            throw new NullObjectException(news.getClass().getName());
+
         dao.updateNews(news);
     }
 }

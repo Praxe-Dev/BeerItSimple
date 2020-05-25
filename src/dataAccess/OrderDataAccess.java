@@ -3,18 +3,17 @@ package dataAccess;
 import exception.*;
 import model.*;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 public interface OrderDataAccess {
     ArrayList<Order> getAllOrders() throws DataQueryException;
 
-    boolean create(Order orderLineTableFormats) throws UpdateException;
+    boolean create(Order order) throws UpdateException;
 
     Order getOrder(int reference) throws DataQueryException;
 
-    boolean deleteOrder(Order order) throws DeletionExceiption;
+    boolean deleteOrder(Order order) throws DeletionException;
 
     boolean updateOrder(Order order) throws DataQueryException, UpdateException;
 

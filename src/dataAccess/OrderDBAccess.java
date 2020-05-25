@@ -408,7 +408,7 @@ public class OrderDBAccess implements OrderDataAccess {
         return newRank;
     }
 
-    public boolean deleteOrder(Order order) throws DeletionExceiption {
+    public boolean deleteOrder(Order order) throws DeletionException {
         try {
 
             String sqlInstruction = "SET SQL_SAFE_UPDATES = 0";
@@ -442,8 +442,7 @@ public class OrderDBAccess implements OrderDataAccess {
 
 
         } catch (SQLException e) {
-//            e.printStackTrace();
-            throw new DeletionExceiption();
+            throw new DeletionException();
         }
 
         return true;
@@ -605,7 +604,7 @@ public class OrderDBAccess implements OrderDataAccess {
         }
     }
 
-    public boolean updateOrder(Order order) throws DataQueryException {
+    public boolean updateOrder(Order order) throws DataQueryException, UpdateException {
         int affectedRow = 0;
 
         String sqlInstruction = "UPDATE `order` SET `isPaid` = ?, `statusNumber` = ?, `paymentMethodId` = ? WHERE `reference` = ?";
@@ -629,7 +628,7 @@ public class OrderDBAccess implements OrderDataAccess {
             //Orderlines update
             updateOrderLines(order);
 
-        } catch (SQLException | SQLManageException e) {
+        } catch (SQLException e) {
             throw new DataQueryException();
         }
 
@@ -682,7 +681,7 @@ public class OrderDBAccess implements OrderDataAccess {
 
     }
 
-    private void updateOrderLines(Order order) throws SQLManageException {
+    private void updateOrderLines(Order order) throws UpdateException, DataQueryException {
         //Check if update necessary for all orderLine
         for (OrderLine orderLine : order.getOrderLineList()) {
             //Chercher si une ligne existe pour ce produit. Si oui, update la quantité. Si non, l'ajouter.
@@ -717,17 +716,17 @@ public class OrderDBAccess implements OrderDataAccess {
 
                         preparedStatementOrderLine.executeUpdate();
                     } catch (SQLException e) {
-                        throw new SQLManageException(e);
+                        throw new UpdateException();
                     }
                 }
             } catch (SQLException e) {
-                throw new SQLManageException(e);
+                throw new UpdateException();
             }
         }
         checkOrderLinesToDelete(order);
     }
 
-    private void checkOrderLinesToDelete(Order order) throws SQLManageException {
+    private void checkOrderLinesToDelete(Order order) throws DataQueryException {
         //Loop on all order line of mentionned order if exist in order.getOrderLineList. If not, need to delete !
         String selectOrderLine = "SELECT * FROM orderline WHERE Orderreference = ?";
         try {
@@ -770,7 +769,7 @@ public class OrderDBAccess implements OrderDataAccess {
                 }
             }
         } catch (SQLException e) {
-            throw new SQLManageException(e);
+            throw new DataQueryException();
         }
     }
 

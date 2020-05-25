@@ -3,7 +3,7 @@ package model;
 import controller.EmployeeController;
 import exception.ConnectionException;
 import exception.DataQueryException;
-import exception.SQLManageException;
+import exception.NullObjectException;
 
 import java.util.GregorianCalendar;
 
@@ -14,7 +14,7 @@ public class NewsTableFormat {
     private GregorianCalendar endDate;
     private String author;
 
-    public NewsTableFormat(Integer id, String title, GregorianCalendar startingDate, GregorianCalendar endDate, String author){
+    public NewsTableFormat(Integer id, String title, GregorianCalendar startingDate, GregorianCalendar endDate, String author) {
         setId(id);
         setTitle(title);
         setStartingDate(startingDate);
@@ -22,7 +22,7 @@ public class NewsTableFormat {
         setAuthor(author);
     }
 
-    public NewsTableFormat(News news){
+    public NewsTableFormat(News news) throws ConnectionException, DataQueryException, NullObjectException {
         this(
                 news.getId(),
                 news.getTitle(),
@@ -32,16 +32,11 @@ public class NewsTableFormat {
         );
     }
 
-    private static String getEmployeeName(Integer entityId){
+    private static String getEmployeeName(Integer entityId) throws ConnectionException, DataQueryException, NullObjectException {
         String name = null;
-        try {
-            EmployeeController employeeController = new EmployeeController();
-            name = employeeController.getEmployeeName(entityId);
-        } catch (ConnectionException e) {
-            e.printStackTrace();
-        } catch (DataQueryException e) {
-            e.printStackTrace();
-        }
+        EmployeeController employeeController = new EmployeeController();
+        name = employeeController.getEmployeeName(entityId);
+
         return name;
     }
 

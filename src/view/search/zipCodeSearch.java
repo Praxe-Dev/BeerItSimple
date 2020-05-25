@@ -7,6 +7,7 @@ import controller.CityController;
 import controller.OrderController;
 import exception.ConnectionException;
 import exception.DataQueryException;
+import exception.NullObjectException;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -66,6 +67,8 @@ public class zipCodeSearch extends View implements Initializable {
             }
         } catch (DataQueryException e) {
             showError(e.getTypeError(), e.getMessage());
+        } catch (NullObjectException e) {
+            System.out.println(e.getMessage());
         }
     }
 

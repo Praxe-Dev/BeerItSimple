@@ -8,11 +8,11 @@ import java.util.ArrayList;
 public interface CustomerDataAccess {
     ArrayList<Customer> getAllCustomers() throws DataQueryException;
 
-    boolean create(Customer customer) throws CustomerInsertionException;
+    boolean create(Customer customer) throws DuplicataException;
 
     Customer getCustomer(Integer id) throws DataQueryException;
 
-    boolean update(Customer customer) throws CustomerUpdateException;
+    boolean update(Customer customer) throws DuplicataException, UpdateException;
 
-    boolean delete(Customer customer);
+    boolean delete(Customer customer) throws DeletionException;
 }

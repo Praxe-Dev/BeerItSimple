@@ -1,13 +1,10 @@
 package view.customer;
 
-import com.itextpdf.text.pdf.ArabicLigaturizer;
 import com.jfoenix.controls.*;
 import controller.CityController;
 import controller.CustomerController;
 import controller.RankController;
-import exception.ConnectionException;
-import exception.CustomerUpdateException;
-import exception.DataQueryException;
+import exception.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -69,9 +66,9 @@ public class Update extends View {
         customersView = (Index) this.getParentView();
 
         Validators.setMailValidators(mail);
-        Validators.setNoNumberValidator(contactName);
+        Validators.setReqField(contactName);
         Validators.setPhoneNumberValidator(phoneNumber);
-        Validators.setNoNumberValidator(address);
+        Validators.setAddressValidator(address);
         Validators.setHouseNumberValidator(houseNumber);
         Validators.setAccountNumberValidator(accountNumber);
         Validators.setBusinessNumberValidator(businessNumber);
@@ -124,7 +121,7 @@ public class Update extends View {
             cityList = cityController.getAllCities();
             rankList = rankController.getAllRanks();
         } catch (DataQueryException e) {
-            e.printStackTrace();
+            showError(e.getTypeError(), e.getMessage());
         }
         ObservableList<City> cityObservableList = FXCollections.observableArrayList(cityList);
         region.setItems(cityObservableList);
@@ -145,8 +142,10 @@ public class Update extends View {
                             customersView.updateTable();
                             closeWindow();
                         }
-                    } catch (CustomerUpdateException excpetion) {
-                        PopUp.showError(excpetion.getTypeError(), excpetion.getMessage());
+                    } catch (DuplicataException | UpdateException exception) {
+                        showError(exception.getTypeError(), exception.getMessage());
+                    } catch (NullObjectException nullObjectException) {
+                        System.out.println(nullObjectException.getMessage());
                     }
                 }
         });
@@ -189,7 +188,7 @@ public class Update extends View {
         return true;
     }
 
-    public boolean updateCostumer() throws CustomerUpdateException {
+    public boolean updateCostumer() throws DuplicataException, UpdateException, NullObjectException {
         selectedCustomer.setRank(customerRank.getSelectionModel().getSelectedItem());
         selectedCustomer.getEntity().setContactName(contactName.getText());
         selectedCustomer.getEntity().setStreet(address.getText());

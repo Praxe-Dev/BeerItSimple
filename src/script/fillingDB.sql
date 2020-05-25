@@ -55,16 +55,16 @@ VALUES ('Prioritised', 1500);
 /* Filling Status table */
 
 INSERT INTO `Status` (label)
-VALUES ('En attente');
+VALUES ('Pending');
 
 INSERT INTO `Status` (label)
-VALUES ('Confirmé');
+VALUES ('Confirmed');
 
 INSERT INTO `Status` (label)
-VALUES ('Annulé');
+VALUES ('Canceled');
 
 INSERT INTO `Status` (label)
-VALUES ('Terminé');
+VALUES ('Completed');
 
 /* Filling PaymentMethod */
 
@@ -83,7 +83,7 @@ VALUES ('Gift card');
 /* Filling Role table */
 
 INSERT INTO Role (name)
-VALUES ('Employé');
+VALUES ('Employee');
 
 INSERT INTO Role (name)
 VALUES ('Manager');
@@ -143,13 +143,13 @@ VALUES (3, 1, '2020-03-07');
 /* Filling Employee table */
 
 INSERT INTO Employee (EntityId, RoleId,password)
-VALUES (1, 1, 'JeSuisUnPoisson');
+VALUES (1, 1, 'employee');
 
 INSERT INTO Employee (EntityId, RoleId,password)
 VALUES (2, 2, 'admin');
 
 INSERT INTO Employee (EntityId, RoleId,password)
-VALUES (8, 3, 'delivery');
+VALUES (8, 3, 'deliverer');
 
 /* Filling Provider table */
 
@@ -159,13 +159,22 @@ VALUES (2, 'Artisan');
 /* Filling Order table */
 
 INSERT INTO `Order` (startingDate, isPaid, StatusNumber, paymentMethodId, CustomerEntityId)
-VALUES ('2019-06-14', false, 1, 2, 1);
+VALUES ('2019-06-14', false, 1, 1, 1);
 
 INSERT INTO `Order` (startingDate, isPaid, StatusNumber, paymentMethodId, CustomerEntityId)
-VALUES ('2020-05-04', false, 1, 2, 2);
+VALUES ('2020-05-04', false, 2, 2, 2);
 
 INSERT INTO `Order` (startingDate, isPaid, StatusNumber, paymentMethodId, CustomerEntityId)
-VALUES ('2020-06-04', false, 1, 2, 3);
+VALUES ('2019-06-04', true, 4, 3, 3);
+
+INSERT INTO `Order` (startingDate, isPaid, StatusNumber, paymentMethodId, CustomerEntityId)
+VALUES ('2020-06-04', false, 1, 2, 4);
+
+INSERT INTO `Order` (startingDate, isPaid, StatusNumber, paymentMethodId, CustomerEntityId)
+VALUES ('2020-06-04', false, 3, 2, 5);
+
+INSERT INTO `Order` (startingDate, isPaid, StatusNumber, paymentMethodId, CustomerEntityId)
+VALUES ('2020-06-04', true, 2, 2, 6);
 
 /* Filling Product table */
 
@@ -198,7 +207,43 @@ VALUES ('2020-06-21', 1, 1);
 /* Filling OrderLine table */
 
 INSERT INTO OrderLine (Productcode, Orderreference, quantity, salesUnitPrice)
-VALUES (1,1,32,2.70);
+VALUES (1,4,10,2.70);
+
+INSERT INTO OrderLine (Productcode, Orderreference, quantity, salesUnitPrice)
+VALUES (2,5,10,2.70);
+
+INSERT INTO OrderLine (Productcode, Orderreference, quantity, salesUnitPrice)
+VALUES (3,2,10,2.70);
+
+INSERT INTO OrderLine (Productcode, Orderreference, quantity, salesUnitPrice)
+VALUES (1,3,10,2.70);
+
+INSERT INTO OrderLine (Productcode, Orderreference, quantity, salesUnitPrice)
+VALUES (5,3,10,2.70);
+
+INSERT INTO OrderLine (Productcode, Orderreference, quantity, salesUnitPrice)
+VALUES (7,2,10,2.70);
+
+INSERT INTO OrderLine (Productcode, Orderreference, quantity, salesUnitPrice)
+VALUES (6,1,10,2.70);
+
+INSERT INTO OrderLine (Productcode, Orderreference, quantity, salesUnitPrice)
+VALUES (4,6,10,2.70);
+
+INSERT INTO OrderLine (Productcode, Orderreference, quantity, salesUnitPrice)
+VALUES (4,5,10,13.65);
+
+INSERT INTO OrderLine (Productcode, Orderreference, quantity, salesUnitPrice)
+VALUES (4,4,10,13.65);
+
+INSERT INTO OrderLine (Productcode, Orderreference, quantity, salesUnitPrice)
+VALUES (4,3,8,13.65);
+
+INSERT INTO OrderLine (Productcode, Orderreference, quantity, salesUnitPrice)
+VALUES (4,2,12,13.65);
+
+INSERT INTO OrderLine (Productcode, Orderreference, quantity, salesUnitPrice)
+VALUES (4,1,20,13.65);
 
 /* Filling News table*/
 

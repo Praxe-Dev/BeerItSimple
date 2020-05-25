@@ -20,7 +20,6 @@ public class DBConnection {
         try {
             connection = DriverManager.getConnection(url, id, password);
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new ConnectionException();
         }
     }

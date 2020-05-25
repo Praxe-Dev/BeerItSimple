@@ -22,12 +22,7 @@ public class City {
     }
 
     public void setZipCode(int zipCode) {
-        if (zipCode < 1000 || zipCode > 9999) {
-            // TODO: throw error ZipCode
-            System.out.println("Erreur - zipCode non valide");
-        } else {
-            this.zipCode = zipCode;
-        }
+        this.zipCode = zipCode;
     }
 
     @Override

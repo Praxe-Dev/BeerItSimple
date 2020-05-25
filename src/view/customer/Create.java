@@ -7,9 +7,7 @@ import com.jfoenix.controls.JFXTextField;
 import controller.CityController;
 import controller.CustomerController;
 import controller.RankController;
-import exception.ConnectionException;
-import exception.CustomerInsertionException;
-import exception.DataQueryException;
+import exception.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -25,8 +23,6 @@ import view.View;
 import java.util.ArrayList;
 
 public class Create extends View {
-    @FXML
-    private ToggleGroup customerType;
     @FXML
     private JFXRadioButton privateCustomer;
     @FXML
@@ -76,9 +72,9 @@ public class Create extends View {
         businessView.setVisible(false);
 
         Validators.setMailValidators(mail);
-        Validators.setNoNumberValidator(contactName);
+        Validators.setReqField(contactName);
         Validators.setPhoneNumberValidator(phoneNumber);
-        Validators.setNoNumberValidator(address);
+        Validators.setAddressValidator(address);
         Validators.setHouseNumberValidator(houseNumber);
         Validators.setAccountNumberValidator(accountNumber);
         Validators.setBusinessNumberValidator(businessNumber);
@@ -119,18 +115,20 @@ public class Create extends View {
             if(Validators.validate(contactName, phoneNumber, address, houseNumber)  && Validators.validateNullableValue(mail, businessNumber, accountNumber)) {
                 try {
                     insertCustomer();
-                    PopUp.showSuccess("Client créé avec succès !", "Success");
+                    PopUp.showSuccess("Customer created with success !", "Success");
                     Index customersView = (Index) getParentView();
                     customersView.updateTable();
                     closeWindow();
-                } catch (CustomerInsertionException exception) {
+                } catch (DuplicataException exception) {
                     PopUp.showError(exception.getTypeError(), exception.getMessage());
+                } catch (NullObjectException nullObjectException) {
+                    System.out.println(nullObjectException.getMessage());
                 }
             }
         });
     }
 
-    private boolean insertCustomer() throws CustomerInsertionException {
+    private boolean insertCustomer() throws DuplicataException, NullObjectException {
 
         Customer newCustomer;
         Entity newEntity = new Entity();

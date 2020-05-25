@@ -1,5 +1,6 @@
 package utils;
 
+import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTimePicker;
@@ -13,7 +14,8 @@ import java.time.LocalDate;
 public class Validators {
 
     public static void setMailValidators(JFXTextField mail) {
-        String regexPattern = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+        //String regexPattern = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+        String regexPattern = "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)(\\.([-a-zA-Z]{2,10})){1,2}$";
         String message = "Format sould be : abc@domain.eu";
 
         RegexValidator mailValidator = new RegexValidator();
@@ -35,8 +37,9 @@ public class Validators {
         setReqField(phoneNumber);
     }
 
-    public static void setNoNumberValidator(JFXTextField field) {
-        String regexPattern = "^([a-zA-Z']+\\s)*[-a-zA-Z']+$";
+    public static void setAddressValidator(JFXTextField field) {
+        //String regexPattern = "^([a-zA-Z-À-ÿ']+\\s)*[-a-zA-Z-À-ÿ']+$";
+        String regexPattern = "^[A-z]+((\\s){1}([A-z]+|[-'À-ÿ]+)+){1,}$";
         RegexValidator validator = new RegexValidator();
         validator.setRegexPattern(regexPattern);
         validator.setMessage("Address should not contains numbers and special characters");
@@ -76,6 +79,15 @@ public class Validators {
 
         businessNumber.getValidators().add(businessNumberValidator);
         addListener(businessNumber);
+    }
+
+    public static void setReqField(JFXPasswordField field) {
+        RequiredFieldValidator reqField = new RequiredFieldValidator();
+        reqField.setMessage("Required field");
+
+        field.getValidators().add(0, reqField);
+
+        addListener(field);
     }
 
     public static void setReqField(JFXTextField field) {
@@ -146,6 +158,14 @@ public class Validators {
         });
     }
 
+    private static void addListener(JFXPasswordField field) {
+        field.focusedProperty().addListener((o, oldVal, newVal) -> {
+            if (!newVal && !newVal.equals("")) {
+                field.validate();
+            }
+        });
+    }
+
     private static void addListener(JFXTextArea area) {
         area.focusedProperty().addListener((o, oldVal, newVal) -> {
             if (!newVal && !newVal.equals("")) {
@@ -172,6 +192,14 @@ public class Validators {
 
     public static boolean validateBetweenDates(LocalDate start, LocalDate end) {
         return end.isBefore(LocalDate.now().plusDays(1)) && start.isBefore(end.plusDays(1));
+    }
+
+    public static boolean startingDateIsBeforeNow(LocalDate start){
+        return start.isBefore(LocalDate.now());
+    }
+
+    public static boolean endIsAfterStart(LocalDate start, LocalDate end){
+        return start.isBefore(end.plusDays(1));
     }
 
     public static boolean validate(JFXTextField... elements) {

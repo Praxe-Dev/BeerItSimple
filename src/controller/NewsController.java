@@ -4,7 +4,6 @@ import business.NewsBusiness;
 import exception.*;
 import model.News;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class NewsController {
@@ -18,7 +17,7 @@ public class NewsController {
         this.newsBusiness = newsBusiness;
     }
 
-    public News getRandomNews() throws SQLManageException {
+    public News getRandomNews() throws ThreadNewsException {
         return newsBusiness.getRandomNews();
     }
 
@@ -26,19 +25,19 @@ public class NewsController {
         return newsBusiness.getAllNews();
     }
 
-    public News getNewsFromId(Integer id) throws NoRowSelected {
+    public News getNewsFromId(Integer id) throws NoRowSelected, NullObjectException {
         return newsBusiness.getNewsFromId(id);
     }
 
-    public void insertNews(News news) throws DataQueryException {
+    public void insertNews(News news) throws DataQueryException, NullObjectException {
         newsBusiness.insertNews(news);
     }
 
-    public boolean deleteNews(News news) throws DeletionExceiption {
+    public boolean deleteNews(News news) throws DeletionException, NullObjectException {
         return newsBusiness.deleteNews(news);
     }
 
-    public void updateNews(News news) throws UpdateException {
+    public void updateNews(News news) throws UpdateException, NullObjectException {
         newsBusiness.updateNews(news);
     }
 }
