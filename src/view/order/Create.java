@@ -21,6 +21,7 @@ import utils.Validators;
 import utils.PopUp;
 import view.View;
 
+import java.net.ConnectException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -276,7 +277,7 @@ public class Create extends View {
         if (deliveryCheck.isSelected()) {
             Employee deliverer = deliveryMan.getValue();
 
-            if(deliverer == null){
+            if(deliverer == null) {
                 PopUp.showError("Delivery error","You need to select a delivery man if you want a delivery");
             } else {
 
@@ -291,19 +292,19 @@ public class Create extends View {
                 );
 
                 newOrder.setDelivery(delivery);
+            }
+        }
 
-                for (OrderLineTableFormat line : tableArticle.getItems()) {
-                    product = productList.getItems().get(line.getProductCode() - 1);
-                    newOrder.addOrderLine(new OrderLine(product, newOrder, line.getQuantity(), line.getUnitPrice()));
-                }
+        for (OrderLineTableFormat line : tableArticle.getItems()) {
+            product = productList.getItems().get(line.getProductCode() - 1);
+            newOrder.addOrderLine(new OrderLine(product, newOrder, line.getQuantity(), line.getUnitPrice()));
+        }
 
-                orderCreated = orderController.create(newOrder);
-                if(orderCreated){
-                    Rank updateRank = orderController.updateCustomerRank(newOrder.getCustomer());
-                    if(updateRank != null){
-                        PopUp.showSuccess("Rank up !", "Thank the client and announce their new rank is: " + updateRank.getLabel() + ".\n His new credit limit is: " + updateRank.getCreditLimit() + "\n");
-                    }
-                }
+        orderCreated = orderController.create(newOrder);
+        if(orderCreated){
+            Rank updateRank = orderController.updateCustomerRank(newOrder.getCustomer());
+            if(updateRank != null){
+                PopUp.showSuccess("Rank up !", "Thank the client and announce their new rank is: " + updateRank.getLabel() + ".\n His new credit limit is: " + updateRank.getCreditLimit() + "\n");
             }
         }
         return orderCreated;
