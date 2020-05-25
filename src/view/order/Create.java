@@ -5,9 +5,7 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import controller.*;
-import exception.NoRowSelected;
-import exception.SQLManageException;
-import exception.UpdateOrderException;
+import exception.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -20,16 +18,12 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.text.Text;
 import model.*;
 import utils.Validators;
-import view.PopUp;
+import utils.PopUp;
 import view.View;
-
-import java.math.BigDecimal;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Create extends View {
@@ -84,34 +78,47 @@ public class Create extends View {
 
     @Override
     public void init() {
-        customerController = new CustomerController();
-        employeeController = new EmployeeController();
-        paymentMethodController = new PaymentMethodController();
-        productController = new ProductController();
-        orderController = new OrderController();
+        try {
+
+            customerController = new CustomerController();
+            employeeController = new EmployeeController();
+            paymentMethodController = new PaymentMethodController();
+            productController = new ProductController();
+            orderController = new OrderController();
+        } catch (ConnectionException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
 
         setShortcut(new KeyCodeCombination(KeyCode.ENTER), () -> addArticle());
         setShortcut(new KeyCodeCombination(KeyCode.DELETE), () -> removeProduct());
 
         Validators.setNumberValidator(productQuantity);
 
-        ArrayList<Customer> allCustomers = customerController.getAllCustomers();
+        ArrayList<Customer> allCustomers = null;
+        ArrayList<PaymentMethod> allPaymentMethod = null;
+        ArrayList<Product> allProducts = null;
+
+        try {
+            allCustomers = customerController.getAllCustomers();
+            allPaymentMethod = paymentMethodController.getAllPaymentMethod();
+            allProducts = productController.getAllProducts();
+        } catch (DataQueryException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
         customerList.setItems(FXCollections.observableArrayList(allCustomers));
         customerList.getSelectionModel().selectFirst();
 
-        ArrayList<PaymentMethod> allPaymentMethod = paymentMethodController.getAllPaymentMethod();
         paymentMethod.setItems(FXCollections.observableArrayList(allPaymentMethod));
         paymentMethod.getSelectionModel().selectFirst();
 
-        ArrayList<Product> allProducts = productController.getAllProducts();
         productList.setItems(FXCollections.observableArrayList(allProducts));
         productList.getSelectionModel().selectFirst();
 
         try {
             ArrayList<Employee> deliveryList = employeeController.getAllDeliveryEmployee();
             deliveryMan.setItems(FXCollections.observableArrayList(deliveryList));
-        } catch(SQLManageException e){
-            e.showMessage();
+        } catch(DataQueryException e){
+            showError(e.getTypeError(), e.getMessage());
         }
 
         deliveryDisplay.setVisible(false);
@@ -152,12 +159,8 @@ public class Create extends View {
                             index.updateTable();
                             closeWindow();
                         }
-                    } catch (SQLException ex) {
-                        ex.printStackTrace();
-                    } catch (SQLManageException ex) {
-                        ex.showMessage();
-                    } catch(UpdateOrderException ex) {
-                        ex.showMessage();
+                    } catch (UpdateException ex) {
+                        showError(ex.getTypeError(), ex.getMessage());
                     }
                 }
            }
@@ -174,12 +177,9 @@ public class Create extends View {
             } else {
 
                 addProduct(newProduct);
-//                   String newVatAmount = String.format("%.2F", (newAmount) )
             }
         } else {
             productQuantity.setStyle("-fx-background-color: rgba(255,0,0,0.5)");
-//               productQuantity.getStyleClass().add("error");
-
         }
     }
 
@@ -208,27 +208,34 @@ public class Create extends View {
         try {
 
             OrderLineTableFormat orderLineTableFormat = tableArticle.getSelectionModel().getSelectedItem();
+            if (orderLineTableFormat == null)
+                throw new NoRowSelected();
+
             tableArticle.getItems().remove(tableArticle.getSelectionModel().getSelectedItem());
 
-            double currentAmountExlVat = Double.parseDouble(totalAmountExclVat.getText().replace(',', '.'));
-            double newAmountExclVat = currentAmountExlVat - orderLineTableFormat.getExclVat();
-            String newTotalExclVat = String.format("%.2f", newAmountExclVat);
-            totalAmountExclVat.setText(newTotalExclVat);
-
-            double currentVatTotal = Double.parseDouble(totalAmountVatOnly.getText().replace(',', '.'));
-            double newVatTotal = 0;
-            if (newAmountExclVat != 0) {
-                newVatTotal = currentVatTotal - (orderLineTableFormat.getExclVat() * ((double) orderLineTableFormat.getVatCodeRate() / 100.0));
-            }
-            String totalVat = String.format("%.2f", newVatTotal);
-            totalAmountVatOnly.setText(totalVat);
-
-            double newTotalVatIncl = newAmountExclVat + newVatTotal;
-            String totalVatIncl = String.format("%.2f", newTotalVatIncl);
-            totalAmountVatInc.setText(totalVatIncl);
-        } catch (NullPointerException e) {
-            new NoRowSelected();
+            computeAndDisplayNewAmount(orderLineTableFormat, totalAmountExclVat, totalAmountVatOnly, totalAmountVatInc);
+        } catch (NoRowSelected e) {
+            showError(e.getTypeError(),e.getMessage());
         }
+    }
+
+    static void computeAndDisplayNewAmount(OrderLineTableFormat orderLineTableFormat, Text totalAmountExclVat, Text totalAmountVatOnly, Text totalAmountVatInc) {
+        double currentAmountExlVat = Double.parseDouble(totalAmountExclVat.getText().replace(',', '.'));
+        double newAmountExclVat = currentAmountExlVat - orderLineTableFormat.getExclVat();
+        String newTotalExclVat = String.format("%.2f", newAmountExclVat);
+        totalAmountExclVat.setText(newTotalExclVat);
+
+        double currentVatTotal = Double.parseDouble(totalAmountVatOnly.getText().replace(',', '.'));
+        double newVatTotal = 0;
+        if (newAmountExclVat != 0) {
+            newVatTotal = currentVatTotal - (orderLineTableFormat.getExclVat() * (orderLineTableFormat.getVatCodeRate() / 100.0));
+        }
+        String totalVat = String.format("%.2f", newVatTotal);
+        totalAmountVatOnly.setText(totalVat);
+
+        double newTotalVatIncl = newAmountExclVat + newVatTotal;
+        String totalVatIncl = String.format("%.2f", newTotalVatIncl);
+        totalAmountVatInc.setText(totalVatIncl);
     }
 
     private boolean deliveryDateCheck() {
@@ -255,10 +262,10 @@ public class Create extends View {
         return true;
     }
 
-    private boolean newOrderInsert() throws SQLException, SQLManageException, UpdateOrderException {
-        ArrayList<OrderLine> orderLines = new ArrayList<>();
+    private boolean newOrderInsert() throws UpdateException {
         Product product;
         Delivery delivery = null;
+        Boolean orderCreated = false;
 
         Order newOrder = new Order(
                 customerList.getValue(),
@@ -267,34 +274,36 @@ public class Create extends View {
         );
 
         if (deliveryCheck.isSelected()) {
+            Employee deliverer = deliveryMan.getValue();
 
-            if(deliveryMan.getSelectionModel().isSelected(-1)){
-                throw new UpdateOrderException("You need to select a delivery man if you want a delivery");
-            }
-            LocalDate date = deliveryDate.getValue();
-            // Create the right format for delivery.plannedDate (-1 and +1 to get the right value)
-            GregorianCalendar gc = new GregorianCalendar(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth() + 1);
+            if(deliverer == null){
+                PopUp.showError("Delivery error","You need to select a delivery man if you want a delivery");
+            } else {
 
-//            date.set(deliveryDate.getValue().getYear(), deliveryDate.getValue().getMonthValue(), deliveryDate.getValue().getDayOfMonth());
-            delivery = new Delivery(
-                    deliveryMan.getSelectionModel().getSelectedItem(),
-                    gc,
-                    newOrder
-            );
+                LocalDate date = deliveryDate.getValue();
+                // Create the right format for delivery.plannedDate (-1 and +1 to get the right value)
+                GregorianCalendar gc = new GregorianCalendar(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth() + 1);
 
-            newOrder.setDelivery(delivery);
-        }
+                delivery = new Delivery(
+                        deliverer,
+                        gc,
+                        newOrder
+                );
 
-        for (OrderLineTableFormat line : tableArticle.getItems()) {
-            product = productList.getItems().get(line.getProductCode() - 1);
-            newOrder.addOrderLine(new OrderLine(product, newOrder, line.getQuantity(), line.getUnitPrice()));
-        }
+                newOrder.setDelivery(delivery);
 
-        Boolean orderCreated = orderController.create(newOrder);
-        if(orderCreated){
-            Rank updateRank = orderController.updateCustomerRank(newOrder.getCustomer());
-            if(updateRank != null){
-                PopUp.showSuccess("Rank up !", "Thank the client and announce their new rank is: " + updateRank.getLabel() + ".\n His new credit limit is: " + updateRank.getCreditLimit() + "\n");
+                for (OrderLineTableFormat line : tableArticle.getItems()) {
+                    product = productList.getItems().get(line.getProductCode() - 1);
+                    newOrder.addOrderLine(new OrderLine(product, newOrder, line.getQuantity(), line.getUnitPrice()));
+                }
+
+                orderCreated = orderController.create(newOrder);
+                if(orderCreated){
+                    Rank updateRank = orderController.updateCustomerRank(newOrder.getCustomer());
+                    if(updateRank != null){
+                        PopUp.showSuccess("Rank up !", "Thank the client and announce their new rank is: " + updateRank.getLabel() + ".\n His new credit limit is: " + updateRank.getCreditLimit() + "\n");
+                    }
+                }
             }
         }
         return orderCreated;

@@ -1,8 +1,8 @@
 package dataAccess;
 
-import com.mysql.cj.x.protobuf.MysqlxPrepare;
-import exception.EmployeeLoginException;
-import exception.SQLManageException;
+import exception.ConnectionException;
+import exception.DataQueryException;
+import exception.LoginException;
 import model.City;
 import model.Employee;
 import model.Entity;
@@ -14,12 +14,12 @@ import java.util.ArrayList;
 public class EmployeeDBAccess implements EmployeeDataAccess {
     private Connection connection;
 
-    public EmployeeDBAccess() {
-        this.connection = DBConnection.getDBConnection();
+    public EmployeeDBAccess() throws ConnectionException {
+        this.connection = DBConnection.getInstance();
     }
 
     @Override
-    public Employee getEmployee(int registrationNumber, String password) throws EmployeeLoginException {
+    public Employee getEmployee(int login, String password) throws LoginException {
         String sqlInstructions = "SELECT employee.*, e.*, r.*, city.* FROM employee\n" +
                                 "JOIN entity e ON e.id = employee.EntityId\n" +
                                 "JOIN role r ON r.id = employee.RoleId\n" +
@@ -29,7 +29,7 @@ public class EmployeeDBAccess implements EmployeeDataAccess {
 
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlInstructions);
-            preparedStatement.setInt(1, registrationNumber);
+            preparedStatement.setInt(1, login);
             preparedStatement.setString(2, password);
             employeeData = preparedStatement.executeQuery();
             employeeData.next();
@@ -60,13 +60,13 @@ public class EmployeeDBAccess implements EmployeeDataAccess {
                 return new Employee(entity, role, password);
             }
         } catch (Exception e) {
-            throw new EmployeeLoginException();
+            throw new LoginException();
         }
 
         return null;
     }
 
-    public ArrayList<Employee> getAllDeliveryEmployee() throws SQLManageException {
+    public ArrayList<Employee> getAllDeliveryEmployee() throws DataQueryException {
         ArrayList<Employee> deliveryList = new ArrayList<>();
         String sqlInstruction = "SELECT e.*, entity.*, r.*, c.* FROM employee e JOIN role r ON r.id = e.RoleId JOIN entity ON entity.id = e.EntityId JOIN city c ON c.label = entity.Citylabel AND c.zipCode = entity.CityZipCode WHERE r.id = ?";
         ResultSet employeeData;
@@ -100,14 +100,14 @@ public class EmployeeDBAccess implements EmployeeDataAccess {
                 deliveryList.add(new Employee(entity, role));
             }
         } catch(SQLException e){
-            throw new SQLManageException(e);
+            throw new DataQueryException();
         }
 
 
         return deliveryList;
     }
 
-    public String getEmployeeName(Integer entityId) throws SQLManageException {
+    public String getEmployeeName(Integer entityId) throws DataQueryException {
         //Return entity name from entityId
         String sqlInstruction = "SELECT contactName FROM entity WHERE id = ?";
         try {
@@ -118,7 +118,7 @@ public class EmployeeDBAccess implements EmployeeDataAccess {
                 return data.getString("contactName");
             }
         } catch(SQLException e){
-            throw new SQLManageException(e);
+            throw new DataQueryException();
         }
 
         return null;

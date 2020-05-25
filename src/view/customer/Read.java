@@ -4,12 +4,14 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import controller.OrderController;
+import exception.ConnectionException;
+import exception.DataQueryException;
 import exception.SQLManageException;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import model.Customer;
 import model.Order;
-import view.PopUp;
+import utils.PopUp;
 import view.View;
 import view.Window;
 import view.order.Index;
@@ -53,7 +55,11 @@ public class Read extends View {
 
     @Override
     public void init() {
-        orderController = new OrderController();
+        try {
+            orderController = new OrderController();
+        } catch (ConnectionException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
 
         contactName.setText(selectedCustomer.getEntity().getContactName());
         address.setText(selectedCustomer.getEntity().getStreet());
@@ -103,8 +109,8 @@ public class Read extends View {
                 } else {
                     openNewTabView(allOrders);
                 }
-            } catch(SQLManageException ex){
-                ex.showMessage();
+            } catch(DataQueryException ex){
+                showError(ex.getTypeError(), ex.getMessage());
             }
         });
 

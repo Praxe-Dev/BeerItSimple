@@ -7,6 +7,8 @@ import com.jfoenix.controls.JFXRadioButton;
 import controller.OrderController;
 import controller.RankController;
 import controller.StatusController;
+import exception.ConnectionException;
+import exception.DataQueryException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ToggleGroup;
@@ -46,14 +48,19 @@ public class ordersFromRank extends View implements Initializable {
 
     @Override
     public void init() {
-        rankController = new RankController();
-        rankList.getItems().setAll(rankController.getAllRanks());
+        try {
+            rankController = new RankController();
+            statusController = new StatusController();
+            rankList.getItems().setAll(rankController.getAllRanks());
+            statusList.getItems().addAll(statusController.getAllStatus());
+        } catch (ConnectionException | DataQueryException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
+
         rankList.getSelectionModel().selectFirst();
         rankList.getStyleClass().add("whiteComboBox");
 
-        statusController = new StatusController();
         statusList.getItems().add(new Status(null, "No matter"));
-        statusList.getItems().addAll(statusController.getAllStatus());
         statusList.getSelectionModel().selectFirst();
         statusList.getStyleClass().add("whiteComboBox");
 
@@ -62,7 +69,7 @@ public class ordersFromRank extends View implements Initializable {
 
     private void executeSearch() {
         Rank rank = rankList.getValue();
-        // If no matter is selected, the id value is null, so we don't search for the status
+        // in the case [no matter] is selected, the id value is null, so we don't search for the status
         Status status = (statusList.getValue().getId() == null ? null : statusList.getValue());
 
         //  true = paid | false = not paid | Null = Both
@@ -71,9 +78,14 @@ public class ordersFromRank extends View implements Initializable {
         if (paidRadio.isSelected() || notPaidRadio.isSelected())
             isPaid = paidRadio.isSelected();
 
-        ArrayList<Order> orderFromRanks = new OrderController().getOrdersFromRanks(rank, status, isPaid);
-        openNewTabview(orderFromRanks);
+        ArrayList<Order> orderFromRanks = null;
+        try {
+            orderFromRanks = new OrderController().getOrdersFromRanks(rank, status, isPaid);
+        } catch (ConnectionException | DataQueryException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
 
+        openNewTabview(orderFromRanks);
     }
 
     private void openNewTabview(ArrayList<Order> orderFromRanks) {

@@ -2,14 +2,13 @@ package view.search;
 
 import com.jfoenix.controls.JFXButton;
 import controller.OrderController;
+import exception.ConnectionException;
+import exception.DataQueryException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.DatePicker;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.layout.BorderPane;
 import model.Order;
-import view.PopUp;
+import utils.PopUp;
 import view.View;
 import view.Window;
 import view.order.Index;
@@ -28,7 +27,6 @@ public class searchBetweenDates extends View implements Initializable {
     @FXML
     private JFXButton searchBtn;
 
-    private Index orderIndex;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -44,9 +42,6 @@ public class searchBetweenDates extends View implements Initializable {
         searchBtn.setOnAction(e -> {
             executeSearch();
         });
-
-//        setShortcut(new KeyCodeCombination(KeyCode.ENTER), () -> executeSearch());
-        orderIndex = new Index();
     }
 
     public void executeSearch() {
@@ -57,8 +52,12 @@ public class searchBetweenDates extends View implements Initializable {
              end = endDate.getValue().plusDays(1);
 
         if (validateBothDates(start, end)) {
-            ArrayList<Order> orderBetweenDates = new OrderController().getAllOrdersBetweenDates(start, end);
-
+            ArrayList<Order> orderBetweenDates = null;
+            try {
+                orderBetweenDates = new OrderController().getAllOrdersBetweenDates(start, end);
+            } catch (ConnectionException | DataQueryException e) {
+                showError(e.getTypeError(), e.getMessage());
+            }
             openNewTableView(orderBetweenDates);
         } else {
             PopUp.showError("Wrong date", "The starting date must be one day earlier than the current date\n (Either the end date won't \"back to the future\")");

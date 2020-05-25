@@ -2,8 +2,9 @@ package business;
 
 import dataAccess.EmployeeDBAccess;
 import dataAccess.EmployeeDataAccess;
-import exception.EmployeeLoginException;
-import exception.SQLManageException;
+import exception.ConnectionException;
+import exception.DataQueryException;
+import exception.LoginException;
 import model.Employee;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 public class EmployeeBusiness {
     private EmployeeDataAccess dao;
 
-    public EmployeeBusiness() {
+    public EmployeeBusiness() throws ConnectionException {
         setDao(new EmployeeDBAccess());
     }
 
@@ -19,15 +20,15 @@ public class EmployeeBusiness {
         this.dao = employeeDBAccess;
     }
 
-    public Employee getEmployee(int registrationNumber, String password) throws EmployeeLoginException {
+    public Employee getEmployee(int registrationNumber, String password) throws LoginException {
         return dao.getEmployee(registrationNumber, password);
     }
 
-    public ArrayList<Employee> getAllDeliveryEmployee() throws SQLManageException {
+    public ArrayList<Employee> getAllDeliveryEmployee() throws DataQueryException {
         return dao.getAllDeliveryEmployee();
     }
 
-    public String getEmployeeName(Integer entityId) throws SQLManageException {
+    public String getEmployeeName(Integer entityId) throws DataQueryException {
         return dao.getEmployeeName(entityId);
     }
 }

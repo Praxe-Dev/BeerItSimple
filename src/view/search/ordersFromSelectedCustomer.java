@@ -4,13 +4,15 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import controller.CustomerController;
 import controller.OrderController;
+import exception.ConnectionException;
+import exception.DataQueryException;
 import exception.SQLManageException;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import model.Customer;
 import model.Order;
-import view.PopUp;
+import utils.PopUp;
 import view.View;
 import view.Window;
 import view.order.Index;
@@ -37,10 +39,21 @@ public class ordersFromSelectedCustomer extends View implements Initializable {
 
     @Override
     public void init() {
-        customerController = new CustomerController();
-        orderController = new OrderController();
+        try {
+            customerController = new CustomerController();
+            orderController = new OrderController();
+        } catch (ConnectionException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
+
+
         //Init customerBox
-        ArrayList<Customer> allCustomers = customerController.getAllCustomers();
+        ArrayList<Customer> allCustomers = null;
+        try {
+            allCustomers = customerController.getAllCustomers();
+        } catch (DataQueryException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
         customerBox.setItems(FXCollections.observableArrayList(allCustomers));
         customerBox.getSelectionModel().selectFirst();
         customerBox.getStyleClass().add("whiteComboBox");
@@ -64,8 +77,8 @@ public class ordersFromSelectedCustomer extends View implements Initializable {
             } else {
                 openNewTabView(allOrders, customer);
             }
-        } catch(SQLManageException e){
-            e.showMessage();
+        } catch(DataQueryException e){
+            showError(e.getTypeError(), e.getMessage());
         }
 
     }

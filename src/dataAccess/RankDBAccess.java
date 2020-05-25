@@ -1,6 +1,7 @@
 package dataAccess;
 
-import model.Customer;
+import exception.ConnectionException;
+import exception.DataQueryException;
 import model.Rank;
 
 import java.sql.Connection;
@@ -11,12 +12,12 @@ import java.util.ArrayList;
 public class RankDBAccess implements RankDataAccess {
     private Connection connection;
 
-    public RankDBAccess() {
-        this.connection = DBConnection.getDBConnection();
+    public RankDBAccess() throws ConnectionException {
+        this.connection = DBConnection.getInstance();
     }
 
     @Override
-    public ArrayList<Rank> getAllRanks() {
+    public ArrayList<Rank> getAllRanks() throws DataQueryException {
         String sqlInstruction = "SELECT * FROM `rank`";
         ArrayList<Rank> rankList;
         try {
@@ -33,12 +34,10 @@ public class RankDBAccess implements RankDataAccess {
 
                 rankList.add(rank);
             }
-
-            return rankList;
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataQueryException();
         }
 
-        return null;
+        return rankList;
     }
 }

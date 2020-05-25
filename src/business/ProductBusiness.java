@@ -4,6 +4,8 @@ import dataAccess.OrderLineDBAccess;
 import dataAccess.OrderLineDataAccess;
 import dataAccess.ProductDBAccess;
 import dataAccess.ProductDataAccess;
+import exception.ConnectionException;
+import exception.DataQueryException;
 import model.OrderLine;
 import model.Product;
 import model.ProductIncome;
@@ -15,16 +17,16 @@ public class ProductBusiness {
     private ProductDataAccess productDao;
     private OrderLineDataAccess orderLineDao;
 
-    public ProductBusiness() {
+    public ProductBusiness() throws ConnectionException {
         this.productDao = new ProductDBAccess();
         this.orderLineDao = new OrderLineDBAccess();
     }
 
-    public ArrayList<Product> getAllProducts() {
+    public ArrayList<Product> getAllProducts() throws DataQueryException {
         return productDao.getAllProducts();
     }
 
-    public ArrayList<ProductIncome> getAllProductsIncome(LocalDate startDate, LocalDate endDate) {
+    public ArrayList<ProductIncome> getAllProductsIncome(LocalDate startDate, LocalDate endDate) throws DataQueryException {
         ArrayList<Product> allProducts = productDao.getAllProducts();
         ArrayList<OrderLine> allOrderlines = orderLineDao.getAllOrderLineBetweenDates(startDate, endDate);
 

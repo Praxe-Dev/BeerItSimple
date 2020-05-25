@@ -13,7 +13,7 @@ public class OrderTableFormat {
     private GregorianCalendar plannedDate;
     private GregorianCalendar deliveredDate;
     private String deliveryMan;
-    private static SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+    private static SimpleDateFormat fmt = new SimpleDateFormat("dd-MM-yyyy");
 
     public OrderTableFormat(Order order){
         setReference(order.getReference());

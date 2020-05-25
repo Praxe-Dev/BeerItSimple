@@ -19,7 +19,7 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.text.Text;
 import model.*;
 import utils.Date;
-import view.PopUp;
+import utils.PopUp;
 import view.View;
 
 import java.time.LocalDate;
@@ -91,35 +91,39 @@ public class Update extends View {
     private StatusController statusController;
 
     @Override
-    public void init(){
+    public void init() {
         setShortcut(new KeyCodeCombination(KeyCode.ENTER), () -> addArticle());
         setShortcut(new KeyCodeCombination(KeyCode.DELETE), () -> removeArticle());
 
-        paymentMethodController = new PaymentMethodController();
-        employeeController = new EmployeeController();
-        orderController = new OrderController();
-        productController = new ProductController();
-        statusController = new StatusController();
         Index orderView = (Index) getParentView();
+        try {
+            paymentMethodController = new PaymentMethodController();
+            employeeController = new EmployeeController();
+            orderController = new OrderController();
+            productController = new ProductController();
+            statusController = new StatusController();
 
-        orderReference.setText("[" + order.getReference() + "]");
-        createdAt.setText("Created at " + Date.format(order.getStartingDate()));
+            orderReference.setText("[" + order.getReference() + "]");
+            createdAt.setText("Created at " + Date.format(order.getStartingDate()));
 
-        ArrayList<Product> allProducts = productController.getAllProducts();
-        productList.setItems(FXCollections.observableArrayList(allProducts));
-        productList.getSelectionModel().selectFirst();
+            ArrayList<Product> allProducts = productController.getAllProducts();
+            productList.setItems(FXCollections.observableArrayList(allProducts));
+            productList.getSelectionModel().selectFirst();
 
+            setCurrentStatus();
+        } catch (ConnectionException | DataQueryException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
         setCustomer();
-        setCurrentStatus();
         setPaymentMethod();
         setDelivery();
         initTable();
         fillProductTable();
 
         statusList.setOnAction(e -> {
-            if(!statusList.getSelectionModel().getSelectedItem().getLabel().equals("Finished")){
-                if(order.getDelivery() == null){
-                    if(deliveryCheck.isDisable()){
+            if (!statusList.getSelectionModel().getSelectedItem().getLabel().equals("Finished")) {
+                if (order.getDelivery() == null) {
+                    if (deliveryCheck.isDisable()) {
                         deliveryCheck.setDisable(false);
                     }
                 }
@@ -135,8 +139,8 @@ public class Update extends View {
         });
 
         deliveryCheck.setOnAction(e -> {
-            if(order.getDelivery() != null){
-                if(order.getDelivery().getDeliveredDate() == null) {
+            if (order.getDelivery() != null) {
+                if (order.getDelivery().getDeliveredDate() == null) {
                     if (deliveryDisplay.isVisible()) {
                         deliveryDisplay.setVisible(false);
                         deliveryMan.setVisible(false);
@@ -162,7 +166,7 @@ public class Update extends View {
             }
         });
 
-        submitBtn.setOnAction(e ->{
+        submitBtn.setOnAction(e -> {
             if (!tableArticle.getItems().isEmpty()) {
                 if (deliveryDateCheck()) {
                     try {
@@ -171,18 +175,19 @@ public class Update extends View {
                             orderView.updateTable();
                             closeWindow();
                         }
-                    } catch (SQLManageException ex) {
-                        ex.showMessage();
                     } catch (PaymentMethodException payErr) {
                         payErr.showMessage();
                     } catch (StatusException statusErr) {
                         statusErr.showMessage();
-                    } catch (UpdateOrderException ex) {
-                        ex.showMessage();
+                    } catch (UpdateException ex) {
+                        showError(ex.getTypeError(), ex.getMessage());
+                    } catch (DataQueryException ex) {
+                        showError(ex.getTypeError(), ex.getMessage());
                     }
                 }
             } else {
-                new UpdateOrderException("You can't save this order without products. If you want, you can delete this order.").showMessage();
+                PopUp.showError("Order error", "You can't save an order without atleast one orderline.");
+                ;
             }
         });
 
@@ -191,7 +196,7 @@ public class Update extends View {
         });
     }
 
-    public void addArticle () {
+    public void addArticle() {
         if (!productQuantity.getText().equals("") && productQuantity.validate()) {
 //               productQuantity.getStyleClass().remove("error");
             productQuantity.setStyle("");
@@ -211,16 +216,14 @@ public class Update extends View {
         try {
 
             OrderLineTableFormat orderLineTableFormat = tableArticle.getSelectionModel().getSelectedItem();
-            tableArticle.getItems().remove(orderLineTableFormat);
-//                double amount = Double.parseDouble(totalAmount.getText().replace(',', '.'));
-//
-//                String newTotal = String.format("%.2f", amount - orderLineTableFormat.getTotal());
-//                totalAmount.setText(newTotal);
+            if (orderLineTableFormat == null)
+                throw new NoRowSelected();
 
+            tableArticle.getItems().remove(orderLineTableFormat);
             removeProduct(orderLineTableFormat);
 
-        } catch (NullPointerException exception) {
-            new NoRowSelected();
+        } catch (NoRowSelected e) {
+            showError(e.getTypeError(), e.getMessage());
         }
     }
 
@@ -257,31 +260,16 @@ public class Update extends View {
 
     private void removeProduct(OrderLineTableFormat orderLineTableFormat) {
 
-        double currentAmountExlVat = Double.parseDouble(totalAmountExclVat.getText().replace(',', '.'));
-        double newAmountExclVat = currentAmountExlVat - orderLineTableFormat.getExclVat();
-        String newTotalExclVat = String.format("%.2f", newAmountExclVat);
-        totalAmountExclVat.setText(newTotalExclVat);
-
-        double currentVatTotal = Double.parseDouble(totalAmountVatOnly.getText().replace(',', '.'));
-        double newVatTotal = 0;
-        if (newAmountExclVat != 0) {
-            newVatTotal = currentVatTotal - (orderLineTableFormat.getExclVat() * ((double) orderLineTableFormat.getVatCodeRate() / 100.0));
-        }
-        String totalVat = String.format("%.2f", newVatTotal);
-        totalAmountVatOnly.setText(totalVat);
-
-        double newTotalVatIncl = newAmountExclVat + newVatTotal;
-        String totalVatIncl = String.format("%.2f", newTotalVatIncl);
-        totalAmountVatInc.setText(totalVatIncl);
+        Create.computeAndDisplayNewAmount(orderLineTableFormat, totalAmountExclVat, totalAmountVatOnly, totalAmountVatInc);
     }
 
-    private boolean updateOrder() throws SQLManageException, PaymentMethodException, StatusException, UpdateOrderException {
+    private boolean updateOrder() throws PaymentMethodException, StatusException, UpdateException, DataQueryException {
         Product product;
 
         if (deliveryCheck.isSelected()) {
-            if(deliveryDate != null) {
-                if(deliveryMan.getSelectionModel().isSelected(-1)){
-                    throw new UpdateOrderException("You need to select a delivery man if you want a delivery");
+            if (deliveryDate != null) {
+                if (deliveryMan.getSelectionModel().isSelected(-1)) {
+                    throw new UpdateException();
                 }
 //                GregorianCalendar date = new GregorianCalendar();
 //                date.set(deliveryDate.getValue().getYear(), deliveryDate.getValue().getDayOfMonth(), deliveryDate.getValue().getDayOfMonth());
@@ -291,9 +279,9 @@ public class Update extends View {
                 GregorianCalendar gc = new GregorianCalendar(date.getYear(), date.getMonthValue() - 1, date.getDayOfMonth() + 1);
 
                 // TODO: find a functioner to compare both date ( order.getDelivery().getPlannedDate() != gc is always false )
-                if(order.getDelivery() != null && order.getDelivery().getPlannedDate() != null){
+                if (order.getDelivery() != null && order.getDelivery().getPlannedDate() != null) {
                     order.getDelivery().setPlannedDate(gc);
-                } else if(order.getDelivery() == null) {
+                } else if (order.getDelivery() == null) {
                     Delivery delivery = new Delivery(
                             deliveryMan.getSelectionModel().getSelectedItem(),
                             gc,
@@ -302,8 +290,8 @@ public class Update extends View {
                     order.setDelivery(delivery);
                 }
 
-                if(delivered.isSelected()){
-                    if(order.getDelivery() != null && order.getDelivery().getDeliveredDate() == null){
+                if (delivered.isSelected()) {
+                    if (order.getDelivery() != null && order.getDelivery().getDeliveredDate() == null) {
                         order.getDelivery().setDeliveredDate(gc);
                     }
                 }
@@ -312,14 +300,14 @@ public class Update extends View {
             order.setDelivery(null);
         }
 
-        if(paid.isSelected()){
+        if (paid.isSelected()) {
             order.setPaid(true);
         }
 
         Status selectedStatus = statusList.getSelectionModel().getSelectedItem();
-        if(selectedStatus.getId() != order.getStatus().getId()){
+        if (selectedStatus.getId() != order.getStatus().getId()) {
 
-            if(selectedStatus.getLabel().equals("Finished")){
+            if (selectedStatus.getLabel().equals("Finished")) {
                 if (order.getDelivery().getPlannedDate() != null && order.getDelivery().getDeliveredDate() == null) {
                     throw new StatusException("You can't finish order if delivery programmed but not done");
                 } else {
@@ -331,8 +319,8 @@ public class Update extends View {
             }
         }
 
-        if(paymentMethod.getSelectionModel().getSelectedItem().getId() != order.getPaymentMethod().getId()){
-            if(order.getPaid()){
+        if (paymentMethod.getSelectionModel().getSelectedItem().getId() != order.getPaymentMethod().getId()) {
+            if (order.getPaid()) {
                 //Can't change payment method after paid
                 throw new PaymentMethodException();
             } else {
@@ -350,43 +338,48 @@ public class Update extends View {
         return orderController.updateOrder(order);
     }
 
-    public void setOrder(Order order){
+    public void setOrder(Order order) {
         this.order = order;
     }
 
-    private void setCustomer(){
+    private void setCustomer() {
         customer.setText(order.getCustomer().getEntity().getContactName());
     }
 
-    private void setPaymentMethod(){
+    private void setPaymentMethod() {
         String paymentSelected = order.getPaymentMethod().getId().toString();
-        ArrayList<PaymentMethod> allPaymentMethod = paymentMethodController.getAllPaymentMethod();
+        ArrayList<PaymentMethod> allPaymentMethod = null;
+        try {
+            allPaymentMethod = paymentMethodController.getAllPaymentMethod();
+        } catch (DataQueryException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
         int paymentIndex = -1;
-        for(int i = 0; i < allPaymentMethod.size(); i++){
-            if(allPaymentMethod.get(i).getId().toString().equals(paymentSelected)){
+        for (int i = 0; i < allPaymentMethod.size(); i++) {
+            if (allPaymentMethod.get(i).getId().toString().equals(paymentSelected)) {
                 paymentIndex = i;
                 break;
             }
         }
         paymentMethod.setItems(FXCollections.observableArrayList(allPaymentMethod));
-        if(paymentIndex != -1){
+        if (paymentIndex != -1) {
             paymentMethod.getSelectionModel().select(paymentIndex);
         } else {
             paymentMethod.getSelectionModel().selectFirst();
         }
 
-        if(order.getPaid()){
+        if (order.getPaid()) {
             paymentMethod.setDisable(true);
             paid.setSelected(true);
             paid.setDisable(true);
         }
     }
 
-    private void setDeliveryList(){
+    private void setDeliveryList() {
         try {
             ArrayList<Employee> deliveryList = employeeController.getAllDeliveryEmployee();
             int deliveryManIndex = -1;
-            if(order.getDelivery() != null) {
+            if (order.getDelivery() != null) {
                 for (int i = 0; i < deliveryList.size(); i++) {
                     if (deliveryList.get(i).getEntity().getId() == order.getDelivery().getEmployee().getEntity().getId()) {
                         deliveryManIndex = i;
@@ -395,21 +388,21 @@ public class Update extends View {
                 }
             }
             deliveryMan.setItems(FXCollections.observableArrayList(deliveryList));
-            if(deliveryManIndex != -1){
+            if (deliveryManIndex != -1) {
                 deliveryMan.getSelectionModel().select(deliveryManIndex);
             }
-        } catch(SQLManageException e){
-            e.showMessage();
+        } catch (DataQueryException e) {
+            showError(e.getTypeError(), e.getMessage());
         }
     }
 
-    private void setDelivery(){
-        if(order.getDelivery() != null) {
+    private void setDelivery() {
+        if (order.getDelivery() != null) {
             deliveryCheck.setSelected(true);
-            if(order.getDelivery().getPlannedDate() != null) {
+            if (order.getDelivery().getPlannedDate() != null) {
                 GregorianCalendar plannedDate = order.getDelivery().getPlannedDate();
                 Calendar calendar = plannedDate;
-                deliveryDate.setValue(LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.DAY_OF_MONTH)));
+                deliveryDate.setValue(LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH)));
                 if (order.getDelivery().getDeliveredDate() != null) {
                     deliveryCheck.setDisable(true);
                     deliveryDate.setDisable(true);
@@ -431,20 +424,20 @@ public class Update extends View {
         setDeliveryList();
     }
 
-    private void setCurrentStatus(){
+    private void setCurrentStatus() throws DataQueryException {
         String currentStatus = order.getStatus().getId().toString();
         ArrayList<Status> statusArrayList = statusController.getAllStatus();
         int statusIndex = -1;
-        for(int i = 0; i < statusArrayList.size(); i++){
-            if(statusArrayList.get(i).getId().toString().equals(currentStatus)){
+        for (int i = 0; i < statusArrayList.size(); i++) {
+            if (statusArrayList.get(i).getId().toString().equals(currentStatus)) {
                 statusIndex = i;
                 break;
             }
         }
         statusList.setItems(FXCollections.observableArrayList(statusArrayList));
-        if(statusIndex != -1){
+        if (statusIndex != -1) {
             statusList.getSelectionModel().select(statusIndex);
-            if(statusArrayList.get(statusIndex).getLabel().equals("Finished")){
+            if (statusArrayList.get(statusIndex).getLabel().equals("Finished")) {
                 deliveryCheck.setDisable(true);
             }
         } else {
@@ -471,10 +464,10 @@ public class Update extends View {
         totalInclVat.setCellValueFactory(new PropertyValueFactory<>("inclVat"));
     }
 
-    private void fillProductTable(){
+    private void fillProductTable() {
         double amountExclVat = 0;
         double amountInclVat = 0;
-        for(OrderLine orderLine : order.getOrderLineList()){
+        for (OrderLine orderLine : order.getOrderLineList()) {
             OrderLineTableFormat orderLineTableFormat = new OrderLineTableFormat(orderLine.getProduct(), orderLine.getQuantity());
             tableArticle.getItems().add(orderLineTableFormat);
 //            double amount = Double.parseDouble(total.getText().replace(',', '.'));

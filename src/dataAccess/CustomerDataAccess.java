@@ -1,23 +1,18 @@
 package dataAccess;
 
-import exception.CustomerException;
-import exception.DuplicataException;
-import exception.NoCustomerFoundException;
+import exception.*;
 import model.Customer;
-import model.Rank;
 
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
 public interface CustomerDataAccess {
-    public ArrayList<Customer> getAllCustomers();
+    ArrayList<Customer> getAllCustomers() throws DataQueryException;
 
-    public boolean create(Customer customer) throws SQLException;
+    boolean create(Customer customer) throws CustomerInsertionException;
 
-    public Customer getCustomer(Integer id) throws CustomerException, NoCustomerFoundException;
+    Customer getCustomer(Integer id) throws DataQueryException;
 
-    boolean update(Customer customer) throws DuplicataException;
+    boolean update(Customer customer) throws CustomerUpdateException;
 
     boolean delete(Customer customer);
 }

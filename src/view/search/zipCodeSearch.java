@@ -5,13 +5,14 @@ import com.jfoenix.controls.JFXComboBox;
 import controller.CityController;
 
 import controller.OrderController;
-import exception.SQLManageException;
+import exception.ConnectionException;
+import exception.DataQueryException;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import model.City;
 import model.Order;
-import view.PopUp;
+import utils.PopUp;
 import view.View;
 import view.Window;
 import view.order.Index;
@@ -36,9 +37,15 @@ public class zipCodeSearch extends View implements Initializable {
 
     @Override
     public void init() {
-        cityController = new CityController();
-        orderController = new OrderController();
-        ArrayList<City> allCities = cityController.getAllCities();
+        ArrayList<City> allCities = null;
+        try {
+            cityController = new CityController();
+            orderController = new OrderController();
+            allCities = cityController.getAllCities();
+        } catch (ConnectionException | DataQueryException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
+
         zipCodeBox.setItems(FXCollections.observableArrayList(allCities));
         zipCodeBox.getSelectionModel().selectFirst();
         zipCodeBox.getStyleClass().add("whiteComboBox");
@@ -48,7 +55,7 @@ public class zipCodeSearch extends View implements Initializable {
         });
     }
 
-    private void search(){
+    private void search() {
         try {
             City city = zipCodeBox.getSelectionModel().getSelectedItem();
             ArrayList<Order> allOrders = orderController.getAllOrdersFromZipCode(city);
@@ -57,8 +64,8 @@ public class zipCodeSearch extends View implements Initializable {
             } else {
                 openNewTabView(allOrders, city);
             }
-        } catch(SQLManageException e){
-            e.showMessage();
+        } catch (DataQueryException e) {
+            showError(e.getTypeError(), e.getMessage());
         }
     }
 

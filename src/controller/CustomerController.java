@@ -1,22 +1,15 @@
 package controller;
 
 import business.CustomerBusiness;
-import exception.CustomerException;
-import exception.DuplicataException;
-import exception.NoCustomerFoundException;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import exception.*;
 import model.Customer;
-import model.CustomerTableFormat;
 
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
 public class CustomerController {
     private CustomerBusiness customerBusiness;
 
-    public CustomerController() {
+    public CustomerController() throws ConnectionException {
         this.customerBusiness = new CustomerBusiness();
     }
 
@@ -24,19 +17,19 @@ public class CustomerController {
      * Ask the business package to get allCustomer from DB
      * @return an array of CustomerViewTable that contains the right format to be displayed
      */
-    public ArrayList<Customer> getAllCustomers() {
+    public ArrayList<Customer> getAllCustomers() throws DataQueryException {
         return customerBusiness.getAllCustomers();
     }
 
-    public boolean create(Customer customer) throws SQLException {
+    public boolean create(Customer customer) throws CustomerInsertionException {
         return customerBusiness.create(customer);
     }
 
-    public Customer getCustomer(Integer id) throws CustomerException, NoCustomerFoundException {
+    public Customer getCustomer(Integer id) throws DataQueryException {
         return customerBusiness.getCustomer(id);
     }
 
-    public boolean update(Customer customer) throws DuplicataException {
+    public boolean update(Customer customer) throws CustomerUpdateException {
         return customerBusiness.update(customer);
     }
 

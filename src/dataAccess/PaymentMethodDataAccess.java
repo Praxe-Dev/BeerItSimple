@@ -1,9 +1,10 @@
 package dataAccess;
 
+import exception.DataQueryException;
 import model.PaymentMethod;
 
 import java.util.ArrayList;
 
 public interface PaymentMethodDataAccess {
-    public ArrayList<PaymentMethod> getAllPaymentMethod();
+    ArrayList<PaymentMethod> getAllPaymentMethod() throws DataQueryException;
 }

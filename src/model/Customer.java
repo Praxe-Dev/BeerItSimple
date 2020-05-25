@@ -53,15 +53,6 @@ public class Customer {
         return this.entity;
     }
 
-//    @Override
-//    public String toString() {
-//        return "Customer{" +
-//                "rank=" + rank.getId() +
-//                ", entity=" + entity.getId() +
-//                ", date=" + date +
-//                '}';
-//    }
-
     @Override
     public String toString() {
         return getEntity().getContactName() + " (" + getEntity().getPhoneNumber() + ")";

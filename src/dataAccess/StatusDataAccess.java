@@ -1,9 +1,10 @@
 package dataAccess;
 
+import exception.DataQueryException;
 import model.Status;
 
 import java.util.ArrayList;
 
 public interface StatusDataAccess {
-    public ArrayList<Status> getAllStatus();
+    ArrayList<Status> getAllStatus() throws DataQueryException;
 }

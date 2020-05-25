@@ -6,6 +6,8 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
 import controller.OrderController;
+import exception.ConnectionException;
+import exception.DataQueryException;
 import exception.NoRowSelected;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -15,7 +17,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import model.*;
-import view.PopUp;
+import utils.PopUp;
 import view.View;
 
 import java.io.FileOutputStream;
@@ -119,8 +121,8 @@ public class Read extends View {
             }
 
             tableArticle.getItems().addAll(orderLines);
-        } catch (NoRowSelected e) {
-            e.showError();
+        } catch (ConnectionException | DataQueryException e) {
+            showError(e.getTypeError(), e.getMessage());
         }
     }
 

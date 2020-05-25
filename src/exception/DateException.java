@@ -1,6 +1,6 @@
 package exception;
 
-import view.PopUp;
+import utils.PopUp;
 
 public class DateException extends Exception {
     private final String typeError = "Wrong date";
