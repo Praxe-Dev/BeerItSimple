@@ -135,7 +135,7 @@ public class Read extends View {
             PdfWriter writer = PdfWriter.getInstance(invoice, new FileOutputStream("./src/PDFInvoices/invoice_" + selectedOrder.getReference() + ".pdf"));
             invoice.open();
 
-            Image image = Image.getInstance("C:\\Users\\lejeu\\IdeaProjects\\BeerItSimple\\src\\ressources\\logoTest.png");
+            Image image = Image.getInstance("C:\\Users\\lejeu\\IdeaProjects\\BeerItSimple\\src\\ressources\\logoClear.png");
             image.scaleToFit(100f,100f);
 
             // Title
