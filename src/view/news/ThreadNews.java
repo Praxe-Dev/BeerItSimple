@@ -2,10 +2,11 @@ package view.news;
 
 import controller.NewsController;
 import exception.ConnectionException;
-import exception.SQLManageException;
+import exception.ThreadNewsException;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import model.News;
+import utils.PopUp;
 import view.MainView;
 
 public class ThreadNews extends Task<Integer> {
@@ -17,7 +18,7 @@ public class ThreadNews extends Task<Integer> {
         try {
             newsController = new NewsController();
         } catch (ConnectionException e) {
-            e.printStackTrace();
+            PopUp.showError(e.getTypeError(), e.getMessage());
         }
     }
 
@@ -30,7 +31,7 @@ public class ThreadNews extends Task<Integer> {
                     //Get le news random et set la news
                     News news = newsController.getRandomNews();
                     view.setNews(news);
-                } catch (SQLManageException e) {
+                } catch (ThreadNewsException e) {
                     e.showMessage();
                 }
             });

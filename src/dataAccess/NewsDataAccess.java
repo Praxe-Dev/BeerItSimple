@@ -6,7 +6,7 @@ import model.News;
 import java.util.ArrayList;
 
 public interface NewsDataAccess {
-    News getRandomNews() throws SQLManageException;
+    News getRandomNews() throws ThreadNewsException;
 
     ArrayList<News> getAllNews() throws DataQueryException;
 

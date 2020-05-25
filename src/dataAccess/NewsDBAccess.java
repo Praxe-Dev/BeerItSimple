@@ -15,7 +15,7 @@ public class NewsDBAccess implements NewsDataAccess {
         this.connection = DBConnection.getInstance();
     }
 
-    public News getRandomNews() throws SQLManageException {
+    public News getRandomNews() throws ThreadNewsException {
         News randomNews = null;
         String sqlInstruction = "SELECT * FROM news WHERE startingDate <= ? AND endDate >= ? ORDER BY RAND() LIMIT 1";
 
@@ -36,7 +36,7 @@ public class NewsDBAccess implements NewsDataAccess {
                 );
             }
         } catch (SQLException e) {
-            throw new SQLManageException(e);
+            throw new ThreadNewsException();
         }
         return randomNews;
     }
