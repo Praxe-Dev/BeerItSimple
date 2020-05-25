@@ -343,7 +343,11 @@ public class Update extends View {
     }
 
     private void setCustomer() {
-        customer.setText(order.getCustomer().getEntity().getContactName());
+        if(order.getCustomer() != null) {
+            customer.setText(order.getCustomer().getEntity().getContactName());
+        } else {
+            customer.setText("Deleted Customer");
+        }
     }
 
     private void setPaymentMethod() {
