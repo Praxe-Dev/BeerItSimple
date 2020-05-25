@@ -5,7 +5,6 @@ import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import controller.NewsController;
 import exception.ConnectionException;
-import exception.SQLManageException;
 import exception.UpdateException;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
@@ -51,13 +50,9 @@ public class Update extends View {
 
             submitBtn.setOnAction(e -> {
                 if (validateInfo()) {
-                    try {
-                        updateNews();
-                        PopUp.showSuccess("News updated", "Your news has been successfully updated");
-                        this.closeWindow();
-                    } catch (SQLManageException err) {
-                        err.showMessage();
-                    }
+                    updateNews();
+                    PopUp.showSuccess("News updated", "Your news has been successfully updated");
+                    this.closeWindow();
                 }
             });
         } else {
@@ -88,7 +83,7 @@ public class Update extends View {
         return false;
     }
 
-    public void updateNews() throws SQLManageException {
+    public void updateNews() {
         NewsController newsController = null;
         try {
             newsController = new NewsController();

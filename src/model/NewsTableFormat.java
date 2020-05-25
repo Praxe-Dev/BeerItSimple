@@ -3,7 +3,6 @@ package model;
 import controller.EmployeeController;
 import exception.ConnectionException;
 import exception.DataQueryException;
-import exception.SQLManageException;
 
 import java.util.GregorianCalendar;
 

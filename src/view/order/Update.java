@@ -175,13 +175,7 @@ public class Update extends View {
                             orderView.updateTable();
                             closeWindow();
                         }
-                    } catch (PaymentMethodException payErr) {
-                        payErr.showMessage();
-                    } catch (StatusException statusErr) {
-                        statusErr.showMessage();
-                    } catch (UpdateException ex) {
-                        showError(ex.getTypeError(), ex.getMessage());
-                    } catch (DataQueryException ex) {
+                    } catch (UpdateException | DataQueryException ex) {
                         showError(ex.getTypeError(), ex.getMessage());
                     }
                 }
@@ -263,7 +257,7 @@ public class Update extends View {
         Create.computeAndDisplayNewAmount(orderLineTableFormat, totalAmountExclVat, totalAmountVatOnly, totalAmountVatInc);
     }
 
-    private boolean updateOrder() throws PaymentMethodException, StatusException, UpdateException, DataQueryException {
+    private boolean updateOrder() throws UpdateException, DataQueryException {
         Product product;
 
         if (deliveryCheck.isSelected()) {
@@ -309,7 +303,7 @@ public class Update extends View {
 
             if (selectedStatus.getLabel().equals("Finished")) {
                 if (order.getDelivery().getPlannedDate() != null && order.getDelivery().getDeliveredDate() == null) {
-                    throw new StatusException("You can't finish order if delivery programmed but not done");
+                    PopUp.showError("Order error", "You can't finish order if delivery programmed but not done");
                 } else {
                     order.setPaid(true);
                     order.setStatus(selectedStatus);
@@ -322,7 +316,7 @@ public class Update extends View {
         if (paymentMethod.getSelectionModel().getSelectedItem().getId() != order.getPaymentMethod().getId()) {
             if (order.getPaid()) {
                 //Can't change payment method after paid
-                throw new PaymentMethodException();
+                showError("Payment method error", "You can't change payment method after order is paid.");
             } else {
                 order.setPaymentMethod(paymentMethod.getSelectionModel().getSelectedItem());
             }

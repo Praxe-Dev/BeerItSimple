@@ -6,7 +6,6 @@ import com.jfoenix.controls.JFXTextField;
 import controller.NewsController;
 import exception.ConnectionException;
 import exception.DataQueryException;
-import exception.SQLManageException;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import model.News;
