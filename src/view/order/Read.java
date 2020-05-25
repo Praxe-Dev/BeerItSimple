@@ -73,7 +73,7 @@ public class Read extends View {
         if (selectedOrder.getCustomer() != null)
             customer.setText(selectedOrder.getCustomer().getEntity().getContactName());
         else
-            customer.setText("N/A");
+            customer.setText("Deleted Customer");
 
         paymentMethod.setText(selectedOrder.getPaymentMethod().getLabel());
 
