@@ -7,9 +7,7 @@ import com.jfoenix.controls.JFXTextField;
 import controller.CityController;
 import controller.CustomerController;
 import controller.RankController;
-import exception.ConnectionException;
-import exception.CustomerInsertionException;
-import exception.DataQueryException;
+import exception.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -123,14 +121,14 @@ public class Create extends View {
                     Index customersView = (Index) getParentView();
                     customersView.updateTable();
                     closeWindow();
-                } catch (CustomerInsertionException exception) {
+                } catch (DuplicataException exception) {
                     PopUp.showError(exception.getTypeError(), exception.getMessage());
                 }
             }
         });
     }
 
-    private boolean insertCustomer() throws CustomerInsertionException {
+    private boolean insertCustomer() throws DuplicataException {
 
         Customer newCustomer;
         Entity newEntity = new Entity();

@@ -5,7 +5,9 @@ import utils.PopUp;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class DuplicataException extends Exception {
+public class DuplicataException extends BISException {
+    private String typeError = "Duplicata error";
+    private String message = "Cannot duplicate the following value : ";
     String found = "";
 
     public DuplicataException(String message) {
@@ -16,7 +18,13 @@ public class DuplicataException extends Exception {
         }
     }
 
-    public void showError() {
-        PopUp.showError("Duplicata error", "Cannot dupliacte the following value : " + found);
+    @Override
+    public String getTypeError() {
+        return typeError;
+    }
+
+    @Override
+    public String getMessage() {
+        return message + found;
     }
 }

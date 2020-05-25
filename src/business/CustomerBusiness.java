@@ -22,7 +22,7 @@ public class CustomerBusiness {
         return dao.getAllCustomers();
     }
 
-    public boolean create(Customer customer) throws CustomerInsertionException {
+    public boolean create(Customer customer) throws DuplicataException {
         return dao.create(customer);
     }
 
@@ -30,7 +30,7 @@ public class CustomerBusiness {
         return dao.getCustomer(id);
     }
 
-    public boolean update(Customer customer) throws CustomerUpdateException {
+    public boolean update(Customer customer) throws DuplicataException, UpdateException {
         return dao.update(customer);
     }
 

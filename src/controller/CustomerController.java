@@ -21,7 +21,7 @@ public class CustomerController {
         return customerBusiness.getAllCustomers();
     }
 
-    public boolean create(Customer customer) throws CustomerInsertionException {
+    public boolean create(Customer customer) throws DuplicataException {
         return customerBusiness.create(customer);
     }
 
@@ -29,7 +29,7 @@ public class CustomerController {
         return customerBusiness.getCustomer(id);
     }
 
-    public boolean update(Customer customer) throws CustomerUpdateException {
+    public boolean update(Customer customer) throws DuplicataException, UpdateException {
         return customerBusiness.update(customer);
     }
 
