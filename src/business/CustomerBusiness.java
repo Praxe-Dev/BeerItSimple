@@ -34,7 +34,7 @@ public class CustomerBusiness {
         return dao.update(customer);
     }
 
-    public boolean delete(Customer customer) {
+    public boolean delete(Customer customer) throws DeletionException {
         return dao.delete(customer);
     }
 }

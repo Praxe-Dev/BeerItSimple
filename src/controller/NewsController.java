@@ -4,7 +4,6 @@ import business.NewsBusiness;
 import exception.*;
 import model.News;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class NewsController {
@@ -34,7 +33,7 @@ public class NewsController {
         newsBusiness.insertNews(news);
     }
 
-    public boolean deleteNews(News news) throws DeletionExceiption {
+    public boolean deleteNews(News news) throws DeletionException {
         return newsBusiness.deleteNews(news);
     }
 

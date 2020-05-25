@@ -5,7 +5,6 @@ import dataAccess.NewsDataAccess;
 import exception.*;
 import model.News;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class NewsBusiness {
@@ -35,7 +34,7 @@ public class NewsBusiness {
         dao.insertNews(news);
     }
 
-    public boolean deleteNews(News news) throws DeletionExceiption {
+    public boolean deleteNews(News news) throws DeletionException {
         return dao.deleteNews(news);
     }
 

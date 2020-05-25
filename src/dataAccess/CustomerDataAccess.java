@@ -14,5 +14,5 @@ public interface CustomerDataAccess {
 
     boolean update(Customer customer) throws CustomerUpdateException;
 
-    boolean delete(Customer customer);
+    boolean delete(Customer customer) throws DeletionException;
 }

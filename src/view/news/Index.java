@@ -106,7 +106,7 @@ public class Index extends View implements Initializable {
                         updateTable();
                     }
                 }
-            } catch (DeletionExceiption ex) {
+            } catch (DeletionException ex) {
                 showError(ex.getTypeError(), ex.getMessage());
             }
         });

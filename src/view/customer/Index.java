@@ -157,8 +157,12 @@ public class Index extends View implements Initializable {
             Customer customer = getSelectedCustomer();
 
             if (customer != null && PopUp.showConfirm("Confirm delete", "Are you sur you want to delete " + customer.getEntity().getContactName() + " ?")) {
-                if (customersController.delete(customer)) {
-                    updateTable();
+                try {
+                    if (customersController.delete(customer)) {
+                        updateTable();
+                    }
+                } catch (DeletionException ex) {
+                    showError(ex.getTypeError(), ex.getMessage());
                 }
             }
         });
