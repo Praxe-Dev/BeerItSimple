@@ -111,21 +111,6 @@ public class Index extends View implements Initializable {
             }
         });
 
-        deleteBtn.setOnAction(e -> {
-            try {
-                Order order = getSelectedOrder();
-                if(PopUp.showConfirm("Confirm delete", "Are you sur you want to delete the order [" + order.getReference() + "] ?")) {
-                    if (orderController.deleteOrder(order)) {
-                        updateTable();
-                    }
-                }
-            } catch (DeletionExceiption ex) {
-                showError(ex.getTypeError(), ex.getMessage());
-            }
-
-            updateTable();
-        });
-
         detailBtn.setOnAction((e) -> {
             Order selectedOrder;
             Window detailOrder;
@@ -145,6 +130,21 @@ public class Index extends View implements Initializable {
                 detailOrder.show();
             }
         });
+
+        deleteBtn.setOnAction(e -> {
+            try {
+                Order order = getSelectedOrder();
+                if(PopUp.showConfirm("Confirm delete", "Are you sur you want to delete the order [" + order.getReference() + "] ?")) {
+                    if (orderController.deleteOrder(order)) {
+                        updateTable();
+                    }
+                }
+            } catch (DeletionExceiption ex) {
+                showError(ex.getTypeError(), ex.getMessage());
+            }
+
+            updateTable();
+        });
     }
 
     private Order getSelectedOrder() {
@@ -152,8 +152,8 @@ public class Index extends View implements Initializable {
         try {
             OrderTableFormat orderTableFormat = orderTable.getSelectionModel().getSelectedItem();
             order = orderController.getOrder(orderTableFormat.getReference());
-        } catch (Exception e) {
-            new NoRowSelected();
+        } catch (NoRowSelected e) {
+            showError(e.getTypeError(), e.getMessage());
         }
 
         return order;

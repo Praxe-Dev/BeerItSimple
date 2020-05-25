@@ -37,7 +37,7 @@ class ProductBusinessTest {
 
         ArrayList<ProductIncome> productIncomes = productBusiness.computeProductsIncome(allProducts, allOrderLines);
         productIncomes.get(0).calculPercentage();
-        assertEquals(100.0, productIncomes.get(0).getPercentage(), 0.03);
+        assertEquals(100.0, productIncomes.get(0).getPercentage(), 0);
     }
 
     @Test
