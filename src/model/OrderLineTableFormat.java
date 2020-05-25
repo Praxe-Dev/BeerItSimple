@@ -1,7 +1,5 @@
 package model;
 
-import java.time.LocalDate;
-
 public class OrderLineTableFormat {
     private int productCode;
     private String product;
@@ -12,13 +10,47 @@ public class OrderLineTableFormat {
     private double inclVat;
 
     public OrderLineTableFormat(Product p, int quantity) {
-        this.productCode = p.getCode();
-        this.product = p.toString();
-        this.unitPrice = p.getUnitPrice();
+        setProductCode(p.getCode());
+        setProduct(p.toString());
+        setUnitPrice(p.getUnitPrice());
+        setQuantity(quantity);
+        setVATCodeRate(p.getVATRate());
+        setExclVat(quantity);
+        setInclVat();
+    }
+
+    public void setProductCode(int productCode) {
+        this.productCode = productCode;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
+    }
+
+    public void setUnitPrice(double unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
-        this.VATCodeRate = p.getVATRate();
-        this.exclVat = unitPrice * (double) quantity;
-        this.inclVat = this.exclVat * (((double) VATCodeRate / 100) + 1);
+    }
+
+    public void setVATCodeRate(int VATCodeRate) {
+        this.VATCodeRate = VATCodeRate;
+    }
+
+    public void setExclVat(int quantity) {
+        if(unitPrice > 0){
+            this.exclVat = unitPrice * (double) quantity;
+        }
+    }
+
+    public void setInclVat() {
+        if(getExclVat() > 0 && getVatCodeRate() > 0){
+            this.inclVat = getExclVat() * ((getVatCodeRate() / 100) +1);
+        } else {
+            this.inclVat = 0;
+        }
     }
 
     public int getProductCode() {
@@ -38,7 +70,6 @@ public class OrderLineTableFormat {
     }
 
     public double getInclVat() {
-        // if not casted, not correct (I wanna die)
         return (double) Math.round(inclVat * 100) / 100;
     }
     public double getExclVat() {

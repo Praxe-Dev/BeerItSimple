@@ -1,10 +1,13 @@
 package view.customer;
 
+import com.itextpdf.text.pdf.ArabicLigaturizer;
 import com.jfoenix.controls.*;
 import controller.CityController;
 import controller.CustomerController;
 import controller.RankController;
-import exception.DuplicataException;
+import exception.ConnectionException;
+import exception.CustomerUpdateException;
+import exception.DataQueryException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,53 +16,56 @@ import model.City;
 import model.Customer;
 import model.Rank;
 import utils.Validators;
+import utils.PopUp;
 import view.View;
 
 import java.util.ArrayList;
 
 public class Update extends View {
+    @FXML
+    private JFXRadioButton privateCustomer;
+    @FXML
+    private JFXRadioButton businessCustomer;
+    @FXML
+    private JFXComboBox<Rank> customerRank;
+    @FXML
+    private JFXTextField contactName;
+    @FXML
+    private JFXTextField address;
+    @FXML
+    private JFXTextField houseNumber;
+    @FXML
+    private JFXTextField mail;
+    @FXML
+    private JFXTextField phoneNumber;
+    @FXML
+    private JFXComboBox<City> region;
+    @FXML
+    private JFXTextField accountNumber;
+    @FXML
+    private JFXTextField businessNumber;
+    @FXML
+    private Group businessView;
+    @FXML
+    private JFXButton cancelBtn;
+    @FXML
+    private JFXButton submitBtn;
 
-    @FXML
-    JFXRadioButton privateCustomer;
-    @FXML
-    JFXRadioButton businessCustomer;
-    @FXML
-    JFXComboBox<Rank> customerRank;
-    @FXML
-    JFXTextField contactName;
-    @FXML
-    JFXTextField address;
-    @FXML
-    JFXTextField houseNumber;
-    @FXML
-    JFXTextField mail;
-    @FXML
-    JFXTextField phoneNumber;
-    @FXML
-    JFXComboBox<City> region;
-    @FXML
-    JFXTextField accountNumber;
-    @FXML
-    JFXTextField businessNumber;
-    @FXML
-    Group businessView;
-    @FXML
-    JFXButton cancelBtn;
-    @FXML
-    JFXButton submitBtn;
-
-    Customer selectedCustomer;
-
-    CityController cityController;
-    RankController rankController;
-    CustomerController customerController;
-    Index customersView;
+    private Customer selectedCustomer;
+    private CityController cityController;
+    private RankController rankController;
+    private CustomerController customerController;
+    private Index customersView;
 
     @Override
     public void init() {
-        cityController = new CityController();
-        rankController = new RankController();
-        customerController = new CustomerController();
+        try {
+            cityController = new CityController();
+            rankController = new RankController();
+            customerController = new CustomerController();
+        } catch (ConnectionException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
         customersView = (Index) this.getParentView();
 
         Validators.setMailValidators(mail);
@@ -112,12 +118,18 @@ public class Update extends View {
             businessView.setVisible(true);
         });
 
-        ArrayList<City> cityList = cityController.getAllCities();
+        ArrayList<City> cityList = null;
+        ArrayList<Rank> rankList = null;
+        try {
+            cityList = cityController.getAllCities();
+            rankList = rankController.getAllRanks();
+        } catch (DataQueryException e) {
+            e.printStackTrace();
+        }
         ObservableList<City> cityObservableList = FXCollections.observableArrayList(cityList);
         region.setItems(cityObservableList);
         region.getSelectionModel().select(findIndexOfCity(cityObservableList));
 
-        ArrayList<Rank> rankList = rankController.getAllRanks();
         ObservableList<Rank> rankObservableList = FXCollections.observableArrayList(rankList);
         customerRank.setItems(rankObservableList);
         customerRank.getSelectionModel().select(findIndexOfRank(rankObservableList));
@@ -130,12 +142,11 @@ public class Update extends View {
                 if (Validators.validate(contactName, phoneNumber, address, houseNumber, houseNumber) && Validators.validateNullableValue(mail, businessNumber, accountNumber)) {
                     try {
                         if (updateCostumer()) {
-                            System.out.println("Done");
                             customersView.updateTable();
                             closeWindow();
                         }
-                    } catch (DuplicataException exception) {
-                        exception.showError();
+                    } catch (CustomerUpdateException excpetion) {
+                        PopUp.showError(excpetion.getTypeError(), excpetion.getMessage());
                     }
                 }
         });
@@ -152,7 +163,6 @@ public class Update extends View {
             if (city.toString().equals(selectedCustomer.getEntity().getCity().toString())) {
                 return i;
             }
-
             i++;
         }
 
@@ -179,7 +189,7 @@ public class Update extends View {
         return true;
     }
 
-    public boolean updateCostumer() throws DuplicataException {
+    public boolean updateCostumer() throws CustomerUpdateException {
         selectedCustomer.setRank(customerRank.getSelectionModel().getSelectedItem());
         selectedCustomer.getEntity().setContactName(contactName.getText());
         selectedCustomer.getEntity().setStreet(address.getText());

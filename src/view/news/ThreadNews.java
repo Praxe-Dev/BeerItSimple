@@ -1,6 +1,7 @@
 package view.news;
 
 import controller.NewsController;
+import exception.ConnectionException;
 import exception.SQLManageException;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -13,7 +14,11 @@ public class ThreadNews extends Task<Integer> {
 
     public ThreadNews(MainView view){
         this.view = view;
-        newsController = new NewsController();
+        try {
+            newsController = new NewsController();
+        } catch (ConnectionException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

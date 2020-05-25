@@ -1,7 +1,7 @@
 package dataAccess;
 
-import javafx.scene.control.DatePicker;
-import model.Order;
+import exception.ConnectionException;
+import exception.DataQueryException;
 import model.OrderLine;
 import model.Product;
 
@@ -10,10 +10,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class OrderLineDBAccess implements OrderLineDataAccess {
-    Connection connection = DBConnection.getDBConnection();
+    Connection connection;
+
+    public OrderLineDBAccess() throws ConnectionException {
+        connection = DBConnection.getInstance();
+    }
 
     @Override
-    public ArrayList<OrderLine> getAllOrderLineBetweenDates(LocalDate startDate, LocalDate endDate) {
+    public ArrayList<OrderLine> getAllOrderLineBetweenDates(LocalDate startDate, LocalDate endDate) throws DataQueryException {
 
         String sqlInstructions = "SELECT ol.* FROM OrderLine ol\n" +
                                  "JOIN `order` o ON o.reference = ol.Orderreference\n" +
@@ -42,8 +46,8 @@ public class OrderLineDBAccess implements OrderLineDataAccess {
                 orderLinesList.add(ol);
             }
 
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            throw new DataQueryException();
         }
 
         return orderLinesList;

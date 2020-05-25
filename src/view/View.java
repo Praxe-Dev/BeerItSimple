@@ -1,16 +1,15 @@
 package view;
 
 import javafx.scene.Node;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import utils.PopUp;
 
 public abstract class View extends Node {
     private double x = 0.0;
     private double y = 0.0;
-
-    Window window;
+    protected Window window;
     private View parentView = null;
 
     public final void init(Window window) {
@@ -19,8 +18,6 @@ public abstract class View extends Node {
     }
 
     public abstract void init();
-
-//    public abstract Pane getRoot();
 
     public void closeWindow() {
         this.window.close();
@@ -65,5 +62,9 @@ public abstract class View extends Node {
             Stage stage = (Stage) ((Node) e.getSource()).getScene().getWindow();
             stage.setOpacity(1);
         });
+    }
+
+    public void showError(String typeError, String message) {
+        PopUp.showError(typeError, message);
     }
 }

@@ -4,12 +4,14 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import controller.NewsController;
+import exception.ConnectionException;
 import exception.SQLManageException;
+import exception.UpdateException;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import model.News;
 import utils.Validators;
-import view.PopUp;
+import utils.PopUp;
 import view.View;
 
 import java.time.LocalDate;
@@ -87,7 +89,12 @@ public class Update extends View {
     }
 
     public void updateNews() throws SQLManageException {
-        NewsController newsController = new NewsController();
+        NewsController newsController = null;
+        try {
+            newsController = new NewsController();
+        } catch (ConnectionException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
         LocalDate start = startingDate.getValue();
         LocalDate end = endDate.getValue();
         GregorianCalendar startGC = new GregorianCalendar(start.getYear(), start.getMonthValue()-1, start.getDayOfMonth());
@@ -95,8 +102,8 @@ public class Update extends View {
         News updateNews = new News(news.getId(), title.getText(), contentArea.getText(), startGC, endGC, 2);
         try {
             newsController.updateNews(updateNews);
-        } catch(SQLManageException e){
-            throw e;
+        } catch(UpdateException e){
+            showError(e.getTypeError(), e.getMessage());
         }
     }
 

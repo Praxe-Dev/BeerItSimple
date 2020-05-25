@@ -4,12 +4,14 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import controller.OrderController;
+import exception.ConnectionException;
+import exception.DataQueryException;
 import exception.SQLManageException;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import model.Customer;
 import model.Order;
-import view.PopUp;
+import utils.PopUp;
 import view.View;
 import view.Window;
 import view.order.Index;
@@ -18,43 +20,46 @@ import java.util.ArrayList;
 
 
 public class Read extends View {
+    @FXML
+    private JFXRadioButton privateCustomer;
+    @FXML
+    private JFXRadioButton businessCustomer;
+    @FXML
+    private JFXTextField customerRank;
+    @FXML
+    private JFXTextField contactName;
+    @FXML
+    private JFXTextField phoneNumber;
+    @FXML
+    private JFXTextField mail;
+    @FXML
+    private JFXTextField houseNumber;
+    @FXML
+    private JFXTextField region;
+    @FXML
+    private JFXTextField address;
+    @FXML
+    private JFXTextField accountNumber;
+    @FXML
+    private JFXTextField businessNumber;
+    @FXML
+    private Group businessView;
+    @FXML
+    private JFXButton closeBtn;
+    @FXML
+    private JFXButton viewOrdersBtn;
 
-    @FXML
-    JFXRadioButton privateCustomer;
-    @FXML
-    JFXRadioButton businessCustomer;
-    @FXML
-    JFXTextField customerRank;
-    @FXML
-    JFXTextField contactName;
-    @FXML
-    JFXTextField phoneNumber;
-    @FXML
-    JFXTextField mail;
-    @FXML
-    JFXTextField houseNumber;
-    @FXML
-    JFXTextField region;
-    @FXML
-    JFXTextField address;
-    @FXML
-    JFXTextField accountNumber;
-    @FXML
-    JFXTextField businessNumber;
-    @FXML
-    Group businessView;
-    @FXML
-    JFXButton closeBtn;
-    @FXML
-    JFXButton viewOrdersBtn;
-
-    Customer selectedCustomer;
-    OrderController orderController;
+    private Customer selectedCustomer;
+    private OrderController orderController;
 
 
     @Override
     public void init() {
-        orderController = new OrderController();
+        try {
+            orderController = new OrderController();
+        } catch (ConnectionException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
 
         contactName.setText(selectedCustomer.getEntity().getContactName());
         address.setText(selectedCustomer.getEntity().getStreet());
@@ -104,8 +109,8 @@ public class Read extends View {
                 } else {
                     openNewTabView(allOrders);
                 }
-            } catch(SQLManageException ex){
-                ex.showMessage();
+            } catch(DataQueryException ex){
+                showError(ex.getTypeError(), ex.getMessage());
             }
         });
 

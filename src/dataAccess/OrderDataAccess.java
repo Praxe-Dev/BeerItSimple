@@ -1,8 +1,6 @@
 package dataAccess;
 
-import exception.DeletionExceiption;
-import exception.NoRowSelected;
-import exception.SQLManageException;
+import exception.*;
 import model.*;
 
 import java.sql.SQLException;
@@ -10,23 +8,23 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public interface OrderDataAccess {
-    public ArrayList<Order> getAllOrders() throws SQLException;
+    ArrayList<Order> getAllOrders() throws DataQueryException;
 
-    boolean create(Order orderLineTableFormats) throws SQLException, SQLManageException;
+    boolean create(Order orderLineTableFormats) throws UpdateException;
 
-    Order getOrder(int reference) throws NoRowSelected;
+    Order getOrder(int reference) throws DataQueryException;
 
     boolean deleteOrder(Order order) throws DeletionExceiption;
 
-    boolean updateOrder(Order order) throws SQLManageException;
+    boolean updateOrder(Order order) throws DataQueryException, UpdateException;
 
-    ArrayList<Order> getAllOrdersBetweenDates(LocalDate startingDate, LocalDate endDate);
+    ArrayList<Order> getAllOrdersBetweenDates(LocalDate startingDate, LocalDate endDate) throws DataQueryException;
 
-    ArrayList<Order> getAllOrdersFromCustomer(Customer customer) throws SQLManageException;
+    ArrayList<Order> getAllOrdersFromCustomer(Customer customer) throws DataQueryException;
 
-    ArrayList<Order> getAllOrdersFromZipCode(City city) throws SQLManageException;
+    ArrayList<Order> getAllOrdersFromZipCode(City city) throws DataQueryException;
 
-    Rank updateCustomerRank(Customer customer) throws SQLManageException;
+    Rank updateCustomerRank(Customer customer) throws UpdateException;
 
-    ArrayList<Order> getOrdersFromRanks(Rank rank, Status status, Boolean isPaid);
+    ArrayList<Order> getOrdersFromRanks(Rank rank, Status status, Boolean isPaid) throws DataQueryException;
 }

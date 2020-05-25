@@ -19,24 +19,68 @@ public class CustomerTableFormat {
     private Integer creditLimit;
 
     public CustomerTableFormat(Customer customer) {
-        this.id = customer.getEntity().getId();
-        this.contactName = customer.getEntity().getContactName();
-        this.phoneNumber = customer.getEntity().getPhoneNumber();
-        this.mail = customer.getEntity().getMail();
-        this.address = customer.getEntity().getStreet() + ", " + customer.getEntity().getHouseNumber();
+        Entity entityCustomer = customer.getEntity();
+        setId(entityCustomer.getId());
+        setContactName(entityCustomer.getContactName());
+        setPhoneNumber(entityCustomer.getPhoneNumber());
+        setMail(entityCustomer.getMail());
+        setAddress(entityCustomer.getStreet() + ", " + entityCustomer.getHouseNumber());
+        setBankAccountNumber(entityCustomer.getBankAccountNumber());
+        setBusinessNumber(entityCustomer.getBusinessNumber());
+        setCityLabel(entityCustomer.getCity().getLabel());
+        setZipCode(entityCustomer.getCity().getZipCode());
+        setRankLabel(customer.getRank().getLabel());
+        setCreditLimit(customer.getRank().getCreditLimit());
         setSubscriptionDate(customer.getDate());
-        this.bankAccountNumber = customer.getEntity().getBankAccountNumber();
-        this.businessNumber = customer.getEntity().getBusinessNumber();
-        this.cityLabel = customer.getEntity().getCity().getLabel();
-        this.zipCode = customer.getEntity().getCity().getZipCode();
-        this.rankLabel = customer.getRank().getLabel();
-        this.creditLimit = customer.getRank().getCreditLimit();
     }
-
 
     public void setSubscriptionDate(GregorianCalendar subscriptionDate) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         this.subscriptionDate = formatter.format(subscriptionDate.getTime());
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public void setSubscriptionDate(String subscriptionDate) {
+        this.subscriptionDate = subscriptionDate;
+    }
+
+    public void setBankAccountNumber(String bankAccountNumber) {
+        this.bankAccountNumber = bankAccountNumber;
+    }
+
+    public void setBusinessNumber(String businessNumber) {
+        this.businessNumber = businessNumber;
+    }
+
+    public void setCityLabel(String cityLabel) {
+        this.cityLabel = cityLabel;
+    }
+
+    public void setZipCode(Integer zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public void setRankLabel(String rankLabel) {
+        this.rankLabel = rankLabel;
+    }
+
+    public void setCreditLimit(Integer creditLimit) {
+        this.creditLimit = creditLimit;
     }
 
     public String getSubscriptionDate() {

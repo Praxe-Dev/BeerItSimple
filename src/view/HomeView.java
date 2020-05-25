@@ -8,9 +8,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class HomeView extends View implements Initializable {
-
     @FXML
-    JFXButton incomeBtn;
+    private JFXButton incomeBtn;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

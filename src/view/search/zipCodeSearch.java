@@ -5,13 +5,14 @@ import com.jfoenix.controls.JFXComboBox;
 import controller.CityController;
 
 import controller.OrderController;
-import exception.SQLManageException;
+import exception.ConnectionException;
+import exception.DataQueryException;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import model.City;
 import model.Order;
-import view.PopUp;
+import utils.PopUp;
 import view.View;
 import view.Window;
 import view.order.Index;
@@ -21,15 +22,13 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class zipCodeSearch extends View implements Initializable {
-
     @FXML
-    JFXComboBox<City> zipCodeBox;
+    private JFXComboBox<City> zipCodeBox;
     @FXML
-    JFXButton searchBtn;
+    private JFXButton searchBtn;
 
-    CityController cityController;
-    OrderController orderController;
-
+    private CityController cityController;
+    private OrderController orderController;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -38,20 +37,25 @@ public class zipCodeSearch extends View implements Initializable {
 
     @Override
     public void init() {
-        cityController = new CityController();
-        orderController = new OrderController();
-        ArrayList<City> allCities = cityController.getAllCities();
+        ArrayList<City> allCities = null;
+        try {
+            cityController = new CityController();
+            orderController = new OrderController();
+            allCities = cityController.getAllCities();
+        } catch (ConnectionException | DataQueryException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
+
         zipCodeBox.setItems(FXCollections.observableArrayList(allCities));
         zipCodeBox.getSelectionModel().selectFirst();
         zipCodeBox.getStyleClass().add("whiteComboBox");
-
 
         searchBtn.setOnAction(e -> {
             search();
         });
     }
 
-    private void search(){
+    private void search() {
         try {
             City city = zipCodeBox.getSelectionModel().getSelectedItem();
             ArrayList<Order> allOrders = orderController.getAllOrdersFromZipCode(city);
@@ -60,21 +64,22 @@ public class zipCodeSearch extends View implements Initializable {
             } else {
                 openNewTabView(allOrders, city);
             }
-        } catch(SQLManageException e){
-            e.showMessage();
+        } catch (DataQueryException e) {
+            showError(e.getTypeError(), e.getMessage());
         }
-
-
     }
 
     private void openNewTabView(ArrayList<Order> allOrdersFromZipcode, City city) {
         Window displayResult = new Window("FXML/order/index.fxml", "BeerItSimple - All orders from the selected zipcode : " + city.getZipCode() + " - " + city.getLabel());
         displayResult.load();
         displayResult.getView().setParentView(this);
+
         Index index = (Index) displayResult.getView();
+        index.getMainContainer().setStyle("-fx-background-color: linear-gradient(to left, #0f2027, #203a43, #2c5364)");
         index.updateTable(allOrdersFromZipcode);
         index.hideRefreshButton();
         index.setZipCode(city);
+
         displayResult.show();
     }
 

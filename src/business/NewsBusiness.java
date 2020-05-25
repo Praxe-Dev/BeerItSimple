@@ -2,8 +2,7 @@ package business;
 
 import dataAccess.NewsDBAccess;
 import dataAccess.NewsDataAccess;
-import exception.DeletionExceiption;
-import exception.SQLManageException;
+import exception.*;
 import model.News;
 
 import java.sql.SQLException;
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 public class NewsBusiness {
     private NewsDataAccess dao;
 
-    public NewsBusiness(){
+    public NewsBusiness() throws ConnectionException {
         setDao(new NewsDBAccess());
     }
 
@@ -24,15 +23,15 @@ public class NewsBusiness {
         return dao.getRandomNews();
     }
 
-    public ArrayList<News> getAllNews() throws SQLManageException {
+    public ArrayList<News> getAllNews() throws DataQueryException {
         return dao.getAllNews();
     }
 
-    public News getNewsFromId(Integer id) throws SQLManageException {
+    public News getNewsFromId(Integer id) throws NoRowSelected {
         return dao.getNewsFromId(id);
     }
 
-    public void insertNews(News news) throws SQLManageException {
+    public void insertNews(News news) throws DataQueryException {
         dao.insertNews(news);
     }
 
@@ -40,7 +39,7 @@ public class NewsBusiness {
         return dao.deleteNews(news);
     }
 
-    public void updateNews(News news) throws SQLManageException {
+    public void updateNews(News news) throws UpdateException {
         dao.updateNews(news);
     }
 }

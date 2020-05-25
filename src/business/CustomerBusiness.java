@@ -2,19 +2,15 @@ package business;
 
 import dataAccess.CustomerDBAccess;
 import dataAccess.CustomerDataAccess;
-import exception.CustomerException;
-import exception.DuplicataException;
-import exception.NoCustomerFoundException;
+import exception.*;
 import model.Customer;
 
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
 public class CustomerBusiness {
     private CustomerDataAccess dao;
 
-    public CustomerBusiness() {
+    public CustomerBusiness() throws ConnectionException {
         setDao(new CustomerDBAccess());
     }
 
@@ -22,19 +18,19 @@ public class CustomerBusiness {
         this.dao = dao;
     }
 
-    public ArrayList<Customer> getAllCustomers() {
+    public ArrayList<Customer> getAllCustomers() throws DataQueryException {
         return dao.getAllCustomers();
     }
 
-    public boolean create(Customer customer) throws SQLException {
+    public boolean create(Customer customer) throws CustomerInsertionException {
         return dao.create(customer);
     }
 
-    public Customer getCustomer(Integer id) throws CustomerException, NoCustomerFoundException {
+    public Customer getCustomer(Integer id) throws DataQueryException {
         return dao.getCustomer(id);
     }
 
-    public boolean update(Customer customer) throws DuplicataException {
+    public boolean update(Customer customer) throws CustomerUpdateException {
         return dao.update(customer);
     }
 

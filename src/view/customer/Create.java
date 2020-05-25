@@ -7,6 +7,9 @@ import com.jfoenix.controls.JFXTextField;
 import controller.CityController;
 import controller.CustomerController;
 import controller.RankController;
+import exception.ConnectionException;
+import exception.CustomerInsertionException;
+import exception.DataQueryException;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -16,44 +19,42 @@ import model.Customer;
 import model.Entity;
 import model.Rank;
 import utils.Validators;
-import view.PopUp;
+import utils.PopUp;
 import view.View;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Create extends View {
-
     @FXML
-    ToggleGroup customerType;
+    private ToggleGroup customerType;
     @FXML
-    JFXRadioButton privateCustomer;
+    private JFXRadioButton privateCustomer;
     @FXML
-    JFXRadioButton businessCustomer;
+    private JFXRadioButton businessCustomer;
     @FXML
-    JFXComboBox<Rank> customerRank;
+    private JFXComboBox<Rank> customerRank;
     @FXML
-    JFXTextField contactName;
+    private JFXTextField contactName;
     @FXML
-    JFXTextField phoneNumber;
+    private JFXTextField phoneNumber;
     @FXML
-    JFXTextField mail;
+    private JFXTextField mail;
     @FXML
-    JFXTextField houseNumber;
+    private JFXTextField houseNumber;
     @FXML
-    JFXTextField address;
+    private JFXTextField address;
     @FXML
-    JFXComboBox<City> regionBox;
+    private JFXComboBox<City> regionBox;
     @FXML
-    JFXTextField accountNumber;
+    private JFXTextField accountNumber;
     @FXML
-    JFXTextField businessNumber;
+    private JFXTextField businessNumber;
     @FXML
-    Group businessView;
+    private Group businessView;
     @FXML
-    JFXButton cancelBtn;
+    private JFXButton cancelBtn;
     @FXML
-    JFXButton submitBtn;
+    private JFXButton submitBtn;
 
     RankController rankController;
     CityController cityController;
@@ -62,9 +63,14 @@ public class Create extends View {
     @Override
     public void init() {
         // Initialise le controller
-        rankController = new RankController();
-        cityController = new CityController();
-        customerController = new CustomerController();
+        try {
+
+            rankController = new RankController();
+            cityController = new CityController();
+            customerController = new CustomerController();
+        } catch (ConnectionException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
 
         // affiche de base pour un client particulier
         businessView.setVisible(false);
@@ -89,11 +95,17 @@ public class Create extends View {
         });
 
         //Remplis la combobox Rank
-        ArrayList<Rank> rankList = rankController.getAllRanks();
+        ArrayList<Rank> rankList = null;
+        ArrayList<City> cityList = null;
+        try {
+            rankList = rankController.getAllRanks();
+            cityList = cityController.getAllCities();
+        } catch (DataQueryException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
         customerRank.setItems(FXCollections.observableArrayList(rankList));
         customerRank.getSelectionModel().selectFirst();
 
-        ArrayList<City> cityList = cityController.getAllCities();
         regionBox.setItems(FXCollections.observableArrayList(cityList));
         regionBox.getSelectionModel().selectFirst();
 
@@ -104,7 +116,6 @@ public class Create extends View {
         });
 
         submitBtn.setOnAction(e -> {
-//            System.out.println("Check mail :" + checkMail());
             if(Validators.validate(contactName, phoneNumber, address, houseNumber)  && Validators.validateNullableValue(mail, businessNumber, accountNumber)) {
                 try {
                     insertCustomer();
@@ -112,14 +123,14 @@ public class Create extends View {
                     Index customersView = (Index) getParentView();
                     customersView.updateTable();
                     closeWindow();
-                } catch (SQLException exception) {
-                    PopUp.showError(exception.getMessage(), "Error");
+                } catch (CustomerInsertionException exception) {
+                    PopUp.showError(exception.getTypeError(), exception.getMessage());
                 }
             }
         });
     }
 
-    private boolean insertCustomer() throws SQLException{
+    private boolean insertCustomer() throws CustomerInsertionException {
 
         Customer newCustomer;
         Entity newEntity = new Entity();
@@ -137,9 +148,6 @@ public class Create extends View {
             if (businessNumber.validate())
                 newEntity.setBusinessNumber(businessNumber.getText());
         }
-
-        System.out.println("Business Number : " + newEntity.getBusinessNumber());
-        System.out.println("Account number : " + newEntity.getBankAccountNumber());
 
         Rank selectedRank = customerRank.getValue();
         City city = regionBox.getValue();

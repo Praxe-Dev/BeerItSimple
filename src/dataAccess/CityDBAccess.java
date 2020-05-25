@@ -1,5 +1,7 @@
 package dataAccess;
 
+import exception.ConnectionException;
+import exception.DataQueryException;
 import model.City;
 
 import java.sql.Connection;
@@ -10,35 +12,29 @@ import java.util.ArrayList;
 public class CityDBAccess implements CityDataAccess {
     private Connection connection;
 
-    public CityDBAccess() {
-        this.connection = DBConnection.getDBConnection();
+    public CityDBAccess() throws ConnectionException {
+        this.connection = DBConnection.getInstance();
     }
 
 
     @Override
-    public ArrayList<City> getAllCities() {
+    public ArrayList<City> getAllCities() throws DataQueryException {
         String sqlInstruction = "SELECT * FROM City";
-
         ArrayList<City> cityList = new ArrayList<>();
 
         try {
             ResultSet data = connection.createStatement().executeQuery(sqlInstruction);
-
             City city;
 
             while (data.next()) {
-                //System.out.println("Label : " + data.getString("Label"));
-                //System.out.println("zipCode : " + data.getInt("zipCode"));
-
                 city = new City(data.getString("Label"), data.getInt("zipCode"));
                 cityList.add(city);
             }
 
-            return cityList;
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataQueryException();
         }
 
-        return null;
+        return cityList;
     }
 }

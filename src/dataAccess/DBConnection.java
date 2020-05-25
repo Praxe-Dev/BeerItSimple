@@ -1,5 +1,8 @@
 package dataAccess;
 
+import exception.ConnectionException;
+
+import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -13,16 +16,16 @@ public class DBConnection {
     private static String id = "root";
     private static String password = "root";
 
-    private DBConnection() {
+    private DBConnection() throws ConnectionException {
         try {
             connection = DriverManager.getConnection(url, id, password);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new ConnectionException();
         }
     }
 
-    // TODO: remplacer par getinstance
-    public static Connection getDBConnection() {
+    public static Connection getInstance() throws ConnectionException {
         if (connection == null)
             new DBConnection();
 

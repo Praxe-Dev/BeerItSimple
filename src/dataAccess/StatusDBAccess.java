@@ -1,6 +1,7 @@
 package dataAccess;
 
-import model.PaymentMethod;
+import exception.ConnectionException;
+import exception.DataQueryException;
 import model.Status;
 
 import java.sql.Connection;
@@ -12,12 +13,12 @@ public class StatusDBAccess implements StatusDataAccess {
 
     private Connection connection;
 
-    public StatusDBAccess() {
-        this.connection = DBConnection.getDBConnection();
+    public StatusDBAccess() throws ConnectionException {
+        this.connection = DBConnection.getInstance();
     }
 
     @Override
-    public ArrayList<Status> getAllStatus() {
+    public ArrayList<Status> getAllStatus() throws DataQueryException {
         String sqlInstruction = "SELECT * FROM status";
 
         ArrayList<Status> statusArrayList = new ArrayList<>();
@@ -35,7 +36,7 @@ public class StatusDBAccess implements StatusDataAccess {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataQueryException();
         }
 
         return statusArrayList;

@@ -1,8 +1,7 @@
 package controller;
 
 import business.NewsBusiness;
-import exception.DeletionExceiption;
-import exception.SQLManageException;
+import exception.*;
 import model.News;
 
 import java.sql.SQLException;
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 public class NewsController {
     private NewsBusiness newsBusiness;
 
-    public NewsController() {
+    public NewsController() throws ConnectionException {
         setNewsBusiness(new NewsBusiness());
     }
 
@@ -23,15 +22,15 @@ public class NewsController {
         return newsBusiness.getRandomNews();
     }
 
-    public ArrayList<News> getAllNews() throws SQLManageException {
+    public ArrayList<News> getAllNews() throws DataQueryException {
         return newsBusiness.getAllNews();
     }
 
-    public News getNewsFromId(Integer id) throws SQLManageException {
+    public News getNewsFromId(Integer id) throws NoRowSelected {
         return newsBusiness.getNewsFromId(id);
     }
 
-    public void insertNews(News news) throws SQLManageException {
+    public void insertNews(News news) throws DataQueryException {
         newsBusiness.insertNews(news);
     }
 
@@ -39,7 +38,7 @@ public class NewsController {
         return newsBusiness.deleteNews(news);
     }
 
-    public void updateNews(News news) throws SQLManageException {
+    public void updateNews(News news) throws UpdateException {
         newsBusiness.updateNews(news);
     }
 }

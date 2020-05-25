@@ -2,9 +2,7 @@ package view.news;
 
 import com.jfoenix.controls.JFXButton;
 import controller.NewsController;
-import exception.DeletionExceiption;
-import exception.NoRowSelected;
-import exception.SQLManageException;
+import exception.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.SelectionMode;
@@ -13,10 +11,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.News;
 import model.NewsTableFormat;
-import view.PopUp;
+import utils.PopUp;
 import view.View;
 import view.Window;
-import view.news.Update;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -48,10 +45,6 @@ public class Index extends View implements Initializable {
 
     private NewsController newsController;
 
-    public Index(){
-        newsController = new NewsController();
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         init();
@@ -60,7 +53,11 @@ public class Index extends View implements Initializable {
 
     @Override
     public void init() {
-
+        try {
+            newsController = new NewsController();
+        } catch (ConnectionException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
         refreshBtn.setOnAction(e -> {
             updateTable();
         });
@@ -104,15 +101,13 @@ public class Index extends View implements Initializable {
         deleteNews.setOnAction(e -> {
             try {
                 News news = getSelectedNews();
-                if(PopUp.showConfirm("Confirm delete", "Are you sur you want to delete the news [(" + news.getId() + ") " + news.getTitle() + "] ?")) {
+                if(news != null && PopUp.showConfirm("Confirm delete", "Are you sur you want to delete the news [(" + news.getId() + ") " + news.getTitle() + "] ?")) {
                     if (newsController.deleteNews(news)) {
                         updateTable();
                     }
                 }
             } catch (DeletionExceiption ex) {
-                ex.showError();
-            } catch (NullPointerException ex) {
-                new NoRowSelected();
+                showError(ex.getTypeError(), ex.getMessage());
             }
         });
     }
@@ -128,8 +123,8 @@ public class Index extends View implements Initializable {
         ArrayList<News> newsList = new ArrayList<News>();
         try{
             newsList = newsController.getAllNews();
-        } catch(SQLManageException ex){
-           ex.showMessage();
+        } catch(DataQueryException ex){
+           showError(ex.getTypeError(), ex.getMessage());
         }
         ArrayList<NewsTableFormat> newsRow = new ArrayList<>();
         for (News news : newsList) {
@@ -147,10 +142,16 @@ public class Index extends View implements Initializable {
 
     private News getSelectedNews() {
         News news = null;
+
         try {
-            news = newsController.getNewsFromId(newsTable.getSelectionModel().getSelectedItem().getId());
-        } catch (Exception e) {
-            new NoRowSelected();
+            NewsTableFormat newsSelected = newsTable.getSelectionModel().getSelectedItem();
+            if (newsSelected != null)
+                news = newsController.getNewsFromId(newsSelected.getId());
+            else
+                throw new NoRowSelected();
+
+        } catch (NoRowSelected e) {
+            showError(e.getTypeError(), e.getMessage());
         }
 
         return news;
@@ -159,8 +160,8 @@ public class Index extends View implements Initializable {
     private void updateTable() {
         try {
             updateTable(newsController.getAllNews());
-        } catch (SQLManageException e) {
-            e.showMessage();
+        } catch(DataQueryException ex){
+            showError(ex.getTypeError(), ex.getMessage());
         }
     }
 

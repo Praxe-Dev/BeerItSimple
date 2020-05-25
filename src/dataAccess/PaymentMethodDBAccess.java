@@ -1,5 +1,7 @@
 package dataAccess;
 
+import exception.ConnectionException;
+import exception.DataQueryException;
 import model.PaymentMethod;
 
 import java.sql.Connection;
@@ -11,12 +13,12 @@ public class PaymentMethodDBAccess implements PaymentMethodDataAccess {
 
     private Connection connection;
 
-    public PaymentMethodDBAccess() {
-        this.connection = DBConnection.getDBConnection();
+    public PaymentMethodDBAccess() throws ConnectionException {
+        this.connection = DBConnection.getInstance();
     }
 
     @Override
-    public ArrayList<PaymentMethod> getAllPaymentMethod() {
+    public ArrayList<PaymentMethod> getAllPaymentMethod() throws DataQueryException {
         String sqlInstruction = "SELECT * FROM paymentMethod";
 
         ArrayList<PaymentMethod> paymentMethodList = new ArrayList<>();
@@ -34,7 +36,7 @@ public class PaymentMethodDBAccess implements PaymentMethodDataAccess {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataQueryException();
         }
 
         return paymentMethodList;

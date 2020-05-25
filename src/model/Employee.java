@@ -6,9 +6,9 @@ public class Employee {
     private String password;
 
     public Employee(Entity entity, Role role, String password) {
-        this.entity = entity;
-        this.role = role;
-        this.password = password;
+        setEntity(entity);
+        setRole(role);
+        setPassword(password);
     }
 
     public Employee(Entity entity, Role role) {

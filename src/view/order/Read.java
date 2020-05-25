@@ -6,6 +6,8 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
 import controller.OrderController;
+import exception.ConnectionException;
+import exception.DataQueryException;
 import exception.NoRowSelected;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -15,7 +17,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import model.*;
-import view.PopUp;
+import utils.PopUp;
 import view.View;
 
 import java.io.FileOutputStream;
@@ -24,45 +26,42 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Read extends View {
+    @FXML
+    private Label orderReference;
+    @FXML
+    private JFXTextField customer;
+    @FXML
+    private JFXTextField paymentMethod;
+    @FXML
+    private JFXCheckBox deliveryCheck;
+    @FXML
+    private Group deliveryDisplay;
+    @FXML
+    private JFXTextField deliveryDate;
+    @FXML
+    private JFXButton okBtn;
+    @FXML
+    private TableView<OrderLineTableFormat> tableArticle;
+    @FXML
+    private TableColumn<OrderLineTableFormat, String> article;
+    @FXML
+    private TableColumn<OrderLineTableFormat, Double> price;
+    @FXML
+    private TableColumn<OrderLineTableFormat, Integer> quantity;
+    @FXML
+    private TableColumn<OrderLineTableFormat, Double> totalExclVat;
+    @FXML
+    private TableColumn<OrderLineTableFormat, Double> totalInclVat;
+    @FXML
+    private Text totalAmountExclVat;
+    @FXML
+    private Text totalAmountVatOnly;
+    @FXML
+    private Text totalAmountVatInc;
+    @FXML
+    private JFXButton invoiceBtn;
 
-    @FXML
-    Label orderReference;
-    @FXML
-    JFXTextField customer;
-    @FXML
-    JFXTextField paymentMethod;
-    @FXML
-    JFXCheckBox deliveryCheck;
-    @FXML
-    Group deliveryDisplay;
-    @FXML
-    JFXTextField deliveryDate;
-    @FXML
-    JFXButton okBtn;
-    @FXML
-    TableView<OrderLineTableFormat> tableArticle;
-    @FXML
-    TableColumn<OrderLineTableFormat, String> article;
-    @FXML
-    TableColumn<OrderLineTableFormat, Double> price;
-    @FXML
-    TableColumn<OrderLineTableFormat, Integer> quantity;
-    @FXML
-    TableColumn<OrderLineTableFormat, Double> totalExclVat;
-    @FXML
-    TableColumn<OrderLineTableFormat, Double> totalInclVat;
-    @FXML
-    Text totalAmountExclVat;
-    @FXML
-    Text totalAmountVatOnly;
-    @FXML
-    Text totalAmountVatInc;
-    @FXML
-    JFXButton invoiceBtn;
-
-//    OrderController orderController;
-
-    Order selectedOrder;
+    private Order selectedOrder;
 
     @Override
     public void init() {
@@ -122,8 +121,8 @@ public class Read extends View {
             }
 
             tableArticle.getItems().addAll(orderLines);
-        } catch (NoRowSelected e) {
-            e.showError();
+        } catch (ConnectionException | DataQueryException e) {
+            showError(e.getTypeError(), e.getMessage());
         }
     }
 

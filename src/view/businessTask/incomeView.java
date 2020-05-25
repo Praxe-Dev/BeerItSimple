@@ -2,10 +2,10 @@ package view.businessTask;
 
 import com.jfoenix.controls.JFXButton;
 import controller.ProductController;
+import exception.ConnectionException;
+import exception.DataQueryException;
 import exception.DateException;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
@@ -15,51 +15,60 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
-import model.OrderTableFormat;
 import model.Product;
 import model.ProductIncome;
 import utils.Validators;
-import view.PopUp;
 import view.View;
 
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.function.Function;
 
 public class incomeView extends View {
 
     @FXML
-    DatePicker startDate;
+    private DatePicker startDate;
     @FXML
-    DatePicker endDate;
+    private DatePicker endDate;
     @FXML
-    JFXButton refreshBtn;
+    private JFXButton refreshBtn;
     @FXML
-    TableView<ProductIncome> incomeTable;
+    private TableView<ProductIncome> incomeTable;
     @FXML
-    TableColumn<ProductIncome, Integer> productCode;
+    private TableColumn<ProductIncome, Integer> productCode;
     @FXML
-    TableColumn<ProductIncome, String> productName;
+    private TableColumn<ProductIncome, String> productName;
     @FXML
-    TableColumn<ProductIncome, Integer> amountSold;
+    private TableColumn<ProductIncome, Integer> amountSold;
     @FXML
-    TableColumn<ProductIncome, Double> income;
+    private TableColumn<ProductIncome, Double> income;
     @FXML
-    TableColumn<ProductIncome, Double> salePercentage;
+    private TableColumn<ProductIncome, Double> salePercentage;
     @FXML
-    PieChart pieChart;
+    private PieChart pieChart;
     @FXML
-    Text totalIncome;
+    private Text totalIncome;
+
+    ProductController productController;
 
     @Override
     public void init() {
+        try {
+            productController = new ProductController();
+        } catch (ConnectionException exception) {
+            showError(exception.getTypeError(), exception.getMessage());
+        }
+
         refreshBtn.setOnAction(e -> {
             LocalDate start = startDate.getValue();
             LocalDate end = endDate.getValue();
 
             if (Validators.validateBetweenDates(start, end)) {
-                ArrayList<ProductIncome> productIncomes = new ProductController().getAllProductsIncome(start, end);
+                ArrayList<ProductIncome> productIncomes = null;
+                try {
+                    productIncomes = productController.getAllProductsIncome(start, end);
+                } catch (DataQueryException ex) {
+                    showError(ex.getTypeError(), ex.getMessage());
+                }
                 updateTable(productIncomes);
 
             } else {
@@ -70,7 +79,12 @@ public class incomeView extends View {
         startDate.setValue(LocalDate.now().minusYears(1));
         endDate.setValue(LocalDate.now());
 
-        ArrayList<ProductIncome> productIncomes = new ProductController().getAllProductsIncome(startDate.getValue(), endDate.getValue());
+        ArrayList<ProductIncome> productIncomes = null;
+        try {
+            productIncomes = productController.getAllProductsIncome(startDate.getValue(), endDate.getValue());
+        } catch (DataQueryException e) {
+            showError(e.getTypeError(), e.getMessage());
+        }
         double total = 0;
         for (ProductIncome p : productIncomes) {
             total += p.getSalePercentageNumber();
@@ -103,8 +117,8 @@ public class incomeView extends View {
         incomeTable.getItems().setAll(products);
 
         double total = products.stream()
-                                .mapToDouble(ProductIncome::getIncome)
-                                .sum();
+                .mapToDouble(ProductIncome::getIncome)
+                .sum();
 
         totalIncome.setText(String.format("%.2f", total));
     }
