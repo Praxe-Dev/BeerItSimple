@@ -27,7 +27,6 @@ public class searchBetweenDates extends View implements Initializable {
     @FXML
     private JFXButton searchBtn;
 
-    private Index orderIndex;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -43,9 +42,6 @@ public class searchBetweenDates extends View implements Initializable {
         searchBtn.setOnAction(e -> {
             executeSearch();
         });
-
-//        setShortcut(new KeyCodeCombination(KeyCode.ENTER), () -> executeSearch());
-        orderIndex = new Index();
     }
 
     public void executeSearch() {

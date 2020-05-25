@@ -216,16 +216,14 @@ public class Update extends View {
         try {
 
             OrderLineTableFormat orderLineTableFormat = tableArticle.getSelectionModel().getSelectedItem();
-            tableArticle.getItems().remove(orderLineTableFormat);
-//                double amount = Double.parseDouble(totalAmount.getText().replace(',', '.'));
-//
-//                String newTotal = String.format("%.2f", amount - orderLineTableFormat.getTotal());
-//                totalAmount.setText(newTotal);
+            if (orderLineTableFormat == null)
+                throw new NoRowSelected();
 
+            tableArticle.getItems().remove(orderLineTableFormat);
             removeProduct(orderLineTableFormat);
 
-        } catch (NullPointerException exception) {
-            new NoRowSelected();
+        } catch (NoRowSelected e) {
+            showError(e.getTypeError(), e.getMessage());
         }
     }
 

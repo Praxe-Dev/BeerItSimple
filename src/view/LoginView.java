@@ -5,21 +5,14 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import controller.EmployeeController;
 import exception.ConnectionException;
-import exception.EmployeeLoginException;
-import exception.MatriculException;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
+import exception.LoginException;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import model.Employee;
+import utils.Validators;
 
 public class LoginView extends View {
-    @FXML
-    private VBox loginContainer;
     @FXML
     private JFXTextField employeeMatricule;
     @FXML
@@ -32,6 +25,13 @@ public class LoginView extends View {
 
     @Override
     public void init() {
+        Validators.setNumberValidator(employeeMatricule);
+        Validators.setReqField(employeeMatricule);
+
+        this.getStage().setOnCloseRequest(e -> {
+            System.exit(0);
+        });
+
         try {
             employeeController = new EmployeeController();
         } catch (ConnectionException e) {
@@ -44,41 +44,29 @@ public class LoginView extends View {
         });
 
         setShortcut(new KeyCodeCombination(KeyCode.ENTER), () -> openSession());
-
-        makeDraggable(loginContainer);
     }
 
     private void openSession() {
 
         try {
-            int matricule = getMatricule();
+            int matricule = -1;
+            if (employeeMatricule.validate())
+                matricule = getMatricule();
             String password = getPassword();
 
-            // Can save employee as user in view.Window to manage permission
             Employee employee = employeeController.getEmployee(matricule, password);
             Window session;
             session = new Window(PathToMainPanel, "BeerItSimple - Home");
-
+            session.setCurrentUser(employee);
             switchWindow(session);
 
-            MainView mainView = (MainView) session.getView();
-            //TODO: Le modèle employé doit contenir une référence entité. La requete de connexion doit être adaptée.
-            mainView.setUsername(employee.getEntity().getContactName());
-            mainView.setRole(employee.getRole());
-            //mainView.setUsername("Administrator");
-        } catch (EmployeeLoginException exception) {
-
-        } catch (MatriculException exception) {
-                exception.showMessage();
+        } catch (LoginException exception) {
+            showError(exception.getTypeError(), exception.getMessage());
         }
     }
 
-    public int getMatricule() throws MatriculException {
-        if (employeeMatricule.getText().matches("\\d+")) {
-            return Integer.parseInt(employeeMatricule.getText());
-        } else {
-            throw new MatriculException();
-        }
+    public int getMatricule() {
+        return Integer.parseInt(employeeMatricule.getText());
     }
 
     public String getPassword() {

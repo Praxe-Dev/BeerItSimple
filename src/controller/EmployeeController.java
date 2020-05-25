@@ -3,8 +3,7 @@ package controller;
 import business.EmployeeBusiness;
 import exception.ConnectionException;
 import exception.DataQueryException;
-import exception.EmployeeLoginException;
-import exception.SQLManageException;
+import exception.LoginException;
 import model.Employee;
 
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ public class EmployeeController {
         this.employeeBusiness = employeeBusiness;
     }
 
-    public Employee getEmployee(int registrationNumber, String password) throws EmployeeLoginException {
+    public Employee getEmployee(int registrationNumber, String password) throws LoginException {
         //Employee e = new Employee(matricule, password);
         return employeeBusiness.getEmployee(registrationNumber, password);
     }

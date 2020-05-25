@@ -2,14 +2,12 @@ package dataAccess;
 
 import exception.ConnectionException;
 import exception.DataQueryException;
-import exception.EmployeeLoginException;
-import exception.SQLManageException;
+import exception.LoginException;
 import model.City;
 import model.Employee;
 import model.Entity;
 import model.Role;
 
-import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -21,7 +19,7 @@ public class EmployeeDBAccess implements EmployeeDataAccess {
     }
 
     @Override
-    public Employee getEmployee(int login, String password) throws EmployeeLoginException {
+    public Employee getEmployee(int login, String password) throws LoginException {
         String sqlInstructions = "SELECT employee.*, e.*, r.*, city.* FROM employee\n" +
                                 "JOIN entity e ON e.id = employee.EntityId\n" +
                                 "JOIN role r ON r.id = employee.RoleId\n" +
@@ -62,7 +60,7 @@ public class EmployeeDBAccess implements EmployeeDataAccess {
                 return new Employee(entity, role, password);
             }
         } catch (Exception e) {
-            throw new EmployeeLoginException();
+            throw new LoginException();
         }
 
         return null;

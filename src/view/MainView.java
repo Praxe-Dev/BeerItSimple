@@ -3,6 +3,7 @@ package view;
 import com.jfoenix.controls.JFXButton;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,7 +13,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import model.News;
-import model.Role;
 import utils.PopUp;
 import view.news.ThreadNews;
 import view.news.Read;
@@ -55,13 +55,11 @@ public class MainView extends View{
 
     @Override
     public void init() {
+        setUser();
         setNewsTransition();
 
         ThreadNews threadNews = new ThreadNews(this);
-        //threadNews.start();
         new Thread(threadNews).start();
-
-//        getStage().setOnHidden(e -> Platform.exit());
 
         homeBtn.setOnAction(e -> {
             setCenter(pathToHomePanel);
@@ -92,7 +90,6 @@ public class MainView extends View{
         });
 
         logout.setOnMouseClicked(e -> {
-            //TODO: replace with close all windows!
             if (PopUp.showConfirm("Sign out", "Are you sure you want to sign out ?")) {
                 Window login = new Window("FXML/loginPanel.fxml", "Login");
                 switchWindow(login);
@@ -100,13 +97,12 @@ public class MainView extends View{
         });
 
         closeWindow.setOnMouseClicked(e -> {
-            //TODO: replace with close all windows!
             if (PopUp.showConfirm("Closing", "Are you sure you want to quit the application ?"))
                 System.exit(0);
         });
 
         newsLabel.setOnMouseClicked(e -> {
-            if(currentShowedNews != null){
+            if(currentShowedNews != null) {
                 //Open window with news details
                 Window newsDetails = new Window("FXML/news/read.fxml", "News details");
                 newsDetails.load();
@@ -129,7 +125,6 @@ public class MainView extends View{
 
         this.window.undecorated();
         makeDraggable(topBar);
-
     }
 
     /**
@@ -154,15 +149,14 @@ public class MainView extends View{
         currentShowedNews = news;
     }
 
-    public void setUsername(String employeeUsername){
-        username.setText(employeeUsername);
-    }
+    public void setUser(){
+        username.setText(window.getCurrentUser().getEntity().getContactName());
 
-    public void setRole(Role role){
-        if(!role.getName().equals("Manager")){
+        if(!window.getCurrentUser().getRole().getName().equals("Manager")){
             boxMenu.getChildren().remove(newsBtn);
         }
-        username.setText(username.getText() + " (" + role.getName() + ")");
+        username.setText(username.getText() + " (" + window.getCurrentUser().getRole().getName() + ")");
+
     }
 
     private void setNewsTransition(){

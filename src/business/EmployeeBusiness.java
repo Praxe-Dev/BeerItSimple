@@ -4,8 +4,7 @@ import dataAccess.EmployeeDBAccess;
 import dataAccess.EmployeeDataAccess;
 import exception.ConnectionException;
 import exception.DataQueryException;
-import exception.EmployeeLoginException;
-import exception.SQLManageException;
+import exception.LoginException;
 import model.Employee;
 
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ public class EmployeeBusiness {
         this.dao = employeeDBAccess;
     }
 
-    public Employee getEmployee(int registrationNumber, String password) throws EmployeeLoginException {
+    public Employee getEmployee(int registrationNumber, String password) throws LoginException {
         return dao.getEmployee(registrationNumber, password);
     }
 

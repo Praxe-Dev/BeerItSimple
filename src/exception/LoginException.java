@@ -1,6 +1,6 @@
 package exception;
 
-public class EmployeeLoginException extends BISException {
+public class LoginException extends BISException {
     private final String typeError = "Connection Error";
     private final String message = "Login and password doesn't match.";
 

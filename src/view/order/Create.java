@@ -208,11 +208,14 @@ public class Create extends View {
         try {
 
             OrderLineTableFormat orderLineTableFormat = tableArticle.getSelectionModel().getSelectedItem();
+            if (orderLineTableFormat == null)
+                throw new NoRowSelected();
+
             tableArticle.getItems().remove(tableArticle.getSelectionModel().getSelectedItem());
 
             computeAndDisplayNewAmount(orderLineTableFormat, totalAmountExclVat, totalAmountVatOnly, totalAmountVatInc);
-        } catch (NullPointerException e) {
-            new NoRowSelected();
+        } catch (NoRowSelected e) {
+            showError(e.getTypeError(),e.getMessage());
         }
     }
 

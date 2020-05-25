@@ -6,7 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import view.order.Index;
+import model.Employee;
 
 import java.io.IOException;
 
@@ -17,6 +17,7 @@ public class Window extends Parent {
     private final Stage stage;
     private Parent parent;
     private View view;
+    private Employee currentUser;
 
     /**
      * Constructeur de la fenêtre afficher
@@ -49,10 +50,6 @@ public class Window extends Parent {
         stage.show();
     }
 
-//    public Parent getParent() {
-//        return this.parent;
-//    }
-
     public void resizable(Boolean isResizable){
         stage.setResizable(isResizable);
     }
@@ -68,4 +65,12 @@ public class Window extends Parent {
     }
 
     public View getView() { return this.view; }
+
+    public void setCurrentUser(Employee employee) {
+        this.currentUser = employee;
+    }
+
+    public Employee getCurrentUser() {
+        return currentUser;
+    }
 }
