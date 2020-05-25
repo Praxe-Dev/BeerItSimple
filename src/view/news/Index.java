@@ -11,6 +11,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.News;
 import model.NewsTableFormat;
+import model.Order;
 import utils.PopUp;
 import view.View;
 import view.Window;
@@ -106,13 +107,19 @@ public class Index extends View implements Initializable {
 
         deleteNews.setOnAction(e -> {
             try {
-                News news = getSelectedNews();
-                if(news != null && PopUp.showConfirm("Confirm delete", "Are you sur you want to delete the news [(" + news.getId() + ") " + news.getTitle() + "] ?")) {
-                    if (newsController.deleteNews(news)) {
-                        updateTable();
+                ArrayList<News> news = getMultipleSelectedNews();
+                if (news.isEmpty())
+                    throw new NoRowSelected();
+
+                String message = (news.size() > 1) ? "Are you sur you want to delete these multiple news ?" : "Are you sur you want to delete this news ?";
+                if(PopUp.showConfirm("Confirm delete", message)) {
+                    for (News n : news) {
+                        if (newsController.deleteNews(n)) {
+                            updateTable();
+                        }
                     }
                 }
-            } catch (DeletionException ex) {
+            } catch (DeletionException | NoRowSelected ex) {
                 showError(ex.getTypeError(), ex.getMessage());
             } catch (NullObjectException nullObjectException) {
                 System.out.println(nullObjectException.getMessage());
@@ -165,6 +172,21 @@ public class Index extends View implements Initializable {
         }
 
         return news;
+    }
+
+    private ArrayList<News> getMultipleSelectedNews() {
+        ArrayList<News> selectedNews = new ArrayList<>();
+        newsTable.getSelectionModel().getSelectedItems().forEach(n -> {
+            try {
+                selectedNews.add(newsController.getNewsFromId(n.getId()));
+            } catch (NoRowSelected e) {
+                showError(e.getTypeError(), e.getMessage());
+            } catch (NullObjectException e) {
+                System.out.println(e.getMessage());
+            }
+        });
+
+        return selectedNews;
     }
 
     private void updateTable() {
