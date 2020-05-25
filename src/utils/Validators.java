@@ -35,8 +35,9 @@ public class Validators {
         setReqField(phoneNumber);
     }
 
-    public static void setNoNumberValidator(JFXTextField field) {
-        String regexPattern = "^([a-zA-Z']+\\s)*[-a-zA-Z']+$";
+    public static void setAddressValidator(JFXTextField field) {
+        //String regexPattern = "^([a-zA-Z-À-ÿ']+\\s)*[-a-zA-Z-À-ÿ']+$";
+        String regexPattern = "^[A-z]+((\\s){1}([A-z]+|[-'À-ÿ]+)+){1,}$";
         RegexValidator validator = new RegexValidator();
         validator.setRegexPattern(regexPattern);
         validator.setMessage("Address should not contains numbers and special characters");

@@ -72,9 +72,9 @@ public class Create extends View {
         businessView.setVisible(false);
 
         Validators.setMailValidators(mail);
-        Validators.setNoNumberValidator(contactName);
+        Validators.setReqField(contactName);
         Validators.setPhoneNumberValidator(phoneNumber);
-        Validators.setNoNumberValidator(address);
+        Validators.setAddressValidator(address);
         Validators.setHouseNumberValidator(houseNumber);
         Validators.setAccountNumberValidator(accountNumber);
         Validators.setBusinessNumberValidator(businessNumber);
