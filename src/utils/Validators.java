@@ -141,7 +141,7 @@ public class Validators {
 
     public static void setNumberValidator(JFXTextField field) {
         String regexPattern = "(^[1-9])[0-9]{0,3}";
-        String message = "Should only contains number";
+        String message = ">= 1";
         RegexValidator fieldValidator = new RegexValidator();
         fieldValidator.setRegexPattern(regexPattern);
         fieldValidator.setMessage(message);
