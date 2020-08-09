@@ -1,8 +1,8 @@
 package model;
 
 public class City {
-    String label;
-    Integer zipCode;
+    private String label;
+    private Integer zipCode;
 
     public City(String label, int zipCode) {
         setLabel(label);

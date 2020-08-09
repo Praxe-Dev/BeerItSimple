@@ -39,10 +39,12 @@ public class Validators {
 
     public static void setAddressValidator(JFXTextField field) {
         //String regexPattern = "^([a-zA-Z-À-ÿ']+\\s)*[-a-zA-Z-À-ÿ']+$";
-        String regexPattern = "^[A-z]+((\\s){1}([A-z]+|[-'À-ÿ]+)+){1,}$";
+        //String regexPattern = "^[A-z]+((\\s){1}([A-z]+|[-'À-ÿ]+)+){1,}$";
+        String regexPattern = "^[-'A-Za-zÀ-ÿ]+((\\s){1}[-'A-Za-zÀ-ÿ]+)*$";
         RegexValidator validator = new RegexValidator();
         validator.setRegexPattern(regexPattern);
-        validator.setMessage("Address should not contains numbers and special characters");
+        //validator.setMessage("Address should not contains numbers and special characters");
+        validator.setMessage("Should only contains letters, apostrophe and hyphen and only one space between words");
 
         field.getValidators().add(validator);
         setReqField(field);
