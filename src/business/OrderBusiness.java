@@ -79,11 +79,11 @@ public class OrderBusiness {
     public ArrayList<Order> getOrdersFromRanks(Rank rank, Status status, Boolean isPaid) throws DataQueryException, NullObjectException {
         if (rank == null)
             throw new NullObjectException(rank.getClass().getName());
-        if (status == null)
+        //if the status or the boolean isPaid is null, it means that the status or if the order is paid doesn't matter...
+        /*if (status == null)
             throw new NullObjectException(status.getClass().getName());
         if (isPaid == null)
-            throw new NullObjectException(isPaid.getClass().getName());
-
+            throw new NullObjectException(isPaid.getClass().getName());*/
         return dao.getOrdersFromRanks(rank, status, isPaid);
     }
 }
