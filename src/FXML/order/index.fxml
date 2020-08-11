@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import de.jensd.fx.glyphs.fontawesome.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox fx:id="vbox" alignment="CENTER" prefHeight="641.0" prefWidth="1072.0" styleClass="center" stylesheets="/view/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.order.Index">
+<VBox fx:id="vbox" alignment="CENTER" prefHeight="641.0" prefWidth="1072.0" styleClass="center" stylesheets="/view/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.order.Index">
     <children>
         <Label fx:id="label" alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="451.0" style="-fx-background-color: rgba(0,0,0,0.1);" text="Orders" textAlignment="CENTER" textFill="WHITE">
             <VBox.margin>
@@ -40,10 +43,15 @@
             <columns>
                 <TableColumn fx:id="reference" prefWidth="75.0" text="Reference" />
                 <TableColumn fx:id="startingDate" prefWidth="75.0" text="Date" />
+            <TableColumn fx:id="customerId" prefWidth="75.0" text="Customer Id #" />
                 <TableColumn fx:id="customerName" prefWidth="108.0" text="Customer Name" />
+            <TableColumn fx:id="customerRank" prefWidth="75.0" text="Customer Rank" />
                 <TableColumn fx:id="paid" prefWidth="75.0" text="Paid" />
                 <TableColumn fx:id="paymentMethod" prefWidth="116.0" text="Payement Method" />
                 <TableColumn fx:id="status" text="Status" />
+            <TableColumn fx:id="customerAddress" prefWidth="75.0" text="Address" />
+            <TableColumn fx:id="customerCity" prefWidth="75.0" text="City" />
+            <TableColumn fx:id="customerPhoneNumber" prefWidth="75.0" text="Phone number" />
                 <TableColumn fx:id="plannedDate" prefWidth="112.0" text="Planned Delivery" />
                 <TableColumn fx:id="deliveredDate" prefWidth="119.0" text="Delivered Date" />
                 <TableColumn fx:id="deliveryMan" prefWidth="113.0" text="Delivery Man" />

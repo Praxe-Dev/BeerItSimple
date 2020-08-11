@@ -39,13 +39,23 @@ public class Index extends View implements Initializable {
     @FXML
     private TableColumn<OrderTableFormat, String> startingDate;
     @FXML
+    private TableColumn<CustomerTableFormat, Integer> customerId;
+    @FXML
     private TableColumn<OrderTableFormat, String> customerName;
+    @FXML
+    private TableColumn<CustomerTableFormat, String> customerRank;
     @FXML
     private TableColumn<OrderTableFormat, String> paid;
     @FXML
     private TableColumn<OrderTableFormat, String> paymentMethod;
     @FXML
     private TableColumn<OrderTableFormat, String> status;
+    @FXML
+    private TableColumn<CustomerTableFormat, String> customerAddress;
+    @FXML
+    private TableColumn<CustomerTableFormat, String> customerCity;
+    @FXML
+    private TableColumn<CustomerTableFormat, String> customerPhoneNumber;
     @FXML
     private TableColumn<OrderTableFormat, String> plannedDate;
     @FXML
