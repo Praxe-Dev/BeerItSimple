@@ -6,10 +6,15 @@ import java.util.GregorianCalendar;
 public class OrderTableFormat {
     private Integer reference;
     private GregorianCalendar startingDate;
+    private Integer customerId;
     private String customerName;
+    private String customerRank;
     private String paid;
     private String paymentMethod;
     private String status;
+    private String customerAddress;
+    private String customerCity;
+    private String customerPhoneNumber;
     private GregorianCalendar plannedDate;
     private GregorianCalendar deliveredDate;
     private String deliveryMan;
@@ -32,6 +37,14 @@ public class OrderTableFormat {
             setDeliveredDate(order.getDelivery().getDeliveredDate());
             setDeliveryMan(order.getDelivery().getEmployee().getEntity().getContactName());
         }
+
+        if (order.getCustomer().getEntity() != null) {
+            setCustomerId(order.getCustomer().getEntity().getId());
+            setCustomerRank(order.getCustomer().getRank().getLabel());
+            setCustomerAddress(order.getCustomer().getEntity().getStreet() + ", " + order.getCustomer().getEntity().getHouseNumber());
+            setCustomerCity(order.getCustomer().getEntity().getCity().getLabel());
+            setCustomerPhoneNumber(order.getCustomer().getEntity().getPhoneNumber());
+        }
     }
 
     public Integer getReference() {
@@ -49,6 +62,10 @@ public class OrderTableFormat {
     public void setStartingDate(GregorianCalendar startingDate) {
         this.startingDate = startingDate;
     }
+
+    public Integer getCustomerId() { return customerId; }
+
+    public void setCustomerId(Integer customerId) { this.customerId = customerId; }
 
     public String getCustomerName() {
         return customerName;
@@ -112,5 +129,37 @@ public class OrderTableFormat {
 
     public String dateFormat(GregorianCalendar date){
         return fmt.format(date.getTime());
+    }
+
+    public String getCustomerRank() {
+        return customerRank;
+    }
+
+    public void setCustomerRank(String customerRank) {
+        this.customerRank = customerRank;
+    }
+
+    public String getCustomerAddress() {
+        return customerAddress;
+    }
+
+    public void setCustomerAddress(String customerAddress) {
+        this.customerAddress = customerAddress;
+    }
+
+    public String getCustomerCity() {
+        return customerCity;
+    }
+
+    public void setCustomerCity(String customerCity) {
+        this.customerCity = customerCity;
+    }
+
+    public String getCustomerPhoneNumber() {
+        return customerPhoneNumber;
+    }
+
+    public void setCustomerPhoneNumber(String customerPhoneNumber) {
+        this.customerPhoneNumber = customerPhoneNumber;
     }
 }
