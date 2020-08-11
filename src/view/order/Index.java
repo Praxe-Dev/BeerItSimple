@@ -39,13 +39,23 @@ public class Index extends View implements Initializable {
     @FXML
     private TableColumn<OrderTableFormat, String> startingDate;
     @FXML
+    private TableColumn<OrderTableFormat, Integer> customerId;
+    @FXML
     private TableColumn<OrderTableFormat, String> customerName;
+    @FXML
+    private TableColumn<OrderTableFormat, String> customerRank;
     @FXML
     private TableColumn<OrderTableFormat, String> paid;
     @FXML
     private TableColumn<OrderTableFormat, String> paymentMethod;
     @FXML
     private TableColumn<OrderTableFormat, String> status;
+    @FXML
+    private TableColumn<OrderTableFormat, String> customerAddress;
+    @FXML
+    private TableColumn<OrderTableFormat, String> customerCity;
+    @FXML
+    private TableColumn<OrderTableFormat, String> customerPhoneNumber;
     @FXML
     private TableColumn<OrderTableFormat, String> plannedDate;
     @FXML
@@ -189,10 +199,15 @@ public class Index extends View implements Initializable {
         // That allow the cell to retrieve its data and display it
         reference.setCellValueFactory(new PropertyValueFactory<OrderTableFormat, Integer>("reference"));
         startingDate.setCellValueFactory(new PropertyValueFactory<OrderTableFormat, String>("startingDate"));
+        customerId.setCellValueFactory(new PropertyValueFactory<OrderTableFormat, Integer>("customerId"));
         customerName.setCellValueFactory(new PropertyValueFactory<OrderTableFormat, String>("customerName"));
+        customerRank.setCellValueFactory(new PropertyValueFactory<OrderTableFormat, String>("customerRank"));
         paid.setCellValueFactory(new PropertyValueFactory<OrderTableFormat, String>("paid"));
         paymentMethod.setCellValueFactory(new PropertyValueFactory<OrderTableFormat, String>("paymentMethod"));
         status.setCellValueFactory(new PropertyValueFactory<OrderTableFormat, String>("status"));
+        customerAddress.setCellValueFactory(new PropertyValueFactory<OrderTableFormat, String>("customerAddress"));
+        customerCity.setCellValueFactory(new PropertyValueFactory<OrderTableFormat, String>("customerCity"));
+        customerPhoneNumber.setCellValueFactory(new PropertyValueFactory<OrderTableFormat, String>("customerPhoneNumber"));
         plannedDate.setCellValueFactory(new PropertyValueFactory<OrderTableFormat, String>("plannedDate"));
         deliveredDate.setCellValueFactory(new PropertyValueFactory<OrderTableFormat, String>("deliveredDate"));
         deliveryMan.setCellValueFactory(new PropertyValueFactory<OrderTableFormat, String>("deliveryMan"));

@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.text.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXRadioButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
 
-<VBox fx:id="dateSearchPane1" prefHeight="200.0" prefWidth="600.0" stylesheets="/view/style.css" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.search.ordersFromRank">
+<VBox fx:id="dateSearchPane1" prefHeight="200.0" prefWidth="600.0" stylesheets="/view/style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.search.ordersFromRank">
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="141.0" prefWidth="600.0" text="Search customer by rank and different options." textFill="WHITE">
          <font>
@@ -50,17 +54,17 @@
                </toggleGroup></JFXRadioButton>
             <JFXRadioButton fx:id="notPaidRadio" mnemonicParsing="false" text="Not paid" textFill="WHITE" toggleGroup="$orderState">
                <unSelectedColor>
-                  <Color red="1.0" green="1.0" blue="1.0" />
+                  <Color blue="1.0" green="1.0" red="1.0" />
                </unSelectedColor></JFXRadioButton>
             <JFXRadioButton fx:id="paidRadio" layoutX="504.0" layoutY="12.0" mnemonicParsing="false" text="paid" textFill="WHITE" toggleGroup="$orderState">
                <unSelectedColor>
-                  <Color red="1.0" green="1.0" blue="1.0" />
+                  <Color blue="1.0" green="1.0" red="1.0" />
                </unSelectedColor></JFXRadioButton>
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="194.0" prefWidth="600.0" spacing="100.0">
          <children>
-            <JFXButton fx:id="searchBtn" buttonType="RAISED" layoutX="10.0" layoutY="10.0" prefHeight="55.0" prefWidth="125.0" style="-fx-background-color: teal;" text="Search" textFill="WHITE">
+            <JFXButton fx:id="searchBtn" buttonType="RAISED" layoutX="10.0" layoutY="10.0" prefHeight="55.0" prefWidth="125.0" style="-fx-background-color: rgba(0,255,0,0.8);" text="Search" textFill="WHITE">
                <font>
                   <Font size="24.0" />
                </font>

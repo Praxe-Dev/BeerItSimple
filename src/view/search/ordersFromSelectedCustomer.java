@@ -25,8 +25,6 @@ public class ordersFromSelectedCustomer extends View implements Initializable {
     @FXML
     private JFXComboBox<Customer> customerBox;
     @FXML
-    private JFXButton cancelBtn;
-    @FXML
     private JFXButton searchBtn;
 
     private CustomerController customerController;
@@ -57,10 +55,6 @@ public class ordersFromSelectedCustomer extends View implements Initializable {
         customerBox.setItems(FXCollections.observableArrayList(allCustomers));
         customerBox.getSelectionModel().selectFirst();
         customerBox.getStyleClass().add("whiteComboBox");
-
-        cancelBtn.setOnAction(e -> {
-            closeWindow();
-        });
 
         searchBtn.setOnAction(e -> {
             search();
